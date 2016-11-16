@@ -28,7 +28,8 @@ import { InactiveComponent } from './admin/components/inactive.client.component'
 				component: SigninComponent,
 				canActivate: [AuthGuard],
 				data: {
-					requiresAuthentication: false
+					requiresAuthentication: false,
+					roles: []
 				}
 			},
 			{
@@ -36,7 +37,8 @@ import { InactiveComponent } from './admin/components/inactive.client.component'
 				component: UnauthorizedComponent,
 				canActivate: [AuthGuard],
 				data: {
-					requiresAuthentication: false
+					requiresAuthentication: false,
+					roles: []
 				}
 			},
 			{
@@ -44,7 +46,8 @@ import { InactiveComponent } from './admin/components/inactive.client.component'
 				component: UserSignupComponent,
 				canActivate: [AuthGuard],
 				data: {
-					requiresAuthentication: false
+					requiresAuthentication: false,
+					roles: []
 				}
 			},
 			{
@@ -57,7 +60,8 @@ import { InactiveComponent } from './admin/components/inactive.client.component'
 				canActivate: [AuthGuard],
 				component: InvalidResourceComponent,
 				data: {
-					requiresAuthentication: false
+					requiresAuthentication: false,
+					roles: []
 				}
 			},
 			{
@@ -65,7 +69,8 @@ import { InactiveComponent } from './admin/components/inactive.client.component'
 				canActivate: [AuthGuard],
 				component: InvalidCertificateComponent,
 				data: {
-					requiresAuthentication: false
+					requiresAuthentication: false,
+					roles: []
 				}
 			},
 			{
