@@ -1,0 +1,31 @@
+<section>
+	<div class="row">
+		<div *ngIf="eua" class="col-md-8 col-md-offset-2">
+			<div class="page-header">
+				<h2>End User Agreement (EUA)<br/><small>Please review and acknowledge the end user agreement</small></h2>
+			</div>
+			<!-- Alert Notifications -->
+			<alert *ngFor="let alert of alertService.getAlerts(); let i = index" [type]="alert.type" (close)="alertService.clear(i)" dismissible="true">{{alert.msg}}</alert>
+
+			<form name="userForm" autocomplete="off" class="form-horizontal" role="form">
+				<div class="panel panel-default word-wrap">
+					<div class="panel-heading">
+						<h3 class="panel-title">{{eua.title}}</h3>
+					</div>
+					<!-- Contents of EUA -->
+					<div class="panel-body" [innerHtml]="eua.text"></div>
+
+					<div class="panel-footer" [hidden]="preview">
+						<div class="checkbox">
+							<label><input type="checkbox" name="acknowledge" [(ngModel)]="agree">I have read and acknowledge the end user agreement (EUA)</label>
+						</div>
+					</div>
+				</div>
+				<button type="submit" class="btn btn-default" [disabled]="!agree" (click)="accept()" [hidden]="preview">Submit Acknowledgement</button>
+				<div class="modal-footer" [hidden]="!preview">
+					<button class="btn btn-default" (click)="close()">Close</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>

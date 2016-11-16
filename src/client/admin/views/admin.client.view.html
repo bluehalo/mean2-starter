@@ -1,0 +1,11 @@
+<section>
+
+	<ul class="nav nav-tabs">
+		<li role="presentation"><a [routerLink]="['/admin/users', {clearCachedFilter: true}]" routerLinkActive="active">Users</a></li>
+		<li role="presentation"><a [routerLink]="['/admin/cacheEntries', {clearCachedFilter: true}]" routerLinkActive="active">Cache Entries</a></li>
+		<li role="presentation"><a [routerLink]="['/admin/euas', {clearCachedFilter: true}]" routerLinkActive="active">End User Agreement</a></li>
+	</ul>
+
+	<router-outlet></router-outlet>
+
+</section>

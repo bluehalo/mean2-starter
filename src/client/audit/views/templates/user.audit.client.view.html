@@ -1,0 +1,6 @@
+<span *ngIf="!auditObject">
+	<i>N/A</i>
+</span>
+<span *ngIf="auditObject">
+	<i class="fa fa-user"></i> {{auditObject?.name}} ({{auditObject?.username}})
+</span>

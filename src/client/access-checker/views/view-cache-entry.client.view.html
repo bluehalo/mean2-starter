@@ -1,0 +1,32 @@
+<div class="col-md-12 modal-content">
+	<section class="modal-header">
+		<h3>
+			<span>Cache Entry Details</span>
+			<span class="pull-right">
+				<a class="btn-icon no-href"
+				   (click)="done()"
+				   data-tooltip="Close"
+				   data-tooltip-placement="bottom">
+					<i class="fa fa-times"></i>
+				</a>
+			</span>
+		</h3>
+	</section>
+	<section class="modal-body">
+		<div class="row">
+			<div class="col-md-12">
+				<label>Key</label>
+				<div>{{context.cacheEntry.entry.key}}</div>
+
+				<label>Last Updated</label>
+				<div>{{context.cacheEntry.entry.ts | date:'yyyy-MM-dd HH:mm:ssZ'}} ({{context.cacheEntry.entry.ts | agoDate:false}})</div>
+
+				<label>Value</label>
+				<pre>{{context.cacheEntry.entry.value | json}}</pre>
+			</div>
+		</div>
+	</section>
+	<section class="modal-footer">
+		<button class="btn btn-link" (click)="done()">Close</button>
+	</section>
+</div>

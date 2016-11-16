@@ -1,0 +1,15 @@
+<footer>
+	<div class="footer">
+
+		<!-- Copyright footer -->
+		<div class="copyright"
+			*ngIf="copyright.showBanner" [innerHTML]="copyright.string"></div>
+
+		<!-- Banner -->
+		<div class="banner"
+			 [class]="banner.css"
+			 *ngIf="banner.showBanner"
+			 [innerHTML]="banner.string"></div>
+
+	</div>
+</footer>

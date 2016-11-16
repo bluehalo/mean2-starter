@@ -1,0 +1,264 @@
+'use strict';
+
+module.exports = {
+
+	/**
+	 * Core System Settings
+	 */
+
+	/*
+	 * The mode in which the system is operating ('production' | 'development' | 'test')
+	 *
+	 * 'production':
+	 *     Production assets served directly from nodeAngular running in production mode
+	 *     Client runs in production mode
+	 *
+	 * 'development':
+	 *     Development assets served from webpack middleware server
+	 *     Client runs in development mode
+	 *
+	 * 'test':
+	 *     Meant for running server/client tests
+	 */
+	mode: 'development',
+
+	// Auth system
+	auth: {
+		/*
+		 * The API Access List grants token/secret-based access to specific endpoints in the application
+		 */
+		apiAccessList: {
+		},
+
+		/*
+		 * 'local' strategy uses a locally managed username/password and user profile
+		 */
+		strategy: 'local',
+
+		/*
+		 * 'proxy-pki' strategy assumes that the Node app is behind an SSL terminating
+		 * proxy server. The proxy is responsible for passing the DN of the incoming
+		 * user in the the 'x-ssl-client-dn' header.
+		 */
+//		strategy: 'proxy-pki',
+//
+//		accessChecker: {
+//			provider: {
+//				file: 'app/access-checker/tests/server/providers/example-provider.server.service.js',
+//				config: {
+//					'/c=us/st=maryland/o=asymmetrik ltd./ou=client/cn=asymmetrikclient': {
+//						name: 'Ryan Blace',
+//						organization: 'Asymmetrik',
+//						email: 'reblace@gmail.com',
+//						username: 'reblace'
+//					}
+//				}
+//			},
+//			cacheExpire: 1000*60*60*24 // expiration of cache entries
+//		},
+//
+//		autoLogin: true,
+//		autoCreateAccounts: true,
+//		requiredRoles: ['ROLE'],
+
+		defaultRoles: { user: true },
+
+		/*
+		 * Session settings are required regardless of auth strategy
+		 */
+
+		// Session Expiration controls how long sessions can live (in ms)
+		sessionCookie: {
+			maxAge: 24*60*60*1000
+		},
+
+		// Session secret is used to validate sessions
+		sessionSecret: 'AJwo4MDj932jk9J5jldm34jZjnDjbnASqPksh4',
+
+		// Session mongo collection
+		sessionCollection: 'sessions'
+
+	},
+
+	// Scheduled task runner
+//	scheduler: {
+//		services: [
+//			{
+//				file: 'app/access-checker/server/services/cache-refresh.server.service.js',
+//				interval: 5000,
+//				config: {
+//					refresh: 8*3600000 // 8 Hours
+//				}
+//			},
+//			{
+//				file: '...',
+//				interval: 10000,
+//				config: {}
+//			}
+//		],
+//		interval: 10000
+//	},
+
+	// MongoDB
+	db: {
+		admin: 'mongodb://localhost/mean2-dev'
+	},
+
+	/**
+	 * Environment Settings
+	 */
+
+	// Basic title and instance name
+	app: {
+		title: 'MEAN2 UI (Default Settings)',
+		instanceName: 'mean2ui'
+	},
+
+	// Header/footer
+	banner: {
+		// Show/hide the banner
+		showBanner: true,
+
+		// The string to display
+		string: 'DEFAULT SETTINGS',
+
+		// Code that determines applied header/footer style
+		code: 'U'
+	},
+
+	// Copyright footer (shown above the system footer)
+	copyright: {
+		// Show/hide the banner
+		showBanner: true,
+
+		// HTML-enabled contents of the banner
+		string: 'Copyright © 2016 <a href="http://www.asymmetrik.com" target="_blank">Asymmetrik, Ltd</a>. All Rights Reserved.'
+	},
+
+
+	// Configuration for outgoing mail server
+//	mailer: {
+//		from: process.env.MAILER_FROM || 'USERNAME@GMAIL.COM',
+//		options: {
+//			service: process.env.MAILER_SERVICE_PROVIDER || 'gmail',
+//			auth: {
+//				user: process.env.MAILER_EMAIL_ID || 'USERNAME@GMAIL.COM',
+//				pass: process.env.MAILER_PASSWORD || 'PASSWORD'
+//			}
+//		}
+//	},
+
+
+	/**
+	 * Development/debugging settings
+	 */
+
+	// Enable client (NG2) debug level logging
+	clientEnableProdMode: false,
+
+	// Expose server errors to the client (500 errors)
+	exposeServerErrors: true,
+
+	// Mongoose query logging
+	mongooseLogging: false,
+
+	// Express route logging
+	expressLogging: false,
+
+	// Enable automatically reloading the client on changes
+	liveReload: {
+		port: 35729
+	},
+
+	// Set debugger and node inspector ports
+	devPorts: {
+		karma: 9876,
+		nodeInspector: 1337,
+		debug: 5858,
+		webpack: 9000
+	},
+
+
+	/**
+	 * Logging Settings
+	 */
+
+	// Application logging and logstash
+	logger: {
+		application: [
+			// Console logger
+			{
+				stream: process.stdout,
+				level: 'info'
+			}//,
+			// Rotating file logger
+			//{
+			//	type: 'rotating-file',
+			//	level: 'info',
+			//	path: '/usr/local/var/log/mean2/application.log',
+			//	period: '1d',
+			//	count: 1
+			//},
+			// Logstash logger
+			//{
+			//	type: 'raw',
+			//	level: 'info',
+			//	stream: logstash.createStream({
+			//		host: 'localhost',
+			//		port: 4561
+			//	})
+			//}
+		],
+		audit: [
+			// Console logger (audit logger must be 'info' level)
+			{
+				stream: process.stdout,
+				level: 'info'
+			}//,
+			//{
+			//	type: 'rotating-file',
+			//	level: 'info',
+			//	path: '/usr/local/var/log/mean2/audit.log',
+			//	period: '1d',
+			//	count: 1
+			//}
+		]
+	},
+
+
+	/**
+	 * Not So Environment-Specific Settings
+	 */
+
+	// The port to use for the application (defaults to the environment variable if present)
+	port: process.env.PORT || 3000,
+
+	// SocketIO Settings
+	socketio: {
+		ignoreOlderThan: 600
+	},
+
+	// CSV Export Settings
+	csv: {
+		delayMs: 0
+	},
+
+	/*
+	 * The maximum number of records allowed to be scanned by a mongo query
+	 */
+	maxScan: 30000,
+
+	/*
+	 * The maximum number of records allowed to be exported to csv
+	 */
+	maxExport: 1000,
+
+
+	notifications: {
+		email: true,
+		sms: false
+	},
+
+	urlHandler: 'default'
+
+};

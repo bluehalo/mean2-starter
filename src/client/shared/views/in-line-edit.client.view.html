@@ -1,0 +1,26 @@
+<div id="inlineEditWrapper">
+
+    <!-- Editable value -->
+    <a class="btn-edit no-href"
+       (click)="edit(value)"
+       [hidden]="editing"
+       tooltip="Click to edit"
+       tooltipPlacement="right"
+       tooltipAppendToBody="true">{{ value }}</a>
+
+    <!-- Inline edit form -->
+    <form  #inlineEditForm="ngForm" class="inlineEditForm form-inline" (ngSubmit)="onSubmit(value)" [hidden]="!editing">
+        <div class="form-group">
+
+            <!-- Inline edit control  -->
+            <input #inlineEditControl name="inlineEdit" class="form-control" [(ngModel)]="value"/>
+
+            <!-- Inline edit save and cancel buttons -->
+           <span>
+                <button type="submit" class="btn btn-default btn-sm"><span class="fa fa-check"></span></button>
+                <button class="btn btn-default btn-sm" (click)="cancel(value)"><span class="fa fa-times"></span></button>
+           </span>
+
+        </div>
+    </form>
+</div>

@@ -1,0 +1,18 @@
+<section>
+
+	<div style="padding-top:20px;" class="row">
+		<div class="col-md-8 col-md-offset-2">
+
+			<div style="text-align:center;" class="jumbotron">
+				<h1><i class="fa fa-warning"></i> No Access</h1>
+
+				<p class="lead">
+					<span  *ngIf="user.userModel.username">Hey there, {{user.userModel.name}}.</span>
+					The good news is that you've got an account. The bad news is that you do not have the accesses required to use the system.
+				</p>
+			</div>
+
+		</div>
+	</div>
+
+</section>

@@ -1,0 +1,29 @@
+@import '../../shared/sass/colors';
+
+.help-content {
+	padding-top: 25px;
+
+	.map-circle-icon {
+		height: 20px;
+		width: 20px;
+	}
+
+	.fa-check {
+		color: $color-green;
+	}
+
+	.awesome-marker {
+		background-position: -106px 0;
+		display: inline-block;
+		position: static;
+		vertical-align: top;
+
+		.fa-twitter {
+			font-size: 14px;
+			left: 6px;
+			letter-spacing: 8px;
+			position: relative;
+			top: 0;
+		}
+	}
+}

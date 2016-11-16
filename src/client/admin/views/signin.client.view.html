@@ -1,0 +1,39 @@
+<section class="row">
+	<!-- PKI Authentication Strategy -->
+	<div *ngIf="config && config.auth === 'proxy-pki'">
+		Loading, please wait...
+	</div>
+
+	<!-- Username/Password Authentication Strategy -->
+	<div *ngIf="config && config.auth === 'local'">
+
+		<h3 class="col-md-12 text-center">Sign In</h3>
+
+		<div class="col-xs-offset-2 col-xs-8 col-md-offset-5 col-md-2">
+			<div class="signin form-horizontal" autocomplete="off">
+				<fieldset>
+					<div class="form-group">
+						<label for="username">Username</label>
+						<input type="text" id="username" name="username" class="form-control" [(ngModel)]="user.credentials.username" (keyup.enter)="signin()" placeholder="Username">
+					</div>
+					<div class="form-group">
+						<label for="password">Password</label>
+						<input type="password" id="password" name="password" class="form-control" [(ngModel)]="user.credentials.password" (keyup.enter)="signin()" placeholder="Password">
+					</div>
+					<div class="text-center form-group">
+						<button type="submit" class="btn btn-primary" (click)="signin()">Sign in</button>
+						<a type="button" class="btn btn-link" routerLink="/signup">or Sign Up</a>
+					</div>
+					<div data-ng-show="error" class="text-center text-danger">
+						<strong>{{error}}</strong>
+					</div>
+					<div class="text-center">
+						<a type="button" class="btn btn-link subtle danger" data-ui-sref="auth.password.forgot">Forgot your password?</a>
+					</div>
+				</fieldset>
+			</div>
+		</div>
+
+	</div>
+
+</section>

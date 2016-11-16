@@ -1,0 +1,14 @@
+'use strict';
+
+var
+	path = require('path'),
+
+	users = require(path.resolve('./src/server/app/admin/controllers/users.server.controller.js')),
+	exportConfig = require(path.resolve('./src/server/app/util/controllers/export-config.server.controller.js'));
+
+
+module.exports = function(app) {
+	// Admin post CSV config parameters
+	app.route('/admin/requestCSV')
+		.post(users.hasAdminAccess, exportConfig.adminRequestCSV);
+};

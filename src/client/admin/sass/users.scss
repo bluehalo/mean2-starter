@@ -1,0 +1,38 @@
+@media (min-width: 992px) {
+	.nav-users {
+		position: fixed;
+	}
+}
+
+.remove-account-container {
+	display: inline-block;
+	position: relative;
+}
+
+.btn-remove-account {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+}
+
+.word-wrap {
+	word-wrap: break-word;
+}
+
+.column-label {
+	margin-right: 5px;
+}
+
+.column-option {
+	margin-right: 10px;
+
+	input {
+      &[type='checkbox'] {
+        margin-right: 3px;
+	  }
+	}
+}
+
+.dropdown-menu > li > a {
+	cursor: pointer;
+}

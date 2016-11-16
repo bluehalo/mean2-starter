@@ -1,0 +1,542 @@
+@import '../../shared/sass/colors';
+
+//==================================
+// General Purpose Styles
+//=====================================
+
+// Adds ellipsis to any DOM element that is too long
+.hide-overflow {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+//=====================================
+//	List Elements
+//=====================================
+
+.tile {
+	background-color: $color-white;
+	border: 1px solid $color-border-light;
+	border-bottom: 0;
+	padding: 4px 8px;
+
+	&:last-child {
+		border-bottom: 1px solid $color-border-light;
+	}
+
+	&:hover {
+		background-color: $color-white;
+		border-bottom: 1px solid $color-border-light;
+		border-color: $color-border-light;
+	}
+}
+
+.tile-header {
+	margin-bottom: 8px;
+}
+
+.tile-title {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.tile-description {
+	margin: 0 16px;
+}
+
+.tile-footer {
+	.metadata {
+		color: $color-label-gray;
+		font-size: 12px;
+		margin-top: 8px;
+	}
+}
+
+//=====================================
+//	Definition Lists
+//=====================================
+
+dl {
+	&.dl-horizontal {
+		> dd {
+			padding-top: 12px;
+		}
+
+		> dt {
+			padding-top: 12px;
+		}
+	}
+}
+
+//=====================================
+//	Item lists
+//=====================================
+
+.items {
+	.item {
+		background-color: $color-white;
+		border: 1px solid $color-border-med;
+		border-radius: 3px;
+		color: $color-border-dark;
+		font-size: 12px;
+		padding: 2px 2px 2px 7px;
+
+		.item-label {
+			float: left;
+			margin-right: 5px;
+			margin-top: 1px;
+			max-width: 200px;
+		}
+
+		.item-delete {
+			float: left;
+			margin: 0;
+			padding: 0;
+		}
+	}
+}
+
+//=====================================
+//	Blocks
+//=====================================
+
+.block {
+	margin-bottom: 16px;
+
+	> h4 {
+		border-left: 5px solid;
+		margin-bottom: 12px;
+		margin-top: 12px;
+		padding: 7px 10px;
+		text-transform: uppercase;
+	}
+
+	p {
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+}
+
+// Variations
+.block-default {
+	> h4 {
+		background: $color-default-light;
+		border-left-color: $color-default-med;
+		color: $color-default-dark;
+	}
+}
+
+.block-danger {
+	> h4 {
+		background: $color-danger-light;
+		border-left-color: $color-danger-med;
+		color: $color-danger-dark;
+	}
+}
+
+.block-warning {
+	> h4 {
+		background: $color-warning-light;
+		border-left-color: $color-warning-med;
+		color: $color-warning-dark;
+	}
+}
+
+.block-info {
+	> h4 {
+		background: $color-info-light;
+		border-left-color: $color-info-med;
+		color: $color-info-dark;
+	}
+}
+
+//=====================================
+//	Buttons
+//=====================================
+
+.btn-link {
+	background: none;
+	border: 0;
+
+	&.subtle {
+		color: $color-label-gray;
+
+		&:hover {
+			color: $color-border-dark;
+		}
+	}
+
+	&.danger {
+		&:hover {
+			color: $color-danger-med;
+		}
+	}
+}
+
+.btn-selected {
+	background-color: $color-bg-btn;
+	background-image: none;
+	border-color: $color-border-btn;
+	color: $color-text-black;
+
+	&:focus {
+		border-color: $color-border-med;
+	}
+
+	&:hover {
+		border-color: $color-border-med;
+	}
+
+	&:active {
+		border-color: $color-border-med;
+	}
+
+	&.active {
+		&:active {
+			border-color: $color-border-med;
+		}
+	}
+}
+
+.btn-unselected {
+	background-color: $color-white;
+	background-image: none;
+	border-color: $color-border-dark;
+	color: $color-text-black;
+
+	&:focus {
+		border-color: $color-border-med;
+	}
+
+	&:hover {
+		border-color: $color-border-med;
+	}
+
+	&:active {
+		border-color: $color-border-med;
+	}
+
+	&.active {
+		&:active {
+			border-color: $color-border-med;
+		}
+	}
+}
+
+//=====================================
+//	Icon Buttons
+//=====================================
+
+a {
+	&.no-href {
+		&:hover {
+			cursor: pointer;
+		}
+	}
+
+	&.btn-icon {
+		color: inherit;
+		opacity: .5;
+		padding-left: 3px;
+		padding-right: 3px;
+		text-decoration: none;
+
+		&.light {
+			opacity: .25;
+		}
+
+		&.danger {
+			&:hover {
+				color: $color-danger-med;
+			}
+		}
+
+		&:hover {
+			opacity: .9;
+			text-decoration: none;
+		}
+	}
+}
+
+//=====================================
+//	Callouts
+//=====================================
+
+.callout {
+	border: 1px solid $color-border-light;
+	border-left-width: 5px;
+	border-radius: 3px;
+	margin: 12px 0;
+	padding: 20px;
+
+	h4 {
+		margin-bottom: 5px;
+		margin-top: 0;
+	}
+
+	p {
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+}
+
+// Variations
+.callout-danger {
+	border-left-color: $color-danger-med;
+
+	h4 {
+		color: $color-danger-dark;
+	}
+}
+
+.callout-warning {
+	border-left-color: $color-warning-med;
+
+	h4 {
+		color: $color-warning-dark;
+	}
+}
+
+.callout-info {
+	border-left-color: $color-info-med;
+
+	h4 {
+		color: $color-info-dark;
+	}
+}
+
+.callout-default {
+	border-left-color: $color-default-med;
+
+	h4 {
+		color: $color-default-dark;
+	}
+}
+
+//=====================================
+//	Lists
+//=====================================
+
+ul {
+	&.items {
+		list-style-image: none;
+		list-style-position: outside;
+		list-style-type: none;
+		padding: 0;
+
+		li {
+			padding-bottom: 2px;
+			padding-top: 2px;
+		}
+
+		label {
+			color: $color-label-gray;
+			font-size: 12px;
+			font-weight: normal;
+			margin-bottom: 2px;
+			text-transform: capitalize;
+		}
+
+		.title {
+			color: $color-border-dark;
+			font-size: 14px;
+			font-weight: bold;
+		}
+
+		.value {
+			font-size: 18px;
+			font-weight: 300;
+			line-height: 20px;
+		}
+
+		&.inline {
+			li {
+				float: left;
+				padding-left: 4px;
+				padding-right: 4px;
+			}
+		}
+	}
+}
+
+//=====================================
+//	Labels and Values
+//=====================================
+
+.label {
+	-moz-transition: background .2s ease-out;
+	-ms-transition: background .2s ease-out;
+	-o-transition: background .2s ease-out;
+	-webkit-transition: background .2s ease-out;
+	color: $color-label-gray;
+	font-weight: normal;
+	transition: background .2s ease-out;
+}
+
+.label-sm {
+	font-size: 12px;
+}
+
+.value-md {
+	font-size: 14px;
+}
+
+// Table Settings
+table {
+	&.asymmetrik {
+		border-bottom: 1px solid $color-border-light;
+
+		tr {
+			td {
+				vertical-align: middle;
+			}
+		}
+
+		thead {
+			>tr {
+				>th {
+					border-bottom: 1px solid $color-border-light;
+				}
+			}
+		}
+
+		>thead {
+			>tr {
+				&.section {
+					>th {
+						border-bottom: 1px solid $color-border-light;
+					}
+				}
+			}
+		}
+	}
+}
+
+.list-row {
+	.label {
+		display: inline-block;
+		font-size: small;
+		line-height: normal;
+		margin: 3px;
+		max-width: 200px;
+		vertical-align: middle;
+	}
+}
+
+.label-gray {
+	background: $color-label-gray;
+	color: $color-white;
+}
+
+.label-highlight {
+	background: $color-red;
+	color: $color-white;
+}
+
+//=====================================
+//	Text Button Controls
+//=====================================
+
+.controls {
+	color: $color-label-gray;
+	font-size: 12px;
+	margin: 4px 2px;
+
+	span {
+		vertical-align: middle;
+	}
+
+	a {
+		&.btn-link {
+			color: $color-label-gray;
+			font-size: 12px;
+			margin: 0 2px;
+
+			&.selected {
+				color: $color-label-dark-gray;
+			}
+
+			&:hover {
+				color: $color-label-dark-gray;
+				text-decoration: none;
+			}
+		}
+	}
+}
+
+//=====================================
+//	Tabs
+//=====================================
+
+.tab {
+	padding-top: 8px;
+}
+
+.scroll-container {
+	height: 100%;
+	margin: 0;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+//=====================================
+//	Custom font-awesome icons
+//=====================================
+
+// \f142 is ellipsis-v
+// \202F is thin unbreakable
+.fa {
+	&.fa-grip {
+		&::before {
+			content: '\f142 \202F \f142 \202F \f142';
+		}
+	}
+
+	&fa-grip-large {
+		&::before {
+			content: '\f142 \202F \f142 \202F \f142 \202F \f142 \202F \f142 \202F \f142 \202F \f142';
+		}
+	}
+}
+
+.asy-modal {
+	-moz-box-align: center;
+	-ms-box-align: center;
+	-webkit-box-align: center;
+	align-items: center;
+	background-color: $color-bg-black;
+	bottom: 0;
+	display: flex;
+	left: 0;
+	position: fixed;
+	right: 0;
+	top: 0;
+	z-index: 1000;
+}
+
+.asy-modal-body {
+	background-color: $color-white;
+	border-radius: 3px;
+	margin-left: auto;
+	margin-right: auto;
+	overflow: hidden;
+	width: 60%;
+}
+
+//=====================================
+//	Dropdown
+//=====================================
+
+.dropdown-toggle {
+	cursor: pointer;
+}
+
+.calendar-picker {
+	left: 285px;
+	padding-top: 5px;
+	position: absolute;
+	z-index: 20;
+}

@@ -1,0 +1,40 @@
+<div class="modal-header">
+    <h3>Export User Data</h3>
+</div>
+
+<div class="modal-body word-wrap">
+
+    <div class="row form-group">
+        <div class="col-md-6">
+            <label>Export Field</label>
+            <select class="form-control input-sm" [(ngModel)]="selectedField" (ngModelChange)="retrieveUsers()">
+                    <option value="username">Username</option>
+                    <option value="email">Email</option>
+                    <option value="name">Name</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label>Delimiter</label>
+            <input class="form-control input-sm" type="text" [(ngModel)]="delimiter" (ngModelChange)="updateValue()"/>
+        </div>
+    </div>
+
+    <h4>Filter Users by Mongo Query (Advanced)</h4>
+    <div class="row form-group">
+        <div class="col-md-12">
+            <textarea id="filter" class="form-control data-ng-touched" [(ngModel)]="query" [ngClass]="{'ng-invalid': !queryValid}" (ngModelChange)="updateQuery()"></textarea>
+        </div>
+    </div>
+
+    <h4>Results</h4>
+    <div class="row form-group">
+        <div class="col-md-12">
+            <textarea rows="4" class="form-control" id="description" [(ngModel)]="value"></textarea>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-link" (click)="done()">Close</button>
+</div>
