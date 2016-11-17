@@ -39,6 +39,7 @@
 		"method-override": "2.3",
 		"moment": "2.15",
 		"mongoose": "4.6",
+		"mongoose-schema-extend": "0.2.0",
 		"mongoose-unique-validator": "1.0",
 		"morgan": "1.7",
 		"multer": "1.2",
