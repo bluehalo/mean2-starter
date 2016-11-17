@@ -1,8 +1,9 @@
 import { NgModule }     from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { AuthGuard } from '../services/auth-guard.service';
-import { OverviewHelpComponent } from './overview.client.component';
-import { HelpComponent, AboutComponent } from '../../help/components/help.client.component';
+
+import { AuthGuard } from '../auth-guard.service';
+import { OverviewHelpComponent } from './overview.component';
+import { HelpComponent, AboutComponent } from '../../help/help.component';
 
 @NgModule({
 	imports: [
