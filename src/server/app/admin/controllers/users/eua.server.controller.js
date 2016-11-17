@@ -1,6 +1,6 @@
 'use strict';
 
-var
+let
 	path = require('path'),
 	q = require('q'),
 
@@ -14,75 +14,68 @@ var
 	UserAgreement = dbs.admin.model('UserAgreement');
 
 
-/**
- * Private methods
- */
-
-function searchEuas(req, res) {
+// Search (Retrieve) all user Agreements
+module.exports.searchEuas = function(req, res) {
 
 	// Handle the query/search/page
-	var query = req.body.q;
-	var search = req.body.s;
+	let query = req.body.q;
+	let search = req.body.s;
 
-	var page = req.query.page;
-	var size = req.query.size;
-	var sort = req.query.sort;
-	var dir = req.query.dir;
+	let page = req.query.page;
+	let size = req.query.size;
+	let sort = req.query.sort;
+	let dir = req.query.dir;
 
 	// Limit has to be at least 1 and no more than 100
-	if(null == size){ size = 20; }
+	if (null == size) { size = 20; }
 	size = Math.max(1, Math.min(100, size));
 
 	// Page needs to be positive and has no upper bound
-	if(null == page){ page = 0; }
+	if (null == page) { page = 0; }
 	page = Math.max(0, page);
 
 	// Sort can be null, but if it's non-null, dir defaults to DESC
-	if(null != sort && dir == null){ dir = 'DESC'; }
+	if (null != sort && dir == null) { dir = 'DESC'; }
 
 	// Create the variables to the search call
-	var limit = size;
-	var offset = page*size;
-	var sortArr;
-	if(null != sort){
+	let limit = size;
+	let offset = page*size;
+	let sortArr;
+	if (null != sort) {
 		sortArr = [{ property: sort, direction: dir }];
 	}
 
-	UserAgreement.search(query, search, limit, offset, sortArr).then(function(result){
+	UserAgreement.search(query, search, limit, offset, sortArr)
+		.then(function(result) {
+			let toReturn = {
+				totalSize: result.count,
+				pageNumber: page,
+				pageSize: size,
+				totalPages: Math.ceil(result.count / size),
+				elements: result.results
+			};
 
-		// success
-		var toReturn = {
-			totalSize: result.count,
-			pageNumber: page,
-			pageSize: size,
-			totalPages: Math.ceil(result.count/size),
-			elements: result.results
-		};
+			return q(toReturn);
+		}).then(function(results) {
+			res.status(200).json(results);
+		}, function(err) {
+			util.handleErrorResponse(res, err);
+		}).done();
+};
 
-		// Serialize the response
-		res.json(toReturn);
-	}, function(error){
-		// failure
-		logger.error(error);
-		return util.send400Error(res, error);
-	});
-}
-
-
-/**
- * Standard Operations
- */
 
 // Publish the EUA
 module.exports.publishEua = function(req, res) {
-	var eua = req.euaParam;
+
+	// The eua is placed into this parameter by the middleware
+	let eua = req.euaParam;
 	eua.published = Date.now();
 
-	eua.save(function(err){
-		util.catchError(res, err, function() {
-			res.json(eua);
-		});
-	});
+	eua.save().then(function(results) {
+		res.status(200).json(results);
+	}, function(err) {
+		util.handleErrorResponse(res, err);
+	}).done();
 };
 
 
@@ -90,55 +83,53 @@ module.exports.publishEua = function(req, res) {
 module.exports.acceptEua = function(req, res) {
 
 	// Make sure the user is logged in
-	if(null == req.user){
-		util.send400Error(res, 'User is not signed in');
-		return;
+	if (null == req.user) {
+		util.handleErrorResponse(res, { status: 400, type: 'error', message: 'User is not signed in' });
 	}
-
-	User.findOneAndUpdate(
-		{ _id: req.user._id },
-		{ acceptedEua: Date.now() },
-		{ new: true, upsert: false },
-		function(err, user) {
-			util.catchError(res, err, function() {
-				// Audit accepted eua
-				auditService.audit('eua accepted', 'eua', 'accepted',
-					User.auditCopy(user), {});
-
-				res.json(User.fullCopy(user));
-			});
-		});
-
+	else {
+		// Audit accepted eua
+		auditService.audit('eua accepted', 'eua', 'accepted', User.auditCopy(user), {})
+			.then(function() {
+				return User.findOneAndUpdate(
+					{ _id: req.user._id },
+					{ acceptedEua: Date.now() },
+					{ new: true, upsert: false }).exec();
+			}).then(function(user) {
+				res.status(200).json(User.fullCopy(user));
+			}, function(err) {
+				util.handleErrorResponse(res, err);
+			}).done();
+	}
 };
 
 // Create a new User Agreement
 module.exports.createEua = function(req, res) {
-	var eua = new UserAgreement(req.body);
+
+	let eua = new UserAgreement(req.body);
 	eua.created = Date.now();
 	eua.updated = eua.created;
 
-	eua.save(function(err) {
-		util.catchError(res, err, function() {
-			// Audit eua creates
-			auditService.audit('eua create', 'eua', 'create',
-				User.auditCopy(req.user),
-				UserAgreement.auditCopy(eua));
-
-			res.json(eua);
-		});
-	});
+	// Audit eua creates
+	auditService.audit('eua create', 'eua', 'create', User.auditCopy(req.user), UserAgreement.auditCopy(eua))
+		.then(function() {
+			return eua.save();
+		}).then(function(results) {
+			res.status(200).json(results);
+		}, function(err) {
+			util.handleErrorResponse(res, err);
+		}).done();
 };
 
 
 // Retrieve the Current User Agreement
 module.exports.getCurrentEua = function(req, res) {
-	UserAgreement.getCurrentEua().then(function(result) {
-		return res.json(result);
-	}, function(error){
-		// failure
-		logger.error(error);
-		return util.send400Error(res, error);
-	});
+
+	UserAgreement.getCurrentEua()
+		.then(function(result) {
+			res.status(200).json(results);
+		}, function(error){
+			util.handleErrorResponse(res, err);
+		}).done();
 };
 
 
@@ -146,89 +137,77 @@ module.exports.getCurrentEua = function(req, res) {
 module.exports.getEuaById = function(req, res) {
 
 	// The eua is placed into this parameter by the middleware
-	var eua = req.euaParam;
+	let eua = req.euaParam;
 
-	if(null == eua){
-		res.status(400).json({
-			message: 'End User Agreement does not exist'
-		});
-		return;
+	if (null == eua) {
+		util.handleErrorResponse(res, { status: 400, type: 'error', message: 'End User Agreement does not exist' });
 	}
-
-	res.json(eua);
-};
-
-
-// Search (Retrieve) all user Agreements
-module.exports.searchEuas = function(req, res) {
-	searchEuas(req, res);
+	else {
+		res.status(200).json(eua);
+	}
 };
 
 
 // Update a User Agreement
 module.exports.updateEua = function(req, res) {
 
-	// The persistence user
-	var eua = req.euaParam;
+	// The eua is placed into this parameter by the middleware
+	let eua = req.euaParam;
 
-	// A copy of the original user for auditing
-	var originalEua = UserAgreement.auditCopy(eua);
+	// A copy of the original eua for auditing
+	let originalEua = UserAgreement.auditCopy(eua);
 
-	if(null == eua){
-		res.status(400).json({
-			message: 'Could not find end user agreement'
-		});
-		return;
+	if (null == eua) {
+		util.handleErrorResponse(res, { status: 400, type: 'error', message: 'Could not find end user agreement' });
 	}
+	else {
+		// Copy over the new user properties
+		eua.text = req.body.text;
+		eua.title = req.body.title;
 
-	// Copy over the new user properties
-	eua.text = req.body.text;
-	eua.title = req.body.title;
+		// Update the updated date
+		eua.updated = Date.now();
 
-	// Update the updated date
-	eua.updated = Date.now();
-
-	// Save the user
-	eua.save(function(err) {
-		util.catchError(res, err, function() {
-			// Audit user update
-			auditService.audit('end user agreement updated', 'eua', 'update',
-				User.auditCopy(req.user),
-				{ before: originalEua, after: UserAgreement.auditCopy(eua) });
-
-			res.json(eua);
-		});
-	});
+		// Audit user update
+		auditService.audit('end user agreement updated', 'eua', 'update', User.auditCopy(req.user),
+			{ before: originalEua, after: UserAgreement.auditCopy(eua) })
+			.then(function() {
+				return eua.save();
+			}).then(function(results) {
+				res.status(200).json(results);
+			}, function(err) {
+				util.handleErrorResponse(res, err);
+			}).done();
+	}
 };
 
 
 // Delete a User Agreement
 module.exports.deleteEua = function(req, res) {
-	var eua = req.euaParam;
 
-	if(null == eua){
-		res.status(400).json({
-			message: 'Could not find end user agreement'
-		});
-		return;
+	// The eua is placed into this parameter by the middleware
+	let eua = req.euaParam;
+
+	if (null == eua) {
+		util.handleErrorResponse(res, { status: 400, type: 'error', message: 'Could not find end user agreement' });
 	}
-
-	// Delete the eua
-	eua.remove(function(err) {
-		util.catchError(res, err, function() {
-			// Audit eua delete
-			auditService.audit('eua deleted', 'eua', 'delete',
-				User.auditCopy(req.user),
-				UserAgreement.auditCopy(eua));
-
-			res.json(eua);
-		});
-	});
+	else {
+		// Audit eua delete
+		auditService.audit('eua deleted', 'eua', 'delete', User.auditCopy(req.user), UserAgreement.auditCopy(eua))
+			.then(function() {
+				return eua.remove();
+			}).then(function(results) {
+				res.status(200).json(results);
+			}, function(err) {
+				util.handleErrorResponse(res, err);
+			}).done();
+	}
 };
 
 
-//EUA middleware - stores user corresponding to id in 'userParam'
+// EUA middleware - stores user corresponding to id in 'euaParam'
 module.exports.euaById = function(req, res, next, id) {
+
 	UserAgreement.findOne({
 		_id: id
 	}).exec(function(err, eua) {
@@ -240,33 +219,24 @@ module.exports.euaById = function(req, res, next, id) {
 };
 
 
-
-/*
- * Route Auth Middleware
- */
-
 /**
  * Check the state of the EUA
  */
 module.exports.requiresEua = function(req) {
-	var defer = q.defer();
 
-	UserAgreement.getCurrentEua().then(function(result){
-
-		// compare the current eua to the user's acceptance state
-		if(null == result || null == result.published || (req.user.acceptedEua && req.user.acceptedEua >= result.published)){
-			// if the user's acceptance is valid, then proceed
-			defer.resolve();
-		} else {
-			defer.reject({ status: 403, type: 'eua', message: 'User must accept end-user agreement.'});
-		}
-
-	}, function(error){
-		// failure
-		logger.error(error);
-		defer.reject({ status: 500, type: 'error', error: error });
-	});
-
-	return defer.promise;
+	return UserAgreement.getCurrentEua()
+		.then(function(result) {
+			// Compare the current eua to the user's acceptance state
+			if (null == result || null == result.published || (req.user.acceptedEua && req.user.acceptedEua >= result.published)) {
+				// if the user's acceptance is valid, then proceed
+				return q();
+			} else {
+				return q.reject({ status: 403, type: 'eua', message: 'User must accept end-user agreement.'});
+			}
+		}, function(error) {
+			// Failure
+			logger.error(error);
+			return q.reject({ status: 500, type: 'error', error: error });
+		});
 };
 
