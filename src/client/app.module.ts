@@ -2,14 +2,15 @@ import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+
 import { ModalModule } from 'angular2-modal';
+import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
+import { Ng2BootstrapModule } from 'ng2-bootstrap';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { Ng2BootstrapModule } from 'ng2-bootstrap';
 import { AdminModule } from './admin/admin.module';
 import { AccessCheckerModule } from './access-checker/access-checker.module';
-import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
 import { AuditModule } from './audit/audit.module';
 import { HeaderComponent, FooterComponent } from './core/components/core.client.component';
 import { LoggedInComponent } from './core/components/logged-in.client.component';
@@ -22,6 +23,8 @@ import { UtilModule } from './shared/util.module';
 import { ClientConfiguration } from './config/configurator';
 import { BaseService } from './config/test/test-stub-service.client.service';
 import { HelpModule } from './help/help.module';
+import { TeamsModule } from './teams/teams.module';
+import { ProjectsModule } from './projects/projects.module';
 
 export function initializerFactory () {
 	return () => () => new Promise<any>( (resolve) => {
@@ -48,6 +51,8 @@ export function initializerFactory () {
 		AdminModule,
 		AuditModule,
 		HelpModule,
+		ProjectsModule,
+		TeamsModule,
 		UtilModule
 	],
 	declarations: [

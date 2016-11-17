@@ -1,0 +1,54 @@
+<section>
+
+	<a class="back-link" [routerLink]="[asyRoutes.getPath('Teams')]">
+		<i class="fa fa-angle-double-left"></i> Back to My Teams
+	</a>
+
+	<!-- Alert Notifications -->
+	<alert *ngFor="let alert of alertService.getAlerts(); let i = index" [type]="alert.type" (close)="alertService.clear(i)" dismissible="true" >{{alert.msg}}</alert>
+
+	<div style="padding-top:10px; padding-bottom:10px;">
+		<div class="media">
+
+			<a *ngIf="user.canManageTeam(team)" type="button" class="btn btn-default btn-sm pull-right" (click)="remove(team)">
+				<i class="fa fa-fw fa-trash"></i> Delete Team
+			</a>
+
+			<div class="media-left team-avatar">
+				<img style="width: 100px;" class="media-object" src="app/core/img/brand/team.png"/>
+			</div>
+
+			<div class="media-body">
+				<div *ngIf="user.canManageTeam(team)" class="team-header"><asy-in-line-edit [name]="name" [(ngModel)]="team.name" (onSave)="saveEditable($event)">{{ team.name }}</asy-in-line-edit></div>
+				<div *ngIf="!user.canManageTeam(team)" class="team-header">{{ team.name }}</div>
+				<div *ngIf="user.canManageTeam(team)" class="team-description"><asy-in-line-edit [name]="description" [(ngModel)]="team.description" (onSave)="saveEditable($event)">{{ team.description }}</asy-in-line-edit></div>
+				<div *ngIf="!user.canManageTeam(team)" class="team-description">{{ team.description }}</div>
+				<div style="font-size: 14px;">Team created {{ team.created | agoDate:true }}</div>
+			</div>
+
+		</div>
+
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<tabset class="tabs">
+				<tab>
+					<template tabHeading>
+						Projects
+					</template>
+					<br/>
+					<list-projects [readOnly]="!user.canManageTeamResources(team)"></list-projects>
+				</tab>
+				<tab>
+					<template tabHeading>
+						Members
+					</template>
+					<br/>
+					<list-team-members [readOnly]="!user.canManageTeam(team)"></list-team-members>
+				</tab>
+			</tabset>
+		</div>
+	</div>
+
+</section>

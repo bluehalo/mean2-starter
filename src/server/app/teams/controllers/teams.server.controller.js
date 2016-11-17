@@ -10,7 +10,7 @@ let mongoose = require('mongoose'),
 	dbs = deps.dbs,
 	auditService = deps.auditService,
 	util = deps.utilService,
-	// Project = dbs.admin.model('Project'),
+	Project = dbs.admin.model('Project'),
 	TeamMember = dbs.admin.model('TeamUser'),
 	Team = dbs.admin.model('Team'),
 	TeamRole = dbs.admin.model('TeamRole');
@@ -308,8 +308,8 @@ module.exports.delete = function(req, res) {
 				TeamMember.update(
 					{'teams._id': team._id },
 					{ $pull: { teams: { _id: team._id } } }
-				)//,
-				//Project.remove({owner: team._id})
+				),
+				Project.remove({owner: team._id})
 			]);
 		})
 		.then(function() {
