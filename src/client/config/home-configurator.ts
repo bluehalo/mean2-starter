@@ -1,5 +1,5 @@
 import { ClientConfiguration } from './configurator';
-import { BaseService2 } from './test/test-stub-service.client.service';
+import { BaseService2 } from './test/test-stub-service.service';
 
 let config = ClientConfiguration.config;
 

@@ -9,7 +9,7 @@ import { User } from '../user.class';
 
 @Component({
 	selector: 'user-signup',
-	templateUrl: '../../views/manage-user.client.view.html'
+	templateUrl: './manage-user.client.view.html'
 })
 export class UserSignupComponent extends ManageUserComponent {
 

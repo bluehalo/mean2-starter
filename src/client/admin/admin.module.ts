@@ -5,15 +5,10 @@ import { NgModule } from '@angular/core';
 
 import { Ng2BootstrapModule } from 'ng2-bootstrap';
 
-import { EuaService } from './eua.service';
-import { UserEuaComponent } from './end-user-agreement/user-eua.component';
+import { EuaService } from './end-user-agreement/eua.service';
 import { AdminService } from './admin.service';
 import { AdminComponent } from './admin.component';
-import { InvalidCertificateComponent } from './invalid-certificate.component';
-import { InactiveComponent } from './inactive.component';
-import { NoAccessComponent } from './no-access.component';
-import { SigninComponent } from './signin.component';
-import { UnauthorizedComponent } from './unauthorized.component';
+import { AuthenticationModule } from './authentication/authentication.module';
 import { AdminRoutingModule } from './admin-routes.module';
 import { AdminUserModule } from './user-management/admin-user.module';
 import { AdminEuaModule } from './end-user-agreement/admin-eua.module';
@@ -28,6 +23,8 @@ import { AlertService } from '../shared/alert.service';
 		AdminEuaModule,
 		AdminUserModule,
 
+		AuthenticationModule,
+
 		CommonModule,
 		FormsModule,
 		RouterModule,
@@ -36,13 +33,7 @@ import { AlertService } from '../shared/alert.service';
 	],
 	exports: [],
 	declarations:   [
-		AdminComponent,
-		InactiveComponent,
-		InvalidCertificateComponent,
-		NoAccessComponent,
-		SigninComponent,
-		UnauthorizedComponent,
-		UserEuaComponent
+		AdminComponent
 	],
 	providers:  [
 		AlertService,

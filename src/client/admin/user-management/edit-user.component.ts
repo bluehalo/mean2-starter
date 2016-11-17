@@ -14,7 +14,7 @@ import { CacheEntriesService } from '../../access-checker/cache-entries.service'
 
 @Component({
 	selector: 'edit-user',
-	templateUrl: '../../views/manage-user.client.view.html'
+	templateUrl: './manage-user.client.view.html'
 })
 export class UpdateUserComponent extends ManageUserComponent {
 

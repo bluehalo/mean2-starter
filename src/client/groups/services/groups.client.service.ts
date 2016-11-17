@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
+
 import { Observable } from 'rxjs/Observable';
 
-import { AsyHttp, HttpOptions } from '../../shared/services/asy-http.client.service';
-import { AuthenticationService } from '../../admin/services/authentication.client.service';
-import { User } from '../../admin/model/user.client.class';
+import { AsyHttp, HttpOptions } from '../../shared/asy-http.service';
+import { AuthenticationService } from '../../admin/authentication.service';
+import { User } from '../../admin/user.class';
 
 export class Group {
 	constructor (
