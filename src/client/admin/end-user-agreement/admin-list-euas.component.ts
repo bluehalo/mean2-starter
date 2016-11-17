@@ -9,14 +9,14 @@ import { Modal } from 'angular2-modal/plugins/bootstrap';
 import { EndUserAgreement } from './eua.class';
 import { EuaService } from './eua.service';
 import { AdminService } from '../admin.service';
-import { AuthenticationService } from '../authentication.service';
+import { AuthenticationService } from '../authentication/authentication.service';
 import { PagingOptions } from '../../shared/pager.component';
 import { SortDisplayOption, SortDirection } from '../../shared/result-utils.class';
 import { AlertService } from '../../shared/alert.service';
 
 @Component({
 	selector: 'admin-list-euas',
-	templateUrl: '../../views/eua/admin-list-euas.client.view.html'
+	templateUrl: './admin-list-euas.component.html'
 })
 export class AdminListEuasComponent implements OnInit {
 	private agree: boolean = false;

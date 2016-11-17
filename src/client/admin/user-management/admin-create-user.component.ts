@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
 import { ManageUserComponent } from './manage-user.component';
 import { AdminService } from '../admin.service';
 import { User } from '../user.class';
-import { Role } from '../role.class';
+import { Role } from '../user-management/role.class';
 import { ConfigService } from '../../core/config.service';
 import { AlertService } from '../../shared/alert.service';
 

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Response } from '@angular/http';
 
-import { AdminService } from './admin.service';
+import { AdminService } from '../admin.service';
 
 export class ExportUsersModalContext {
 // extends BSModalContext {

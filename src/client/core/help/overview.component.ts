@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
-	templateUrl: './overview.client.component.html'
+	templateUrl: './overview.component.html'
 })
 export class OverviewHelpComponent {
 	@Output() backEvent = new EventEmitter();

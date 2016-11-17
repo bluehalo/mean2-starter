@@ -4,13 +4,13 @@ import { Component } from '@angular/core';
 import { User } from '../user.class';
 import { AdminService } from '../admin.service';
 import { ManageUserComponent } from './manage-user.component';
-import { Role } from '../role.class';
+import { Role } from '../user-management/role.class';
 import { ConfigService } from '../../core/config.service';
 import { AlertService } from '../../shared/alert.service';
 
 @Component({
 	selector: 'admin-edit-user',
-	templateUrl: '../../views/manage-user.client.view.html'
+	templateUrl: './manage-user.component.html'
 })
 export class AdminUpdateUserComponent extends ManageUserComponent {
 

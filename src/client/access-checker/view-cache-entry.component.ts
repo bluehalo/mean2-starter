@@ -15,7 +15,7 @@ export class ViewCacheEntryModalContext extends BSModalContext {
 }
 
 @Component({
-	templateUrl: '../views/view-cache-entry.client.view.html'
+	templateUrl: './view-cache-entry.component.html'
 })
 export class ViewCacheEntryModal implements ModalComponent<ViewCacheEntryModalContext> {
 	private context: ViewCacheEntryModalContext;

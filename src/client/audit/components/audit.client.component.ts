@@ -13,7 +13,7 @@ import {
 import { PagingOptions } from '../../shared/pager.component';
 import { SortDisplayOption, SortDirection } from '../../shared/result-utils.class';
 import { UserService } from '../../admin/users.service';
-import { AuthenticationService } from '../../admin/authentication.service';
+import { AuthenticationService } from '../../admin/authentication/authentication.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 

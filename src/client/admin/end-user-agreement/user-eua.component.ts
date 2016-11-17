@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
-import { AuthenticationService } from '../authentication.service';
-import { UserStateService } from '../user-state.service';
+import { AuthenticationService } from '../authentication/authentication.service';
+import { UserStateService } from '../authentication/user-state.service';
 import { AlertService } from '../../shared/alert.service';
 
 @Component({
-	templateUrl: '../../views/eua/user-eua.client.view.html'
+	templateUrl: './user-eua.component.html'
 })
 
 export class UserEuaComponent {

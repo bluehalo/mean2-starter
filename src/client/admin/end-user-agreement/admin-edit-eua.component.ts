@@ -5,13 +5,13 @@ import { Modal } from 'angular2-modal/plugins/bootstrap';
 
 import { EndUserAgreement } from './eua.class';
 import { EuaService } from './eua.service';
-import { AuthenticationService } from '../authentication.service';
+import { AuthenticationService } from '../authentication/authentication.service';
 import { ManageEuaComponent } from './manage-eua.component';
 import { AlertService } from '../../shared/alert.service';
 
 @Component({
 	selector: 'admin-update-eua',
-	templateUrl: '../../views/eua/manage-eua.client.view.html'
+	templateUrl: './manage-eua.component.html'
 })
 export class AdminUpdateEuaComponent extends ManageEuaComponent {
 

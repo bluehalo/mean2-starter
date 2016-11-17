@@ -7,14 +7,14 @@ import * as _ from 'lodash';
 import { ManageUserComponent } from './manage-user.component';
 import { AdminService } from '../admin.service';
 import { User } from '../user.class';
-import { AuthenticationService } from '../authentication.service';
+import { AuthenticationService } from '../authentication/authentication.service';
 import { ConfigService } from '../../core/config.service';
 import { AlertService } from '../../shared/alert.service';
 import { CacheEntriesService } from '../../access-checker/cache-entries.service';
 
 @Component({
 	selector: 'edit-user',
-	templateUrl: './manage-user.client.view.html'
+	templateUrl: './manage-user.component.html'
 })
 export class UpdateUserComponent extends ManageUserComponent {
 

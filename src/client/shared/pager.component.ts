@@ -46,7 +46,7 @@ export class PagingOptions {
 
 @Component({
 	selector: 'asy-pager',
-	templateUrl: '../views/pager.client.view.html'
+	templateUrl: './pager.component.html'
 })
 export class Pager {
 

@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 
 import { Observable, BehaviorSubject } from 'rxjs';
 
-import { User } from './user.class';
+import { User } from '../user.class';
 import { UserStateService } from './user-state.service';
-import { AsyHttp, HttpOptions } from '../shared/asy-http.service';
-import { ObservableUtils } from '../shared/observable-utils.class';
+import { AsyHttp, HttpOptions } from '../../shared/asy-http.service';
+import { ObservableUtils } from '../../shared/observable-utils.class';
 
 @Injectable()
 export class AuthenticationService {

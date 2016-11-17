@@ -1,7 +1,7 @@
 import { NgModule }     from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { AdminListUsersComponent } from './admin-list-users.component';
+import { AdminListUsersComponent } from './user-management/admin-list-users.component';
 import { AdminCreateUserComponent } from './user-management/admin-create-user.component';
 import { AdminUpdateUserComponent } from './user-management/admin-edit-user.component';
 import { AdminComponent } from './admin.component';

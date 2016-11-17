@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 
 import { EndUserAgreement } from './eua.class';
-import { AuthenticationService } from '../authentication.service';
+import { AuthenticationService } from '../authentication/authentication.service';
 import { AlertService } from '../../shared/alert.service';
 
 export abstract class ManageEuaComponent {

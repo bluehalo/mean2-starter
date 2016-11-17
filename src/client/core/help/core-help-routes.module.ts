@@ -3,7 +3,8 @@ import { RouterModule } from '@angular/router';
 
 import { AuthGuard } from '../auth-guard.service';
 import { OverviewHelpComponent } from './overview.component';
-import { HelpComponent, AboutComponent } from '../../help/help.component';
+import { HelpComponent } from '../../help/help.component';
+import { AboutComponent } from '../../help/about.component';
 
 @NgModule({
 	imports: [

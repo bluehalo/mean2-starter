@@ -4,32 +4,11 @@ import { Router } from '@angular/router';
 import { HelpTopic } from './help.class';
 import { ConfigService } from '../core/config.service';
 import { User } from '../admin/user.class';
-import { AuthenticationService } from '../admin/authentication.service';
+import { AuthenticationService } from '../admin/authentication/authentication.service';
 import { HelpService } from './help.service';
 
-/**
- * Component that contains information about the application
- */
 @Component({
-	templateUrl: '../views/about.client.view.html'
-})
-export class AboutComponent {
-
-	private version: string = '';
-
-	constructor(private configService: ConfigService) {
-	}
-
-	ngOnInit() {
-		this.configService.getConfig()
-			.subscribe((config: any) => {
-				this.version = config.version;
-			});
-	}
-}
-
-@Component({
-	templateUrl: '../views/help.client.view.html'
+	templateUrl: './help.component.html'
 })
 
 export class HelpComponent {

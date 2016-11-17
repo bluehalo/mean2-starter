@@ -1,4 +1,4 @@
-import { Credentials } from './credentials.class';
+import { Credentials } from './authentication/credentials.class';
 
 export class User {
 

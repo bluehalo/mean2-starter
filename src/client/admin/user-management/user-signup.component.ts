@@ -4,12 +4,12 @@ import { Component } from '@angular/core';
 import { ManageUserComponent } from './manage-user.component';
 import { ConfigService } from '../../core/config.service';
 import { AlertService } from '../../shared/alert.service';
-import { AuthenticationService } from '../authentication.service';
+import { AuthenticationService } from '../authentication/authentication.service';
 import { User } from '../user.class';
 
 @Component({
 	selector: 'user-signup',
-	templateUrl: './manage-user.client.view.html'
+	templateUrl: './manage-user.component.html'
 })
 export class UserSignupComponent extends ManageUserComponent {
 

@@ -6,7 +6,7 @@ import 'rxjs/Rx';
 import { Observable } from 'rxjs';
 import * as _ from 'lodash';
 
-import { UserStateService } from '../admin/user-state.service';
+import { UserStateService } from '../admin/authentication/user-state.service';
 
 export class HttpOptions {
 	public urlParams: URLSearchParams;
