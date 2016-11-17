@@ -246,7 +246,7 @@ gulp.task('coverage-init', () => {
 		.pipe(plugins.istanbul.hookRequire());
 });
 
-gulp.task('test-server-ci', [ 'env:test'/*, 'coverage-init'*/ ], (done) => {
+gulp.task('test-server-ci', [ 'env:test', 'coverage-init' ], (done) => {
 	// Run mocha tests with coverage and without nodemon
 
 	// Open mongoose connections
