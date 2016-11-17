@@ -8,8 +8,8 @@ import { Ng2BootstrapModule } from 'ng2-bootstrap';
 import { AdminService } from '../admin.service';
 import { UserService } from '../users.service';
 import { UtilModule } from '../../shared/util.module';
+import { AdminRoutingModule } from '../admin-routes.module';
 import { AlertService } from '../../shared/alert.service';
-import { CacheEntriesService } from '../../access-checker/cache-entries.service';
 import { NoAccessComponent } from './no-access.component';
 import { InvalidCertificateComponent } from './invalid-certificate.component';
 import { InactiveComponent } from './inactive.component';
@@ -18,6 +18,7 @@ import { UnauthorizedComponent } from './unauthorized.component';
 
 @NgModule({
 	imports: [
+		AdminRoutingModule,
 		CommonModule,
 		FormsModule,
 		RouterModule,
@@ -35,7 +36,6 @@ import { UnauthorizedComponent } from './unauthorized.component';
 	providers:  [
 		AlertService,
 		AdminService,
-		CacheEntriesService,
 		UserService
 	],
 })
