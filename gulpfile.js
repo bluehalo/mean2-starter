@@ -10,8 +10,8 @@ let
 	glob = require('glob'),
 	path = require('path'),
 	runSequence = require('run-sequence'),
+	argv = require('yargs').argv,
 	webpack = require('webpack'),
-	//yargs = require('yargs'),
 
 	pkg = require('./package.json'),
 	plugins = gulpLoadPlugins(),
@@ -64,18 +64,6 @@ gulp.task('watch-server', () => {
 	});
 });
 
-gulp.task('watch-server-tests', () => {
-	return nodemon({
-		script: 'test-server.js',
-		ext: 'js json',
-		env: { 'NODE_ENV': 'test' },
-		watch: _.union(
-			assets.build,
-			assets.tests.server,
-			assets.server.allJS,
-			assets.server.config)
-	});
-});
 
 gulp.task('watch-client', () => {
 	var config = require('./src/server/config');
@@ -219,11 +207,23 @@ gulp.task('env:test', () => {
 	process.env.NODE_ENV = 'test';
 });
 
+
 gulp.task('test-server', ['env:test'], () => {
+	// Gather some args for custom testing
+	let args = [];
+
+	// --bail will cause mocha to stop on first error
+	if(argv.bail) { args.push('--bail'); }
+
+	// --filter will filter the test files using the glob pattern
+	if(null != argv.filter) { args.push('--filter=\'' + argv.filter + '\''); }
+
 	// Run mocha tests with nodemon
 	return nodemon({
 		script: './config/build/test-server.js',
-		ext: 'js',
+		ext: 'js json',
+		env: { 'NODE_ENV': 'test' },
+		args: args,
 		watch: _.union(
 			assets.tests.server,
 			assets.server.allJS,
@@ -258,7 +258,6 @@ gulp.task('test-server-ci', [ 'env:test'/*, 'coverage-init'*/ ], (done) => {
 
 		gulp.src(sources)
 			.pipe(plugins.mocha({
-				//bail: argv.bail,
 				reporter: 'mochawesome',
 				reporterOptions: {
 					reportDir: 'reports/tests',
@@ -267,10 +266,10 @@ gulp.task('test-server-ci', [ 'env:test'/*, 'coverage-init'*/ ], (done) => {
 					inlineAssets: true
 				}
 			}))
-			// .pipe(plugins.istanbul.writeReports({
-			// 	dir: './reports/coverage',
-			// 	reporters: ['html']
-			// }))
+			.pipe(plugins.istanbul.writeReports({
+				dir: './reports/coverage',
+				reporters: ['html']
+			}))
 			.on('error', (err) => {
 				error = err;
 			})

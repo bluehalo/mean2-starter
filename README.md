@@ -43,3 +43,21 @@ To run the application in development mode:
 1. Set the 'mode' environment configuration property to 'development'. This will make the application use the development assets loaded from the ./public/dev directory and from the Webpack dev middleware. 
 1. Run the server using 'gulp dev' (without using gulp, watches on the style, server, and html files will not work)
 1. Do your development. Changes to server files will cause a reload of the server. Changes to client styles will cause gulp to recompile the styles and, if enabled, livereload will reload the styles. Changes to Typescript files will be picked up and recompiled by Webpack and livereload will reload the client.
+
+## Testing ##
+To test the application:
+
+Currently, we've only implemented server tests using Mocha. There are two relevant gulp tasks: 'test' and 'test-ci'.
+
+### Test ###
+'gulp test'
+
+Executes the tests using a watch on all server test and source files. The tests will re-execute upon any changes. Optionally, you can pass in either of two parameters:
+
+1. '--bail': Pass this parameter to make the mocha tests stop on the first test failure. This can be useful if you want to speed up testing.
+1. '--filter=regex': Pass this paraemeter with a valid regest in string format to filter the tests to run by spec filename.
+
+### Test CI ###
+'gulp test-ci'
+
+This task is intended to be used by a continuous integration system. When run, it generates both a test report and a coverage report under a ./reports directory. The tests are run without a filesystem watch and will only run once.
