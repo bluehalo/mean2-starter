@@ -8,13 +8,14 @@ let
 	q = require('q'),
 	should = require('should'),
 
-	deps = require(path.resolve('./config/dependencies.js')),
+	deps = require(path.resolve('./src/server/dependencies.js')),
 	dbs = deps.dbs,
 
 	Audit = dbs.admin.model('Audit'),
 	Team = dbs.admin.model('Team'),
 	TeamMember = dbs.admin.model('TeamUser'),
-	teams = require(path.resolve('./app/teams/server/controllers/teams.server.controller.js'));
+
+	teams = require(path.resolve('./src/server/app/teams/controllers/teams.server.controller.js'));
 
 /**
  * Globals

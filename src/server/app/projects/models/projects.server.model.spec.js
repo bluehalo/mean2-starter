@@ -8,7 +8,7 @@ let
 	q = require('q'),
 	should = require('should'),
 
-	deps = require(path.resolve('./config/dependencies.js')),
+	deps = require(path.resolve('./src/server/dependencies.js')),
 	dbs = deps.dbs,
 
 	Project = dbs.admin.model('Project'),

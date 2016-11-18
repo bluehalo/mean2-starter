@@ -8,7 +8,7 @@ let _ = require('lodash'),
 	q = require('q'),
 	should = require('should'),
 
-	deps = require(path.resolve('./config/dependencies.js')),
+	deps = require(path.resolve('./src/server/dependencies.js')),
 	dbs = deps.dbs,
 
 	User = dbs.admin.model('User'),
@@ -16,8 +16,7 @@ let _ = require('lodash'),
 	TeamMember = dbs.admin.model('TeamUser'),
 	TeamRole = dbs.admin.model('TeamRole'),
 
-	teamController = require(path.resolve('app/teams/server/controllers/teams.server.controller.js'));
-
+	teamController = require(path.resolve('./src/server/app/teams/controllers/teams.server.controller.js'));
 
 /**
  * Helpers

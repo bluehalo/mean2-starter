@@ -3,7 +3,7 @@
 		"node": true,
 		"mocha": true
 	},
-	
+
 	"parserOptions": {
 		"ecmaVersion": 6,
 		"sourceType": "module"
@@ -15,13 +15,13 @@
 		"eqeqeq": ["error", "smart"],
 		"no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
 		"no-trailing-spaces": ["error"],
-		"no-unused-vars": ["error", { "vars": "all", "args": "none" }],
+		"no-unused-vars": ["error", { "vars": "all", "varsIgnorePattern": "extend", "args": "none" }],
 		"quotes": ["error", "single"],
 		"linebreak-style": ["error", "unix"],
 		"semi": ["error", "always"],
 		"comma-dangle": ["error", "never"]
 	},
-	
+
 	"globals": {
 	}
 }

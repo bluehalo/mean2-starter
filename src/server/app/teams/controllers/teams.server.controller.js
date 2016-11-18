@@ -5,7 +5,7 @@ let
 	q = require('q'),
 	_ = require('lodash'),
 
-	deps = require(path.resolve('./config/dependencies.js')),
+	deps = require(path.resolve('./src/server/dependencies.js')),
 	config = deps.config,
 	dbs = deps.dbs,
 	auditService = deps.auditService,

@@ -221,7 +221,7 @@ UserSchema.methods.hashPassword = function(password) {
 	let user = this;
 
 	if (user.salt && password) {
-		return crypto.pbkdf2Sync(password, user.salt, 10000, 64).toString('base64');
+		return crypto.pbkdf2Sync(password, user.salt, 10000, 64, 'SHA1').toString('base64');
 	} else {
 		return password;
 	}
