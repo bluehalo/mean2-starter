@@ -66,7 +66,6 @@ export class AdminListUsersComponent {
 		private auth: AuthenticationService,
 		private alertService: AlertService,
 		private exportConfigService: ExportConfigService,
-		private viewContainer: ViewContainerRef,
 		private route: ActivatedRoute,
 		private configService: ConfigService,
 		private modal: Modal
