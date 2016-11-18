@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Response } from '@angular/http';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import { Observable } from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
 
 import { Team } from '../teams/teams.class';
 import { TeamsService } from '../teams/teams.service';

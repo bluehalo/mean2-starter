@@ -4,14 +4,11 @@
  * Module dependencies.
  */
 let _ = require('lodash'),
-	mongoose = require('mongoose'),
-	passport = require('passport'),
 	path = require('path'),
 	q = require('q'),
 	should = require('should'),
 
 	deps = require(path.resolve('./config/dependencies.js')),
-	config = deps.config,
 	dbs = deps.dbs,
 
 	User = dbs.admin.model('User'),

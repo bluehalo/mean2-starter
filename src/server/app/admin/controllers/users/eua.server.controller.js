@@ -88,7 +88,7 @@ module.exports.acceptEua = function(req, res) {
 	}
 	else {
 		// Audit accepted eua
-		auditService.audit('eua accepted', 'eua', 'accepted', User.auditCopy(user), {})
+		auditService.audit('eua accepted', 'eua', 'accepted', User.auditCopy(req.user), {})
 			.then(function() {
 				return User.findOneAndUpdate(
 					{ _id: req.user._id },
@@ -125,9 +125,9 @@ module.exports.createEua = function(req, res) {
 module.exports.getCurrentEua = function(req, res) {
 
 	UserAgreement.getCurrentEua()
-		.then(function(result) {
+		.then(function(results) {
 			res.status(200).json(results);
-		}, function(error){
+		}, function(err){
 			util.handleErrorResponse(res, err);
 		}).done();
 };

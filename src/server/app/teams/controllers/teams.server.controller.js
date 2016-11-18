@@ -1,6 +1,6 @@
 'use strict';
 
-let mongoose = require('mongoose'),
+let
 	path = require('path'),
 	q = require('q'),
 	_ = require('lodash'),
@@ -74,7 +74,7 @@ module.exports.meetsRequiredExternalTeams = meetsRequiredExternalTeams;
  * @returns Returns the role of the user in the team or null if user doesn't belong to team.
  */
 function getTeamRole(user, team) {
-	let ndx = _.findIndex(user.teams, t => t._id.equals(team._id));
+	let ndx = _.findIndex(user.teams, (t) => t._id.equals(team._id));
 
 	if (-1 !== ndx) {
 		return user.teams[ndx].role;
@@ -187,7 +187,7 @@ function removeMemberFromTeam(team, user, actor) {
 				TeamMember.auditCopy(actor), Team.auditCopyTeamMember(team, user, ''))
 				.then(function () {
 					// Apply the update
-					return TeamMember.update({_id: user._id}, {$pull: {teams: {_id: team._id}}}).exec()
+					return TeamMember.update({_id: user._id}, {$pull: {teams: {_id: team._id}}}).exec();
 				});
 		});
 }
@@ -226,7 +226,7 @@ module.exports.create = function(req, res) {
 	newTeam.creatorName = req.user.name;
 
 	// Audit the creation event
-	auditService.audit('team created', 'team', 'create', TeamMember.auditCopy(req.user), Team.auditCopy(team))
+	auditService.audit('team created', 'team', 'create', TeamMember.auditCopy(req.user), Team.auditCopy(newTeam))
 		.then(function () {
 			// Save the new team
 			return newTeam.save();
@@ -326,7 +326,6 @@ module.exports.delete = function(req, res) {
 module.exports.search = function(req, res) {
 
 	let search = req.body.s || null;
-	let roles = req.body.roles || {};
 	let query = req.body.q || {};
 	query = util.toMongoose(query);
 
@@ -364,7 +363,7 @@ module.exports.search = function(req, res) {
 
 		// If the query already has a filter by team, take the intersection
 		if (null != query._id && null != query._id.$in) {
-			teams = teams.filter(team => query._id.$in.indexOf(team) > -1);
+			teams = teams.filter((team) => query._id.$in.indexOf(team) > -1);
 		}
 
 		// If no remaining teams, return no results
@@ -591,7 +590,7 @@ module.exports.getTeamIds = function(user, role) {
 	}
 
 	let userTeams = (_.isArray(user.teams)) ? user.teams : [];
-	let filteredTeamIds = userTeams.filter(t => (null != t.role && t.role === role)).map(t => t._id.toString());
+	let filteredTeamIds = userTeams.filter((t) => (null != t.role && t.role === role)).map((t) => t._id.toString());
 
 	return q(filteredTeamIds);
 };

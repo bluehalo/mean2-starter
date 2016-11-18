@@ -2,7 +2,6 @@
 
 let
 	mongoose = require('mongoose'),
-	extend = require('mongoose-schema-extend'),
 	path = require('path'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),

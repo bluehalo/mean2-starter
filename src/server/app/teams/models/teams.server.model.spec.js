@@ -3,7 +3,7 @@
 /**
  * Module dependencies.
  */
-let mongoose = require('mongoose'),
+let
 	path = require('path'),
 	q = require('q'),
 	should = require('should'),
@@ -35,7 +35,7 @@ let spec = {
 		email: 'user1@mail.com',
 		username: 'user1',
 		password: 'password',
-		provider: 'local',
+		provider: 'local'
 	},
 	team1: {
 		name: 'Title',

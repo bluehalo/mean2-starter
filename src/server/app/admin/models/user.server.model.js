@@ -1,6 +1,6 @@
 'use strict';
 
-let
+let _ = require('lodash'),
 	crypto = require('crypto'),
 	mongoose = require('mongoose'),
 	path = require('path'),
@@ -8,8 +8,10 @@ let
 	uniqueValidator = require('mongoose-unique-validator'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
+	config = deps.config,
 	util = deps.utilService,
 	query = deps.queryService,
+	userAuthorizationService = require(path.resolve('./src/server/app/admin/services/users.authorization.server.service.js')),
 	GetterSchema = deps.schemaService.GetterSchema;
 
 /**

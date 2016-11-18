@@ -3,7 +3,7 @@
 /**
  * Module dependencies.
  */
-let mongoose = require('mongoose'),
+let
 	path = require('path'),
 	q = require('q'),
 	should = require('should'),
@@ -24,7 +24,6 @@ function clearDatabase() {
 	]);
 }
 
-let team1;
 let project1;
 
 let spec = {
@@ -33,7 +32,7 @@ let spec = {
 		email: 'user1@mail.com',
 		username: 'user1',
 		password: 'password',
-		provider: 'local',
+		provider: 'local'
 	},
 	team1: {
 		name: 'Title',
@@ -53,7 +52,7 @@ describe('Project Model:', function() {
 
 	before(function(done) {
 		return clearDatabase().then(function() {
-			team1 = new Team(spec.team1).save().then(function(t) {
+			new Team(spec.team1).save().then(function(t) {
 				team = t;
 
 				spec.project1.owner = team;

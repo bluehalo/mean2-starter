@@ -66,15 +66,15 @@ export class ListProjectsComponent {
 	}
 
 	private getProjects() {
-		let query:any = {
+		let query: any = {
 			owner: {'$in': this.teamId}
 		};
-		let options:any = {};
+		let options: any = {};
 
 		this.loading = true;
 		this.projectsService.searchProjects(query, this.search, this.pagingOptions, options)
 			.subscribe(
-				(result:any) => {
+				(result: any) => {
 					if (null != result && null != result.elements && result.elements.length > 0) {
 						this.projects = result.elements;
 						this.pagingOptions.set(result.pageNumber, result.pageSize, result.totalPages, result.totalSize);
@@ -83,7 +83,7 @@ export class ListProjectsComponent {
 						this.pagingOptions.reset();
 					}
 				},
-				err => {
+				(err) => {
 					console.error(err);
 				},
 				() => {
@@ -102,8 +102,8 @@ export class ListProjectsComponent {
 	}
 
 	private setSort(sortOpt: SortDisplayOption) {
-		if (sortOpt.sortField === this.pagingOptions.sortField){
-			this.pagingOptions.sortDir = (this.pagingOptions.sortDir === SortDirection.asc)? SortDirection.desc : SortDirection.asc;
+		if (sortOpt.sortField === this.pagingOptions.sortField) {
+			this.pagingOptions.sortDir = (this.pagingOptions.sortDir === SortDirection.asc) ? SortDirection.desc : SortDirection.asc;
 		} else {
 			this.pagingOptions.sortField = sortOpt.sortField;
 			this.pagingOptions.sortDir = sortOpt.sortDir;

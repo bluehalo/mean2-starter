@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Response } from "@angular/http";
+import { Response } from '@angular/http';
 
-import { Observable } from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
 
 import { Team } from './teams.class';
 import { TeamsService } from './teams.service';
@@ -13,7 +13,7 @@ import { ConfigService } from '../core/config.service';
 @Component({
 	selector: 'manage-team',
 	templateUrl: './manage-team.component.html'
-//	directives: [AlertComponent, AddRemoveList, BUTTON_DIRECTIVES, ROUTER_DIRECTIVES],
+// directives: [AlertComponent, AddRemoveList, BUTTON_DIRECTIVES, ROUTER_DIRECTIVES],
 })
 export class ManageTeamComponent {
 

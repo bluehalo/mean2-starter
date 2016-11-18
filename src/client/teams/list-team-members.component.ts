@@ -1,8 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { Response } from "@angular/http";
+import { Response } from '@angular/http';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import { Observable } from "rxjs";
+import * as _ from 'lodash';
+import { Observable } from 'rxjs';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 
 import { Team, TeamMember, TeamRole } from './teams.class';
@@ -30,7 +31,7 @@ export class ListTeamMembersComponent {
 
 	private teamId: string;
 
-	private teamRoleOptions:any[] = TeamRole.ROLES;
+	private teamRoleOptions: any[] = TeamRole.ROLES;
 
 	private user: User;
 
@@ -45,6 +46,8 @@ export class ListTeamMembersComponent {
 	private sortOptions: any = {};
 
 	private pagingOptions: PagingOptions;
+
+	private searchUsersRef = this.searchUsers.bind(this);
 
 	constructor(
 		private router: Router,
@@ -120,12 +123,10 @@ export class ListTeamMembersComponent {
 			});
 	}
 
-	private searchUsersRef = this.searchUsers.bind(this);
-
 	private searchUsers() {
 		return this.userService.match({}, this.queryUserSearchTerm, this.pagingOptions)
 			.map((result) => {
-				return result.elements.filter((e:any) => {
+				return result.elements.filter((e: any) => {
 					return (-1 === _.findIndex(this.teamMembers, function(m: TeamMember) { return m.userModel._id === e._id; }));
 				})
 				.map(function(r: any) {

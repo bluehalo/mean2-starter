@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
-import { Response } from "@angular/http";
+import { Injectable } from '@angular/core';
+import { Response } from '@angular/http';
 
-import { Observable } from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
 
 import { AsyHttp, HttpOptions } from '../shared/asy-http.service';
 import { PagingOptions } from '../shared/pager.component';
@@ -10,7 +10,7 @@ import { Project } from './projects.class';
 @Injectable()
 export class ProjectsService {
 
-	public cache : any = {};
+	public cache: any = {};
 
 	constructor(
 		private asyHttp: AsyHttp

@@ -1,14 +1,12 @@
 'use strict';
 
-let mongoose = require('mongoose'),
+let
 	path = require('path'),
 	q = require('q'),
 	_ = require('lodash'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
-	config = deps.config,
 	dbs = deps.dbs,
-	logger = deps.logger,
 	auditService = deps.auditService,
 	util = deps.utilService,
 	Project = dbs.admin.model('Project'),
@@ -49,7 +47,7 @@ module.exports.create = function(req, res) {
 	newProject.updated = Date.now();
 
 	// Audit the project creation
-	auditService.audit('project created', 'project', 'create', TeamMember.auditCopy(req.user), Project.auditCopy(project))
+	auditService.audit('project created', 'project', 'create', TeamMember.auditCopy(req.user), Project.auditCopy(newProject))
 		.then(function() {
 			return Team.findOne({ _id: teamId }).exec();
 		})
@@ -164,12 +162,12 @@ module.exports.search = function(req, res) {
 		let teams =  [];
 
 		if (null != userObj.teams && _.isArray(userObj.teams)) {
-			teams = userObj.teams.map(t => t._id.toString() );
+			teams = userObj.teams.map((t) => t._id.toString() );
 		}
 
 		// If the query already has a filter by team, take the intersection
 		if (null != query.owner && null != query.owner.$in) {
-			teams = teams.filter(t => query.owner.$in.indexOf(team) > -1);
+			teams = teams.filter((t) => query.owner.$in.indexOf(t) > -1);
 		}
 
 		// If no remaining teams, return no results

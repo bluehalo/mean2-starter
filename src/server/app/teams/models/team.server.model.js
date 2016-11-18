@@ -2,13 +2,11 @@
 
 let
 	mongoose = require('mongoose'),
-	extend = require('mongoose-schema-extend'),
 	path = require('path'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	util = deps.utilService,
 	query = deps.queryService,
-	User = dbs.admin.model('User'),
 	GetterSchema = deps.schemaService.GetterSchema;
 
 /**

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Response } from '@angular/http';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
+import * as _ from 'lodash';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 
 import { Team, TeamMember } from './teams.class';
@@ -57,14 +58,14 @@ export class TeamSummaryComponent {
 								this.router.navigate(['resource/invalid', {type: 'team'}]);
 							}
 						},
-						err => {
+						(err) => {
 							this.router.navigate(['resource/invalid', {type: 'team'}]);
 						});
 			}
 		});
 	}
 
-	private saveEditable(val) {
+	private saveEditable(val: any) {
 		if (val.hasOwnProperty('name')) {
 			this.team.name = val.name;
 		}
@@ -75,7 +76,7 @@ export class TeamSummaryComponent {
 
 		this.teamsService.update(this.team)
 			.subscribe(
-				(result:any) => {
+				(result: any) => {
 					if (null != result) {
 						this.team = new Team(result._id, result.name, result.description, result.created, result.requiresExternalTeams);
 
@@ -84,7 +85,7 @@ export class TeamSummaryComponent {
 						}
 					}
 				},
-				err => {
+				(err) => {
 					console.log(err);
 				});
 	}
