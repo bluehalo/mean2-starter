@@ -39,7 +39,7 @@ mongoose.connect().then(() => {
 			mocha.addFile(file);
 		}
 	});
-	console.log('Mocha: Executing ' + testCount + ' test files.');
+	console.log(`Mocha: Executing ${testCount} test files.`);
 
 	try {
 		// Run the tests.
