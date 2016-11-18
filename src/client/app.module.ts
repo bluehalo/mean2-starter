@@ -24,8 +24,8 @@ import { UtilModule } from './shared/util.module';
 import { ClientConfiguration } from './config/configurator';
 import { BaseService } from './config/test/test-stub-service.service';
 import { HelpModule } from './help/help.module';
-import { TeamsModule } from './teams/teams.module';
-import { ProjectsModule } from './projects/projects.module';
+import { TeamsModule } from './organizations/teams/teams.module';
+import { ProjectsModule } from './organizations/projects/projects.module';
 
 export function initializerFactory () {
 	return () => () => new Promise<any>( (resolve) => {

@@ -8,12 +8,12 @@ import { Modal } from 'angular2-modal/plugins/bootstrap';
 
 import { Team, TeamMember, TeamRole } from './teams.class';
 import { TeamsService } from './teams.service';
-import { User } from '../admin/user.class';
-import { UserService } from '../admin/users.service';
-import { PagingOptions } from '../shared/pager.component';
-import { SortDirection, SortDisplayOption } from '../shared/result-utils.class';
-import { AlertService } from '../shared/alert.service';
-import { AuthenticationService } from '../admin/authentication/authentication.service';
+import { User } from '../../admin/user.class';
+import { UserService } from '../../admin/users.service';
+import { PagingOptions } from '../../shared/pager.component';
+import { SortDirection, SortDisplayOption } from '../../shared/result-utils.class';
+import { AlertService } from '../../shared/alert.service';
+import { AuthenticationService } from '../../admin/authentication/authentication.service';
 
 @Component({
 	selector: 'list-team-members',

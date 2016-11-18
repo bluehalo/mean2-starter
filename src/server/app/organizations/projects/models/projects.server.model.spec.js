@@ -1,5 +1,8 @@
 'use strict';
 
+require('./projects.server.model');
+require('../../teams/models/team.server.model');
+
 /**
  * Module dependencies.
  */

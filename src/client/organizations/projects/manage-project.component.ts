@@ -9,7 +9,7 @@ import { TeamsService } from '../teams/teams.service';
 import { Owner } from './owner.class';
 import { Project } from './projects.class';
 import { ProjectsService } from './projects.service';
-import { AuthenticationService } from '../admin/authentication/authentication.service';
+import { AuthenticationService } from '../../admin/authentication/authentication.service';
 
 @Component({
 	selector: 'manage-project',
