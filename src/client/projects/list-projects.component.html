@@ -1,0 +1,135 @@
+<section>
+
+	<div class="row">
+		<!-- Search Input -->
+		<div [ngClass]="{ 'col-md-10': !readOnly, 'col-md-12': readOnly }">
+			<div class="input-group">
+				<input placeholder="Enter a search..." type="text" class="form-control input-sm" [(ngModel)]="search" (keyup.enter)="applySearch()">
+				<span class="input-group-btn">
+					<button class="btn btn-default btn-sm" type="button" (click)="applySearch()">
+						<i class="fa fa-search"></i>
+					</button>
+				</span>
+			</div>
+		</div>
+		<div class="col-md-2">
+			<a type="button" class="btn btn-default btn-sm pull-right" *ngIf="!readOnly"
+			   [routerLink]="[asyRoutes.getPath('CreateProject'), {mode:'create', teamId:teamId}]">
+				<i class="fa fa-plus"></i> Create Project
+			</a>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+
+			<!--Sorting/Paging Controls -->
+			<div [hidden]="projects.length === 0">
+				<div class="controls" style="float:left;">
+					<span>Sort By:</span>
+					<a style="padding: 0 6px 0 6px;" [ngClass]="{selected: pagingOptions.sortField===sortOptions.name.sortField}" class="no-href btn-link" (click)="setSort(sortOptions.name)">Name</a> /
+					<a style="padding: 0 6px 0 6px;" [ngClass]="{selected: pagingOptions.sortField===sortOptions.created.sortField}" class="no-href btn-link" (click)="setSort(sortOptions.created)">Created</a> /
+					<a style="padding: 0 6px 0 6px;" [ngClass]="{selected: pagingOptions.sortField===sortOptions.updated.sortField}" class="no-href btn-link" (click)="setSort(sortOptions.updated)">Updated</a>
+				</div>
+				<div class="controls pull-right">
+					<asy-pager
+							[pageNumber]="pagingOptions.pageNumber"
+							[pageSize]="pagingOptions.pageSize"
+							[totalSize]="pagingOptions.totalSize"
+							[maxPageSize]="50"
+							[currentSize]="projects.length"
+							(onChange)="goToPage($event)">
+					</asy-pager>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="row" [hidden]="loading">
+		<div class="col-md-12">
+
+			<table class="asymmetrik table table-condensed table-hover table-striped" [hidden]="projects.length === 0">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Description</th>
+						<th>Created</th>
+						<th>Updated</th>
+						<th>Resources</th>
+						<th *ngIf="!readOnly">&nbsp;</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr class="list-row" *ngFor="let project of projects">
+
+						<!-- Project Name -->
+						<td style="width:200px;">
+							<div class="hide-overflow">
+								<a [routerLink]="[asyRoutes.getPath('Dashboard'), {projectId: project._id}]"><strong>{{project.name}}</strong></a>
+							</div>
+						</td>
+
+						<td>
+							<div class="hide-overflow" style="max-width:400px;">{{project.description}}</div>
+						</td>
+
+						<td >
+							<div class="hide-overflow" style="max-width:400px;">{{project.created | agoDate:false}}</div>
+						</td>
+
+						<td >
+							<div class="hide-overflow" style="max-width:400px;">{{project.updated | agoDate:false}}</div>
+						</td>
+
+						<td>
+							<div *ngIf="project?.resources?.length === 0">
+								No resources
+							</div>
+							<div *ngIf="project?.resources?.length > 0">
+								<span class="label label-gray hide-overflow"
+									  style="max-width:400px;"
+									  *ngFor="let resource of project.resources">
+									{{resource.title}}
+								</span>
+								<span class="label label-gray hide-overflow"
+									  *ngIf="project?.numResources > maxResourcesShownInline">
+									...and {{project?.numResources-maxResourcesShownInline}} more
+								</span>
+							</div>
+						</td>
+
+						<td *ngIf="!readOnly">
+							<div class="pull-right" >
+								<a class="no-href btn-icon"
+								   tooltip="Edit"
+								   tooltipAppendToBody="true"
+								   tooltipPlacement="bottom"
+								   [routerLink]="[asyRoutes.getPath('UpdateProject'), {id: project._id, mode: 'edit'}]">
+									<i class="fa fa-gear" [ngClass]="iconClass"></i>
+								</a>
+								<a class="no-href btn-icon"
+								   tooltip="Delete"
+								   tooltipAppendToBody="true"
+								   tooltipPlacement="bottom"
+								   (click)="removeProject(project)">
+									<i class="fa fa-trash-o"></i>
+								</a>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="col-md-6 col-md-offset-3 center" [hidden]="projects.length > 0">
+				<h3>
+					No Projects?<br/>
+					<small>
+						Either there were no Projects that matched your search or there are no projects in this team.<br/>
+					</small>
+				</h3>
+			</div>
+		</div>
+	</div>
+</section>

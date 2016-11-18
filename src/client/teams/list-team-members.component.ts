@@ -1,26 +1,25 @@
-import {Component, Input, forwardRef, Inject, ViewContainerRef} from '@angular/core';
-import {Response} from "@angular/http";
-import {ROUTER_DIRECTIVES, Router, RouteParams} from "@angular/router-deprecated";
-import {DialogRef} from "angular2-modal/angular2-modal";
-import {Modal} from "angular2-modal/plugins/bootstrap";
-import {AlertComponent, TYPEAHEAD_DIRECTIVES} from "ng2-bootstrap/ng2-bootstrap";
-import {Observable} from "rxjs/Observable";
-import {Team, TeamMember, TeamRole, TeamsService} from "../services/teams.client.service";
-import {User} from "../../../users/client/model/user.client.class";
-import {AuthenticationService} from "../../../users/client/services/authentication.client.service";
-import {UserService} from "../../../users/client/services/users.client.service";
-import {PagingOptions, Pager} from "../../../util/client/components/pager.client.component";
-import {AlertService} from "../../../util/client/services/alert.client.service";
-import {AsyRouteMappings} from "../../../util/client/util/AsyRouteMappings.client.class";
-import {SortDirection, SortDisplayOption} from "../../../util/client/util/result-utils.client.classes";
+import { Component, Input } from '@angular/core';
+import { Response } from "@angular/http";
+import { Router, ActivatedRoute, Params } from '@angular/router';
+
+import { Observable } from "rxjs";
+import { Modal } from 'angular2-modal/plugins/bootstrap';
+
+import { Team, TeamMember, TeamRole } from './teams.class';
+import { TeamsService } from './teams.service';
+import { User } from '../admin/user.class';
+import { UserService } from '../admin/users.service';
+import { PagingOptions } from '../shared/pager.component';
+import { SortDirection, SortDisplayOption } from '../shared/result-utils.class';
+import { AlertService } from '../shared/alert.service';
+import { AuthenticationService } from '../admin/authentication/authentication.service';
 
 @Component({
 	selector: 'list-team-members',
-	directives: [AlertComponent, ROUTER_DIRECTIVES, TYPEAHEAD_DIRECTIVES],
-	providers: [],
-	templateUrl: '/app/teams/views/list-team-members.client.view.html'
+	// directives: [AlertComponent, ROUTER_DIRECTIVES, TYPEAHEAD_DIRECTIVES],
+	// providers: [],
+	templateUrl: './list-team-members.component.html'
 })
-
 export class ListTeamMembersComponent {
 
 	@Input() readOnly: boolean = true;
@@ -49,25 +48,21 @@ export class ListTeamMembersComponent {
 
 	constructor(
 		private router: Router,
+		private route: ActivatedRoute,
 		private modal: Modal,
-		private viewContainer: ViewContainerRef,
-		private routeParams: RouteParams,
 		private teamsService: TeamsService,
 		private userService: UserService,
-		public alertService: AlertService,
-		public auth: AuthenticationService,
-		@Inject(forwardRef(() => AsyRouteMappings)) protected asyRoutes
+		private alertService: AlertService,
+		private authService: AuthenticationService
 	) {
-		this.modal.defaultViewContainer = viewContainer;
 	}
 
 	ngOnInit() {
 		this.alertService.clearAllAlerts();
 
-		this.user = this.auth.getCurrentUser();
+		this.user = this.authService.getCurrentUser();
 
 		this.team = new Team();
-		this.teamId = this.routeParams.get('id');
 
 		this.sortOptions.name = new SortDisplayOption('Name', 'name', SortDirection.asc);
 		this.sortOptions.username = new SortDisplayOption('Username', 'username', SortDirection.asc);
@@ -76,16 +71,20 @@ export class ListTeamMembersComponent {
 		this.pagingOptions.sortField = this.sortOptions.name.sortField;
 		this.pagingOptions.sortDir = this.sortOptions.name.sortDir;
 
-		// Initialize team if appropriate
-		if (this.teamId) {
-			this.teamsService.get(this.teamId)
-				.subscribe((result: any) => {
-					if (result) {
-						this.team = new Team(result._id, result.name, result.description, result.created, result.requiresExternalTeams);
-						this.getTeamMembers();
-					}
-				});
-		}
+		this.route.params.subscribe((params: Params) => {
+			this.teamId = params[`id`];
+
+			// Initialize team if appropriate
+			if (this.teamId) {
+				this.teamsService.get(this.teamId)
+					.subscribe((result: any) => {
+						if (result) {
+							this.team = new Team(result._id, result.name, result.description, result.created, result.requiresExternalTeams);
+							this.getTeamMembers();
+						}
+					});
+			}
+		});
 	}
 
 	private typeaheadOnSelect(e: any) {
@@ -157,13 +156,13 @@ export class ListTeamMembersComponent {
 				.okBtn('Remove Admin')
 				.open()
 				.then(
-					resultPromise => resultPromise.result.then(
+					(resultPromise: any) => resultPromise.result.then(
 						() => {
 							this.doUpdateRole(member, role)
 								.subscribe(() => {
-										this.auth.reloadCurrentUser().subscribe(() => {
+										this.authService.reloadCurrentUser().subscribe(() => {
 											// If we successfully removed the role from ourselves, redirect away
-											this.router.navigate([this.asyRoutes.getPath('Teams'), {clearCachedFilter: true}]);
+											this.router.navigate(['/teams', {clearCachedFilter: true}]);
 										});
 									},
 									(response: Response) => {
@@ -200,7 +199,7 @@ export class ListTeamMembersComponent {
 
 		this.teamsService.addMember(this.teamId, member.userModel._id, role)
 			.subscribe(() => {
-					this.auth.reloadCurrentUser().subscribe(() => {
+					this.authService.reloadCurrentUser().subscribe(() => {
 						this.getTeamMembers();
 					});
 				},
@@ -221,11 +220,11 @@ export class ListTeamMembersComponent {
 			.okBtn('Remove Member')
 			.open()
 			.then(
-				resultPromise => resultPromise.result.then(
+				(resultPromise: any) => resultPromise.result.then(
 					() => {
 						this.teamsService.removeMember(this.teamId, member.userModel._id)
 							.subscribe(() => {
-									this.auth.reloadCurrentUser().subscribe(() => {
+									this.authService.reloadCurrentUser().subscribe(() => {
 										this.getTeamMembers();
 									});
 								},

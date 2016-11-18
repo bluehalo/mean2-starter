@@ -1,17 +1,21 @@
 import { NgModule } from '@angular/core';
 
-import { ManageTeamComponent } from './components/manage-team.client.component';
+import { ManageTeamComponent } from './manage-team.component';
+import { ListTeamMembersComponent } from './list-team-members.component';
+import { ListTeamsComponent } from './list-teams.component';
+import { TeamSummaryComponent } from './team-summary.component';
 
 @NgModule({
 	imports: [],
 	entryComponents: [],
 	exports: [],
 	declarations: 	[
-		ManageTeamComponent
+		ManageTeamComponent,
+		ListTeamMembersComponent,
+		ListTeamsComponent,
+		TeamSummaryComponent
 	],
 	providers: [
 	]
 })
 export class TeamsModule { }
-
-//	directives: [AlertComponent, AddRemoveList, BUTTON_DIRECTIVES, ROUTER_DIRECTIVES],

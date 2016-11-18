@@ -1,28 +1,21 @@
+import { Component } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+
 import * as _ from 'lodash';
-import {NgFor} from "@angular/common";
-import {Component, Inject, forwardRef} from '@angular/core';
-import {Response} from "@angular/http";
-import {Router, ROUTER_DIRECTIVES, RouteParams} from "@angular/router-deprecated";
-import {AlertComponent, DROPDOWN_DIRECTIVES, TOOLTIP_DIRECTIVES} from "ng2-bootstrap/ng2-bootstrap";
-import {Observable} from "rxjs/Observable";
-import {Team, TeamMember, TeamsService} from "../services/teams.client.service";
-import {ConfigService} from "../../../core/client/services/config.client.service";
-import {User} from "../../../users/client/model/user.client.class";
-import {AuthenticationService} from "../../../users/client/services/authentication.client.service";
-import {Pager, PagingOptions} from "../../../util/client/components/pager.client.component";
-import {AgoDatePipe} from "../../../util/client/pipes/ago-date.client.pipe";
-import {AlertService} from "../../../util/client/services/alert.client.service";
-import {AsyRouteMappings} from "../../../util/client/util/AsyRouteMappings.client.class";
-import {SortDisplayOption, SortDirection} from "../../../util/client/util/result-utils.client.classes";
+
+import { Team, TeamMember } from './teams.class';
+import { TeamsService } from './teams.service';
+import { SortDirection, SortDisplayOption } from '../shared/result-utils.class';
+import { PagingOptions } from '../shared/pager.component';
+import { AuthenticationService } from '../admin/authentication/authentication.service';
+import { AlertService } from '../shared/alert.service';
 
 @Component({
 	selector: 'list-teams',
-	directives: [AlertComponent, Pager, DROPDOWN_DIRECTIVES, TOOLTIP_DIRECTIVES, ROUTER_DIRECTIVES],
-	providers: [],
-	pipes: [AgoDatePipe],
-	templateUrl: '/app/teams/views/list-teams.client.view.html'
+	// directives: [AlertComponent, Pager, DROPDOWN_DIRECTIVES, TOOLTIP_DIRECTIVES, ROUTER_DIRECTIVES],
+	// pipes: [AgoDatePipe],
+	templateUrl: './list-teams.component.html'
 })
-
 export class ListTeamsComponent {
 
 	private user: TeamMember;
@@ -36,16 +29,15 @@ export class ListTeamsComponent {
 	private pagingOptions: PagingOptions;
 
 	constructor(
-		private router: Router,
-		private routeParams: RouteParams,
+		private route: ActivatedRoute,
 		private teamsService: TeamsService,
-		public auth: AuthenticationService,
-		public alertService: AlertService,
-		@Inject(forwardRef(() => AsyRouteMappings)) protected asyRoutes
-	) {}
+		private authService: AuthenticationService,
+		public alertService: AlertService
+	) {
+	}
 
 	ngOnInit() {
-		this.user = new TeamMember().setFromTeamMemberModel(null, this.auth.getCurrentUser().userModel);
+		this.user = new TeamMember().setFromTeamMemberModel(null, this.authService.getCurrentUser().userModel);
 		this.initializeTeams();
 	}
 
@@ -54,9 +46,12 @@ export class ListTeamsComponent {
 
 		this.sortOptions.name = new SortDisplayOption('Team Name', 'name', SortDirection.asc);
 
-		if (_.toString(this.routeParams.get('clearCachedFilter')) === 'true' || null == this.teamsService.cache.listTeams) {
-			this.teamsService.cache.listTeams = {};
-		}
+		this.route.params.subscribe((params: Params) => {
+			let clearCachedFilter = params[`clearCachedFilter`];
+			if (_.toString(clearCachedFilter) === 'true' || null == this.teamsService.cache.listTeams) {
+				this.teamsService.cache.listTeams = {};
+			}
+		});
 
 		this.initializeUserFilters();
 		this.loadTeams();
