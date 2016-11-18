@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Response} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
-import { AsyHttp, HttpOptions } from '../../shared/services/asy-http.client.service';
-import { PagingOptions } from '../../shared/components/pager.client.component';
+import { AsyHttp, HttpOptions } from '../../shared/asy-http.service';
+import { PagingOptions } from '../../shared/pager.component';
 
 @Injectable()
 export class AuditService {

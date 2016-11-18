@@ -1,6 +1,6 @@
 import { Component, ViewContainerRef } from '@angular/core';
 import { Overlay } from 'angular2-modal';
-import { ConfigService } from './core/services/config.client.service';
+import { ConfigService } from './core/config.service';
 
 @Component({
 	selector: 'app-component',
