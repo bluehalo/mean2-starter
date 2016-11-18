@@ -47,7 +47,7 @@
 					<!-- Right side user logged in area -->
 					<ul class="nav navbar-nav navbar-right" *ngIf="user.isAuthenticated()">
 
-						<li class="dropdown" dropdown>
+						<li *ngIf="teams.length > 0" class="dropdown" dropdown>
 							<a data-ng-href="/#!/" class="dropdown-toggle" dropdownToggle>{{user.userModel.name}} <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
 

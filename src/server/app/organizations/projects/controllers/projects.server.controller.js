@@ -12,7 +12,7 @@ let
 	Project = dbs.admin.model('Project'),
 	Team = dbs.admin.model('Team'),
 	TeamMember = dbs.admin.model('TeamUser'),
-	teams = require(path.resolve('./src/server/teams/controllers/teams.server.controller.js'));
+	teams = require(path.resolve('./src/server/app/organizations/teams/controllers/teams.server.controller.js'));
 
 /*
  * Local Functions

@@ -15,7 +15,7 @@ let
 	Team = dbs.admin.model('Team'),
 	TeamMember = dbs.admin.model('TeamUser'),
 
-	teams = require(path.resolve('./src/server/app/teams/controllers/teams.server.controller.js'));
+	teams = require(path.resolve('./src/server/app/organizations/teams/controllers/teams.server.controller.js'));
 
 /**
  * Globals

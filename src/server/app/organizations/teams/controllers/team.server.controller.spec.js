@@ -16,7 +16,7 @@ let _ = require('lodash'),
 	TeamMember = dbs.admin.model('TeamUser'),
 	TeamRole = dbs.admin.model('TeamRole'),
 
-	teamController = require(path.resolve('./src/server/app/teams/controllers/teams.server.controller.js'));
+	teamController = require(path.resolve('./src/server/app/organizations/teams/controllers/teams.server.controller.js'));
 
 /**
  * Helpers

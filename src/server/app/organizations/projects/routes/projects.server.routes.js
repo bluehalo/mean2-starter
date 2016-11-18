@@ -2,8 +2,8 @@
 
 let path = require('path'),
 
-	projects = require(path.resolve('./src/server/projects/controllers/projects.server.controller.js')),
-	users = require(path.resolve('./src/server/users/controllers/users.server.controller.js'));
+	projects = require(path.resolve('./src/server/app/organizations/projects/controllers/projects.server.controller.js')),
+	users = require(path.resolve('./src/server/app/users/controllers/users.server.controller.js'));
 
 module.exports = function(app) {
 
