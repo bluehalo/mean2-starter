@@ -1,5 +1,5 @@
-import { Injectable, ModuleWithProviders } from '@angular/core';
-import { HelpTopic } from './model/help.classes';
+import { Injectable } from '@angular/core';
+import { HelpTopic } from './help.class';
 
 @Injectable()
 export class HelpService {
