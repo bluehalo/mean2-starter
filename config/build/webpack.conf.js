@@ -130,6 +130,7 @@ module.exports = (mode) => {
 			// HTML file loader (for angular2 templates)
 			{ test: /\.html$/, loader: 'html' }
 		]
+
 	};
 
 
@@ -166,7 +167,10 @@ module.exports = (mode) => {
 		new webpack.optimize.CommonsChunkPlugin({
 			name: [ 'app', 'vendor' ],
 			filename: '[name].js'
-		})
+		}),
+		new webpack.ContextReplacementPlugin(
+			/angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/
+		)
 	);
 
 	return wpConfig;
