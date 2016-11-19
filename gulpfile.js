@@ -216,7 +216,7 @@ gulp.task('test-server', ['env:test'], () => {
 	if(argv.bail) { args.push('--bail'); }
 
 	// --filter will filter the test files using the glob pattern
-	if(null != argv.filter) { args.push('--filter=\'' + argv.filter + '\''); }
+	if(null != argv.filter) { args.push(`--filter='${argv.filter}'`); }
 
 	// Run mocha tests with nodemon
 	return nodemon({
