@@ -4,25 +4,31 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { ModalModule } from 'angular2-modal';
 
+import { Ng2BootstrapModule } from 'ng2-bootstrap';
+import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { Ng2BootstrapModule } from 'ng2-bootstrap';
-import { AdminModule } from './admin/admin.module';
+
 import { AccessCheckerModule } from './access-checker/access-checker.module';
-import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
+import { AdminModule } from './admin/admin.module';
 import { AuditModule } from './audit/audit.module';
+import { DemoModule } from './demo/demo.module';
+import { HelpModule } from './help/help.module';
+import { UtilModule } from './shared/util.module';
+
 import { HeaderComponent } from './core/header.component';
 import { FooterComponent } from './core/footer.component';
 import { LoggedInComponent } from './core/logged-in.component';
 import { InvalidResourceComponent } from './core/invalid-resource.component';
+
 import { AuthenticationService } from './admin/authentication/authentication.service';
 import { AuthGuard } from './core/auth-guard.service';
-import { UserStateService } from './admin/authentication/user-state.service';
-import { ConfigService } from './core/config.service';
-import { UtilModule } from './shared/util.module';
-import { ClientConfiguration } from './config/configurator';
 import { BaseService } from './config/test/test-stub-service.service';
-import { HelpModule } from './help/help.module';
+import { ConfigService } from './core/config.service';
+import { ClientConfiguration } from './config/configurator';
+import { UserStateService } from './admin/authentication/user-state.service';
+
 
 export function initializerFactory () {
 	return () => () => new Promise<any>( (resolve) => {
@@ -48,6 +54,7 @@ export function initializerFactory () {
 		AccessCheckerModule,
 		AdminModule,
 		AuditModule,
+		DemoModule,
 		HelpModule,
 		UtilModule
 	],
