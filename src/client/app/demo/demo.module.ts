@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { SentioModule } from '@asymmetrik/angular2-sentio';
 
 import { DemoRoutingModule } from './demo-routing.module';
 import { DemoComponent } from './demo.component';
@@ -8,6 +9,7 @@ import { DemoSentioComponent } from './sentio/demo-sentio.component';
 
 @NgModule({
 	imports: [
+		SentioModule,
 		DemoRoutingModule
 	],
 	exports: [],
