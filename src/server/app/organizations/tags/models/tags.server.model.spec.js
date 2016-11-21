@@ -1,8 +1,5 @@
 'use strict';
 
-require('./tags.server.model');
-require('../../teams/models/team.server.model');
-
 /**
  * Module dependencies.
  */

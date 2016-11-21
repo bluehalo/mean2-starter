@@ -14,10 +14,7 @@ import { AuthenticationService } from '../../admin/authentication/authentication
 @Component({
 	selector: 'manage-tag',
 	templateUrl: './manage-tag.component.html'
-	// directives: [AlertComponent, ROUTER_DIRECTIVES],
-	// providers: []
 })
-
 export class ManageTagComponent {
 
 	private team: Team;

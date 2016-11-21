@@ -12,8 +12,6 @@ import { AlertService } from '../../shared/alert.service';
 
 @Component({
 	selector: 'list-teams',
-	// directives: [AlertComponent, Pager, DROPDOWN_DIRECTIVES, TOOLTIP_DIRECTIVES, ROUTER_DIRECTIVES],
-	// pipes: [AgoDatePipe],
 	templateUrl: './list-teams.component.html'
 })
 export class ListTeamsComponent {
@@ -32,7 +30,7 @@ export class ListTeamsComponent {
 		private route: ActivatedRoute,
 		private teamsService: TeamsService,
 		private authService: AuthenticationService,
-		public alertService: AlertService
+		private alertService: AlertService
 	) {
 	}
 

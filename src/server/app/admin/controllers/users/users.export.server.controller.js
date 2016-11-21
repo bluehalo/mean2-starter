@@ -10,11 +10,12 @@ let _ = require('lodash'),
 	utilService = deps.utilService,
 	auditService = deps.auditService,
 
-	exportConfigController = require(path.resolve('./src/server/app/util/controllers/export-config.server.controller.js')),
-	exportConfigService = require(path.resolve('./src/server/app/util/services/export-config.server.service.js')),
-	TeamMember = dbs.admin.model('TeamUser'),
 	Team = dbs.admin.model('Team'),
-	ExportConfig = dbs.admin.model('ExportConfig');
+	TeamMember = dbs.admin.model('TeamUser'),
+	ExportConfig = dbs.admin.model('ExportConfig'),
+
+	exportConfigController = require(path.resolve('./src/server/app/util/controllers/export-config.server.controller.js')),
+	exportConfigService = require(path.resolve('./src/server/app/util/services/export-config.server.service.js'));
 
 // GET the requested CSV using a special configuration from the export config collection
 exports.adminGetCSV = function (req, res) {

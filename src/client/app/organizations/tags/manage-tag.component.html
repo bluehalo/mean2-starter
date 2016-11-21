@@ -1,9 +1,7 @@
 <section>
 
-	<a class="back-link" [routerLink]="[asyRoutes.getPath('TeamSummary'),{id:team?._id}]"><i class="fa fa-angle-double-left"></i> Back to Team Summary</a>
+	<a class="back-link" [routerLink]="['/team', team?._id]"><i class="fa fa-angle-double-left"></i> Back to Team Summary</a>
 	<form #form="ngForm" (ngSubmit)="save()" novalidate autocomplete="off" class="form-horizontal" role="form">
-
-
 
 		<div class="page-header">
 			<h3>{{ modeDisplay }} Tag</h3>
@@ -16,14 +14,14 @@
 		<div class="form-group row">
 			<label class="col-md-2 control-label">Name<span class="text-danger"><strong> *</strong></span></label>
 			<div class="col-md-10">
-				<input type="text" class="form-control" required [(ngModel)]="tag.name" ngControl="name"/>
+				<input type="text" class="form-control" required name="name" [(ngModel)]="tag.name" ngControl="name"/>
 			</div>
 		</div>
 
 		<div class="form-group row">
 			<label class="col-md-2 control-label">Description</label>
 			<div class="col-md-10">
-				<input type="text" class="form-control" [(ngModel)]="tag.description"/>
+				<input type="text" class="form-control" name="description" [(ngModel)]="tag.description"/>
 			</div>
 		</div>
 
@@ -31,7 +29,7 @@
 			<div class="col-md-12">
 				<div class="pull-right">
 					<button type="submit" class="btn btn-default" [disabled]="!form.form.valid">Save</button>
-					<a type="button" class="btn btn-link" [routerLink]="[asyRoutes.getPath('TeamSummary'),{id:team?._id}]">Cancel</a>
+					<a type="button" class="btn btn-link" [routerLink]="['/team', team?._id]">Cancel</a>
 				</div>
 			</div>
 		</div>

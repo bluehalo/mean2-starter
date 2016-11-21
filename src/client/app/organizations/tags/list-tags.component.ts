@@ -13,9 +13,7 @@ import { TagsService } from './tags.service';
 
 @Component({
 	selector: 'list-tags',
-	templateUrl: './list-tags.component.html',
-	// directives: [AlertComponent, Pager, TOOLTIP_DIRECTIVES, ROUTER_DIRECTIVES, CORE_DIRECTIVES],
-	// pipes: [AgoDatePipe],
+	templateUrl: './list-tags.component.html'
 })
 export class ListTagsComponent {
 

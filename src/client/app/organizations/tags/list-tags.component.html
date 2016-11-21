@@ -14,7 +14,7 @@
 		</div>
 		<div class="col-md-2">
 			<a type="button" class="btn btn-default btn-sm pull-right" *ngIf="!readOnly"
-			   [routerLink]="[asyRoutes.getPath('CreateTag'), {mode:'create', teamId:teamId}]">
+			   [routerLink]="['/tag/create', {mode:'create', teamId:teamId}]">
 				<i class="fa fa-plus"></i> Create Tag
 			</a>
 		</div>
@@ -67,7 +67,7 @@
 						<!-- Tag Name -->
 						<td style="width:200px;">
 							<div class="hide-overflow">
-								<a [routerLink]="[asyRoutes.getPath('Dashboard'), {tagId: tag._id}]"><strong>{{tag.name}}</strong></a>
+								<div class="hide-overflow" style="max-width:400px;">{{tag.name}}</div>
 							</div>
 						</td>
 
@@ -106,7 +106,7 @@
 								   tooltip="Edit"
 								   tooltipAppendToBody="true"
 								   tooltipPlacement="bottom"
-								   [routerLink]="[asyRoutes.getPath('UpdateTag'), {id: tag._id, mode: 'edit'}]">
+								   [routerLink]="['/tag/edit', tag._id, { mode: 'edit' }]">
 									<i class="fa fa-gear" [ngClass]="iconClass"></i>
 								</a>
 								<a class="no-href btn-icon"

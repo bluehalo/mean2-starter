@@ -25,7 +25,9 @@ import { ClientConfiguration } from './config/configurator';
 import { BaseService } from './config/test/test-stub-service.service';
 import { HelpModule } from './help/help.module';
 import { TeamsModule } from './organizations/teams/teams.module';
-import { TagsModule } from './organizations/tags/tags.module';
+import { TeamsRoutingModule } from './organizations/teams/teams-routes.module';
+import { TeamsService } from './organizations/teams/teams.service';
+import { TagsRoutingModule } from './organizations/tags/tags-routes.module';
 
 export function initializerFactory () {
 	return () => () => new Promise<any>( (resolve) => {
@@ -52,8 +54,9 @@ export function initializerFactory () {
 		AdminModule,
 		AuditModule,
 		HelpModule,
-		TagsModule,
+		TagsRoutingModule,
 		TeamsModule,
+		TeamsRoutingModule,
 		UtilModule
 	],
 	declarations: [
@@ -69,6 +72,7 @@ export function initializerFactory () {
 		AuthGuard,
 		ClientConfiguration,
 		ConfigService,
+		TeamsService,
 		UserStateService,
 		{
 			provide: BaseService,

@@ -3,7 +3,7 @@
 let path = require('path'),
 
 	tags = require(path.resolve('./src/server/app/organizations/tags/controllers/tags.server.controller.js')),
-	users = require(path.resolve('./src/server/app/users/controllers/users.server.controller.js'));
+	users = require(path.resolve('./src/server/app/admin/controllers/users.server.controller.js'));
 
 module.exports = function(app) {
 

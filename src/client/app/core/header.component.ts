@@ -4,6 +4,8 @@ import { Router, NavigationEnd } from '@angular/router';
 import { CoreComponent } from './core.component';
 import { ConfigService } from './config.service';
 import { AuthenticationService } from '../admin/authentication/authentication.service';
+import { Team } from '../organizations/teams/teams.class';
+import { TeamsService } from '../organizations/teams/teams.service';
 
 /**
  * Primary header component wrapping the whole page
@@ -13,18 +15,34 @@ import { AuthenticationService } from '../admin/authentication/authentication.se
 	templateUrl: './header.component.html'
 })
 export class HeaderComponent extends CoreComponent {
+
 	private currentRoute: string = '';
 
+	private teams: Team[] = [];
+
 	constructor(
-		protected auth: AuthenticationService,
+		protected router: Router,
+		protected authService: AuthenticationService,
 		protected configService: ConfigService,
-		protected router: Router
+		protected teamsService: TeamsService,
 	) {
-		super(auth, configService);
+		super(authService, configService);
 	}
 
 	ngOnInit() {
 		super.ngOnInit();
+
+		// Subscribe to user initialization observable and load teams when done
+		this.authService.initializing$
+			.subscribe( (isInitializing: boolean) => {
+				if (!isInitializing) {
+					this.teamsService.selectionList().subscribe((result: any) => {
+						if (null != result && null != result.elements && result.elements.length > 0) {
+							this.teams = result.elements.map((e: any) => new Team(e._id, e.name));
+						}
+					});
+				}
+			});
 
 		this.router.events.subscribe( (event) => {
 			if (event instanceof NavigationEnd) {

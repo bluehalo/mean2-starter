@@ -1,6 +1,6 @@
 <section>
 
-	<a class="back-link" [routerLink]="[asyRoutes.getPath('Teams')]">
+	<a class="back-link" [routerLink]="['/teams']">
 		<i class="fa fa-angle-double-left"></i> Back to My Teams
 	</a>
 
@@ -18,13 +18,13 @@
 				<div class="form-group row">
 					<div class="col-md-12">
 						<label for="name">Team Name<span class="text-danger"><strong> *</strong></span></label>
-						<input type="text" class="form-control" id="name" [(ngModel)]="team.name" required/>
+						<input type="text" class="form-control" id="name" name="name" [(ngModel)]="team.name" required/>
 					</div>
 				</div>
 				<div class="form-group row">
 					<div class="col-md-12">
 						<label for="description">Description</label>
-						<textarea rows="4" class="form-control" id="description" [(ngModel)]="team.description"></textarea>
+						<textarea rows="4" class="form-control" id="description" name="description" [(ngModel)]="team.description"></textarea>
 					</div>
 				</div>
 
@@ -51,7 +51,7 @@
 					<div class="col-md-12">
 						<div class="pull-right">
 							<button type="button" class="btn btn-default" (click)="save()" [disabled]="!form.form.valid">{{ okButtonText }}</button>
-							<a type="button" class="btn btn-link" [routerLink]="[asyRoutes.getPath('Teams')]">Cancel</a>
+							<a type="button" class="btn btn-link" [routerLink]="['/teams']">Cancel</a>
 						</div>
 					</div>
 				</div>

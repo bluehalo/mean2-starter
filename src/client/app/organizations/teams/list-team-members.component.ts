@@ -17,8 +17,6 @@ import { AuthenticationService } from '../../admin/authentication/authentication
 
 @Component({
 	selector: 'list-team-members',
-	// directives: [AlertComponent, ROUTER_DIRECTIVES, TYPEAHEAD_DIRECTIVES],
-	// providers: [],
 	templateUrl: './list-team-members.component.html'
 })
 export class ListTeamMembersComponent {

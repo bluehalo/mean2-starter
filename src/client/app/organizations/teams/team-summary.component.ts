@@ -13,8 +13,6 @@ import { AuthenticationService } from '../../admin/authentication/authentication
 @Component({
 	selector: 'team-summary',
 	templateUrl: './team-summary.component.html'
-	// directives: [AlertComponent, InLineEdit, ListTeamMembersComponent, ListTagsComponent, Pager, TAB_DIRECTIVES, ROUTER_DIRECTIVES],
-	// pipes: [AgoDatePipe]
 })
 export class TeamSummaryComponent {
 

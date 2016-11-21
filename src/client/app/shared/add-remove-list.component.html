@@ -1,0 +1,33 @@
+<div class="input-group">
+	<input type="text"
+		   *ngIf="!readOnly"
+		   class="form-control input-sm"
+		   placeholder="{{ placeholder }}"
+		   [(ngModel)]="item"
+		   (keyup.enter)="addItem($event)"/>
+
+	<!-- Add button -->
+	<span class="input-group-btn"
+		  *ngIf="!readOnly">
+		<button class="btn btn-default btn-sm"
+				type="button"
+				[disabled]="isAddDisabled()"
+				(click)="addItem(item)">
+			<i class="fa fa-plus"></i> {{ buttonText }}
+		</button>
+	</span>
+</div>
+
+<div>
+	<ul class="items inline">
+		<li *ngFor="let it of items; let i = index">
+			<div class="item">
+				<div class="item-label hide-overflow">{{ it }}</div>
+				<div class="item-delete"><a (click)="deleteItem(i)" class="no-href danger btn-icon btn-xs" *ngIf="!readOnly">
+					<i class="fa fa-trash-o"></i></a></div>
+				<br style="clear:both;"/>
+			</div>
+		</li>
+	</ul>
+	<br style="clear:both;"/>
+</div>
