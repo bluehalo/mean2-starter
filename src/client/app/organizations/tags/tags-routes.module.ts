@@ -2,20 +2,20 @@ import { NgModule }     from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { AuthGuard } from '../../core/auth-guard.service';
-import { ManageProjectComponent } from './manage-project.component';
+import { ManageTagComponent } from './manage-tag.component';
 
 @NgModule({
 	imports: [
 		RouterModule.forChild([
 			{
-				path: 'project/create',
-				component: ManageProjectComponent,
+				path: 'tag/create',
+				component: ManageTagComponent,
 				canActivate: [AuthGuard],
 				data: { roles: [ 'user' ] }
 			},
 			{
-				path: 'project/edit/:id',
-				component: ManageProjectComponent,
+				path: 'tag/edit/:id',
+				component: ManageTagComponent,
 				canActivate: [AuthGuard],
 				data: { roles: [ 'user' ] }
 			}
@@ -24,4 +24,4 @@ import { ManageProjectComponent } from './manage-project.component';
 	exports: [
 	]
 })
-export class ProjectsRoutingModule { }
+export class TagsRoutingModule { }

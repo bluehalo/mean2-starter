@@ -7,18 +7,18 @@ import { Observable } from 'rxjs/Observable';
 import { Team } from '../teams/teams.class';
 import { TeamsService } from '../teams/teams.service';
 import { Owner } from './owner.class';
-import { Project } from './projects.class';
-import { ProjectsService } from './projects.service';
+import { Tag } from './tags.class';
+import { TagsService } from './tags.service';
 import { AuthenticationService } from '../../admin/authentication/authentication.service';
 
 @Component({
-	selector: 'manage-project',
-	templateUrl: './manage-project.component.html'
+	selector: 'manage-tag',
+	templateUrl: './manage-tag.component.html'
 	// directives: [AlertComponent, ROUTER_DIRECTIVES],
 	// providers: []
 })
 
-export class ManageProjectComponent {
+export class ManageTagComponent {
 
 	private team: Team;
 
@@ -28,7 +28,7 @@ export class ManageProjectComponent {
 
 	private modeDisplay: string;
 
-	private project: Project;
+	private tag: Tag;
 
 	private error: string = null;
 
@@ -37,26 +37,26 @@ export class ManageProjectComponent {
 		private route: ActivatedRoute,
 		private authService: AuthenticationService,
 		private teamsService: TeamsService,
-		private projectsService: ProjectsService
+		private tagsService: TagsService
 	) {
 	}
 
 	ngOnInit() {
-		this.project = new Project();
+		this.tag = new Tag();
 
 		this.route.params.subscribe((params: Params) => {
 			this.mode = params[`mode`];
 			this.modeDisplay = this.mode.substr(0, 1).toUpperCase() + this.mode.substr(1);
 
-			let projectId = params[`id`];
+			let tagId = params[`id`];
 			let teamId = params[`teamId`];
 
-			// Initialize project if appropriate
-			if (projectId) {
-				this.projectsService.getProject(projectId)
+			// Initialize tag if appropriate
+			if (tagId) {
+				this.tagsService.getTag(tagId)
 					.subscribe((result: any) => {
 						if (result) {
-							this.project = result;
+							this.tag = result;
 							this.team = new Team(result.owner);
 						}
 					});
@@ -68,7 +68,7 @@ export class ManageProjectComponent {
 						if (result) {
 							this.team = result;
 							this.owner = new Owner('team', result._id, result.name);
-							this.project.owner = this.owner.id;
+							this.tag.owner = this.owner.id;
 						}
 					});
 			}
@@ -88,11 +88,11 @@ export class ManageProjectComponent {
 	}
 
 	private create(): Observable<Response> {
-		return this.projectsService.createProject(this.project);
+		return this.tagsService.createTag(this.tag);
 	}
 
 	private update(): Observable<Response> {
-		return this.projectsService.updateProject(this.project);
+		return this.tagsService.updateTag(this.tag);
 	}
 
 }

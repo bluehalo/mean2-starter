@@ -9,7 +9,7 @@ let
 	dbs = deps.dbs,
 	auditService = deps.auditService,
 	util = deps.utilService,
-	Project = dbs.admin.model('Project'),
+	Tag = dbs.admin.model('Tag'),
 	Team = dbs.admin.model('Team'),
 	TeamMember = dbs.admin.model('TeamUser'),
 	teams = require(path.resolve('./src/server/app/organizations/teams/controllers/teams.server.controller.js'));
@@ -22,7 +22,7 @@ let
 /**
  * Copies the mutable fields from src to dest
  */
-function copyProjectMutableFields(dest, src) {
+function copyTagMutableFields(dest, src) {
 	dest.name = src.name;
 	dest.description = src.description;
 }
@@ -34,32 +34,32 @@ function copyProjectMutableFields(dest, src) {
 
 
 /**
- * Create a new project.
+ * Create a new tag.
  */
 module.exports.create = function(req, res) {
 	let teamId = req.body.owner.id || req.body.owner || null;
 
-	// Create the new project model
-	let newProject = new Project(req.body);
+	// Create the new tag model
+	let newTag = new Tag(req.body);
 
 	// Write the auto-generated metadata
-	newProject.created = Date.now();
-	newProject.updated = Date.now();
+	newTag.created = Date.now();
+	newTag.updated = Date.now();
 
-	// Audit the project creation
-	auditService.audit('project created', 'project', 'create', TeamMember.auditCopy(req.user), Project.auditCopy(newProject))
+	// Audit the tag creation
+	auditService.audit('tag created', 'tag', 'create', TeamMember.auditCopy(req.user), Tag.auditCopy(newTag))
 		.then(function() {
 			return Team.findOne({ _id: teamId }).exec();
 		})
 		.then(function(team) {
 			if (null != team) {
-				newProject.owner = team;
-				return q(newProject);
+				newTag.owner = team;
+				return q(newTag);
 			}
 			return q.reject({ status: 400, type: 'bad-request', message: 'Invalid team id.' });
 		})
-		.then(function(project) {
-			return project.save();
+		.then(function(tag) {
+			return tag.save();
 		})
 		.then(function(result) {
 			res.status(200).json(result);
@@ -73,30 +73,30 @@ module.exports.create = function(req, res) {
  * Read the team
  */
 module.exports.read = function(req, res) {
-	res.status(200).json(req.project);
+	res.status(200).json(req.tag);
 };
 
 
 /**
- * Update the project metadata
+ * Update the tag metadata
  */
 module.exports.update = function(req, res) {
-	// Retrieve the project from persistence
-	let project = req.project;
+	// Retrieve the tag from persistence
+	let tag = req.tag;
 
-	// Make a copy of the original project for a "before" snapshot
-	let originalProject = Project.auditCopy(project);
+	// Make a copy of the original tag for a "before" snapshot
+	let originalTag = Tag.auditCopy(tag);
 
 	// Update the updated date
-	project.updated = Date.now();
+	tag.updated = Date.now();
 
 	// Copy in the fields that can be changed by the user
-	copyProjectMutableFields(project, req.body);
+	copyTagMutableFields(tag, req.body);
 
 	// Audit the save action
-	auditService.audit('project updated', 'project', 'update', TeamMember.auditCopy(req.user), { before: originalProject, after: Project.auditCopy(project) })
+	auditService.audit('tag updated', 'tag', 'update', TeamMember.auditCopy(req.user), { before: originalTag, after: Tag.auditCopy(tag) })
 		.then(function() {
-			return project.save();
+			return tag.save();
 		})
 		.then(function(result) {
 			res.status(200).json(result);
@@ -110,15 +110,15 @@ module.exports.update = function(req, res) {
  * Delete the team
  */
 module.exports.delete = function(req, res) {
-	let project = req.project;
+	let tag = req.tag;
 
 	// Audit the deletion attempt
-	auditService.audit('project deleted', 'project', 'delete', TeamMember.auditCopy(req.user), Project.auditCopy(req.project))
+	auditService.audit('tag deleted', 'tag', 'delete', TeamMember.auditCopy(req.user), Tag.auditCopy(req.tag))
 		.then(function() {
-			return project.remove();
+			return tag.remove();
 		})
 		.then(function() {
-			res.status(200).json(project);
+			res.status(200).json(tag);
 		}, function(err) {
 			util.handleErrorResponse(res, err);
 		}).done();
@@ -126,7 +126,7 @@ module.exports.delete = function(req, res) {
 
 
 /**
- * Search the projects, includes paging and sorting
+ * Search the tags, includes paging and sorting
  */
 module.exports.search = function(req, res) {
 	let search = req.body.s || null;
@@ -156,7 +156,7 @@ module.exports.search = function(req, res) {
 
 	let offset = page * limit;
 
-	// If user is not an admin, constrain the results projects owned by the user's teams
+	// If user is not an admin, constrain the results tags owned by the user's teams
 	if(null == req.user.roles || !req.user.roles.admin) {
 		let userObj = req.user.toObject();
 		let teams =  [];
@@ -187,7 +187,7 @@ module.exports.search = function(req, res) {
 		};
 	}
 
-	Project.search(query, search, limit, offset, sortArr)
+	Tag.search(query, search, limit, offset, sortArr)
 		.then(function(result) {
 			// Success
 			return {
@@ -207,17 +207,17 @@ module.exports.search = function(req, res) {
 
 
 /**
- * Project middleware
+ * Tag middleware
  */
-module.exports.projectById = function(req, res, next, id) {
-	Project.findOne({ _id: id })
+module.exports.tagById = function(req, res, next, id) {
+	Tag.findOne({ _id: id })
 		.exec()
-		.then(function(project) {
-			if (null == project) {
-				next(new Error('Could not find project: ' + id));
+		.then(function(tag) {
+			if (null == tag) {
+				next(new Error('Could not find tag: ' + id));
 			}
 			else {
-				req.project = project;
+				req.tag = tag;
 				next();
 			}
 		}, next);
@@ -225,36 +225,36 @@ module.exports.projectById = function(req, res, next, id) {
 
 
 /**
- * Does the user have the referenced role in the team that owns the project
+ * Does the user have the referenced role in the team that owns the tag
  */
 module.exports.requiresRole = function(role) {
 	return function(req) {
 
-		// Verify that the user and project are on the request
+		// Verify that the user and tag are on the request
 		let user = req.user.toObject();
 		if(null == user) {
 			return q.reject({ status: 400, type: 'bad-request', message: 'No user for request' });
 		}
-		let project = req.project;
+		let tag = req.tag;
 
-		if (null == project) {
+		if (null == tag) {
 			// Try the request body
-			project = req.body;
+			tag = req.body;
 		}
 
-		if(null == project || null == project.owner) {
-			return q.reject({ status: 400, type: 'bad-request', message: 'No project for request' });
+		if(null == tag || null == tag.owner) {
+			return q.reject({ status: 400, type: 'bad-request', message: 'No tag for request' });
 		}
 
-		// Get the team that owns the project
-		return Team.findOne({ _id: project.owner })
+		// Get the team that owns the tag
+		return Team.findOne({ _id: tag.owner })
 			.exec()
 			.then(function(team) {
 				if (null != team) {
 					return teams.meetsRoleRequirement(user, team, role);
 				}
 
-				return q.reject({ status: 404, type: 'not-found', message: 'No owner found for project.' });
+				return q.reject({ status: 404, type: 'not-found', message: 'No owner found for tag.' });
 			});
 	};
 };

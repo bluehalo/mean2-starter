@@ -14,8 +14,8 @@
 		</div>
 		<div class="col-md-2">
 			<a type="button" class="btn btn-default btn-sm pull-right" *ngIf="!readOnly"
-			   [routerLink]="[asyRoutes.getPath('CreateProject'), {mode:'create', teamId:teamId}]">
-				<i class="fa fa-plus"></i> Create Project
+			   [routerLink]="[asyRoutes.getPath('CreateTag'), {mode:'create', teamId:teamId}]">
+				<i class="fa fa-plus"></i> Create Tag
 			</a>
 		</div>
 	</div>
@@ -24,7 +24,7 @@
 		<div class="col-md-12">
 
 			<!--Sorting/Paging Controls -->
-			<div [hidden]="projects.length === 0">
+			<div [hidden]="tags.length === 0">
 				<div class="controls" style="float:left;">
 					<span>Sort By:</span>
 					<a style="padding: 0 6px 0 6px;" [ngClass]="{selected: pagingOptions.sortField===sortOptions.name.sortField}" class="no-href btn-link" (click)="setSort(sortOptions.name)">Name</a> /
@@ -37,7 +37,7 @@
 							[pageSize]="pagingOptions.pageSize"
 							[totalSize]="pagingOptions.totalSize"
 							[maxPageSize]="50"
-							[currentSize]="projects.length"
+							[currentSize]="tags.length"
 							(onChange)="goToPage($event)">
 					</asy-pager>
 				</div>
@@ -49,7 +49,7 @@
 	<div class="row" [hidden]="loading">
 		<div class="col-md-12">
 
-			<table class="asymmetrik table table-condensed table-hover table-striped" [hidden]="projects.length === 0">
+			<table class="asymmetrik table table-condensed table-hover table-striped" [hidden]="tags.length === 0">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -62,40 +62,40 @@
 				</thead>
 
 				<tbody>
-					<tr class="list-row" *ngFor="let project of projects">
+					<tr class="list-row" *ngFor="let tag of tags">
 
-						<!-- Project Name -->
+						<!-- Tag Name -->
 						<td style="width:200px;">
 							<div class="hide-overflow">
-								<a [routerLink]="[asyRoutes.getPath('Dashboard'), {projectId: project._id}]"><strong>{{project.name}}</strong></a>
+								<a [routerLink]="[asyRoutes.getPath('Dashboard'), {tagId: tag._id}]"><strong>{{tag.name}}</strong></a>
 							</div>
 						</td>
 
 						<td>
-							<div class="hide-overflow" style="max-width:400px;">{{project.description}}</div>
+							<div class="hide-overflow" style="max-width:400px;">{{tag.description}}</div>
 						</td>
 
 						<td >
-							<div class="hide-overflow" style="max-width:400px;">{{project.created | agoDate:false}}</div>
+							<div class="hide-overflow" style="max-width:400px;">{{tag.created | agoDate:false}}</div>
 						</td>
 
 						<td >
-							<div class="hide-overflow" style="max-width:400px;">{{project.updated | agoDate:false}}</div>
+							<div class="hide-overflow" style="max-width:400px;">{{tag.updated | agoDate:false}}</div>
 						</td>
 
 						<td>
-							<div *ngIf="project?.resources?.length === 0">
+							<div *ngIf="tag?.resources?.length === 0">
 								No resources
 							</div>
-							<div *ngIf="project?.resources?.length > 0">
+							<div *ngIf="tag?.resources?.length > 0">
 								<span class="label label-gray hide-overflow"
 									  style="max-width:400px;"
-									  *ngFor="let resource of project.resources">
+									  *ngFor="let resource of tag.resources">
 									{{resource.title}}
 								</span>
 								<span class="label label-gray hide-overflow"
-									  *ngIf="project?.numResources > maxResourcesShownInline">
-									...and {{project?.numResources-maxResourcesShownInline}} more
+									  *ngIf="tag?.numResources > maxResourcesShownInline">
+									...and {{tag?.numResources-maxResourcesShownInline}} more
 								</span>
 							</div>
 						</td>
@@ -106,14 +106,14 @@
 								   tooltip="Edit"
 								   tooltipAppendToBody="true"
 								   tooltipPlacement="bottom"
-								   [routerLink]="[asyRoutes.getPath('UpdateProject'), {id: project._id, mode: 'edit'}]">
+								   [routerLink]="[asyRoutes.getPath('UpdateTag'), {id: tag._id, mode: 'edit'}]">
 									<i class="fa fa-gear" [ngClass]="iconClass"></i>
 								</a>
 								<a class="no-href btn-icon"
 								   tooltip="Delete"
 								   tooltipAppendToBody="true"
 								   tooltipPlacement="bottom"
-								   (click)="removeProject(project)">
+								   (click)="removeTag(tag)">
 									<i class="fa fa-trash-o"></i>
 								</a>
 							</div>
@@ -122,11 +122,11 @@
 				</tbody>
 			</table>
 
-			<div class="col-md-6 col-md-offset-3 center" [hidden]="projects.length > 0">
+			<div class="col-md-6 col-md-offset-3 center" [hidden]="tags.length > 0">
 				<h3>
-					No Projects?<br/>
+					No Tags?<br/>
 					<small>
-						Either there were no Projects that matched your search or there are no projects in this team.<br/>
+						Either there were no tags that matched your search or there are no tags in this team.<br/>
 					</small>
 				</h3>
 			</div>

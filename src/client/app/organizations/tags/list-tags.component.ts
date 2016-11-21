@@ -9,19 +9,19 @@ import { PagingOptions } from '../../shared/pager.component';
 import { SortDirection, SortDisplayOption } from '../../shared/result-utils.class';
 import { AlertService } from '../../shared/alert.service';
 import { AuthenticationService } from '../../admin/authentication/authentication.service';
-import { ProjectsService } from './projects.service';
+import { TagsService } from './tags.service';
 
 @Component({
-	selector: 'list-projects',
-	templateUrl: './list-projects.component.html',
+	selector: 'list-tags',
+	templateUrl: './list-tags.component.html',
 	// directives: [AlertComponent, Pager, TOOLTIP_DIRECTIVES, ROUTER_DIRECTIVES, CORE_DIRECTIVES],
 	// pipes: [AgoDatePipe],
 })
-export class ListProjectsComponent {
+export class ListTagsComponent {
 
 	@Input() readOnly: boolean = true;
 
-	private projects: any[] = [];
+	private tags: any[] = [];
 
 	private teamId: string;
 
@@ -43,7 +43,7 @@ export class ListProjectsComponent {
 		private route: ActivatedRoute,
 		private alertService: AlertService,
 		private auth: AuthenticationService,
-		private projectsService: ProjectsService
+		private tagsService: TagsService
 	) {
 	}
 
@@ -61,25 +61,25 @@ export class ListProjectsComponent {
 		this.route.params.subscribe((params: Params) => {
 			this.teamId = params[`id`];
 
-			this.getProjects();
+			this.getTags();
 		});
 	}
 
-	private getProjects() {
+	private getTags() {
 		let query: any = {
 			owner: {'$in': this.teamId}
 		};
 		let options: any = {};
 
 		this.loading = true;
-		this.projectsService.searchProjects(query, this.search, this.pagingOptions, options)
+		this.tagsService.searchTags(query, this.search, this.pagingOptions, options)
 			.subscribe(
 				(result: any) => {
 					if (null != result && null != result.elements && result.elements.length > 0) {
-						this.projects = result.elements;
+						this.tags = result.elements;
 						this.pagingOptions.set(result.pageNumber, result.pageSize, result.totalPages, result.totalSize);
 					} else {
-						this.projects = [];
+						this.tags = [];
 						this.pagingOptions.reset();
 					}
 				},
@@ -93,12 +93,12 @@ export class ListProjectsComponent {
 
 	private goToPage(event: any) {
 		this.pagingOptions.update(event.pageNumber, event.pageSize);
-		this.getProjects();
+		this.getTags();
 	}
 
 	private applySearch() {
 		this.pagingOptions.setPageNumber(0);
-		this.getProjects();
+		this.getTags();
 	}
 
 	private setSort(sortOpt: SortDisplayOption) {
@@ -108,24 +108,24 @@ export class ListProjectsComponent {
 			this.pagingOptions.sortField = sortOpt.sortField;
 			this.pagingOptions.sortDir = sortOpt.sortDir;
 		}
-		this.getProjects();
+		this.getTags();
 	};
 
-	private removeProject(project: any) {
+	private removeTag(tag: any) {
 		this.modal.confirm()
 			.size('lg')
 			.showClose(true)
 			.isBlocking(true)
-			.title('Remove project from team?')
-			.body(`Are you sure you want to remove project: "${project.name}" from this team?`)
-			.okBtn('Remove Project')
+			.title('Remove tag from team?')
+			.body(`Are you sure you want to remove tag: "${tag.name}" from this team?`)
+			.okBtn('Remove Tag')
 			.open()
 			.then(
 				(resultPromise: any) => resultPromise.result.then(
 					() => {
-						this.projectsService.deleteProject(project._id)
+						this.tagsService.deleteTag(tag._id)
 							.subscribe(() => {
-									this.getProjects();
+									this.getTags();
 								},
 								(response: Response) => {
 									if (response.status >= 400 && response.status < 500) {

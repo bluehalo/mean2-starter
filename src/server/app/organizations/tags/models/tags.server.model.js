@@ -10,15 +10,15 @@ let
 	GetterSchema = deps.schemaService.GetterSchema;
 
 /**
- * Project Schema
+ * Tag Schema
  */
 
-let ProjectSchema = new GetterSchema({
+let TagSchema = new GetterSchema({
 	name: {
 		type: String,
 		trim: true,
 		default: '',
-		validate: [util.validateNonEmpty, 'Please provide a project name']
+		validate: [util.validateNonEmpty, 'Please provide a tag name']
 	},
 	description: {
 		type: String,
@@ -46,7 +46,7 @@ let ProjectSchema = new GetterSchema({
  */
 
 // Text-search index
-ProjectSchema.index({ name: 'text', description: 'text' });
+TagSchema.index({ name: 'text', description: 'text' });
 
 /**
  * Lifecycle Hooks
@@ -63,30 +63,30 @@ ProjectSchema.index({ name: 'text', description: 'text' });
  */
 
 
-// Search projects by text and other criteria
-ProjectSchema.statics.search = function(queryTerms, searchTerms, limit, offset, sortArr) {
+// Search tags by text and other criteria
+TagSchema.statics.search = function(queryTerms, searchTerms, limit, offset, sortArr) {
 	return query.search(this, queryTerms, searchTerms, limit, offset, sortArr);
 };
 
-// Copy Project for creation
-ProjectSchema.statics.createCopy = function(project) {
+// Copy Tag for creation
+TagSchema.statics.createCopy = function(tag) {
 	let toReturn = {};
 
-	toReturn.name = project.name;
-	toReturn.description = project.description;
-	toReturn.created = project.created;
+	toReturn.name = tag.name;
+	toReturn.description = tag.description;
+	toReturn.created = tag.created;
 
 	return toReturn;
 };
 
-// Copy a project for audit logging
-ProjectSchema.statics.auditCopy = function(project) {
+// Copy a tag for audit logging
+TagSchema.statics.auditCopy = function(tag) {
 	let toReturn = {};
-	project = project || {};
+	tag = tag || {};
 
-	toReturn._id = project._id;
-	toReturn.name = project.name;
-	toReturn.description = project.description;
+	toReturn._id = tag._id;
+	toReturn.name = tag.name;
+	toReturn.description = tag.description;
 
 	return toReturn;
 };
@@ -95,4 +95,4 @@ ProjectSchema.statics.auditCopy = function(project) {
 /**
  * Model Registration
  */
-mongoose.model('Project', ProjectSchema, 'projects');
+mongoose.model('Tag', TagSchema, 'tags');

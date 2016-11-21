@@ -1,6 +1,6 @@
 'use strict';
 
-require('./projects.server.model');
+require('./tags.server.model');
 require('../../teams/models/team.server.model');
 
 /**
@@ -14,7 +14,7 @@ let
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	dbs = deps.dbs,
 
-	Project = dbs.admin.model('Project'),
+	Tag = dbs.admin.model('Tag'),
 	Team = dbs.admin.model('Team');
 
 /**
@@ -22,12 +22,12 @@ let
  */
 function clearDatabase() {
 	return q.all([
-		Project.remove(),
+		Tag.remove(),
 		Team.remove()
 	]);
 }
 
-let project1;
+let tag1;
 
 let spec = {
 	user1: {
@@ -41,8 +41,8 @@ let spec = {
 		name: 'Title',
 		description: 'Description'
 	},
-	project1: {
-		name: 'Project 1',
+	tag1: {
+		name: 'Tag 1',
 		description: 'Description 3'
 	}
 };
@@ -50,7 +50,7 @@ let spec = {
 /**
  * Unit tests
  */
-describe('Project Model:', function() {
+describe('Tag Model:', function() {
 	let team = {};
 
 	before(function(done) {
@@ -58,9 +58,9 @@ describe('Project Model:', function() {
 			new Team(spec.team1).save().then(function(t) {
 				team = t;
 
-				spec.project1.owner = team;
+				spec.tag1.owner = team;
 
-				project1 = new Project(spec.project1);
+				tag1 = new Tag(spec.tag1);
 			});
 
 			done();
@@ -74,29 +74,29 @@ describe('Project Model:', function() {
 	});
 
 	describe('Method Save', function() {
-		it('should begin with no projects', function(done) {
-			Project.find({}).exec().then(function(projects) {
-				projects.should.have.length(0);
+		it('should begin with no tags', function(done) {
+			Tag.find({}).exec().then(function(tags) {
+				tags.should.have.length(0);
 				done();
 			}, done);
 		});
 
 		it('should be able to save without problems', function(done) {
-			project1.save(done);
+			tag1.save(done);
 		});
 
 
 		it('should fail when trying to save without a name', function(done) {
-			project1.name = '';
-			project1.save(function(err) {
+			tag1.name = '';
+			tag1.save(function(err) {
 				should.exist(err);
 				done();
 			});
 		});
 
 		it('should fail when trying to save with an invalid owner', function(done) {
-			project1.owner = 'badowner';
-			project1.save(function(err) {
+			tag1.owner = 'badowner';
+			tag1.save(function(err) {
 				should.exist(err);
 				done();
 			});

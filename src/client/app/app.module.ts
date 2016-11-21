@@ -25,7 +25,7 @@ import { ClientConfiguration } from './config/configurator';
 import { BaseService } from './config/test/test-stub-service.service';
 import { HelpModule } from './help/help.module';
 import { TeamsModule } from './organizations/teams/teams.module';
-import { ProjectsModule } from './organizations/projects/projects.module';
+import { TagsModule } from './organizations/tags/tags.module';
 
 export function initializerFactory () {
 	return () => () => new Promise<any>( (resolve) => {
@@ -52,7 +52,7 @@ export function initializerFactory () {
 		AdminModule,
 		AuditModule,
 		HelpModule,
-		ProjectsModule,
+		TagsModule,
 		TeamsModule,
 		UtilModule
 	],

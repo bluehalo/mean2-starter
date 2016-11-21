@@ -6,24 +6,24 @@
 
 
 		<div class="page-header">
-			<h3>{{ modeDisplay }} Project</h3>
+			<h3>{{ modeDisplay }} Tag</h3>
 		</div>
 
 		<div>
-			<h4>Project Owner: {{team?.name}}</h4>
+			<h4>Tag Owner: {{team?.name}}</h4>
 		</div>
 
 		<div class="form-group row">
 			<label class="col-md-2 control-label">Name<span class="text-danger"><strong> *</strong></span></label>
 			<div class="col-md-10">
-				<input type="text" class="form-control" required [(ngModel)]="project.name" ngControl="name"/>
+				<input type="text" class="form-control" required [(ngModel)]="tag.name" ngControl="name"/>
 			</div>
 		</div>
 
 		<div class="form-group row">
 			<label class="col-md-2 control-label">Description</label>
 			<div class="col-md-10">
-				<input type="text" class="form-control" [(ngModel)]="project.description"/>
+				<input type="text" class="form-control" [(ngModel)]="tag.description"/>
 			</div>
 		</div>
 

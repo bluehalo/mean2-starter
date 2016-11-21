@@ -35,10 +35,10 @@
 			<tabset class="tabs">
 				<tab>
 					<template tabHeading>
-						Projects
+						Tags
 					</template>
 					<br/>
-					<list-projects [readOnly]="!user.canManageTeamResources(team)"></list-projects>
+					<list-tags [readOnly]="!user.canManageTeamResources(team)"></list-tags>
 				</tab>
 				<tab>
 					<template tabHeading>
