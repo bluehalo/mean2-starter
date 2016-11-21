@@ -15,7 +15,7 @@
 			</a>
 
 			<div class="media-left team-avatar">
-				<img style="width: 100px;" class="media-object" src="../../img/brand/team.png"/>
+				<img style="width: 100px;" class="media-object" src="../img/brand/team.png"/>
 			</div>
 
 			<div class="media-body">
@@ -23,7 +23,7 @@
 				<div *ngIf="!user.canManageTeam(team)" class="team-header">{{ team.name }}</div>
 				<div *ngIf="user.canManageTeam(team)" class="team-description"><asy-in-line-edit [name]="description" [(ngModel)]="team.description" (onSave)="saveEditable($event)">{{ team.description }}</asy-in-line-edit></div>
 				<div *ngIf="!user.canManageTeam(team)" class="team-description">{{ team.description }}</div>
-				<div style="font-size: 14px;">Team created {{ team.created | agoDate:true }}</div>
+				<div style="font-size: 14px;">Team created {{ team.created | agoDate:true }} ago</div>
 			</div>
 
 		</div>

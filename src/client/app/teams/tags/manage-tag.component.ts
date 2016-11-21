@@ -4,8 +4,8 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
 
-import { Team } from '../teams/teams.class';
-import { TeamsService } from '../teams/teams.service';
+import { Team } from '../teams.class';
+import { TeamsService } from '../teams.service';
 import { Owner } from './owner.class';
 import { Tag } from './tags.class';
 import { TagsService } from './tags.service';

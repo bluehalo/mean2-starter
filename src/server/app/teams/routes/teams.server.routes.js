@@ -2,7 +2,7 @@
 
 let path = require('path'),
 
-	teams = require(path.resolve('./src/server/app/organizations/teams/controllers/teams.server.controller.js')),
+	teams = require(path.resolve('./src/server/app/teams/controllers/teams.server.controller.js')),
 	users = require(path.resolve('./src/server/app/admin/controllers/users.server.controller.js'));
 
 module.exports = function(app) {

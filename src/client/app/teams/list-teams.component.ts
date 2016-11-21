@@ -5,10 +5,10 @@ import * as _ from 'lodash';
 
 import { Team, TeamMember } from './teams.class';
 import { TeamsService } from './teams.service';
-import { SortDirection, SortDisplayOption } from '../../shared/result-utils.class';
-import { PagingOptions } from '../../shared/pager.component';
-import { AuthenticationService } from '../../admin/authentication/authentication.service';
-import { AlertService } from '../../shared/alert.service';
+import { SortDirection, SortDisplayOption } from '../shared/result-utils.class';
+import { PagingOptions } from '../shared/pager.component';
+import { AuthenticationService } from '../admin/authentication/authentication.service';
+import { AlertService } from '../shared/alert.service';
 
 @Component({
 	selector: 'list-teams',

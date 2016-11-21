@@ -2,7 +2,7 @@
 
 	<div class="row">
 		<!-- Search Input -->
-		<div [ngClass]="{ 'col-md-10': !readOnly, 'col-md-12': readOnly }">
+		<div [ngClass]="{ 'col-md-11': !readOnly, 'col-md-12': readOnly }">
 			<div class="input-group">
 				<input placeholder="Enter a search..." type="text" class="form-control input-sm" [(ngModel)]="search" (keyup.enter)="applySearch()">
 				<span class="input-group-btn">
@@ -12,7 +12,7 @@
 				</span>
 			</div>
 		</div>
-		<div class="col-md-2">
+		<div class="col-md-1">
 			<a type="button" class="btn btn-default btn-sm pull-right" *ngIf="!readOnly"
 			   [routerLink]="['/tag/create', {mode:'create', teamId:teamId}]">
 				<i class="fa fa-plus"></i> Create Tag
@@ -20,7 +20,7 @@
 		</div>
 	</div>
 
-	<div class="row">
+	<div style="padding-top:5px;" class="row">
 		<div class="col-md-12">
 
 			<!--Sorting/Paging Controls -->
@@ -105,14 +105,14 @@
 								<a class="no-href btn-icon"
 								   tooltip="Edit"
 								   tooltipAppendToBody="true"
-								   tooltipPlacement="bottom"
+								   tooltipPlacement="top"
 								   [routerLink]="['/tag/edit', tag._id, { mode: 'edit' }]">
 									<i class="fa fa-gear" [ngClass]="iconClass"></i>
 								</a>
 								<a class="no-href btn-icon"
 								   tooltip="Delete"
 								   tooltipAppendToBody="true"
-								   tooltipPlacement="bottom"
+								   tooltipPlacement="top"
 								   (click)="removeTag(tag)">
 									<i class="fa fa-trash-o"></i>
 								</a>

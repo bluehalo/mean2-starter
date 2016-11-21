@@ -24,10 +24,10 @@ import { UtilModule } from './shared/util.module';
 import { ClientConfiguration } from './config/configurator';
 import { BaseService } from './config/test/test-stub-service.service';
 import { HelpModule } from './help/help.module';
-import { TeamsModule } from './organizations/teams/teams.module';
-import { TeamsRoutingModule } from './organizations/teams/teams-routes.module';
-import { TeamsService } from './organizations/teams/teams.service';
-import { TagsRoutingModule } from './organizations/tags/tags-routes.module';
+import { TeamsModule } from './teams/teams.module';
+import { TeamsRoutingModule } from './teams/teams-routes.module';
+import { TeamsService } from './teams/teams.service';
+import { TagsRoutingModule } from './teams/tags/tags-routes.module';
 
 export function initializerFactory () {
 	return () => () => new Promise<any>( (resolve) => {
