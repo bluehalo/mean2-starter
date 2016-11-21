@@ -80,6 +80,7 @@
 		"@types/d3": "3",
 
 		"@asymmetrik/sentio": "2.0",
+		"@asymmetrik/angular2-sentio": "2.0",
 
 		"@types/core-js": "0.9",
 		"@types/node": "6.0",

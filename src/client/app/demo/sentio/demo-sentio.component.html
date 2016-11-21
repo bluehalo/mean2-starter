@@ -1,27 +1,39 @@
 <section>
 
-	<!-- Donut Chart
+	<!-- Donut Chart -->
+	<section class="row">
+		<div class="col-md-12">
+
+			<h3>Donut Chart</h3>
+			<button class="btn btn-default" (click)="donut.update()">Update</button>
+
+		</div>
+	</section>
 	<section class="row">
 		<div class="col-md-3">
 
-			<h2>Donut Chart</h2>
-			<button class="btn btn-default" (click)="donut.update()">Update</button>
 			<donut-chart
-			             [model]="donut.model"
-			             [resize]="donut.resize"
-			             [configure]="donut.configure">
+				[model]="donut.model"
+				[resize]="donut.resize"
+				[configure]="donut.configure">
 			</donut-chart>
 
 		</div>
 	</section>
-	-->
 
-	<!-- Bar Chart
+
+	<!-- Bar Chart -->
 	<section class="row">
-		<div class="col-md-3">
+		<div class="col-md-12">
 
-			<h2>Bar Chart</h2>
+			<h3>Bar Chart</h3>
 			<button class="btn btn-default" (click)="bars.update()">Update</button>
+
+		</div>
+	</section>
+	<section class="row">
+		<div class="col-md-6">
+
 			<vertical-bar-chart
 				[model]="bars.model"
 				[widthExtent]="bars.widthExtent"
@@ -31,14 +43,20 @@
 
 		</div>
 	</section>
-	-->
+
 
 	<!-- Matrix Chart -->
 	<section class="row">
+		<div class="col-md-12">
+
+			<h3>Matrix Chart</h3>
+			<button class="btn btn-default" (click)="matrix.update()">Update</button>
+
+		</div>
+	</section>
+	<section class="row">
 		<div class="col-md-3">
 
-			<h2>Matrix Chart</h2>
-			<button class="btn btn-default" (click)="matrix.update()">Update</button>
 			<matrix-chart
 				[model]="matrix.model"
 				[configure]="matrix.configure">
@@ -47,5 +65,25 @@
 		</div>
 	</section>
 
+
+	<!-- Matrix Chart -->
+	<section class="row">
+		<div class="col-md-12">
+
+			<h3>Matrix Chart</h3>
+			<button class="btn btn-default" (click)="matrix.update()">Update</button>
+
+		</div>
+	</section>
+	<section class="row">
+		<div class="col-md-3">
+
+			<matrix-chart
+				[model]="matrix.model"
+				[configure]="matrix.configure">
+			</matrix-chart>
+
+		</div>
+	</section>
 
 </section>

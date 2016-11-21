@@ -45,7 +45,7 @@ export class DemoSentioComponent {
 				});
 			}
 			this.bars.model = newData
-				.sort((a: any, b: any) => { return a.value - b.value; })
+				.sort((a: any, b: any) => { return b.value - a.value; })
 				.slice(0, 12);
 		}
 	};
@@ -91,8 +91,8 @@ export class DemoSentioComponent {
 
 
 	ngOnInit() {
-		// this.donut.update();
-		// this.bars.update();
+		this.donut.update();
+		this.bars.update();
 		this.matrix.update();
 	}
 }
