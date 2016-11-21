@@ -10,10 +10,10 @@ import {
 	AuditViewDetailModalContext, AuditViewChangeModal,
 	AuditViewDetailModal
 } from './audit-view-change.client.component';
-import { PagingOptions } from '../../shared/components/pager.client.component';
-import { SortDisplayOption, SortDirection } from '../../shared/util/result-utils.client.classes';
-import { UserService } from '../../admin/services/users.client.service';
-import { AuthenticationService } from '../../admin/services/authentication.client.service';
+import { PagingOptions } from '../../shared/pager.component';
+import { SortDisplayOption, SortDirection } from '../../shared/result-utils.class';
+import { UserService } from '../../admin/users.service';
+import { AuthenticationService } from '../../admin/authentication/authentication.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 

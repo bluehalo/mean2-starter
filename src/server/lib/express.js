@@ -69,7 +69,7 @@ function initMiddleware(app) {
 	}));
 
 	// Initialize favicon middleware
-	app.use(favicon(path.resolve('./src/client/core/img/brand/favicon.ico')));
+	app.use(favicon(path.resolve('./src/client/img/brand/favicon.ico')));
 
 	// Environment dependent middleware
 	if (config.mode === 'development') {
