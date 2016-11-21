@@ -59,7 +59,7 @@ export class ListTeamsComponent {
 	 * Initialize query, search, and paging options, possibly from cached user settings
 	 */
 	private initializeUserFilters() {
-		let cachedFilter = this.teamsService.cache.listTeams;
+		let cachedFilter: any = this.teamsService.cache.listTeams;
 
 		this.search = cachedFilter.search ? cachedFilter.search : '';
 		if (cachedFilter.paging) {

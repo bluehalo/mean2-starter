@@ -27,9 +27,9 @@
 			<div [hidden]="tags.length === 0">
 				<div class="controls" style="float:left;">
 					<span>Sort By:</span>
-					<a style="padding: 0 6px 0 6px;" [ngClass]="{selected: pagingOptions.sortField===sortOptions.name.sortField}" class="no-href btn-link" (click)="setSort(sortOptions.name)">Name</a> /
-					<a style="padding: 0 6px 0 6px;" [ngClass]="{selected: pagingOptions.sortField===sortOptions.created.sortField}" class="no-href btn-link" (click)="setSort(sortOptions.created)">Created</a> /
-					<a style="padding: 0 6px 0 6px;" [ngClass]="{selected: pagingOptions.sortField===sortOptions.updated.sortField}" class="no-href btn-link" (click)="setSort(sortOptions.updated)">Updated</a>
+					<a type="button" [ngClass]="{selected: pagingOptions.sortField===sortOptions.name.sortField}" class="no-href btn-link" (click)="setSort(sortOptions.name)">Name</a> /
+					<a type="button" [ngClass]="{selected: pagingOptions.sortField===sortOptions.created.sortField}" class="no-href btn-link" (click)="setSort(sortOptions.created)">Created</a> /
+					<a type="button" [ngClass]="{selected: pagingOptions.sortField===sortOptions.updated.sortField}" class="no-href btn-link" (click)="setSort(sortOptions.updated)">Updated</a>
 				</div>
 				<div class="controls pull-right">
 					<asy-pager
@@ -47,8 +47,16 @@
 	</div>
 
 	<div class="row" [hidden]="loading">
-		<div class="col-md-12">
+		<div class="col-md-6 col-md-offset-3 center" [hidden]="tags.length > 0">
+			<h3>
+				No Tags?<br/>
+				<small>
+					Either there were no tags that matched your search or there are no tags in this team.<br/>
+				</small>
+			</h3>
+		</div>
 
+		<div class="col-md-12">
 			<table class="asymmetrik table table-condensed table-hover table-striped" [hidden]="tags.length === 0">
 				<thead>
 					<tr>
@@ -121,15 +129,6 @@
 					</tr>
 				</tbody>
 			</table>
-
-			<div class="col-md-6 col-md-offset-3 center" [hidden]="tags.length > 0">
-				<h3>
-					No Tags?<br/>
-					<small>
-						Either there were no tags that matched your search or there are no tags in this team.<br/>
-					</small>
-				</h3>
-			</div>
 		</div>
 	</div>
 </section>

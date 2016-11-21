@@ -13,7 +13,6 @@ import { ConfigService } from '../core/config.service';
 @Component({
 	selector: 'manage-team',
 	templateUrl: './manage-team.component.html'
-// directives: [AlertComponent, AddRemoveList, BUTTON_DIRECTIVES, ROUTER_DIRECTIVES],
 })
 export class ManageTeamComponent {
 

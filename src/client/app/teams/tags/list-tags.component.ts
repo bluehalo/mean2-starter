@@ -37,7 +37,6 @@ export class ListTagsComponent {
 
 	constructor(
 		private modal: Modal,
-		private router: Router,
 		private route: ActivatedRoute,
 		private alertService: AlertService,
 		private auth: AuthenticationService,

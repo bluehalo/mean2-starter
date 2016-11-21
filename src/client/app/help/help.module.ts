@@ -10,6 +10,8 @@ import { HelpRoutingModule } from './help-routes.module';
 import { UtilModule } from '../shared/util.module';
 import { CoreHelpModule } from '../core/help/core-help.module';
 import { CoreHelpRoutingModule } from '../core/help/core-help-routes.module';
+import { TeamsHelpModule } from '../teams/help/teams-help.module';
+import { TeamsHelpRoutingModule } from '../teams/help/teams-help-routes.module';
 import { HelpService } from './help.service';
 
 @NgModule({
@@ -20,6 +22,9 @@ import { HelpService } from './help.service';
 		CoreHelpRoutingModule,
 
 		HelpRoutingModule,
+
+		TeamsHelpModule,
+		TeamsHelpRoutingModule,
 
 		CommonModule,
 		FormsModule,

@@ -14,15 +14,15 @@
 		</div>
 	</div>
 
-	<div class="row">
+	<div style="padding-top:5px;" class="row">
 		<div class="col-md-12">
 
 			<!-- Sorting/Paging Controls -->
 			<div [hidden]="teamMembers.length === 0">
 				<div class="controls" style="float:left;">
 					<span>Sort By:</span>
-					<a style="padding: 0 6px 0 6px;" [ngClass]="{selected: pagingOptions.sortField===sortOptions.name.sortField}" class="no-href btn-link" (click)="setSort(sortOptions.name)">Name</a> /
-					<a style="padding: 0 6px 0 6px;" [ngClass]="{selected: pagingOptions.sortField===sortOptions.username.sortField}" class="no-href btn-link" (click)="setSort(sortOptions.username)">Username</a>
+					<a type="button" [ngClass]="{selected: pagingOptions.sortField===sortOptions.name.sortField}" class="no-href btn-link" (click)="setSort(sortOptions.name)">Name</a> /
+					<a type="button" [ngClass]="{selected: pagingOptions.sortField===sortOptions.username.sortField}" class="no-href btn-link" (click)="setSort(sortOptions.username)">Username</a>
 				</div>
 				<div class="controls pull-right">
 					<asy-pager
@@ -39,19 +39,19 @@
 		</div>
 	</div>
 
-	<div style="padding-top:5px;" class="row">
+	<div class="row">
+
+		<div class="col-md-6 col-md-offset-3 text-center" [hidden]="teamMembers.length > 0">
+			<h4>
+				No Members?<br/>
+				<small>
+					There are no members on this team.<br/>
+					Read our <a [routerLink]="['/help/teams']">help page</a> for more details.
+				</small>
+			</h4>
+		</div>
+
 		<div class="col-md-12">
-
-			<div class="col-md-6 col-md-offset-3 text-center" [hidden]="teamMembers.length > 0">
-				<h4>
-					No Members?<br/>
-					<small>
-						Either there were no Team Members that matched your search or there aren't any users in the system that aren't already members of this team.<br/>
-						<!--Read our <a [routerLink]="[asyRoutes.getPath('Help')]">help page</a> for more details.-->
-					</small>
-				</h4>
-			</div>
-
 			<table class="asymmetrik table table-condensed table-hover table-striped" [hidden]="teamMembers.length === 0">
 				<thead>
 					<tr>

@@ -83,8 +83,10 @@ export class TeamSummaryComponent {
 						}
 					}
 				},
-				(err) => {
-					console.log(err);
+				(response: Response) => {
+					if (response.status >= 400 && response.status < 500) {
+						this.alertService.addAlert(response.json().message);
+					}
 				});
 	}
 

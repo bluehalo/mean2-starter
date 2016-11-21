@@ -9,7 +9,6 @@ import { TeamsService } from '../teams.service';
 import { Owner } from './owner.class';
 import { Tag } from './tags.class';
 import { TagsService } from './tags.service';
-import { AuthenticationService } from '../../admin/authentication/authentication.service';
 
 @Component({
 	selector: 'manage-tag',
@@ -32,7 +31,6 @@ export class ManageTagComponent {
 	constructor(
 		private router: Router,
 		private route: ActivatedRoute,
-		private authService: AuthenticationService,
 		private teamsService: TeamsService,
 		private tagsService: TagsService
 	) {

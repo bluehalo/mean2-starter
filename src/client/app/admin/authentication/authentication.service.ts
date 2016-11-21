@@ -56,6 +56,10 @@ export class AuthenticationService {
 				if (!wasAuthenticated && this.getCurrentUser().isAuthenticated()) {
 					 // this.router.navigateByInstruction(this.router.currentInstruction);
 				}
+			},
+			(err) => {},
+			() => {
+				this.initializing$.next(false);
 			}
 		));
 	}

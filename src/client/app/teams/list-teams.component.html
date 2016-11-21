@@ -27,7 +27,7 @@
 		</div>
 	</div>
 
-	<div class="row">
+	<div style="padding-top:5px;" class="row">
 		<div class="col-md-12">
 
 			<!-- Sorting/Paging Controls -->
@@ -48,8 +48,17 @@
 	</div>
 
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-6 col-md-offset-3 text-center" [hidden]="teams.length > 0">
+			<h4>
+				No Teams?<br/>
+				<small>
+					Either there were no teams that matched your search or you don't have access to any teams yet.<br/>
+					Read our <a [routerLink]="['/help/teams']">getting started page</a> for more details.
+				</small>
+			</h4>
+		</div>
 
+		<div class="col-md-12">
 			<!-- Actual results -->
 			<table class="asymmetrik table table-condensed table-hover table-striped" [hidden]="teams.length === 0">
 				<thead>
@@ -74,17 +83,8 @@
 					</tr>
 				</tbody>
 			</table>
-
-			<div class="col-md-6 col-md-offset-3 text-center" [hidden]="teams.length > 0">
-				<h4>
-					No Teams?<br/>
-					<small>
-						Either there were no Teams that matched your search or you don't have access to any Teams yet.<br/>
-						<!--Read our <a [routerLink]="[asyRoutes.getPath('Help')]">getting started page</a> for more details.-->
-					</small>
-				</h4>
-			</div>
 		</div>
+
 	</div>
 
 </section>

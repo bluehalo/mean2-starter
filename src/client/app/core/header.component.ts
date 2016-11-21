@@ -40,6 +40,9 @@ export class HeaderComponent extends CoreComponent {
 						if (null != result && null != result.elements && result.elements.length > 0) {
 							this.teams = result.elements.map((e: any) => new Team(e._id, e.name));
 						}
+						else {
+							this.teams = [];
+						}
 					});
 				}
 			});

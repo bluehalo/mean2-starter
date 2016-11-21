@@ -1,4 +1,7 @@
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+
+import * as _ from 'lodash';
 
 @Component({
 	selector: 'invalid-resource',
@@ -6,12 +9,20 @@ import {Component} from '@angular/core';
 })
 
 export class InvalidResourceComponent {
-	private type: string;
+
+	private type: string = 'Resource';
 
 	constructor(
-		// private routeParams: RouteParams,
+		private route: ActivatedRoute
 	) {}
 
 	ngOnInit() {
+		this.route.params.subscribe((params: Params) => {
+			let type = params[`type`];
+
+			if (!_.isEmpty(type)) {
+				this.type = _.capitalize(params[`type`]);
+			}
+		});
 	}
 }

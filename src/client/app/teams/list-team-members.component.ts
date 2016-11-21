@@ -37,15 +37,11 @@ export class ListTeamMembersComponent {
 
 	private queryUserObj: User;
 
-	private search: string = '';
-
-	private error: string = null;
-
 	private sortOptions: any = {};
 
 	private pagingOptions: PagingOptions;
 
-	private searchUsersRef = this.searchUsers.bind(this);
+	private searchUsersRef: Observable<any>;
 
 	constructor(
 		private router: Router,
@@ -86,6 +82,22 @@ export class ListTeamMembersComponent {
 					});
 			}
 		});
+
+		// Bind the search users typeahead to a function
+		this.searchUsersRef = Observable.create((observer: any) => {
+			this.userService.match({}, this.queryUserSearchTerm, this.pagingOptions)
+				.subscribe((result: any) => {
+					let formatted = result.elements
+						.filter((e: any) => {
+							return (-1 === _.findIndex(this.teamMembers, (m: TeamMember) => m.userModel._id === e._id ));
+						})
+						.map((r: any) => {
+							r.displayName = r.name + ' [' + r.username + ']';
+							return r;
+						});
+					observer.next(formatted);
+				});
+		});
 	}
 
 	private typeaheadOnSelect(e: any) {
@@ -119,19 +131,6 @@ export class ListTeamMembersComponent {
 					this.pagingOptions.reset();
 				}
 			});
-	}
-
-	private searchUsers() {
-		return this.userService.match({}, this.queryUserSearchTerm, this.pagingOptions)
-			.map((result) => {
-				return result.elements.filter((e: any) => {
-					return (-1 === _.findIndex(this.teamMembers, function(m: TeamMember) { return m.userModel._id === e._id; }));
-				})
-				.map(function(r: any) {
-					r.displayName = r.name + ' [' + r.username + ']';
-					return r;
-				});
-			}).toPromise();
 	}
 
 	private doUpdateRole(member: TeamMember, role: string): Observable<Response> {
