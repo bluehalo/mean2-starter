@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { SentioModule } from '@asymmetrik/angular2-sentio';
 
@@ -9,6 +10,7 @@ import { DemoSentioComponent } from './sentio/demo-sentio.component';
 
 @NgModule({
 	imports: [
+		CommonModule,
 		SentioModule,
 		DemoRoutingModule
 	],

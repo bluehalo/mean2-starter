@@ -28,16 +28,9 @@
 
 					<!-- Left part of navbar -->
 					<ul class="nav navbar-nav">
-						<li class="dropdown" dropdown>
+						<!-- Demo -->
+						<li><a [routerLink]="['/demo']">Demo</a></li>
 
-							<a href="/#!/" class="dropdown-toggle" dropdownToggle>Demo <span class="caret"></span></a>
-							<ul class="dropdown-menu" role="menu">
-
-								<!-- Leaflet Demo -->
-								<li><a [routerLink]="['/demo/leaflet']">Leaflet</a></li>
-
-							</ul>
-						</li>
 					</ul>
 
 					<!-- Right side Signin/Signup area -->

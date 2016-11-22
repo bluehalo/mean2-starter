@@ -59,8 +59,8 @@ export class DemoSentioComponent {
 				.margin({ top: 20, right: 2, bottom: 2, left: 80 });
 		},
 		update: () => {
-			let data: Object[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-			let series: Object[] = [];
+			let data: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+			let series: any[] = [];
 
 			series.push({ key: 'increasing', label: 'Increasing', values: data.map((d: any, i: number) => { return i; }) });
 			series.push({ key: 'decreasing', label: 'Decreasing', values: data.map((d: any, i: number, arr: any[]) => { return arr.length - i - 1; }) });
@@ -89,10 +89,42 @@ export class DemoSentioComponent {
 		}
 	};
 
+	// Timeline Line Chart Configuration
+	private timeline: any = {
+		model: [],
+		filterEnabled: true,
+		filter: null,
+		interval: 60000,
+		binSize: 1000,
+		hwm: Date.now(),
+		configure: (chart: any) => {},
+		eventHandler: (msg: string, event: any) => {
+			console.log({ msg: msg, event: event });
+		},
+		update: () => {
+			this.timeline.hwm = Date.now();
+			let newModel: any[] = [];
+
+			['series1', 'series2'].forEach((s) => {
+				let k = s;
+				let d: any[] = [];
+
+				for (let i = 0; i < this.timeline.interval / this.timeline.binSize; i++) {
+					d.push([ this.timeline.hwm + (i * this.timeline.binSize), Math.random() * 10 ]);
+				}
+
+				newModel.push({ key: k, data: d });
+			});
+
+			this.timeline.model = newModel;
+		}
+	};
+
 
 	ngOnInit() {
 		this.donut.update();
 		this.bars.update();
 		this.matrix.update();
+		this.timeline.update();
 	}
 }

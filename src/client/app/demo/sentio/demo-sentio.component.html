@@ -66,23 +66,33 @@
 	</section>
 
 
-	<!-- Matrix Chart -->
+	<!-- Timeline Chart -->
 	<section class="row">
 		<div class="col-md-12">
 
-			<h3>Matrix Chart</h3>
-			<button class="btn btn-default" (click)="matrix.update()">Update</button>
+			<h3>Timeline Chart</h3>
+			<button class="btn btn-default" (click)="timeline.update()">Update</button>
 
 		</div>
 	</section>
 	<section class="row">
 		<div class="col-md-3">
 
-			<matrix-chart
-				[model]="matrix.model"
-				[configure]="matrix.configure">
-			</matrix-chart>
+			<timeline-line
+				style="width:400px; height:100px;"
+				[model]="timeline.model"
+				[configure]="timeline.configure"
+				[filterEnabled]="timeline.filterEnabled"
+				[(filter)]="timeline.filter"
+				(filterChange)="timeline.eventHandler('filterChanged', $event)">
+			</timeline-line>
 
+		</div>
+	</section>
+	<section class="row">
+		<div class="col-md-6">
+			<span *ngIf="timeline.filter">{{timeline.filter[0]}} - {{timeline.filter[1]}}</span>
+			<span *ngIf="!timeline.filter">No Filter Applied</span>
 		</div>
 	</section>
 
