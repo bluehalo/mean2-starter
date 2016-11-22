@@ -45,7 +45,7 @@ export class MessageHandlerService {
 									title: 'New messages',
 									timeout: 0,
 									bodyOutputType: BodyOutputType.TrustedHtml,
-									body: `<div>You have ${messages.totalSize} new messages</div>`
+									body: `<div>You have ${messages.totalSize} new messages</div><div><a class="toast-message-link" href="#/welcome">View messages</a></div>`
 								};
 								this.toasterService.pop(toast);
 								this.newMessages = true;
@@ -91,6 +91,7 @@ export class MessageHandlerService {
 	};
 
 	private markAllRead() {
+		console.log('Marking read');
 		this.newMessages = false;
 		this.messageService.markAllRead();
 	};

@@ -1,5 +1,5 @@
 import { ActivatedRoute, Params } from '@angular/router';
-import { Component, ViewContainerRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { DialogRef } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 import { Message } from '../message.class';

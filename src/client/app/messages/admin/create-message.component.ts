@@ -1,4 +1,4 @@
-import { Component, forwardRef, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { ManageMessageComponent } from './manage-message.component';
 import { Router } from '@angular/router';
 import { MessageService } from '../message.service';

@@ -9,7 +9,6 @@ import { AdminUpdateMessageComponent } from './edit-message.component';
 import { ListMessagesComponent } from './list-messages.component';
 import { AdminMessagesRoutingModule } from './admin-messages-routes.module';
 import { MessagesModule } from '../messages.module';
-import { MessageService } from '../message.service';
 
 @NgModule({
 	imports: [

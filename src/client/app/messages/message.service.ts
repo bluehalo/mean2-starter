@@ -6,7 +6,7 @@ import { HttpOptions, AsyHttp } from '../shared/asy-http.service';
 import { AuthenticationService } from '../admin/authentication/authentication.service';
 import { UserStateService } from '../admin/authentication/user-state.service';
 import { UserService } from '../admin/users.service';
-import { SocketService } from '../core/services/socket.service';
+import { SocketService } from '../core/socket.service';
 
 @Injectable()
 export class MessageService {
@@ -117,7 +117,6 @@ export class MessageService {
 	}
 
 	private payloadRouterFn: Function = (payload: any) => {
-		console.log('!!!!!!!', payload);
 		if (this.subscribed > 0) {
 			let message = new Message();
 			message.setFromModel(payload.wrappedPayload.p.message);

@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
 
 import { Message, MessageType } from '../messages/message.class';
-import { AuthenticationService } from '../admin/authentication/authentication.service';
-import { ConfigService } from '../core/config.service';
-import { AlertService } from '../shared/alert.service';
 import { MessageService } from '../messages/message.service';
 import { PagingOptions } from '../shared/pager.component';
 import * as _ from 'lodash';
@@ -18,9 +15,6 @@ export class MessagesComponent {
 	private motd: Message;
 
 	constructor(
-		private auth: AuthenticationService,
-		private configService: ConfigService,
-		private alertService: AlertService,
 		private messageService: MessageService
 	) {}
 
