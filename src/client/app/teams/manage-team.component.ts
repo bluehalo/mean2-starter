@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Response } from '@angular/http';
@@ -36,6 +37,7 @@ export class ManageTeamComponent {
 	constructor(
 		private router: Router,
 		private route: ActivatedRoute,
+		private location: Location,
 		private configService: ConfigService,
 		private teamsService: TeamsService,
 		private alertService: AlertService,
@@ -104,5 +106,9 @@ export class ManageTeamComponent {
 
 	private update(): Observable<Response> {
 		return this.teamsService.update(this.team);
+	}
+
+	private back() {
+		this.location.back();
 	}
 }

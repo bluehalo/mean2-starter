@@ -131,7 +131,8 @@ export class ListTagsComponent {
 										this.alertService.addAlert(response.json().message);
 									}
 								});
-					}
+					},
+					() => {}
 				)
 			);
 	}

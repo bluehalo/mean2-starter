@@ -91,8 +91,12 @@ export class TeamSummaryComponent {
 				});
 	}
 
+	private update() {
+		this.router.navigate(['/team/edit', this.teamId]);
+	}
+
 	private remove() {
-		this.modal.alert()
+		this.modal.confirm()
 			.size('lg')
 			.showClose(true)
 			.isBlocking(true)
@@ -102,6 +106,7 @@ export class TeamSummaryComponent {
 			.open()
 			.then(
 				(resultPromise: any) => resultPromise.result.then(
+					// Success
 					() => {
 						this.teamsService.delete(this.team._id)
 							.subscribe(
@@ -115,7 +120,9 @@ export class TeamSummaryComponent {
 										this.alertService.addAlert(response.json().message);
 									}
 								});
-					}
+					},
+					// Failure
+					() => {}
 				)
 			);
 	}

@@ -82,7 +82,7 @@ export class AdminCacheEntriesComponent {
 	private confirmDeleteEntry(cacheEntry: any) {
 		let entryToDelete = cacheEntry.entry;
 
-		this.modal.alert()
+		this.modal.confirm()
 			.size('lg')
 			.showClose(true)
 			.isBlocking(true)

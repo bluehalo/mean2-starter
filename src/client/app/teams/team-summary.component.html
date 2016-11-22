@@ -10,9 +10,10 @@
 	<div style="padding-top:10px; padding-bottom:10px;">
 		<div class="media">
 
-			<a *ngIf="user.canManageTeam(team)" type="button" class="btn btn-default btn-sm pull-right" (click)="remove(team)">
-				<i class="fa fa-fw fa-trash"></i> Delete Team
-			</a>
+			<div *ngIf="user.canManageTeam(team)" class="btn-group pull-right dropdown" dropdown>
+				<button style="margin-right: 10px;" type="button" class="btn btn-default btn-sm" (click)="update()">Edit Team</button>
+				<button type="button" class="btn btn-default btn-sm" (click)="remove()">Delete Team</button>
+			</div>
 
 			<div class="media-left team-avatar">
 				<img style="width: 100px;" class="media-object" src="../img/brand/team.png"/>

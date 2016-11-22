@@ -167,7 +167,8 @@ export class ListTeamMembersComponent {
 											this.alertService.addAlert(response.json().message);
 										}
 									});
-						}
+						},
+						() => {}
 					)
 				);
 		}
@@ -233,7 +234,8 @@ export class ListTeamMembersComponent {
 										this.alertService.addAlert(response.json().message);
 									}
 								});
-					}
+					},
+					() => {}
 				)
 			);
 	}

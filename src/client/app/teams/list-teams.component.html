@@ -66,20 +66,36 @@
 						<th>Team Name</th>
 						<th>Description</th>
 						<th>Created</th>
+						<th>&nbsp;</th>
 					</tr>
 				</thead>
 
 				<tbody>
 					<tr *ngFor="let team of teams">
-						<td >
+						<td>
 							<div class="hideOverflow" style="max-width:200px;">
 								<a [routerLink]="['/team', team._id]"><strong>{{team.name}}</strong></a>
 							</div>
 						</td>
-						<td >
+						<td>
 							<div class="hideOverflow" style="max-width:400px;">{{team.description}}</div>
 						</td>
-						<td >{{team.created | agoDate:false}}</td>
+						<td>
+							{{team.created | agoDate:false}}
+						</td>
+						<td>
+							<div class="pull-right" *ngIf="user.canManageTeam(team)">
+								<div class="btn-group pull-right dropdown" dropdown>
+									<button type="button" class="btn btn-default btn-sm dropdown-toggle" dropdownToggle>
+										<i style="padding-right:5px;" class="fa fa-gear"></i><span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" role="menu">
+										<li><a (click)="updateTeam(team)"><i class="fa fa-fw fa-edit"></i> Edit</a></li>
+										<li><a (click)="deleteTeam(team)"><i class="fa fa-fw fa-trash"></i> Delete</a></li>
+									</ul>
+								</div>
+							</div>
+						</td>
 					</tr>
 				</tbody>
 			</table>
