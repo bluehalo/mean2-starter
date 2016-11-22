@@ -57,7 +57,7 @@ Currently, we've only implemented server tests using Mocha. There are two releva
 Executes the tests using a watch on all server test and source files. The tests will re-execute upon any changes. Optionally, you can pass in either of two parameters:
 
 1. '--bail': Pass this parameter to make the mocha tests stop on the first test failure. This can be useful if you want to speed up testing.
-1. '--filter=regex': Pass this paraemeter with a valid regest in string format to filter the tests to run by spec filename.
+1. '--filter=regex': Pass this parameter with a valid request in string format to filter the tests to run by spec filename.
 
 #### Test CI ####
 'gulp test-ci'
