@@ -101,11 +101,9 @@ export class ListTeamMembersComponent {
 	}
 
 	private typeaheadOnSelect(e: any) {
-		setTimeout(() => {
-			this.queryUserObj = new TeamMember().setFromTeamMemberModel(this.team, e.item);
-			this.addMember(this.queryUserObj);
-			this.queryUserSearchTerm = '';
-		}, 0);
+		this.queryUserObj = new TeamMember().setFromTeamMemberModel(this.team, e.item);
+		this.addMember(this.queryUserObj);
+		this.queryUserSearchTerm = '';
 	}
 
 	private goToPage(event: any) {
@@ -157,7 +155,8 @@ export class ListTeamMembersComponent {
 					(resultPromise: any) => resultPromise.result.then(
 						() => {
 							this.doUpdateRole(member, role)
-								.subscribe(() => {
+								.subscribe(
+									() => {
 										this.authService.reloadCurrentUser().subscribe(() => {
 											// If we successfully removed the role from ourselves, redirect away
 											this.router.navigate(['/teams', {clearCachedFilter: true}]);
@@ -178,7 +177,8 @@ export class ListTeamMembersComponent {
 		}
 		else {
 			this.doUpdateRole(member, role)
-				.subscribe(() => {
+				.subscribe(
+					() => {
 						this.getTeamMembers();
 					},
 					(response: Response) => {
@@ -196,7 +196,8 @@ export class ListTeamMembersComponent {
 		}
 
 		this.teamsService.addMember(this.teamId, member.userModel._id, role)
-			.subscribe(() => {
+			.subscribe(
+				() => {
 					this.authService.reloadCurrentUser().subscribe(() => {
 						this.getTeamMembers();
 					});
@@ -221,7 +222,8 @@ export class ListTeamMembersComponent {
 				(resultPromise: any) => resultPromise.result.then(
 					() => {
 						this.teamsService.removeMember(this.teamId, member.userModel._id)
-							.subscribe(() => {
+							.subscribe(
+								() => {
 									this.authService.reloadCurrentUser().subscribe(() => {
 										this.getTeamMembers();
 									});

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Response } from '@angular/http';
 
+import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 
 import { Team } from './teams.class';
@@ -57,7 +58,7 @@ export class ManageTeamComponent {
 			this.mode = params[`mode`];
 			this.teamId = params[`id`];
 
-			this.modeDisplay = this.mode.substr(0, 1).toUpperCase() + this.mode.substr(1);
+			this.modeDisplay = _.capitalize(this.mode);
 			this.subtitle = this.mode === 'create' ? 'Provide some basic metadata to create a new team' : 'Modify and save basic team metadata';
 			this.okButtonText = this.mode === 'create' ? this.modeDisplay : 'Save';
 

@@ -57,7 +57,7 @@ export class AuthenticationService {
 					 // this.router.navigateByInstruction(this.router.currentInstruction);
 				}
 			},
-			(err) => {},
+			(err: any) => {},
 			() => {
 				this.initializing$.next(false);
 			}

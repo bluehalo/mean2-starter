@@ -16,7 +16,7 @@ let _ = require('lodash'),
 	TeamMember = dbs.admin.model('TeamUser'),
 	TeamRole = dbs.admin.model('TeamRole'),
 
-	teamController = require(path.resolve('./src/server/app/teams/controllers/teams.server.controller.js'));
+	teamsService = require(path.resolve('./src/server/app/teams/services/teams.server.service.js'))();
 
 /**
  * Helpers
@@ -59,7 +59,7 @@ function teamSpec(key) {
 /**
  * Unit tests
  */
-describe('Team Controller:', function() {
+describe('Team Service:', function() {
 	// Specs for tests
 	let spec = { team: {}, user: {} };
 
@@ -69,7 +69,6 @@ describe('Team Controller:', function() {
 
 	spec.team.teamWithNoExternalTeam = teamSpec('no-external');
 	spec.team.teamWithNoExternalTeam.requiresExternalTeams = [];
-
 
 	// User implicit added to team by having an external group
 	spec.user.implicit = proxyPkiUserSpec('implicit');
@@ -126,131 +125,95 @@ describe('Team Controller:', function() {
 	});
 
 	// Test implicit team membership
-	it('Search team membership; user implicitly added to a team via externalGroups', function(done) {
-		let req = {
-			query: { dir: 'ASC', page: '0', size: '5', sort: 'name' },
-			body: {}
-		};
-		let res = {};
+	it('Search team membership; user implicitly added to a team via externalGroups', function() {
+		let queryParams = { dir: 'ASC', page: '0', size: '5', sort: 'name' };
 
 		Team.findOne({ name: 'external' })
 			.exec()
 			.then(function(team) {
-				req.team = team;
-				res.status = function(status) {
-					should(status).equal(200);
-
-					return {
-						json: function(results) {
-							should.exist(results);
-							(results.elements).should.have.length(1);
-							should(results.elements[0].name).equal('implicit Name');
-
-							done();
-						}
-					};
-				};
-
-				teamController.searchMembers(req, res, function() {});
-			}, done).done();
+				let searchResults = teamsService.searchTeamMembers(null, {}, queryParams, team);
+				(searchResults.elements).should.have.length(1);
+				(searchResults.elements[0].name).should.equal('implicit Name');
+			});
 
 	});
 
 	// Test explicit team membership
-	it('Search team membership; user explicitly added to a team through the user.teams property', function(done) {
-		let req = {
-			query: { dir: 'ASC', page: '0', size: '5', sort: 'name' },
-			body: {}
-		};
-		let res = {};
+	it('Search team membership; user explicitly added to a team through the user.teams property', function() {
+		let queryParams = { dir: 'ASC', page: '0', size: '5', sort: 'name' };
 
 		Team.findOne({ name: 'no-external' })
 			.exec()
 			.then(function(team) {
-				req.team = team;
-				res.status = function(status) {
-					should(status).equal(200);
-
-					return {
-						json: function(results) {
-							should.exist(results);
-							should(results.elements).be.an.Array();
-							should(results.elements).have.length(1);
-							should(results.elements[0].name).equal('explicit Name');
-
-							done();
-						}
-					};
-				};
-
-				teamController.searchMembers(req, res, function() {});
-			}, done);
+				let searchResults = teamsService.searchTeamMembers(null, {}, queryParams, team);
+				(searchResults.elements).should.be.an.Array();
+				(searchResults.elements).should.have.length(1);
+				(searchResults.elements[0].name).should.equal('explicit Name');
+			});
 	});
 
-	it('meetsRequiredExternalTeams', function(done) {
+	it('meetsRequiredExternalTeams', function() {
 		let user = { bypassAccessCheck: true };
 		let team = {};
 
-		let match = teamController.meetsRequiredExternalTeams(user,team);
+		let match = teamsService.meetsRequiredExternalTeams(user, team);
 
 		match.should.equal(true);
 
 		user = { bypassAccessCheck: false };
 		team = {};
 
-		match = teamController.meetsRequiredExternalTeams(user,team);
+		match = teamsService.meetsRequiredExternalTeams(user, team);
 
 		match.should.equal(false);
 
 		user = { bypassAccessCheck: false };
 		team = { requiresExternalTeams: ['one']};
 
-		match = teamController.meetsRequiredExternalTeams(user,team);
+		match = teamsService.meetsRequiredExternalTeams(user, team);
 
 		match.should.equal(false);
 
 		user = { bypassAccessCheck: false, externalGroups: ['two'] };
 		team = { requiresExternalTeams: ['one']};
 
-		match = teamController.meetsRequiredExternalTeams(user,team);
+		match = teamsService.meetsRequiredExternalTeams(user, team);
 
 		match.should.equal(false);
 
 		user = { bypassAccessCheck: false, externalGroups: ['one'] };
 		team = { requiresExternalTeams: ['one']};
 
-		match = teamController.meetsRequiredExternalTeams(user,team);
+		match = teamsService.meetsRequiredExternalTeams(user, team);
 
 		match.should.equal(true);
 
 		user = { bypassAccessCheck: false, externalGroups: ['two'] };
 		team = { requiresExternalTeams: ['one', 'two']};
 
-		match = teamController.meetsRequiredExternalTeams(user,team);
+		match = teamsService.meetsRequiredExternalTeams(user, team);
 
 		match.should.equal(true);
 
 		user = { bypassAccessCheck: false, externalGroups: ['two', 'four'] };
 		team = { requiresExternalTeams: ['one', 'two']};
 
-		match = teamController.meetsRequiredExternalTeams(user,team);
+		match = teamsService.meetsRequiredExternalTeams(user, team);
 
 		match.should.equal(true);
 
 		user = { bypassAccessCheck: false, externalGroups: ['two', 'four'] };
 		team = { requiresExternalTeams: ['four', 'one', 'two']};
 
-		match = teamController.meetsRequiredExternalTeams(user,team);
+		match = teamsService.meetsRequiredExternalTeams(user, team);
 
 		match.should.equal(true);
 
 		user = { bypassAccessCheck: false, externalGroups: ['two'] };
 		team = { requiresExternalTeams: []};
 
-		match = teamController.meetsRequiredExternalTeams(user,team);
+		match = teamsService.meetsRequiredExternalTeams(user, team);
 
 		match.should.equal(false);
-
-		done();
 	});
 });

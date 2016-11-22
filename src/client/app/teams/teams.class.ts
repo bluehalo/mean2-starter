@@ -16,9 +16,7 @@ export class TeamMember extends User {
 
 	public getRoleInTeam(team: Team): string {
 		// Find the role of this user in the team
-		let ndx = _.findIndex(this.userModel.teams, function(t: any) {
-			return t._id === team._id;
-		});
+		let ndx = _.findIndex(this.userModel.teams, (t: any) => t._id === team._id);
 
 		if (-1 !== ndx) {
 			return this.userModel.teams[ndx].role;

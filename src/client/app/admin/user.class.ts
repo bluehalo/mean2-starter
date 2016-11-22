@@ -19,7 +19,7 @@ export class User {
 		return this.isAuthenticated() && (this.isAdmin() || (this.isEuaCurrent() && this.hasAnyRole()));
 	}
 	public hasRole(role: string): boolean {
-		return (null != this.userModel) && (null != this.userModel.roles) && (this.userModel.roles[role]);
+		return (null != this.userModel) && (null != this.userModel.roles) && (null != this.userModel.roles[role]) && (this.userModel.roles[role]);
 	}
 	public hasAnyRole(): boolean {
 		return (this.hasRole('user') || this.hasRole('auditor') || this.hasRole('editor') || this.hasRole('admin'));

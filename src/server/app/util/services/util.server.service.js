@@ -120,6 +120,33 @@ module.exports.dateParse = function (date) {
 	return Date.parse(date);
 };
 
+/**
+ * Get the limit provided by the user, if there is one.
+ * Limit has to be at least 1 and no more than 100.
+ *
+ * @param queryParams
+ * @param maxSize (optional)
+ * @returns {number}
+ */
+module.exports.getLimit = function (queryParams, maxSize) {
+	let max = maxSize || 100;
+	let limit = Math.floor(queryParams.size);
+	if (null == limit || isNaN(limit)) {
+		limit = 20;
+	}
+	return Math.max(1, Math.min(max, limit));
+};
+
+/**
+ * Page needs to be positive and has no upper bound
+ * @param queryParams
+ * @returns {number}
+ */
+module.exports.getPage = function (queryParams) {
+	let page = queryParams.page || 0;
+	return Math.max(0, page);
+};
+
 function propToMongoose(prop, nonMongoFunction) {
 	if (typeof prop === 'object' && prop.$date != null && typeof prop.$date === 'string') {
 		return new Date(prop.$date);

@@ -45,7 +45,8 @@ export class TeamSummaryComponent {
 			// Initialize team
 			if (this.teamId) {
 				this.teamsService.get(this.teamId)
-					.subscribe((result: any) => {
+					.subscribe(
+						(result: any) => {
 							if (null != result) {
 								this.team = new Team(result._id, result.name, result.description, result.created, result.requiresExternalTeams);
 								if (_.isEmpty(this.team.description)) {
@@ -56,7 +57,7 @@ export class TeamSummaryComponent {
 								this.router.navigate(['resource/invalid', {type: 'team'}]);
 							}
 						},
-						(err) => {
+						(err: any) => {
 							this.router.navigate(['resource/invalid', {type: 'team'}]);
 						});
 			}
@@ -103,7 +104,8 @@ export class TeamSummaryComponent {
 				(resultPromise: any) => resultPromise.result.then(
 					() => {
 						this.teamsService.delete(this.team._id)
-							.subscribe(() => {
+							.subscribe(
+								() => {
 									this.authService.reloadCurrentUser().subscribe(() => {
 										this.router.navigate(['/teams', {clearCachedFilter: true}]);
 									});

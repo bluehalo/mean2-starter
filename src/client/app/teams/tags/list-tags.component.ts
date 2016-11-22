@@ -55,11 +55,11 @@ export class ListTagsComponent {
 		this.pagingOptions.sortField = this.sortOptions.name.sortField;
 		this.pagingOptions.sortDir = this.sortOptions.name.sortDir;
 
-		this.route.params.subscribe((params: Params) => {
-			this.teamId = params[`id`];
-
-			this.getTags();
-		});
+		this.route.params.subscribe(
+			(params: Params) => {
+				this.teamId = params[`id`];
+				this.getTags();
+			});
 	}
 
 	private getTags() {
@@ -80,8 +80,9 @@ export class ListTagsComponent {
 						this.pagingOptions.reset();
 					}
 				},
-				(err) => {
+				(err: any) => {
 					console.error(err);
+					this.loading = false;
 				},
 				() => {
 					this.loading = false;
@@ -121,7 +122,8 @@ export class ListTagsComponent {
 				(resultPromise: any) => resultPromise.result.then(
 					() => {
 						this.tagsService.deleteTag(tag._id)
-							.subscribe(() => {
+							.subscribe(
+								() => {
 									this.getTags();
 								},
 								(response: Response) => {

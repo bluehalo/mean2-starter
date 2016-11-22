@@ -12,16 +12,16 @@
 			<h4>Tag Owner: {{team?.name}}</h4>
 		</div>
 
-		<div class="form-group row">
-			<label class="col-md-2 control-label">Name<span class="text-danger"><strong> *</strong></span></label>
-			<div class="col-md-10">
+		<div style="padding-top:10px;" class="form-group row">
+			<label class="col-md-1 control-label">Name<span class="text-danger"><strong> *</strong></span></label>
+			<div class="col-md-11">
 				<input type="text" class="form-control" required name="name" [(ngModel)]="tag.name" ngControl="name"/>
 			</div>
 		</div>
 
 		<div class="form-group row">
-			<label class="col-md-2 control-label">Description</label>
-			<div class="col-md-10">
+			<label class="col-md-1 control-label">Description</label>
+			<div class="col-md-11">
 				<input type="text" class="form-control" name="description" [(ngModel)]="tag.description"/>
 			</div>
 		</div>

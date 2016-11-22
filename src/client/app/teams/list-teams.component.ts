@@ -89,9 +89,7 @@ export class ListTeamsComponent {
 		this.teamsService.search(query, this.search, this.pagingOptions, options)
 			.subscribe((result: any) => {
 				if (null != result && null != result.elements && result.elements.length > 0) {
-					this.teams = result.elements.map(function(e: any) {
-						return new Team(e._id, e.name, e.description, e.created);
-					});
+					this.teams = result.elements.map((e: any) => new Team(e._id, e.name, e.description, e.created) );
 					this.pagingOptions.set(result.pageNumber, result.pageSize, result.totalPages, result.totalSize);
 				} else {
 					this.teams = [];

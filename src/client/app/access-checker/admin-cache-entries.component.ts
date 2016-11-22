@@ -99,7 +99,9 @@ export class AdminCacheEntriesComponent {
 								this.alertService.addAlert(`Deleted cache entry: ${entryToDelete.key}`, 'success');
 								this.loadCacheEntries();
 							},
-							(response: Response) => { this.alertService.addAlert(response.json().message); });
+							(response: Response) => {
+								this.alertService.addAlert(response.json().message);
+							});
 					},
 					// Fail
 					() => {}

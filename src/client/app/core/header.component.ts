@@ -33,24 +33,26 @@ export class HeaderComponent extends CoreComponent {
 		super.ngOnInit();
 
 		// Subscribe to user initialization observable and load teams when done
-		this.authService.initializing$
-			.subscribe( (isInitializing: boolean) => {
+		this.authService.initializing$.subscribe(
+			(isInitializing: boolean) => {
 				if (!isInitializing) {
-					this.teamsService.selectionList().subscribe((result: any) => {
-						if (null != result && null != result.elements && result.elements.length > 0) {
-							this.teams = result.elements.map((e: any) => new Team(e._id, e.name));
-						}
-						else {
-							this.teams = [];
-						}
-					});
+					this.teamsService.selectionList().subscribe(
+						(result: any) => {
+							if (null != result && null != result.elements && result.elements.length > 0) {
+								this.teams = result.elements.map((e: any) => new Team(e._id, e.name));
+							}
+							else {
+								this.teams = [];
+							}
+						});
 				}
 			});
 
-		this.router.events.subscribe( (event) => {
-			if (event instanceof NavigationEnd) {
-				this.currentRoute = event.url;
-			}
-		});
+		this.router.events.subscribe(
+			(event: any) => {
+				if (event instanceof NavigationEnd) {
+					this.currentRoute = event.url;
+				}
+			});
 	}
 }

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Response } from '@angular/http';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
+import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 
 import { Team } from '../teams.class';
@@ -41,7 +42,7 @@ export class ManageTagComponent {
 
 		this.route.params.subscribe((params: Params) => {
 			this.mode = params[`mode`];
-			this.modeDisplay = this.mode.substr(0, 1).toUpperCase() + this.mode.substr(1);
+			this.modeDisplay = _.capitalize(this.mode);
 
 			let tagId = params[`id`];
 			let teamId = params[`teamId`];
@@ -74,7 +75,9 @@ export class ManageTagComponent {
 	private save() {
 		let result: Observable<Response> = this.mode === 'create' ? this.create() : this.update();
 		result.subscribe(
-			() => this.router.navigate(['/team/:id', {id: this.team._id}]),
+			() => {
+				this.router.navigate(['/team', this.team._id]);
+			},
 			(response: Response) => {
 				if (response.status >= 400 && response.status < 500) {
 					this.error = response.json().message;

@@ -3,64 +3,21 @@
 let
 	path = require('path'),
 	q = require('q'),
-	_ = require('lodash'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	dbs = deps.dbs,
-	auditService = deps.auditService,
 	util = deps.utilService,
 	Tag = dbs.admin.model('Tag'),
 	Team = dbs.admin.model('Team'),
-	TeamMember = dbs.admin.model('TeamUser'),
-	teams = require(path.resolve('./src/server/app/teams/controllers/teams.server.controller.js'));
-
-/*
- * Local Functions
- */
-
-
-/**
- * Copies the mutable fields from src to dest
- */
-function copyTagMutableFields(dest, src) {
-	dest.name = src.name;
-	dest.description = src.description;
-}
-
-
-/*
- * CRUD Operations
- */
+	tagsService = require(path.resolve('./src/server/app/teams/services/tags.server.service.js'))(),
+	teamsService = require(path.resolve('./src/server/app/teams/services/teams.server.service.js'))();
 
 
 /**
  * Create a new tag.
  */
 module.exports.create = function(req, res) {
-	let teamId = req.body.owner.id || req.body.owner || null;
-
-	// Create the new tag model
-	let newTag = new Tag(req.body);
-
-	// Write the auto-generated metadata
-	newTag.created = Date.now();
-	newTag.updated = Date.now();
-
-	// Audit the tag creation
-	auditService.audit('tag created', 'tag', 'create', TeamMember.auditCopy(req.user), Tag.auditCopy(newTag))
-		.then(function() {
-			return Team.findOne({ _id: teamId }).exec();
-		})
-		.then(function(team) {
-			if (null != team) {
-				newTag.owner = team;
-				return q(newTag);
-			}
-			return q.reject({ status: 400, type: 'bad-request', message: 'Invalid team id.' });
-		})
-		.then(function(tag) {
-			return tag.save();
-		})
+	tagsService.createTag(req.body, req.user)
 		.then(function(result) {
 			res.status(200).json(result);
 		}, function(err) {
@@ -70,7 +27,7 @@ module.exports.create = function(req, res) {
 
 
 /**
- * Read the team
+ * Read the tag
  */
 module.exports.read = function(req, res) {
 	res.status(200).json(req.tag);
@@ -81,23 +38,7 @@ module.exports.read = function(req, res) {
  * Update the tag metadata
  */
 module.exports.update = function(req, res) {
-	// Retrieve the tag from persistence
-	let tag = req.tag;
-
-	// Make a copy of the original tag for a "before" snapshot
-	let originalTag = Tag.auditCopy(tag);
-
-	// Update the updated date
-	tag.updated = Date.now();
-
-	// Copy in the fields that can be changed by the user
-	copyTagMutableFields(tag, req.body);
-
-	// Audit the save action
-	auditService.audit('tag updated', 'tag', 'update', TeamMember.auditCopy(req.user), { before: originalTag, after: Tag.auditCopy(tag) })
-		.then(function() {
-			return tag.save();
-		})
+	tagsService.updateTag(req.tag, req.body, req.user)
 		.then(function(result) {
 			res.status(200).json(result);
 		}, function(err) {
@@ -107,18 +48,12 @@ module.exports.update = function(req, res) {
 
 
 /**
- * Delete the team
+ * Delete the tag
  */
 module.exports.delete = function(req, res) {
-	let tag = req.tag;
-
-	// Audit the deletion attempt
-	auditService.audit('tag deleted', 'tag', 'delete', TeamMember.auditCopy(req.user), Tag.auditCopy(req.tag))
-		.then(function() {
-			return tag.remove();
-		})
-		.then(function() {
-			res.status(200).json(tag);
+	tagsService.deleteTag(req.tag, req.user)
+		.then(function(result) {
+			res.status(200).json(req.tag);
 		}, function(err) {
 			util.handleErrorResponse(res, err);
 		}).done();
@@ -129,75 +64,12 @@ module.exports.delete = function(req, res) {
  * Search the tags, includes paging and sorting
  */
 module.exports.search = function(req, res) {
+	// Get search and query parameters
 	let search = req.body.s || null;
 	let query = req.body.q || {};
 	query = util.toMongoose(query);
 
-	// Get the limit provided by the user, if there is one.
-	// Limit has to be at least 1 and no more than 100.
-	let limit = Math.floor(req.query.size);
-	if (null == limit || isNaN(limit)) {
-		limit = 20;
-	}
-	limit = Math.max(1, Math.min(100, limit));
-
-	// default sorting by ID
-	let sortArr = [{ property: '_id', direction: 'DESC' }];
-	if(null != req.query.sort && null != req.query.dir) {
-		sortArr = [{ property:  req.query.sort, direction: req.query.dir }];
-	}
-
-	// Page needs to be positive and has no upper bound
-	let page = req.query.page;
-	if (null == page){
-		page = 0;
-	}
-	page = Math.max(0, page);
-
-	let offset = page * limit;
-
-	// If user is not an admin, constrain the results tags owned by the user's teams
-	if(null == req.user.roles || !req.user.roles.admin) {
-		let userObj = req.user.toObject();
-		let teams =  [];
-
-		if (null != userObj.teams && _.isArray(userObj.teams)) {
-			teams = userObj.teams.map((t) => t._id.toString() );
-		}
-
-		// If the query already has a filter by team, take the intersection
-		if (null != query.owner && null != query.owner.$in) {
-			teams = teams.filter((t) => query.owner.$in.indexOf(t) > -1);
-		}
-
-		// If no remaining teams, return no results
-		if (teams.length === 0) {
-			res.status(200).json({
-				totalSize: 0,
-				pageNumber: 0,
-				pageSize: limit,
-				totalPages: 0,
-				elements: []
-			});
-			return;
-		}
-
-		query.owner = {
-			$in: teams
-		};
-	}
-
-	Tag.search(query, search, limit, offset, sortArr)
-		.then(function(result) {
-			// Success
-			return {
-				totalSize: result.count,
-				pageNumber: page,
-				pageSize: limit,
-				totalPages: Math.ceil(result.count / limit),
-				elements: result.results
-			};
-		})
+	tagsService.searchTags(search, query, req.query, req.user)
 		.then(function(result) {
 			res.status(200).json(result);
 		}, function(err) {
@@ -251,7 +123,7 @@ module.exports.requiresRole = function(role) {
 			.exec()
 			.then(function(team) {
 				if (null != team) {
-					return teams.meetsRoleRequirement(user, team, role);
+					return teamsService.meetsRoleRequirement(user, team, role);
 				}
 
 				return q.reject({ status: 404, type: 'not-found', message: 'No owner found for tag.' });
