@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { AuthGuard } from '../auth-guard.service';
 import { OverviewHelpComponent } from './overview.component';
 import { HelpComponent } from '../../help/help.component';
-import { AboutComponent } from '../../help/about.component';
+import { AboutComponent } from '../about.component';
 
 @NgModule({
 	imports: [
@@ -24,19 +24,18 @@ import { AboutComponent } from '../../help/about.component';
 						pathMatch: 'full'
 					},
 					{
-						path: 'about',
-						component: AboutComponent,
-						canActivate: [AuthGuard],
-						data: { roles: [ 'user' ] },
-					},
-					{
 						path: 'overview',
-						component: OverviewHelpComponent,
-						canActivate: [AuthGuard],
-						data: { roles: [ 'user' ] },
+						component: OverviewHelpComponent
 					}
 				]
-			}])
+			},
+			{
+				path: 'about',
+				component: AboutComponent,
+				canActivate: [AuthGuard],
+				data: { roles: [ 'user' ] }
+			}
+		])
 	],
 	exports: []
 })

@@ -1,6 +1,6 @@
 'use strict';
 
-var
+let
 	async = require('async'),
 	crypto = require('crypto'),
 	nodemailer = require('nodemailer'),
@@ -16,7 +16,7 @@ var
 
 
 // Initialize the mailer if it has been configured
-var smtpTransport;
+let smtpTransport;
 if(null != config.mailer) {
 	smtpTransport = nodemailer.createTransport(config.mailer.options);
 }
@@ -29,7 +29,7 @@ exports.forgot = function(req, res, next) {
 
 	// Make sure that the mailer is configured
 	if(null == smtpTransport) {
-		var error = { message: 'Email not configured on server.'};
+		let error = { message: 'Email not configured on server.'};
 		logger.warn({req: req, error: error}, error.message);
 		return res.status(500).json(error);
 	}
@@ -45,7 +45,7 @@ exports.forgot = function(req, res, next) {
 		// Generate random token
 		function(done) {
 			crypto.randomBytes(20, function(error, buffer) {
-				var token = buffer.toString('hex');
+				let token = buffer.toString('hex');
 				logger.debug('Generated reset token.');
 				done(error, token);
 			});
@@ -95,7 +95,7 @@ exports.forgot = function(req, res, next) {
 
 		// Send the email
 		function(emailHTML, user, done) {
-			var mailOptions = {
+			let mailOptions = {
 				to: user.email,
 				from: config.mailer.from,
 				subject: 'Password Reset',
@@ -145,11 +145,11 @@ exports.validateResetToken = function(req, res) {
 exports.reset = function(req, res, next) {
 
 	// Init Variables
-	var password = req.body.password;
+	let password = req.body.password;
 
 	// Make sure that the mailer is configured
 	if(null == smtpTransport) {
-		var error = { message: 'Email not configured on server.'};
+		let error = { message: 'Email not configured on server.'};
 		logger.warn({req: req, error: error}, error.message);
 		return res.status(500).json(error);
 	}
@@ -212,7 +212,7 @@ exports.reset = function(req, res, next) {
 
 		// If valid email, send reset email using service
 		function(emailHTML, user, done) {
-			var mailOptions = {
+			let mailOptions = {
 				to: user.email,
 				from: config.mailer.from,
 				subject: 'Your password has been changed',

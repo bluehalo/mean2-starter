@@ -1,6 +1,6 @@
 'use strict';
 
-var
+let _ = require('lodash'),
 	crypto = require('crypto'),
 	mongoose = require('mongoose'),
 	path = require('path'),
@@ -8,8 +8,10 @@ var
 	uniqueValidator = require('mongoose-unique-validator'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
+	config = deps.config,
 	util = deps.utilService,
 	query = deps.queryService,
+	userAuthorizationService = require(path.resolve('./src/server/app/admin/services/users.authorization.server.service.js')),
 	GetterSchema = deps.schemaService.GetterSchema;
 
 /**
@@ -17,8 +19,8 @@ var
  */
 
 // Validate the password
-var validatePassword = function(password) {
-	var toReturn = true;
+let validatePassword = function(password) {
+	let toReturn = true;
 
 	// only care if it's local
 	if(this.provider === 'local') {
@@ -27,18 +29,18 @@ var validatePassword = function(password) {
 
 	return toReturn;
 };
-var passwordMessage = 'Password must be at least 6 characters long';
+let passwordMessage = 'Password must be at least 6 characters long';
 
 /**
  * Ensure that the notification type is one of the allowed values
  */
-var validNotificationTypes = ['seed'];
-var validateNotificationType = function(inputType) {
+let validNotificationTypes = [''];
+let validateNotificationType = function(inputType) {
 	// is it in the allowed enumerations defined below?
 	return validNotificationTypes.indexOf(inputType) !== -1;
 };
 
-var NotificationPreferenceSchema = new GetterSchema({
+let NotificationPreferenceSchema = new GetterSchema({
 	notificationType: {
 		type: String,
 		required: 'Notification Type is required',
@@ -67,31 +69,7 @@ var NotificationPreferenceSchema = new GetterSchema({
  * User Schema
  */
 
-
-var GroupPermissionSchema = new GetterSchema({
-	_id: {
-		type: mongoose.Schema.ObjectId,
-		ref: 'Group'
-	},
-	roles: {
-		type: {
-			editor: {
-				type: Boolean,
-				default: false
-			},
-			admin: {
-				type: Boolean,
-				default: false
-			},
-			follower: {
-				type: Boolean,
-				default: false
-			}
-		}
-	}
-});
-
-var UserSchema = new GetterSchema({
+let UserSchema = new GetterSchema({
 	name: {
 		type: String,
 		trim: true,
@@ -194,10 +172,6 @@ var UserSchema = new GetterSchema({
 		default: null,
 		get: util.dateParse
 	},
-	groups: {
-		type: [GroupPermissionSchema],
-		default: []
-	},
 	preferences: {
 		type: {
 			notifications: {
@@ -214,7 +188,7 @@ UserSchema.plugin(uniqueValidator);
  */
 
 // Text-search index
-UserSchema.index({ name: 'text', email: 'text', username: 'text', 'groups.group': 1 });
+UserSchema.index({ name: 'text', email: 'text', username: 'text' });
 
 
 /**
@@ -223,7 +197,7 @@ UserSchema.index({ name: 'text', email: 'text', username: 'text', 'groups.group'
 
 // Process the password
 UserSchema.pre('save', function(next) {
-	var user = this;
+	let user = this;
 
 	// If the password is modified and it is valid, then re- salt/hash it
 	if (user.isModified('password') && validatePassword.call(user, user.password)) {
@@ -244,10 +218,10 @@ UserSchema.pre('save', function(next) {
 
 // Hash Password
 UserSchema.methods.hashPassword = function(password) {
-	var user = this;
+	let user = this;
 
 	if (user.salt && password) {
-		return crypto.pbkdf2Sync(password, user.salt, 10000, 64).toString('base64');
+		return crypto.pbkdf2Sync(password, user.salt, 10000, 64, 'SHA1').toString('base64');
 	} else {
 		return password;
 	}
@@ -264,10 +238,10 @@ UserSchema.methods.authenticate = function(password) {
  * append it to the existing notification preferences.
  */
 UserSchema.methods.updateNotificationPreference = function(np) {
-	var defer = q.defer();
-	var user = this;
+	let defer = q.defer();
+	let user = this;
 
-	var notifType = np.notificationType.toLowerCase();
+	let notifType = np.notificationType.toLowerCase();
 
 	user.update(
 		{ $pull: { 'preferences.notifications': { 'notificationType' : notifType, 'referenceId' : np.referenceId  } } },
@@ -293,7 +267,7 @@ UserSchema.methods.updateNotificationPreference = function(np) {
  * instead of having a fully fledged schema, filter out the one to remove.
  */
 UserSchema.methods.removeNotificationPreference = function(type, referenceId) {
-	var defer = q.defer();
+	let defer = q.defer();
 
 	type = type.toLowerCase();
 
@@ -317,7 +291,7 @@ UserSchema.statics.hasRoles = function(user, roles){
 	if (null == user.roles) {
 		return false;
 	}
-	var toReturn = true;
+	let toReturn = true;
 
 	if (null != roles) {
 		roles.forEach(function(element) {
@@ -342,7 +316,7 @@ UserSchema.statics.containsQuery = function(queryTerms, fields, search, limit, o
 
 // Filtered Copy of a User (public)
 UserSchema.statics.filteredCopy = function(user) {
-	var toReturn = null;
+	let toReturn = null;
 
 	if(null != user){
 		toReturn = {};
@@ -357,59 +331,16 @@ UserSchema.statics.filteredCopy = function(user) {
 	return toReturn;
 };
 
-//Group Copy of a User (has group roles for the group )
-UserSchema.statics.groupCopy = function(user, groupId) {
-	var toReturn = null;
-
-	if(null != user){
-		toReturn = {};
-
-		toReturn._id = user._id;
-		toReturn.name = user.name;
-		toReturn.username = user.username;
-		toReturn.created = user.created;
-		toReturn.lastLogin = toReturn.lastLogin;
-		toReturn.externalGroups = user.externalGroups;
-		toReturn.bypassAccessCheck = user.bypassAccessCheck;
-
-		// Copy only the relevant group roles
-		toReturn.groups = [];
-		if(null != user.groups) {
-			user.groups.forEach(function(element){
-				if(null != element._id && element._id.equals(groupId)) {
-					toReturn.groups.push(element);
-				}
-			});
-		}
-	}
-
-	return toReturn;
-};
 
 // Full Copy of a User (admin)
 UserSchema.statics.fullCopy = function(user) {
-	var toReturn = null;
+	let toReturn = null;
 
 	if(null != user){
-		toReturn = {};
-
-		toReturn._id = user._id;
-		toReturn.providerData = user.providerData;
-		toReturn.name = user.name;
-		toReturn.organization = user.organization;
-		toReturn.email = user.email;
-		toReturn.phone = user.phone;
-		toReturn.username = user.username;
-		toReturn.roles = user.roles;
-		toReturn.externalRoles = user.externalRoles;
-		toReturn.externalGroups = user.externalGroups;
-		toReturn.bypassAccessCheck = user.bypassAccessCheck;
-		toReturn.updated = user.updated;
-		toReturn.created = user.created;
-		toReturn.acceptedEua = user.acceptedEua;
-		toReturn.lastLogin = user.lastLogin;
-		toReturn.groups = user.groups;
-		toReturn.preferences = user.preferences;
+		toReturn = user.toObject();
+		if (toReturn.hasOwnProperty('password')) {
+			delete toReturn.password;
+		}
 	}
 
 	return toReturn;
@@ -417,7 +348,7 @@ UserSchema.statics.fullCopy = function(user) {
 
 // Copy User for creation
 UserSchema.statics.createCopy = function(user) {
-	var toReturn = {};
+	let toReturn = {};
 
 	toReturn.name = user.name;
 	toReturn.organization = user.organization;
@@ -432,13 +363,26 @@ UserSchema.statics.createCopy = function(user) {
 };
 
 // Copy a user for audit logging
-UserSchema.statics.auditCopy = function(user) {
-	var toReturn = {};
+UserSchema.statics.auditCopy = function(user, userIP) {
+	let toReturn = {};
 	user = user || {};
 
 	toReturn._id = user._id;
 	toReturn.name = user.name;
 	toReturn.username = user.username;
+	toReturn.organization = user.organization;
+	toReturn.email = user.email;
+	toReturn.phone = user.phone;
+	if (null != userIP) {
+		toReturn.ip = userIP;
+	}
+
+	toReturn.roles = _.cloneDeep(user.roles);
+	toReturn.bypassAccessCheck = user.bypassAccessCheck;
+	toReturn.externalRoleAccess = userAuthorizationService.checkExternalRoles(user, config.auth);
+	if (null != user.providerData && null != user.providerData.dn) {
+		toReturn.dn = user.providerData.dn;
+	}
 
 	return toReturn;
 };
@@ -447,5 +391,4 @@ UserSchema.statics.auditCopy = function(user) {
  * Model Registration
  */
 mongoose.model('User', UserSchema);
-mongoose.model('GroupPermission', GroupPermissionSchema);
 mongoose.model('NotificationPreference', NotificationPreferenceSchema);

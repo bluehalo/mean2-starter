@@ -35,8 +35,6 @@ export class HelpComponent {
 				this.helpTopics = this.helpService.helpRegistry;
 				this.pki = config.auth === 'proxy-pki';
 				this.config = config;
-
-				this.router.navigate([`/help/${this.helpService.getTopics()[0].id}`]);
 			});
 
 		// If local mode and user has no roles, redirect

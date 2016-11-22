@@ -1,0 +1,106 @@
+<section>
+
+	<h3 class="page-header">
+		My Teams
+		<small>View and manage team membership and roles</small>
+		<a *ngIf="user.canManageSystemResources()" [routerLink]="['/team/create', { mode:'create' }]" type="button" class="btn btn-default btn-sm pull-right">
+			<i class="fa fa-plus"></i> Create Team
+		</a>
+	</h3>
+
+	<!-- Alert Notifications -->
+	<alert *ngFor="let alert of alertService.getAlerts(); let i = index" [type]="alert.type" (close)="alertService.clear(i)" dismissible="true" >{{alert.msg}}</alert>
+
+	<div class="row">
+		<div class="col-md-12">
+
+			<!-- Search Input -->
+			<div class="input-group">
+				<input placeholder="Enter a search..." type="text" class="form-control input-sm" [(ngModel)]="search" (keyup.enter)="applySearch()">
+				<span class="input-group-btn">
+					<button class="btn btn-default btn-sm" type="button" (click)="applySearch()">
+						<i class="fa fa-search"></i>
+					</button>
+				</span>
+			</div>
+
+		</div>
+	</div>
+
+	<div style="padding-top:5px;" class="row">
+		<div class="col-md-12">
+
+			<!-- Sorting/Paging Controls -->
+			<div [hidden]="pagingOptions.totalSize === 0">
+				<div class="controls pull-right">
+					<asy-pager
+							[pageNumber]="pagingOptions.pageNumber"
+							[pageSize]="pagingOptions.pageSize"
+							[totalSize]="pagingOptions.totalSize"
+							[maxPageSize]=50
+							[currentSize]="teams.length"
+							(onChange)="goToPage($event)">
+					</asy-pager>
+				</div>
+				<br style="clear:both;"/>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3 text-center" [hidden]="teams.length > 0">
+			<h4>
+				No Teams?<br/>
+				<small>
+					Either there were no teams that matched your search or you don't have access to any teams yet.<br/>
+					Read our <a [routerLink]="['/help/teams']">getting started page</a> for more details.
+				</small>
+			</h4>
+		</div>
+
+		<div class="col-md-12">
+			<!-- Actual results -->
+			<table class="asymmetrik table table-condensed table-hover table-striped" [hidden]="teams.length === 0">
+				<thead>
+					<tr>
+						<th>Team Name</th>
+						<th>Description</th>
+						<th>Created</th>
+						<th>&nbsp;</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr *ngFor="let team of teams">
+						<td>
+							<div class="hideOverflow" style="max-width:200px;">
+								<a [routerLink]="['/team', team._id]"><strong>{{team.name}}</strong></a>
+							</div>
+						</td>
+						<td>
+							<div class="hideOverflow" style="max-width:400px;">{{team.description}}</div>
+						</td>
+						<td>
+							{{team.created | agoDate:false}}
+						</td>
+						<td>
+							<div class="pull-right" *ngIf="user.canManageTeam(team)">
+								<div class="btn-group pull-right dropdown" dropdown>
+									<button type="button" class="btn btn-default btn-sm dropdown-toggle" dropdownToggle>
+										<i style="padding-right:5px;" class="fa fa-gear"></i><span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" role="menu">
+										<li><a (click)="updateTeam(team)"><i class="fa fa-fw fa-edit"></i> Edit</a></li>
+										<li><a (click)="deleteTeam(team)"><i class="fa fa-fw fa-trash"></i> Delete</a></li>
+									</ul>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+
+</section>

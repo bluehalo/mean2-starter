@@ -128,7 +128,7 @@ export class AdminListEuasComponent implements OnInit {
 		this.euaToDelete = eua;
 
 		let dialogPromise: Promise<DialogRef<any>>;
-		dialogPromise = this.modal.alert()
+		dialogPromise = this.modal.confirm()
 			.size('lg')
 			.showClose(true)
 			.isBlocking(true)

@@ -193,7 +193,7 @@ export class AdminListUsersComponent {
 		this.userToDelete = user;
 
 		let dialogPromise: Promise<DialogRef<any>>;
-		dialogPromise = this.modal.alert()
+		dialogPromise = this.modal.confirm()
 			.size('lg')
 			.showClose(true)
 			.isBlocking(true)
