@@ -26,7 +26,9 @@ var getSystemConfig = function() {
 		maxScan: config.maxScan,
 		maxExport: config.maxExport,
 		notifications: config.notifications,
-		sourcing: config.sourcing
+		sourcing: config.sourcing,
+
+		welcomeLinks: config.welcomeLinks
 	};
 
 	return toReturn;

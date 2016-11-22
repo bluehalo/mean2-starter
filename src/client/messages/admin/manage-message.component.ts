@@ -2,9 +2,9 @@ import { Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { AlertService } from '../../shared/services/alert.client.service';
 import { Message } from '../message.class';
-import { ConfigService } from '../../core/services/config.client.service';
+import { ConfigService } from '../../core/config.service';
+import { AlertService } from '../../shared/alert.service';
 
 export abstract class ManageMessageComponent {
 
@@ -41,7 +41,7 @@ export abstract class ManageMessageComponent {
 			});
 	}
 
-	abstract initialize();
+	abstract initialize(): void;
 
 	abstract submitMessage(message: Message): Observable<Response>;
 

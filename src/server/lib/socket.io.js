@@ -93,6 +93,6 @@ module.exports.registerSocketListener = function(s) {
 		name = s.prototype.name;
 	}
 
-	logger.debug('Registering Socket Listener: %s', name);
+	logger.info('Registering Socket Listener: %s', name);
 	registeredSocketListeners.push(s);
 };

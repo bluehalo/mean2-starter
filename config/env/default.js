@@ -178,6 +178,12 @@ module.exports = {
 		webpack: 9000
 	},
 
+	kafka: {
+		broker: 'localhost:9092',
+		zookeeper: 'localhost:2181',
+		zookeeperCommTimeoutMs: 1000,
+		kafkaRetryMs: 3000
+	},
 
 	/**
 	 * Logging Settings
@@ -225,6 +231,19 @@ module.exports = {
 		]
 	},
 
+	/*
+	 * External links for dashboard
+	 */
+	welcomeLinks: {
+		enabled: true,
+		links: [
+			{
+				title: 'Asymmetrik',
+				description: 'Asymmetrik corporate information',
+				href: 'http://www.asymmetrik.com'
+			}
+		]
+	},
 
 	/**
 	 * Not So Environment-Specific Settings

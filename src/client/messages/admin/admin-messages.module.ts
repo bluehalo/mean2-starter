@@ -7,12 +7,18 @@ import { UtilModule } from '../../shared/util.module';
 import { CreateMessageComponent } from './create-message.component';
 import { AdminUpdateMessageComponent } from './edit-message.component';
 import { ListMessagesComponent } from './list-messages.component';
+import { AdminMessagesRoutingModule } from './admin-messages-routes.module';
+import { MessagesModule } from '../messages.module';
+import { MessageService } from '../message.service';
 
 @NgModule({
 	imports: [
+		AdminMessagesRoutingModule,
 		CommonModule,
 		FormsModule,
 		RouterModule,
+		MessagesModule,
+
 		Ng2BootstrapModule,
 		UtilModule
 	],
@@ -22,7 +28,8 @@ import { ListMessagesComponent } from './list-messages.component';
 		CreateMessageComponent,
 		ListMessagesComponent
 	],
-	providers: []
+	providers: [
+	]
 })
 export class AdminMessagesModule {
 }

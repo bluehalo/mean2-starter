@@ -3,12 +3,12 @@
 var path = require('path'),
 	nodeUtil = require('util'),
 
-	deps = require(path.resolve('./config/dependencies.js')),
+	deps = require(path.resolve('./src/server/dependencies.js')),
 	logger = deps.logger,
 	socketIO = deps.socketIO,
 
-	KafkaSocket = require(path.resolve('./app/util/server/sockets/kafka.server.socket.js')),
-	users = require(path.resolve('./app/users/server/controllers/users.server.controller.js'));
+	KafkaSocket = require(path.resolve('./src/server/app/util/sockets/kafka.server.socket.js')),
+	users = require(path.resolve('./src/server/app/admin/controllers/users.server.controller.js'));
 
 /**
  * MessageSocket Socket Controller that overrides Base Socket Controller

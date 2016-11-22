@@ -1,7 +1,7 @@
 <section>
 
 	<!-- Show a breadcrumb to the list users page -->
-	<a *ngIf="mode === 'admin-edit' || mode === 'admin-create'" class="back-link" [routerLink]="[asyRoutes.getPath('AdminListMessages')]">
+	<a *ngIf="mode === 'admin-edit' || mode === 'admin-create'" class="back-link" [routerLink]="['/admin/messages']">
 		<i class="fa fa-angle-double-left"></i> Back to Messages
 	</a>
 
@@ -21,7 +21,7 @@
 		<div class="form-group row">
 			<label class="col-md-12" for="messageType">Type<span class="text-danger"><strong> *</strong></span></label>
 			<div class="col-md-12">
-				<select id="messageType" class="input-sm" [(ngModel)]="message.type" ngControl="messageType">
+				<select id="messageType" class="input-sm" name="type" [(ngModel)]="message.type">
 					<option *ngFor="let opt of typeOptions" [value]="opt.value">{{opt.display}}</option>
 				</select>
 			</div>
@@ -30,20 +30,20 @@
 		<!-- Title -->
 		<div class="form-group row">
 			<label class="col-md-12" for="title">Title<span class="text-danger"><strong> *</strong></span></label>
-			<div class="col-md-12"><input type="text" class="form-control" id="title" name="title" [(ngModel)]="message.title" ngControl="title" required /></div>
+			<div class="col-md-12"><input type="text" class="form-control" id="title" name="title" [(ngModel)]="message.title" required /></div>
 		</div>
 
 		<!-- Tearline -->
 		<div class="form-group row">
 			<label class="col-md-12" for="tearline">Tearline<span class="text-danger"></span></label>
-			<div class="col-md-12"><input type="text" class="form-control" id="tearline" name="tearline" [(ngModel)]="message.tearline" ngControl="tearline" /></div>
+			<div class="col-md-12"><input type="text" class="form-control" id="tearline" name="tearline" [(ngModel)]="message.tearline" /></div>
 		</div>
 
 		<!-- Body -->
 		<div class="form-group row">
 			<label class="col-md-12" for="text">Message Body<span class="text-danger"><strong> *</strong></span></label>
 			<div class="col-md-12">
-				<textarea class="form-control" id="text" name="text" [(ngModel)]="message.body" ngControl="text" required></textarea>
+				<textarea class="form-control" id="text" name="text" [(ngModel)]="message.body" required></textarea>
 			</div>
 		</div>
 
@@ -60,7 +60,7 @@
 			<div class="col-md-12">
 				<div class="pull-right">
 					<button class="btn btn-default" (click)="submit()" [disabled]="okDisabled">{{okButtonText}}</button>
-					<a type="button" [routerLink]="[asyRoutes.getPath('AdminListMessages')]"> Cancel</a>
+					<a type="button" [routerLink]="['/admin/messages']"> Cancel</a>
 				</div>
 			</div>
 		</div>

@@ -1,15 +1,17 @@
 import { NgModule } from '@angular/core';
-import { AdminMessagesModule } from './admin/admin-messages.module';
 import { MessageHandlerService } from './message-handler.service';
+import { MessageService } from './message.service';
+import { SocketService } from '../core/services/socket.service';
 
 @NgModule({
-	imports: [AdminMessagesModule],
-	exports: [
-		AdminMessagesModule,
-		MessageHandlerService
-	],
+	imports: [],
+	exports: [],
 	declarations: [],
-	providers: [MessageHandlerService],
+	providers: [
+		MessageService,
+		MessageHandlerService,
+		SocketService
+	],
 })
 export class MessagesModule {
 }

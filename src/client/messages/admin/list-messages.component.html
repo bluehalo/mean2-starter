@@ -3,7 +3,7 @@
 	<h3 class="page-header">
 		Messages
 		<small>Administer Messages</small>
-		<a [routerLink]="[asyRoutes.getPath('AdminCreateMessage')]"  type="button" class="btn btn-default btn-sm pull-right">
+		<a [routerLink]="['/admin/message']"  type="button" class="btn btn-default btn-sm pull-right">
 			<i class="fa fa-plus"></i> Create Message
 		</a>
 	</h3>
@@ -92,7 +92,7 @@
 
 						<td style="min-width: 80px;max-width: 80px;">
 							<div class="pull-right">
-								<a title="Edit" [routerLink]="[asyRoutes.getPath('AdminUpdateMessage'), {id: message._id}]" type="button" class="btn btn-default btn-sm"><span class="fa fa-edit"></span></a>
+								<a title="Edit" [routerLink]="['/admin/message', {id: message._id}]" type="button" class="btn btn-default btn-sm"><span class="fa fa-edit"></span></a>
 								<button title="Delete" type="button" class="btn btn-danger btn-sm" (click)="confirmDeleteMessage(message)"><span class="fa fa-trash-o"></span></button>
 							</div>
 						</td>

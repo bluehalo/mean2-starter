@@ -2,16 +2,16 @@ import { Component } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { ManageMessageComponent } from './manage-message.component';
-import { ConfigService } from '../../core/services/config.client.service';
-import { AlertService } from '../../shared/services/alert.client.service';
 import { MessageService } from '../message.service';
 import { Message } from '../message.class';
+import { ConfigService } from '../../core/config.service';
+import { AlertService } from '../../shared/alert.service';
 
 @Component({
 	selector: 'admin-edit-user',
 	templateUrl: './manage-message.component.html'
 })
-export abstract class AdminUpdateMessageComponent extends ManageMessageComponent {
+export class AdminUpdateMessageComponent extends ManageMessageComponent {
 
 	private mode = 'admin-edit';
 
@@ -34,7 +34,7 @@ export abstract class AdminUpdateMessageComponent extends ManageMessageComponent
 			this.title = 'Edit Message';
 			this.subtitle = 'Make changes to the message\'s information';
 			this.okButtonText = 'Save';
-			this.navigateOnSuccess = 'AdminListMessages';
+			this.navigateOnSuccess = '/admin/messages';
 			this.okDisabled = false;
 			this.messageService.get(this.id).subscribe((messageRaw: any) => {
 				this.message = new Message().setFromModel(messageRaw);

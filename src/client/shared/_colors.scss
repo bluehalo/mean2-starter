@@ -12,6 +12,8 @@ $color-bg-tooltip: #ddd;
 $color-bg-btn: #cec;
 $color-bg-light: #bbb;
 
+$color-box-shadow: rgba(136, 153, 166, .95);
+
 $color-border-light: #eee;
 $color-border-med: #aaa;
 $color-border-dark: #444;
@@ -20,10 +22,13 @@ $color-label-gray: #999;
 $color-label-dark-gray: #333;
 $color-link: #337ab7;
 
+$color-panel-title: #a1a1a1;
+
 $color-text-light: #bcbcbc;
 $color-text-black: #222;
 
 // Blocks
+
 $color-default-light: #e4eaf0;
 $color-default-med: #cbd0d6;
 $color-default-dark: #777f93;
@@ -39,3 +44,9 @@ $color-warning-dark: #a63;
 $color-info-light: #def;
 $color-info-med: #5bc0de;
 $color-info-dark: #3a87ad;
+
+// Messages
+$color-motd-header: #e1e1e1;
+$color-callout-info-border: #c1c1c1;
+$color-callout-info-title: #616161;
+$color-toast-bg: #fcfcfc;

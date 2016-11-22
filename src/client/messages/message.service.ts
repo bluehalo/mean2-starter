@@ -1,12 +1,12 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
 import { Message } from './message.class';
-import { AsyHttp, HttpOptions } from '../shared/services/asy-http.client.service';
-import { UserService } from '../admin/services/users.client.service';
-import { AuthenticationService } from '../admin/services/authentication.client.service';
-import { PagingOptions } from '../shared/components/pager.client.component';
+import { PagingOptions } from '../shared/pager.component';
+import { HttpOptions, AsyHttp } from '../shared/asy-http.service';
+import { AuthenticationService } from '../admin/authentication/authentication.service';
+import { UserStateService } from '../admin/authentication/user-state.service';
+import { UserService } from '../admin/users.service';
 import { SocketService } from '../core/services/socket.service';
-import { UserStateService } from '../admin/services/user-state.client.service';
 
 @Injectable()
 export class MessageService {
@@ -116,7 +116,8 @@ export class MessageService {
 		});
 	}
 
-	private payloadRouterFn: Function = (payload) => {
+	private payloadRouterFn: Function = (payload: any) => {
+		console.log('!!!!!!!', payload);
 		if (this.subscribed > 0) {
 			let message = new Message();
 			message.setFromModel(payload.wrappedPayload.p.message);

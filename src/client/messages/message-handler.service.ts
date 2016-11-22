@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ToasterService, Toast, BodyOutputType } from 'angular2-toaster';
-import { AuthenticationService } from '../admin/services/authentication.client.service';
 import { MessageService } from './message.service';
 import { Message, MessageType } from './message.class';
-import { UserStateService } from '../admin/services/user-state.client.service';
+import { AuthenticationService } from '../admin/authentication/authentication.service';
+import { UserStateService } from '../admin/authentication/user-state.service';
 import * as _ from 'lodash';
 
 @Injectable()
@@ -56,8 +56,9 @@ export class MessageHandlerService {
 					// Register for new notifications from the websocket
 					this.messageService.subscribe();
 					this.messageService.messageReceived
-						.subscribe((message) => {
-							if (message.created > this.userStateService.user.userModel.messagesViewed) {
+						.subscribe((message: any) => {
+							if (undefined === this.userStateService.user.userModel.messagesViewed
+								|| message.created > this.userStateService.user.userModel.messagesViewed) {
 								this.showToaster(message);
 								this.newMessages = true;
 							}
@@ -67,7 +68,7 @@ export class MessageHandlerService {
 	}
 
 	private showToaster(message: Message) {
-		let popupBody;
+		let popupBody: any;
 		if (!_.isUndefined(message.tearline) && !_.isEmpty(message.tearline)) {
 			popupBody = `${message.tearline} <br/>`;
 		}

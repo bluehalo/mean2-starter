@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
-import { AuthenticationService } from '../../admin/services/authentication.client.service';
-import { UserStateService } from '../../admin/services/user-state.client.service';
+import { AuthenticationService } from '../../admin/authentication/authentication.service';
+import { UserStateService } from '../../admin/authentication/user-state.service';
 
 /**
  * Handles sockets for the application
@@ -42,12 +42,13 @@ export class SocketService {
 	}
 
 	public on(eventName: string, callback: Function) {
-		this.socket.on(eventName, (event) => {
+		this.socket.on(eventName, (event: any) => {
 			callback.apply(this.socket, [event]);
 		});
 	}
 
 	public emit(eventName: string) {
+		console.log(eventName);
 		this.socket.emit(eventName);
 	}
 }

@@ -3,20 +3,19 @@ import { Component, ViewContainerRef } from '@angular/core';
 import { DialogRef } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 import { Message } from '../message.class';
-import { PagingOptions } from '../../shared/components/pager.client.component';
-import { SortDirection, SortDisplayOption } from '../../shared/util/result-utils.client.classes';
 import { MessageService } from '../message.service';
-import { AlertService } from '../../shared/services/alert.client.service';
-import { AuthenticationService } from '../../admin/services/authentication.client.service';
 
 import * as _ from 'lodash';
 import { Response } from '@angular/http';
+import { PagingOptions } from '../../shared/pager.component';
+import { SortDirection, SortDisplayOption } from '../../shared/result-utils.class';
+import { AuthenticationService } from '../../admin/authentication/authentication.service';
+import { AlertService } from '../../shared/alert.service';
 
 @Component({
 	selector: 'admin-list-users',
 	templateUrl: './list-messages.component.html'
 })
-
 export class ListMessagesComponent {
 
 	private messages: Message[] = [];

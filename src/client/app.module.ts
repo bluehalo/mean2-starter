@@ -23,6 +23,8 @@ import { UtilModule } from './shared/util.module';
 import { ClientConfiguration } from './config/configurator';
 import { BaseService } from './config/test/test-stub-service.service';
 import { HelpModule } from './help/help.module';
+import { ToasterModule } from 'angular2-toaster';
+import { WelcomeModule } from './welcome/welcome.module';
 
 export function initializerFactory () {
 	return () => () => new Promise<any>( (resolve) => {
@@ -44,12 +46,14 @@ export function initializerFactory () {
 		Ng2BootstrapModule,
 		ModalModule.forRoot(),
 		BootstrapModalModule,
+		ToasterModule,
 
 		AccessCheckerModule,
 		AdminModule,
 		AuditModule,
 		HelpModule,
-		UtilModule
+		UtilModule,
+		WelcomeModule
 	],
 	declarations: [
 		AppComponent,
