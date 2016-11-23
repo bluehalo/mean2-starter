@@ -11,18 +11,16 @@
 	<!-- Alert Notifications -->
 	<alert *ngFor="let alert of alertService.getAlerts(); let i = index" [type]="alert.type" (close)="alertService.clear(i)" dismissible="true" >{{alert.msg}}</alert>
 
+	<!-- Search Input -->
 	<div class="row">
 		<div class="col-md-12">
-			<!-- Search Input -->
-			<div class="col-md-10 col-sm-8">
-				<div class="input-group">
-					<input placeholder="Enter a search..." type="text" class="form-control input-sm" [(ngModel)]="search" (keyup.enter)="applySearch()">
-					<span class="input-group-btn">
-						<button class="btn btn-default btn-sm" type="button" (click)="applySearch()">
-							<i class="fa fa-search"></i>
-						</button>
-					</span>
-				</div>
+			<div class="input-group">
+				<input placeholder="Enter a search..." type="text" class="form-control input-sm" [(ngModel)]="search" (keyup.enter)="applySearch()">
+				<span class="input-group-btn">
+					<button class="btn btn-default btn-sm" type="button" (click)="applySearch()">
+						<i class="fa fa-search"></i>
+					</button>
+				</span>
 			</div>
 		</div>
 	</div>
@@ -89,10 +87,11 @@
 						<td [hidden]="!columns.type.show">{{message.type}}</td>
 						<td [hidden]="!columns.created.show">{{message.created | agoDate:false}}</td>
 						<td [hidden]="!columns.updated.show">{{message.updated | agoDate:false}}</td>
+						<td [hidden]="!columns._id.show">{{message._id}}</td>
 
 						<td style="min-width: 80px;max-width: 80px;">
 							<div class="pull-right">
-								<a title="Edit" [routerLink]="['/admin/message', {id: message._id}]" type="button" class="btn btn-default btn-sm"><span class="fa fa-edit"></span></a>
+								<a title="Edit" [routerLink]="['/admin/message', message._id]" type="button" class="btn btn-default btn-sm"><span class="fa fa-edit"></span></a>
 								<button title="Delete" type="button" class="btn btn-danger btn-sm" (click)="confirmDeleteMessage(message)"><span class="fa fa-trash-o"></span></button>
 							</div>
 						</td>

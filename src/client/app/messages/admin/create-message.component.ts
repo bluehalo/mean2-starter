@@ -7,7 +7,6 @@ import { ConfigService } from '../../core/config.service';
 import { AlertService } from '../../shared/alert.service';
 
 @Component({
-	selector: 'admin-create-user',
 	templateUrl: './manage-message.component.html',
 })
 export class CreateMessageComponent extends ManageMessageComponent {
@@ -29,10 +28,6 @@ export class CreateMessageComponent extends ManageMessageComponent {
 		this.navigateOnSuccess = '/admin/messages';
 		this.message = new Message();
 		this.message.type = MessageType.MOTD;
-	}
-
-	handleBypassAccessCheck() {
-		// Don't need to do anything
 	}
 
 	submitMessage(message: Message) {

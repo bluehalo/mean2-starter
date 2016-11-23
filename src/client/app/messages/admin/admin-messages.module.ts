@@ -5,10 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { Ng2BootstrapModule } from 'ng2-bootstrap';
 import { UtilModule } from '../../shared/util.module';
 import { CreateMessageComponent } from './create-message.component';
-import { AdminUpdateMessageComponent } from './edit-message.component';
 import { ListMessagesComponent } from './list-messages.component';
 import { AdminMessagesRoutingModule } from './admin-messages-routes.module';
 import { MessagesModule } from '../messages.module';
+import { UpdateMessageComponent } from './edit-message.component';
 
 @NgModule({
 	imports: [
@@ -23,7 +23,7 @@ import { MessagesModule } from '../messages.module';
 	],
 	exports: [],
 	declarations: [
-		AdminUpdateMessageComponent,
+		UpdateMessageComponent,
 		CreateMessageComponent,
 		ListMessagesComponent
 	],

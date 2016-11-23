@@ -39,7 +39,7 @@ export class MessageService {
 	}
 
 	/**
-	 * Retrieves an array of a field's value for all users in the system
+	 * Retrieves an array of a field's value for all messages in the system
 	 */
 	public getAll(query: any, field: any) {
 		return this.asyHttp.post(new HttpOptions(`admin/message/getAll`, () => {

@@ -4,8 +4,8 @@ import { RouterModule } from '@angular/router';
 import { AdminComponent } from '../../admin/admin.component';
 import { AuthGuard } from '../../core/auth-guard.service';
 import { ListMessagesComponent } from './list-messages.component';
-import { AdminUpdateMessageComponent } from './edit-message.component';
 import { CreateMessageComponent } from './create-message.component';
+import { UpdateMessageComponent } from './edit-message.component';
 
 @NgModule({
 	imports: [
@@ -26,7 +26,7 @@ import { CreateMessageComponent } from './create-message.component';
 					},
 					{
 						path: 'message/:id',
-						component: AdminUpdateMessageComponent
+						component: UpdateMessageComponent
 					}
 				]
 			}])

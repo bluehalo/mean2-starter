@@ -91,7 +91,6 @@ export class MessageHandlerService {
 	};
 
 	private markAllRead() {
-		console.log('Marking read');
 		this.newMessages = false;
 		this.messageService.markAllRead();
 	};

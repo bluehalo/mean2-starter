@@ -13,7 +13,6 @@ import { AuthenticationService } from '../../admin/authentication/authentication
 import { AlertService } from '../../shared/alert.service';
 
 @Component({
-	selector: 'admin-list-users',
 	templateUrl: './list-messages.component.html'
 })
 export class ListMessagesComponent {
@@ -70,7 +69,7 @@ export class ListMessagesComponent {
 	ngOnInit() {
 		this.alertService.clearAllAlerts();
 		this.route.params.subscribe((params: Params) => {
-			if (_.toString(params[`clearCachedFilter`]) === 'true' || null == this.messageService.cache.listUsers) {
+			if (_.toString(params[`clearCachedFilter`]) === 'true' || null == this.messageService.cache.listMessages) {
 				this.messageService.cache.listMessages = {};
 			}
 

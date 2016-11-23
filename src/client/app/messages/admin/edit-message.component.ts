@@ -8,10 +8,9 @@ import { ConfigService } from '../../core/config.service';
 import { AlertService } from '../../shared/alert.service';
 
 @Component({
-	selector: 'admin-edit-user',
 	templateUrl: './manage-message.component.html'
 })
-export class AdminUpdateMessageComponent extends ManageMessageComponent {
+export class UpdateMessageComponent extends ManageMessageComponent {
 
 	private mode = 'admin-edit';
 
@@ -29,6 +28,7 @@ export class AdminUpdateMessageComponent extends ManageMessageComponent {
 
 	initialize() {
 		this.route.params.subscribe((params: Params) => {
+			console.log(params);
 			this.id = params[`id`];
 
 			this.title = 'Edit Message';
