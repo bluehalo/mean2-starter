@@ -1,4 +1,4 @@
-import { NgModule }     from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { AuthGuard } from '../../core/auth-guard.service';
@@ -22,6 +22,7 @@ import { ManageTagComponent } from './manage-tag.component';
 		])
 	],
 	exports: [
+		RouterModule
 	]
 })
 export class TagsRoutingModule { }

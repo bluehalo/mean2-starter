@@ -22,7 +22,7 @@ import { AddRemoveList } from './add-remove-list.component';
 		FormsModule,
 		Ng2BootstrapModule
 	],
-	exports: 		[
+	exports: [
 		AddRemoveList,
 		AgoDatePipe,
 		AsyLoading,
@@ -32,7 +32,7 @@ import { AddRemoveList } from './add-remove-list.component';
 		Pager
 	],
 
-	declarations: 	[
+	declarations: [
 		AddRemoveList,
 		AgoDatePipe,
 		AsyLoading,
