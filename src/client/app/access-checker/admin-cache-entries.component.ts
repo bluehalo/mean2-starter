@@ -1,7 +1,7 @@
-import { Component, ViewContainerRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { Response } from '@angular/http';
 
-import { DialogRef, overlayConfigFactory } from 'angular2-modal';
+import { overlayConfigFactory } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 
 import { CacheEntriesService, CacheEntry } from './cache-entries.service';
@@ -30,7 +30,6 @@ export class AdminCacheEntriesComponent {
 	constructor(
 		private cacheEntriesService: CacheEntriesService,
 		private alertService: AlertService,
-		private viewContainer: ViewContainerRef,
 		private modal: Modal
 	) {}
 
@@ -83,31 +82,31 @@ export class AdminCacheEntriesComponent {
 	private confirmDeleteEntry(cacheEntry: any) {
 		let entryToDelete = cacheEntry.entry;
 
-		let dialogPromise: Promise<DialogRef<any>>;
-		dialogPromise = this.modal.alert()
+		this.modal.confirm()
 			.size('lg')
 			.showClose(true)
 			.isBlocking(true)
 			.title('Delete cache entry?')
 			.body(`Are you sure you want to delete entry: ${cacheEntry.entry.key}?`)
 			.okBtn('Delete')
-			.open();
-
-		dialogPromise.then(
-			(resultPromise: any) => resultPromise.result.then(
-				// Success
-				() => {
-					this.cacheEntriesService.remove(entryToDelete.key).subscribe(
-						() => {
-							this.alertService.addAlert(`Deleted cache entry: ${entryToDelete.key}`, 'success');
-							this.loadCacheEntries();
-						},
-						(response: Response) => { this.alertService.addAlert(response.json().message); });
-				},
-				// Fail
-				() => {}
-			)
-		);
+			.open()
+			.then(
+				(resultPromise: any) => resultPromise.result.then(
+					// Success
+					() => {
+						this.cacheEntriesService.remove(entryToDelete.key).subscribe(
+							() => {
+								this.alertService.addAlert(`Deleted cache entry: ${entryToDelete.key}`, 'success');
+								this.loadCacheEntries();
+							},
+							(response: Response) => {
+								this.alertService.addAlert(response.json().message);
+							});
+					},
+					// Fail
+					() => {}
+				)
+			);
 	};
 
 	private viewCacheEntry(cacheEntry: any) {

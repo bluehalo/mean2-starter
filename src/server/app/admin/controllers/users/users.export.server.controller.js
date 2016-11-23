@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require('lodash'),
+let _ = require('lodash'),
 	path = require('path'),
 	q = require('q'),
 
@@ -10,15 +10,16 @@ var _ = require('lodash'),
 	utilService = deps.utilService,
 	auditService = deps.auditService,
 
+	Team = dbs.admin.model('Team'),
+	TeamMember = dbs.admin.model('TeamUser'),
+	ExportConfig = dbs.admin.model('ExportConfig'),
+
 	exportConfigController = require(path.resolve('./src/server/app/util/controllers/export-config.server.controller.js')),
-	exportConfigService = require(path.resolve('./src/server/app/util/services/export-config.server.service.js')),
-	User = dbs.admin.model('User'),
-	Group = dbs.admin.model('Group'),
-	ExportConfig = dbs.admin.model('ExportConfig');
+	exportConfigService = require(path.resolve('./src/server/app/util/services/export-config.server.service.js'));
 
 // GET the requested CSV using a special configuration from the export config collection
 exports.adminGetCSV = function (req, res) {
-	var exportId = req.params.exportId;
+	let exportId = req.params.exportId;
 
 	exportConfigService.getConfigById(exportId)
 		.then(function (result) {
@@ -30,21 +31,21 @@ exports.adminGetCSV = function (req, res) {
 				});
 			}
 			return auditService.audit(result.type + 'CSV config retrieved', 'export', 'export',
-				User.auditCopy(req.user),
+				TeamMember.auditCopy(req.user),
 				ExportConfig.auditCopy(result))
 				.then(function () {
 					return q(result);
 				});
 		})
 		.then(function (result) {
-			var userData = [],
+			let userData = [],
 				columns = result.config.cols,
 				query = (result.config.q) ? JSON.parse(result.config.q) : null,
 				search = result.config.s,
 				sortArr = [{property: result.config.sort, direction: result.config.dir}],
 				fileName = config.app.instanceName + '-' + result.type + '.csv',
-				groupTitleMap = {},
-				isGroupRequested = false;
+				teamTitleMap = {},
+				isTeamRequested = false;
 
 			// Based on which columns are requested, handle property-specific behavior (ex. callbacks for the
 			// CSV service to make booleans and dates more human-readable)
@@ -67,46 +68,42 @@ exports.adminGetCSV = function (req, res) {
 							return (value) ? new Date(value).toISOString() : '';
 						};
 						break;
-					case 'groups':
-						isGroupRequested = true;
+					case 'teams':
+						isTeamRequested = true;
 						break;
 				}
 			});
 
-			return User.search(query, search, null, null, sortArr)
+			return TeamMember.search(query, search, null, null, sortArr)
 				.then(function (userResult) {
 					// Process user data to be usable for CSV
 					userData = (null != userResult.results) ? userResult.results.map(function (user) {
-						return User.fullCopy(user);
+						return TeamMember.fullCopy(user);
 					}) : [];
 
-					if (!isGroupRequested) return q(null); //No group column included in export
-					// Determine which groups are relevant to our user set
+					if (isTeamRequested) {
+						let teamIds = [];
 					userData.forEach(function (user) {
-						user.groups.forEach(function (group) {
-							var groupId = group._id.toString();
-							if (!groupTitleMap.hasOwnProperty(groupId)) {
-								groupTitleMap[groupId] = '';
+							teamIds = teamIds.concat(user.teams.map(function(t) { return t._id; }));
+						});
+						return Team.find({_id: {$in: teamIds}}).exec();
+					}
+					else {
+						return q();
 							}
-						});
-					});
-					return Group.find({_id: {$in: _.keys(groupTitleMap)}}).exec();
 				})
-				.then(function (groupResults) {
-					if (null != groupResults) {
-						groupResults.forEach(function (group) {
-							groupTitleMap[group._id.toString()] = group.title;
-						});
+				.then(function (teamResults) {
+					if (null != teamResults) {
+						teamTitleMap = _.keyBy(teamResults, '_id');
 
 						// Convert user.groups to human readable groups string
 						userData.forEach(function (user) {
-							var groupsArr = user.groups.map(function(group) {
-								var title = groupTitleMap[group._id.toString()];
-								return (title)? title : '<missing>';
+							let teamNames = user.teams.map(function(t) {
+								return (teamTitleMap.hasOwnProperty(t._id) ? teamTitleMap[t._id].name : '<missing>');
 							});
 
-							// Formatted group string, ex. "Group 1, Test Group"
-							user.groups = groupsArr.join(', ');
+							// Formatted team name string, ex. "Group 1, WildfireDev, Test Group"
+							user.teams = teamNames.join(', ');
 						});
 					}
 					exportConfigController.exportData(req, res, fileName, columns, userData);

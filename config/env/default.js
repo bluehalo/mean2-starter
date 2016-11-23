@@ -173,7 +173,6 @@ module.exports = {
 	// Set debugger and node inspector ports
 	devPorts: {
 		karma: 9876,
-		nodeInspector: 1337,
 		debug: 5858,
 		webpack: 9000
 	},

@@ -1,0 +1,131 @@
+<section>
+
+	<div class="row" *ngIf="!readOnly">
+		<div class="col-md-12">
+			<!-- Adding new users typeahead control-->
+			<input type="text" name="member" class="form-control input-sm"
+				   placeholder="Start typing a user to add..."
+				   [(ngModel)]="queryUserSearchTerm"
+				   [typeahead]="searchUsersRef"
+				   [typeaheadOptionField]="'displayName'"
+				   [typeaheadMinLength]="2"
+				   [typeaheadWaitMs]="300"
+				   (typeaheadOnSelect)="typeaheadOnSelect($event)">
+		</div>
+	</div>
+
+	<div style="padding-top:5px;" class="row">
+		<div class="col-md-12">
+
+			<!-- Sorting/Paging Controls -->
+			<div [hidden]="teamMembers.length === 0">
+				<div class="controls" style="float:left;">
+					<span>Sort By:</span>
+					<a type="button" [ngClass]="{selected: pagingOptions.sortField===sortOptions.name.sortField}" class="no-href btn-link" (click)="setSort(sortOptions.name)">Name</a> /
+					<a type="button" [ngClass]="{selected: pagingOptions.sortField===sortOptions.username.sortField}" class="no-href btn-link" (click)="setSort(sortOptions.username)">Username</a>
+				</div>
+				<div class="controls pull-right">
+					<asy-pager
+							[pageNumber]="pagingOptions.pageNumber"
+							[pageSize]="pagingOptions.pageSize"
+							[totalSize]="pagingOptions.totalSize"
+							[maxPageSize]=50
+							[currentSize]="teamMembers.length"
+							(onChange)="goToPage($event)">
+					</asy-pager>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="row">
+
+		<div class="col-md-6 col-md-offset-3 text-center" [hidden]="teamMembers.length > 0">
+			<h4>
+				No Members?<br/>
+				<small>
+					There are no members on this team.<br/>
+					Read our <a [routerLink]="['/help/teams']">help page</a> for more details.
+				</small>
+			</h4>
+		</div>
+
+		<div class="col-md-12">
+			<table class="asymmetrik table table-condensed table-hover table-striped" [hidden]="teamMembers.length === 0">
+				<thead>
+					<tr>
+						<th *ngIf="!readOnly" >&nbsp;</th>
+						<th>Name</th>
+						<th>Username</th>
+						<th>Active</th>
+						<th>Bypassed</th>
+						<th>Team Role</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr *ngFor="let member of teamMembers">
+
+						<!--  Remove Button -->
+						<td *ngIf="!readOnly" style="width:110px;">
+							<div class="pull-left">
+								<button type="button" class="btn btn-danger btn-sm"
+										[disabled]="!member.explicit"
+										(click)="removeMember(member)">
+									<i class="fa fa-user-times"></i> Remove
+								</button>
+							</div>
+						</td>
+
+						<!-- Name -->
+						<td>
+							<div class="hide-overflow" style="max-width: 200px;">{{member.userModel.name}}</div>
+						</td>
+
+						<!-- Username -->
+						<td>
+							<div class="hide-overflow" style="max-width:400px;">{{member.userModel.username}}</div>
+						</td>
+
+						<!-- Active -->
+						<td>
+							<div class="hide-overflow" style="max-width:50px;">
+								<i class="fa fa-fw fa-check-square-o" disabled
+								   [ngClass]="{'fa-check-square-o': member.active, 'fa-square-o': !member.active }"></i>
+							</div>
+						</td>
+
+						<!-- Bypass -->
+						<td>
+							<div class="hideOverflow" style="max-width:50px;">
+								<i class="fa fa-fw fa-check-square-o" disabled
+								   [ngClass]="{'fa-check-square-o': member.userModel.bypassAccessCheck, 'fa-square-o': !member.userModel.bypassAccessCheck }"></i>
+							</div>
+						</td>
+
+						<!--Role Buttons-->
+						<td style="width:275px;">
+							<div class="pull-left">
+								<div *ngIf="!readOnly" class="btn-group btn-group-sm" role="group">
+									<button type="button"
+											class="btn btn-sm"
+											*ngFor="let role of teamRoleOptions"
+											[ngClass]="{ 'btn-selected': member.role === role.role, 'btn-unselected': member.role !== role.role }"
+											[attr.title]="role.label"
+											(click)="updateRole(member, role.role)">
+										{{role.label}}
+									</button>
+								</div>
+								<div *ngIf="readOnly">
+									{{member.role}}
+								</div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</section>
