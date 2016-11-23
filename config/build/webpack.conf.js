@@ -164,10 +164,6 @@ module.exports = (mode) => {
 
 	// Chunk common code if we're not running in test mode
 	wpConfig.plugins.push(
-		new webpack.ProvidePlugin({
-			sentio: '@asymmetrik/sentio',
-			d3: 'd3'
-		}),
 		new webpack.optimize.CommonsChunkPlugin({
 			name: [ 'app', 'vendor' ],
 			filename: '[name].js'
