@@ -14,7 +14,6 @@ export class ExternalLinksComponent {
 	}
 
 	ngOnInit() {
-		console.log('hi');
 		this.configService.getConfig()
 			.subscribe((config: any) => {
 				this.config = config;

@@ -48,7 +48,6 @@ export class SocketService {
 	}
 
 	public emit(eventName: string) {
-		console.log(eventName);
 		this.socket.emit(eventName);
 	}
 }

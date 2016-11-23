@@ -24,8 +24,6 @@ export class WelcomeComponent {
 	ngOnInit() {
 		this.configService.getConfig()
 			.subscribe((config: any) => {
-				console.log(config);
-
 				this.config = config;
 				this.externalLinksEnabled = config.welcomeLinks && config.welcomeLinks.enabled;
 			});
