@@ -1,4 +1,4 @@
-import { NgModule }     from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { AuthGuard } from '../core/auth-guard.service';
@@ -36,6 +36,7 @@ import { TeamSummaryComponent } from './team-summary.component';
 		])
 	],
 	exports: [
+		RouterModule
 	]
 })
 export class TeamsRoutingModule { }

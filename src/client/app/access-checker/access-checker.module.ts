@@ -10,10 +10,24 @@ import { AdminCacheEntriesComponent } from './admin-cache-entries.component';
 import { UtilModule } from '../shared/util.module';
 
 @NgModule({
-	imports:         [ CommonModule, FormsModule, UtilModule, Ng2BootstrapModule ],
-	entryComponents: [ ViewCacheEntryModal ],
-	declarations:    [ AdminCacheEntriesComponent, ViewCacheEntryModal ],
-	exports:         [ AdminCacheEntriesComponent ],
-	providers:       [ CacheEntriesService ]
+	imports: [
+		CommonModule,
+		FormsModule,
+		UtilModule,
+		Ng2BootstrapModule
+	],
+	entryComponents: [
+		ViewCacheEntryModal
+	],
+	declarations: [
+		AdminCacheEntriesComponent,
+		ViewCacheEntryModal
+	],
+	exports: [
+		AdminCacheEntriesComponent
+	],
+	providers: [
+		CacheEntriesService
+	]
 })
 export class AccessCheckerModule { }

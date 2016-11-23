@@ -9,6 +9,7 @@ import { Ng2BootstrapModule } from 'ng2-bootstrap';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+
 import { AdminModule } from './admin/admin.module';
 import { AccessCheckerModule } from './access-checker/access-checker.module';
 import { AuditModule } from './audit/audit.module';
@@ -25,9 +26,8 @@ import { ClientConfiguration } from './config/configurator';
 import { BaseService } from './config/test/test-stub-service.service';
 import { HelpModule } from './help/help.module';
 import { TeamsModule } from './teams/teams.module';
-import { TeamsRoutingModule } from './teams/teams-routes.module';
 import { TeamsService } from './teams/teams.service';
-import { TagsRoutingModule } from './teams/tags/tags-routes.module';
+
 
 export function initializerFactory () {
 	return () => () => new Promise<any>( (resolve) => {
@@ -54,9 +54,7 @@ export function initializerFactory () {
 		AdminModule,
 		AuditModule,
 		HelpModule,
-		TagsRoutingModule,
 		TeamsModule,
-		TeamsRoutingModule,
 		UtilModule
 	],
 	declarations: [
