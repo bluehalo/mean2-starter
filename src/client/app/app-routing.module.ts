@@ -1,5 +1,6 @@
-import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
 import { AuthGuard } from './core/auth-guard.service';
 import { SigninComponent } from './admin/authentication/signin.component';
 import { UnauthorizedComponent } from './admin/authentication/unauthorized.component';
@@ -108,7 +109,9 @@ import { InactiveComponent } from './admin/authentication/inactive.component';
 			useHash: true
 		})
 	],
-	exports: [RouterModule]
+	exports: [
+		RouterModule
+	]
 })
 
 export class AppRoutingModule {}

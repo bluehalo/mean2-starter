@@ -1,0 +1,55 @@
+<section>
+
+	<a class="back-link" [routerLink]="['/teams']">
+		<i class="fa fa-angle-double-left"></i> Back to My Teams
+	</a>
+
+	<!-- Alert Notifications -->
+	<alert *ngFor="let alert of alertService.getAlerts(); let i = index" [type]="alert.type" (close)="alertService.clear(i)" dismissible="true" >{{alert.msg}}</alert>
+
+	<div style="padding-top:10px; padding-bottom:10px;">
+		<div class="media">
+
+			<div *ngIf="user.canManageTeam(team)" class="btn-group pull-right dropdown" dropdown>
+				<button style="margin-right: 10px;" type="button" class="btn btn-default btn-sm" (click)="update()">Edit Team</button>
+				<button type="button" class="btn btn-default btn-sm" (click)="remove()">Delete Team</button>
+			</div>
+
+			<div class="media-left team-avatar">
+				<img style="width: 100px;" class="media-object" src="../img/brand/team.png"/>
+			</div>
+
+			<div class="media-body">
+				<div *ngIf="user.canManageTeam(team)" class="team-header"><asy-in-line-edit [name]="name" [(ngModel)]="team.name" (onSave)="saveEditable($event)">{{ team.name }}</asy-in-line-edit></div>
+				<div *ngIf="!user.canManageTeam(team)" class="team-header">{{ team.name }}</div>
+				<div *ngIf="user.canManageTeam(team)" class="team-description"><asy-in-line-edit [name]="description" [(ngModel)]="team.description" (onSave)="saveEditable($event)">{{ team.description }}</asy-in-line-edit></div>
+				<div *ngIf="!user.canManageTeam(team)" class="team-description">{{ team.description }}</div>
+				<div style="font-size: 14px;">Team created {{ team.created | agoDate:true }} ago</div>
+			</div>
+
+		</div>
+
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<tabset class="tabs">
+				<tab>
+					<template tabHeading>
+						Tags
+					</template>
+					<br/>
+					<list-tags [readOnly]="!user.canManageTeamResources(team)"></list-tags>
+				</tab>
+				<tab>
+					<template tabHeading>
+						Members
+					</template>
+					<br/>
+					<list-team-members [readOnly]="!user.canManageTeam(team)"></list-team-members>
+				</tab>
+			</tabset>
+		</div>
+	</div>
+
+</section>

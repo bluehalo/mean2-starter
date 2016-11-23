@@ -112,23 +112,23 @@ module.exports = (mode) => {
 			},
 
 			// CSS loader
-			{ test: /\.css$/, loaders: [ 'style', 'css' ] },
+			{ test: /\.css$/, loaders: [ 'style-loader', 'css-loader' ] },
 
 			// SCSS loader
-			{ test: /\.scss$/, loaders: [ 'style', 'css', 'sass' ] },
+			{ test: /\.scss$/, loaders: [ 'style-loader', 'css-loader', 'sass-loader' ] },
 
 			// Image file loader
-			{ test: /\.png$/, loader: 'url?limit=10000&mimetype=image/png' },
-			{ test: /\.(gif|jpg|jpeg)$/, loader: 'file' },
+			{ test: /\.png$/, loader: 'url-loader?limit=10000&mimetype=image/png' },
+			{ test: /\.(gif|jpg|jpeg)$/, loader: 'file-loader' },
 
 			// Font file loader (mostly for bootstrap/font-awesome)
-			{ test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url?limit=10000&mimetype=application/font-woff' },
+			{ test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader?limit=10000&mimetype=application/font-woff' },
 
 			// Font file loader (mostly for bootstrap/font-awesome)
-			{ test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/, loader: 'file' },
+			{ test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/, loader: 'file-loader' },
 
 			// HTML file loader (for angular2 templates)
-			{ test: /\.html$/, loader: 'html' }
+			{ test: /\.html$/, loader: 'html-loader' }
 		]
 
 	};

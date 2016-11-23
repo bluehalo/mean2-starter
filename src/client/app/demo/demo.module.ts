@@ -10,9 +10,10 @@ import { DemoSentioComponent } from './sentio/demo-sentio.component';
 
 @NgModule({
 	imports: [
-		CommonModule,
 		SentioModule,
-		DemoRoutingModule
+		DemoRoutingModule,
+
+		CommonModule
 	],
 	exports: [],
 	declarations: [

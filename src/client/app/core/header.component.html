@@ -47,12 +47,27 @@
 					<!-- Right side user logged in area -->
 					<ul class="nav navbar-nav navbar-right" *ngIf="user.isAuthenticated()">
 
+						<!--Team Quick Select-->
+						<li *ngIf="teams.length > 0" class="dropdown" dropdown>
+							<a class="dropdown-toggle" dropdownToggle>Teams <span class="caret"></span></a>
+							<ul class="dropdown-menu" role="menu">
+								<li *ngFor="let team of teams.slice(0,3)">
+									<a [routerLink]="['/team', team._id]">{{team.name}}</a>
+								</li>
+								<li class="divider"></li>
+								<li><a [routerLink]="['/teams']">View all</a></li>
+							</ul>
+						</li>
+
 						<li class="dropdown" dropdown>
 							<a href="/#!/" class="dropdown-toggle" dropdownToggle>{{user.userModel.name}} <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
 
 								<!-- Manage User Account -->
 								<li><a [routerLink]="['/update-user']">My Account</a></li>
+
+								<!-- Manage Teams -->
+								<li *ngIf="user.isAdmin()"><a [routerLink]="['/teams', {clearCachedFilter: true}]">My Teams</a></li>
 
 								<!-- Audit Page (only users with audit role should see this) -->
 								<li *ngIf="user.isAuditor()"><a [routerLink]="['/audit']">Audit Activity</a></li>
@@ -80,7 +95,7 @@
 								<li [hidden]="!pki && !user.isActive()"><a [routerLink]="['/help']">Help</a></li>
 
 								<!-- About -->
-								<li><a [routerLink]="['/help/about']">About</a></li>
+								<li><a [routerLink]="['/about']">About</a></li>
 
 							</ul>
 						</li>

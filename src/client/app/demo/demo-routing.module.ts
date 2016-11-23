@@ -21,7 +21,7 @@ import { DemoSentioComponent } from './sentio/demo-sentio.component';
 					 */
 					{
 						path: '',
-						redirectTo: 'demo/leaflet',
+						redirectTo: '/demo/leaflet',
 						pathMatch: 'full'
 					},
 

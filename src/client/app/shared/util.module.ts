@@ -14,6 +14,7 @@ import { AsyUrlHandler } from './asy-url-handler.service';
 import { AlertService } from './alert.service';
 import { AsyHttp } from './asy-http.service';
 import { ExportConfigService } from './export-config.service';
+import { AddRemoveList } from './add-remove-list.component';
 
 @NgModule({
 	imports: [
@@ -21,16 +22,18 @@ import { ExportConfigService } from './export-config.service';
 		FormsModule,
 		Ng2BootstrapModule
 	],
-	exports: 		[
+	exports: [
+		AddRemoveList,
+		AgoDatePipe,
 		AsyLoading,
 		ConfirmModal,
 		ConstrainedQuery,
 		InLineEdit,
-		Pager,
-		AgoDatePipe
+		Pager
 	],
 
-	declarations: 	[
+	declarations: [
+		AddRemoveList,
 		AgoDatePipe,
 		AsyLoading,
 		ConfirmModal,

@@ -2,10 +2,10 @@ import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { ModalModule } from 'angular2-modal';
 
-import { Ng2BootstrapModule } from 'ng2-bootstrap';
+import { ModalModule } from 'angular2-modal';
 import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
+import { Ng2BootstrapModule } from 'ng2-bootstrap';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -15,6 +15,7 @@ import { AdminModule } from './admin/admin.module';
 import { AuditModule } from './audit/audit.module';
 import { DemoModule } from './demo/demo.module';
 import { HelpModule } from './help/help.module';
+import { TeamsModule } from './teams/teams.module';
 import { UtilModule } from './shared/util.module';
 
 import { HeaderComponent } from './core/header.component';
@@ -28,6 +29,7 @@ import { BaseService } from './config/test/test-stub-service.service';
 import { ConfigService } from './core/config.service';
 import { ClientConfiguration } from './config/configurator';
 import { UserStateService } from './admin/authentication/user-state.service';
+import { TeamsService } from './teams/teams.service';
 
 
 export function initializerFactory () {
@@ -56,6 +58,7 @@ export function initializerFactory () {
 		AuditModule,
 		DemoModule,
 		HelpModule,
+		TeamsModule,
 		UtilModule
 	],
 	declarations: [
@@ -71,6 +74,7 @@ export function initializerFactory () {
 		AuthGuard,
 		ClientConfiguration,
 		ConfigService,
+		TeamsService,
 		UserStateService,
 		{
 			provide: BaseService,
