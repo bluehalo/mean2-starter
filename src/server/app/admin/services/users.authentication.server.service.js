@@ -38,11 +38,6 @@ module.exports.initializeNewUser = function(user) {
 		_.defaults(user.roles, config.auth.defaultRoles);
 	}
 
-	// Add the default groups
-	if (null != config.auth.defaultGroups) {
-		user.groups = config.auth.defaultGroups;
-	}
-
 	// Resolve the user (this might seem like overkill, but planning for the future)
 	return q(user);
 };

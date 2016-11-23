@@ -1,0 +1,61 @@
+@import '../shared/colors';
+
+.team-tile {
+	h4 {
+		padding-right: 8px;
+	}
+
+	.media-body {
+		max-width: 50%;
+		width: 50%;
+	}
+
+	.media-left {
+		max-width: 210px;
+		width: 210px;
+	}
+}
+
+.team-avatar {
+	img {
+		background: $color-white;
+		border: 5px solid $color-white;
+		border-radius: 8px;
+		max-height: 200px;
+		max-width: 200px;
+	}
+}
+
+.team-header {
+	color: $color-black;
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.team-description {
+	color: $color-link-light;
+	font-size: 14px;
+}
+
+.team-member-badge {
+	background-color: $color-bg-lighter;
+	border: 1px solid $color-border-med;
+	border-radius: 5px;
+	box-sizing: border-box;
+	float: left;
+	font-size: 12px;
+	margin-right: 20px;
+	min-height: 75px;
+	padding: 10px;
+	position: relative;
+	width: 200px;
+
+	.badge-header {
+		font-size: 14px;
+		font-weight: 700;
+	}
+
+	.content-container {
+		margin-left: 5px;
+	}
+}
