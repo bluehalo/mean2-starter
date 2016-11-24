@@ -96,4 +96,28 @@
 		</div>
 	</section>
 
+
+	<!-- Realtime Timeline Chart -->
+	<section class="row">
+		<div class="col-md-12">
+
+			<h3>Realtime Timeline Chart</h3>
+			<button class="btn btn-default" (click)="rtTimeline.play()">Play</button>
+			<button class="btn btn-default" (click)="rtTimeline.pause()">Pause</button>
+
+		</div>
+	</section>
+	<section class="row">
+		<div class="col-md-3">
+
+			<realtime-timeline
+				style="width:400px; height:100px;"
+				[model]="rtTimeline.model"
+				[markers]="rtTimeline.markers"
+				[configure]="rtTimeline.configure">
+			</realtime-timeline>
+
+		</div>
+	</section>
+
 </section>

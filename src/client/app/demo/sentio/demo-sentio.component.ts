@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import * as d3 from 'd3';
+import * as sentio from '@asymmetrik/sentio';
+
 
 @Component({
 	templateUrl: './demo-sentio.component.html'
@@ -24,6 +26,9 @@ export class DemoSentioComponent {
 				});
 			}
 			this.donut.model = newModel;
+		},
+		init: () => {
+			this.donut.update();
 		}
 	};
 
@@ -47,6 +52,9 @@ export class DemoSentioComponent {
 			this.bars.model = newData
 				.sort((a: any, b: any) => { return b.value - a.value; })
 				.slice(0, 12);
+		},
+		init: () => {
+			this.bars.update();
 		}
 	};
 
@@ -86,6 +94,9 @@ export class DemoSentioComponent {
 			swap(Math.floor(Math.random() * series.length), Math.floor(Math.random() * series.length), series);
 
 			this.matrix.model = series;
+		},
+		init: () => {
+			this.matrix.update();
 		}
 	};
 
@@ -117,14 +128,69 @@ export class DemoSentioComponent {
 			});
 
 			this.timeline.model = newModel;
+		},
+		init: () => {
+			this.timeline.update();
 		}
 	};
 
+	// Timeline Line Chart Configuration
+	private rtTimeline: any = {
+		chart: null,
+		model: [],
+		bins: sentio.controller.rtBins({ binCount: 60, binSize: 1000 }),
+		markers: [],
+		hwm: Date.now(),
+		configure: (chart: any) => {
+			chart.margin({ top: 16, right: 10, bottom: 20, left: 40 }).resize();
+			this.rtTimeline.chart = chart;
+			this.rtTimeline.play();
+		},
+		eventHandler: (msg: string, event: any) => {
+			console.log({ msg: msg, event: event });
+		},
+		play: () => {
+			this.rtTimeline.chart.start();
+		},
+		pause: () => {
+			this.rtTimeline.chart.stop();
+		},
+		init: () => {
+			this.rtTimeline.bins.model()
+				.updateBin((bin: any[], d: number) => { bin[1] += 1; })
+				.createSeed(() => { return 0; });
+
+			this.rtTimeline.model = [
+				{ key: 'series1', data: this.rtTimeline.bins.bins() }
+			];
+		}
+	};
+
+	@HostListener('mouseup', ['$event'])
+	onMouseUp(event: MouseEvent) {
+		this.rtTimeline.markers.push([Date.now(), 'Click']);
+
+		// Remove old markers
+		let markers = this.rtTimeline.markers;
+		let hwm = this.rtTimeline.bins.hwm();
+		let binCount = this.rtTimeline.bins.model().binCount();
+		let binSize = this.rtTimeline.bins.model().binSize();
+
+		while (markers.length > 0 && markers[0][0] < hwm - (binCount * binSize)) {
+			this.rtTimeline.markers.shift();
+		}
+	};
+
+	@HostListener('mousemove', ['$event'])
+	onMouseMove(event: MouseEvent) {
+		this.rtTimeline.bins.add([Date.now()]);
+	}
 
 	ngOnInit() {
-		this.donut.update();
-		this.bars.update();
-		this.matrix.update();
-		this.timeline.update();
+		this.donut.init();
+		this.bars.init();
+		this.matrix.init();
+		this.timeline.init();
+		this.rtTimeline.init();
 	}
 }
