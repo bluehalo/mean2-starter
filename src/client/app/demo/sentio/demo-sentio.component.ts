@@ -172,9 +172,9 @@ export class DemoSentioComponent {
 
 		// Remove old markers
 		let markers = this.rtTimeline.markers;
-		let hwm = this.rtTimeline.bins.hwm();
-		let binCount = this.rtTimeline.bins.model().binCount();
-		let binSize = this.rtTimeline.bins.model().binSize();
+		let hwm = this.rtTimeline.bins.model().hwm();
+		let binCount = this.rtTimeline.bins.model().count();
+		let binSize = this.rtTimeline.bins.model().size();
 
 		while (markers.length > 0 && markers[0][0] < hwm - (binCount * binSize)) {
 			this.rtTimeline.markers.shift();
