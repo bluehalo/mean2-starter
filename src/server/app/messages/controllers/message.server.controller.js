@@ -11,7 +11,7 @@ var mongoose = require('mongoose'),
 	logger = deps.logger,
 	auditService = deps.auditService,
 	util = deps.utilService,
-	kafkaProducer = deps.kafkaProducer,
+	publishProvider = require(path.resolve(config.messages.publishProvider)),
 	User = dbs.admin.model('User'),
 	Message = dbs.admin.model('Message');
 
@@ -44,7 +44,7 @@ function save(message, user, res, audit) {
  * Publish via Kafka
  */
 function publish(destination, message, retry) {
-	return kafkaProducer.sendMessageForTopic(destination, JSON.stringify(message), retry);
+	return publishProvider.publish(destination, message, retry);
 }
 
 /**

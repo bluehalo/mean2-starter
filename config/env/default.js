@@ -135,6 +135,15 @@ module.exports = {
 		string: 'Copyright © 2016 <a href="http://www.asymmetrik.com" target="_blank">Asymmetrik, Ltd</a>. All Rights Reserved.'
 	},
 
+	messages: {
+		// Use the following for local eventEmitter
+		publishProvider: './src/server/app/messages/providers/event-message.provider.js',
+		socketProvider: './src/server/app/util/sockets/event.server.socket.js'
+
+		// Use the following for Kafka.  Note, must also uncomment Kafka configuration.
+		// publishProvider: './src/server/app/messages/providers/kafka-message.provider.js',
+		// socketProvider: './src/server/app/util/sockets/kafka.server.socket.js'
+	},
 
 	// Configuration for outgoing mail server
 //	mailer: {
@@ -177,12 +186,14 @@ module.exports = {
 		webpack: 9000
 	},
 
-	kafka: {
-		broker: 'localhost:9092',
-		zookeeper: 'localhost:2181',
-		zookeeperCommTimeoutMs: 1000,
-		kafkaRetryMs: 3000
-	},
+	// Uncomment below if using Kafka messaging
+
+	// kafka: {
+	// 	broker: 'localhost:9092',
+	// 	zookeeper: 'localhost:2181',
+	// 	zookeeperCommTimeoutMs: 1000,
+	// 	kafkaRetryMs: 3000
+	// },
 
 	/**
 	 * Logging Settings

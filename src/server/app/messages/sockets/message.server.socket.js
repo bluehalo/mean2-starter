@@ -3,25 +3,27 @@
 var path = require('path'),
 	nodeUtil = require('util'),
 
-	deps = require(path.resolve('./src/server/dependencies.js')),
+	deps = require(path.resolve('./src/server/dependencies')),
+	config = require(path.resolve('./src/server/config')),
+
 	logger = deps.logger,
 	socketIO = deps.socketIO,
 
-	KafkaSocket = require(path.resolve('./src/server/app/util/sockets/kafka.server.socket.js')),
+	socketProvider = require(path.resolve(config.messages.socketProvider)),
 	users = require(path.resolve('./src/server/app/admin/controllers/users.server.controller.js'));
 
 /**
  * MessageSocket Socket Controller that overrides Base Socket Controller
  * methods to handle specifics of Messages
  */
-function MessageSocket(config) {
+function MessageSocket(socketConfig) {
 	this._emitType = 'message:data';
 	this._topicName = 'message.posted';
 	this._subscriptionCount = 0;
-	KafkaSocket.apply(this, arguments);
+	socketProvider.apply(this, arguments);
 }
 
-nodeUtil.inherits(MessageSocket, KafkaSocket);
+nodeUtil.inherits(MessageSocket, socketProvider);
 
 MessageSocket.prototype.name = 'MessageSocket';
 
@@ -94,7 +96,7 @@ MessageSocket.prototype.handleUnsubscribe = function(payload) {
 	this.unsubscribe(topic);
 
 	this._subscriptionCount = Math.max(0, this._subscriptionCount - 1);
-	// If we are no longer listening for anything, unsubscribe from Kafka
+	// If we are no longer listening for anything, unsubscribe
 	if (this._subscriptionCount === 0) {
 		this.unsubscribe(this.getTopic());
 	}

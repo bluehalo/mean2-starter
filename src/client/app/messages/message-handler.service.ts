@@ -8,6 +8,8 @@ import * as _ from 'lodash';
 
 @Injectable()
 export class MessageHandlerService {
+	private subscribed: boolean = false;
+
 	private newMessages: boolean = false;
 
 	constructor(
@@ -23,6 +25,11 @@ export class MessageHandlerService {
 		this.authentication.initializing$
 			.subscribe(() => {
 				if (this.userStateService.user.isActive()) {
+					if (this.subscribed) {
+						return;
+					}
+					this.subscribed = true;
+
 					// Check for new messages
 					let messagesViewed = this.userStateService.user.userModel.messagesViewed;
 					let query = {};
@@ -57,11 +64,8 @@ export class MessageHandlerService {
 					this.messageService.subscribe();
 					this.messageService.messageReceived
 						.subscribe((message: any) => {
-							if (undefined === this.userStateService.user.userModel.messagesViewed
-								|| message.created > this.userStateService.user.userModel.messagesViewed) {
-								this.showToaster(message);
-								this.newMessages = true;
-							}
+							this.showToaster(message);
+							this.newMessages = true;
 						});
 				}
 			});
