@@ -77,9 +77,9 @@ EventSocket.prototype.getEmitMessage = function(json) {
 };
 
 /**
- * Extracts a timestamp from the Kafka payload, which can be used for filtering messages.
+ * Extracts a timestamp from the payload, which can be used for filtering messages.
  *
- * @param {Object} json The Kafka payload, parsed as JSON.
+ * @param {Object} json The payload, parsed as JSON.
  * @returns {Number} Returns the timestamp of the payload as a Long.
  */
 EventSocket.prototype.getMessageTime = function(json) {
@@ -101,7 +101,7 @@ EventSocket.prototype.getMessageTime = function(json) {
  * Filters a payload to determine whether it should be transmitted. This should be overridden by the
  * implementing class. It does not need to filter by date, as this is done automatically for all payloads.
  *
- * @param {Object} json The Kafka payload, parsed as JSON.
+ * @param {Object} json The payload, parsed as JSON.
  * @return {boolean} False if the payload should be sent to the client, true if it should be ignored.
  */
 EventSocket.prototype.ignorePayload = function(json) {
@@ -152,7 +152,7 @@ EventSocket.prototype.subscribe = function(eventName) {
 /**
  * Unsubscribe from a topic.  If no topic is specified, unsubscribes from all topics consumed by this socket.
  *
- * @param {string} topic The Kafka topic to unsubscribe from (optional).
+ * @param {string} topic The topic to unsubscribe from (optional).
  */
 EventSocket.prototype.unsubscribe = function() {
 

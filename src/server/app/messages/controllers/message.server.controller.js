@@ -41,7 +41,7 @@ function save(message, user, res, audit) {
 
 
 /**
- * Publish via Kafka
+ * Publish
  */
 function publish(destination, message, retry) {
 	return publishProvider.publish(destination, message, retry);
@@ -51,7 +51,7 @@ function publish(destination, message, retry) {
  * Publish a message
  *
  * @param {Message} message The message to be published
- * @returns {Promise} A promise that is resolved when the send to Kafka is successful.
+ * @returns {Promise} A promise that is resolved when the send is successful.
  */
 function sendMessage(message) {
 	// Turn Mongo models into regular objects before we serialize
@@ -89,7 +89,7 @@ exports.create = function(req, res) {
 			User.auditCopy(req.user),
 			Message.auditCopy(message));
 
-		// Publish message over kafka
+		// Publish message
 		sendMessage(message);
 	});
 };
