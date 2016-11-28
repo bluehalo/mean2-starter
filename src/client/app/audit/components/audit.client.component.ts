@@ -1,6 +1,5 @@
 import { Observable } from 'rxjs/Observable';
 import { Component } from '@angular/core';
-import { AuditOption } from '../model/audit.classes';
 import { AuditService } from '../services/audit.client.service';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 import { overlayConfigFactory } from 'angular2-modal';
@@ -16,6 +15,7 @@ import { UserService } from '../../admin/users.service';
 import { AuthenticationService } from '../../admin/authentication/authentication.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { AuditOption } from '../model/audit.classes';
 
 @Component({
 	selector: 'audit',
@@ -135,7 +135,7 @@ export class AuditComponent {
 	private searchUsers() {
 		return this.userService.match({}, this.queryUserSearchTerm, this.userPagingOpts)
 			.map((result) => {
-				return result.elements.map(function(r: any) {
+				return (<any> result.elements).map(function(r: any) {
 					r.displayName = r.name + ' [' + r.username + ']';
 					return r;
 				});

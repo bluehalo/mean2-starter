@@ -1,5 +1,10 @@
-import { Component, Input, ViewChild, ViewContainerRef, ComponentRef } from '@angular/core';
+import {
+	Component, Input, ViewChild, ViewContainerRef, ComponentRef, ComponentFactoryResolver,
+	ComponentFactory
+} from '@angular/core';
 import { AuditObjectTypes } from '../model/audit.classes';
+
+export let auditObjects: any[] = [];
 
 @Component({
 	selector: 'default',
@@ -8,24 +13,32 @@ import { AuditObjectTypes } from '../model/audit.classes';
 export class DefaultAudit {
 	@Input() auditObject: any = {};
 }
+auditObjects.push(DefaultAudit);
+AuditObjectTypes.registerType('default', DefaultAudit);
 
 @Component({
 	selector: 'url',
 	templateUrl: '../views/templates/url.audit.client.view.html'
 })
 export class UrlAudit extends DefaultAudit {}
+auditObjects.push(UrlAudit);
+AuditObjectTypes.registerType('url', UrlAudit);
 
 @Component({
 	selector: 'user-authentication',
 	templateUrl: '../views/templates/user-authentication.audit.client.view.html'
 })
 export class UserAuthenticationAudit extends DefaultAudit {}
+auditObjects.push(UserAuthenticationAudit);
+AuditObjectTypes.registerType('user-authentication', UserAuthenticationAudit);
 
 @Component({
 	selector: 'user',
 	templateUrl: '../views/templates/user.audit.client.view.html'
 })
 export class UserAudit extends DefaultAudit {}
+auditObjects.push(UserAudit);
+AuditObjectTypes.registerType('user', UserAudit);
 
 @Component({
 	selector: 'eua-audit',
@@ -36,6 +49,8 @@ export class UserAudit extends DefaultAudit {}
 			`
 })
 export class EuaAudit extends DefaultAudit {}
+auditObjects.push(EuaAudit);
+AuditObjectTypes.registerType('eua', EuaAudit);
 
 @Component({
 	selector: 'message-audit',
@@ -46,6 +61,8 @@ export class EuaAudit extends DefaultAudit {}
 			`
 })
 export class MessageAudit extends DefaultAudit {}
+auditObjects.push(MessageAudit);
+AuditObjectTypes.registerType('message', MessageAudit);
 
 @Component({
 	selector: 'asy-audit-component',
@@ -60,15 +77,14 @@ export class AuditObjectComponent {
 	private componentRef: ComponentRef<any>;
 
 	constructor(
-		// private componentResolver: ComponentResolver
+		private componentFactoryResolver: ComponentFactoryResolver
 	) {}
 
 	ngOnInit() {
-		let componentType: any = AuditObjectTypes.objects[this.auditType];
-		// this.componentResolver.resolveComponent((_.isUndefined(componentType) ? DefaultAudit : componentType))
-		// 	.then((factory:ComponentFactory<any>) => {
-		// 		this.componentRef = this.content.createComponent(factory);
-		// 		this.componentRef.instance.auditObject = this.auditObject;
-		// 	});
+		let factory: ComponentFactory<Component> =
+			this.componentFactoryResolver.resolveComponentFactory(AuditObjectTypes.objects[this.auditType]);
+
+		this.componentRef = this.content.createComponent(factory);
+		this.componentRef.instance.auditObject = this.auditObject;
 	}
 }

@@ -1,5 +1,3 @@
-import * as types from '../components/audit-object.client.component';
-
 export class AuditOption {
 	constructor(
 		public display?: string,
@@ -8,11 +6,9 @@ export class AuditOption {
 }
 
 export class AuditObjectTypes {
-	public static objects: any = {
-		'eua': types.EuaAudit,
-		'url': types.UrlAudit,
-		'user-authentication': types.UserAuthenticationAudit,
-		'user': types.UserAudit,
-		'message': types.MessageAudit
-	};
+	public static objects: any = {};
+
+	public static registerType(typeName: string, type: any) {
+		AuditObjectTypes.objects[typeName] = type;
+	}
 }
