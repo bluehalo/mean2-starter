@@ -77,8 +77,8 @@
 		"ng2-bootstrap": "1.1",
 		"ng2-select": "1.1.2",
 
-		"d3": "3",
-		"@types/d3": "3",
+		"d3": "4",
+		"@types/d3": "4",
 
 		"@asymmetrik/sentio": "2.0",
 		"@asymmetrik/angular2-sentio": "2.0",
