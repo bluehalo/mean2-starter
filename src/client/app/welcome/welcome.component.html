@@ -1,0 +1,17 @@
+<div class="welcome">
+	<div class="row">
+		<div class="col-md-12 text-center welcome-header">
+			<h2>Welcome to <img class="logo" src="../img/brand/logo-light-bg.png" width="200" /></h2>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-2" *ngIf="externalLinksEnabled">
+			<external-links></external-links>
+		</div>
+
+		<div [ngClass]="{'col-md-8':externalLinksEnabled, 'col-md-10': !externalLinksEnabled}">
+			<messages></messages>
+		</div>
+	</div>
+
+</div>

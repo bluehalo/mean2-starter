@@ -64,6 +64,7 @@
 		"@angular/http": "2.1.1",
 		"@angular/platform-browser": "2.1.1",
 		"@angular/platform-browser-dynamic": "2.1.1",
+		"@angular/upgrade": "2.1.1",
 		"@angular/router": "3.1.1",
 
 		"core-js": "2.4",
@@ -72,6 +73,7 @@
 		"zone.js": "0.7",
 
 		"angular2-modal": "2.0.1",
+		"angular2-toaster": "1.0.2",
 		"bootstrap": "3",
 		"font-awesome": "4.7",
 		"ng2-bootstrap": "1.1",
@@ -83,12 +85,15 @@
 		"@asymmetrik/sentio": "2.0",
 		"@asymmetrik/angular2-sentio": "2.0",
 
+		"leaflet": "1.0",
+		"@types/leaflet": "1.0",
+
+		"socket.io-client": "1.4",
+		"@types/socket.io-client": "1.4",
+
 		"@types/core-js": "0.9",
 		"@types/node": "6.0",
 		"@types/lodash": "4.14",
-
-		"leaflet": "1.0",
-		"@types/leaflet": "1.0",
 
 		"webpack": "2.1.0-beta.27",
 		"angular2-template-loader": "0.6",

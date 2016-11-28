@@ -13,6 +13,7 @@ import { AdminUserModule } from './user-management/admin-user.module';
 import { AdminEuaModule } from './end-user-agreement/admin-eua.module';
 import { UtilModule } from '../shared/util.module';
 import { AlertService } from '../shared/alert.service';
+import { AdminMessagesModule } from '../messages/admin/admin-messages.module';
 
 @NgModule({
 	imports: [
@@ -20,6 +21,7 @@ import { AlertService } from '../shared/alert.service';
 
 		// App Admin Modules
 		AdminEuaModule,
+		AdminMessagesModule,
 		AdminUserModule,
 
 		AuthenticationModule,

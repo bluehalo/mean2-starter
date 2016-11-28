@@ -1,0 +1,111 @@
+<section>
+
+	<h3 class="page-header">
+		Messages
+		<small>Administer Messages</small>
+		<a [routerLink]="['/admin/message']"  type="button" class="btn btn-default btn-sm pull-right">
+			<i class="fa fa-plus"></i> Create Message
+		</a>
+	</h3>
+
+	<!-- Alert Notifications -->
+	<alert *ngFor="let alert of alertService.getAlerts(); let i = index" [type]="alert.type" (close)="alertService.clear(i)" dismissible="true" >{{alert.msg}}</alert>
+
+	<!-- Search Input -->
+	<div class="row">
+		<div class="col-md-12">
+			<div class="input-group">
+				<input placeholder="Enter a search..." type="text" class="form-control input-sm" [(ngModel)]="search" (keyup.enter)="applySearch()">
+				<span class="input-group-btn">
+					<button class="btn btn-default btn-sm" type="button" (click)="applySearch()">
+						<i class="fa fa-search"></i>
+					</button>
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+
+			<!-- Column Selector -->
+			<div class="controls paging-sort" [hidden]="messages.length === 0">
+				<span class="column-label">Columns (
+					<a type="button" [ngClass]="{selected: columnMode==='default'}" class="no-href btn-link" (click)="quickColumnSelect('default')">Default</a> /
+					<a type="button" [ngClass]="{selected: columnMode==='all'}" class="no-href btn-link" (click)="quickColumnSelect('all')">All</a> ):
+				</span>
+				<label class="column-option" *ngFor="let key of columnKeys"><input type="checkbox" [(ngModel)]="columns[key].show" (ngModelChange)="checkColumnConfiguration()"/>{{columns[key].title}}</label>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+
+			<!-- Sorting/Paging Controls -->
+			<div [hidden]="pagingOpts.totalSize === 0">
+				<div class="controls">
+					<div class="paging-sort" style="float:left;">
+						<span>Sort By:</span>
+						<a type="button" [ngClass]="{selected: pagingOpts.sortField===sortOpts.created.sortField}" class="no-href btn-link" (click)="setSort(sortOpts.created)">Created</a> /
+						<a type="button" [ngClass]="{selected: pagingOpts.sortField===sortOpts.title.sortField}" class="no-href btn-link" (click)="setSort(sortOpts.title)">Title</a> /
+						<a type="button" [ngClass]="{selected: pagingOpts.sortField===sortOpts.type.sortField}" class="no-href btn-link" (click)="setSort(sortOpts.type)">Type</a>
+					</div>
+					<div class="paging-controls pull-right">
+						<asy-pager
+								[pageNumber]="pagingOpts.pageNumber"
+								[pageSize]="pagingOpts.pageSize"
+								[totalSize]="pagingOpts.totalSize"
+								[maxPageSize]="50"
+								[currentSize]="messages.length"
+								(onChange)="goToPage($event)">
+						</asy-pager>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="row" *ngIf="results.resolved">
+		<div class="col-md-12">
+
+			<!-- Actual results -->
+			<table class="asymmetrik table table-condensed table-hover table-striped" *ngIf="pagingOpts.totalSize > 0">
+				<thead>
+					<tr>
+						<th *ngFor="let key of columnKeys" [hidden]="!columns[key].show">{{columns[key].title}}</th>
+						<th>&nbsp;</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr *ngFor="let message of messages">
+						<td [hidden]="!columns.title.show">{{message.title}}</td>
+						<td [hidden]="!columns.tearline.show">{{message.tearline}}</td>
+						<td [hidden]="!columns.type.show">{{message.type}}</td>
+						<td [hidden]="!columns.created.show">{{message.created | agoDate:false}}</td>
+						<td [hidden]="!columns.updated.show">{{message.updated | agoDate:false}}</td>
+						<td [hidden]="!columns._id.show">{{message._id}}</td>
+
+						<td style="min-width: 80px;max-width: 80px;">
+							<div class="pull-right">
+								<a title="Edit" [routerLink]="['/admin/message', message._id]" type="button" class="btn btn-default btn-sm"><span class="fa fa-edit"></span></a>
+								<button title="Delete" type="button" class="btn btn-danger btn-sm" (click)="confirmDeleteMessage(message)"><span class="fa fa-trash-o"></span></button>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="col-md-6 col-md-offset-3 center" [hidden]="messages.length > 0">
+				<h3>
+					<small>No Messages matched your search</small>
+				</h3>
+			</div>
+
+		</div>
+	</div>
+
+</section>
