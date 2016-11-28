@@ -26,7 +26,7 @@ import 'zone.js';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import 'font-awesome/css/font-awesome.css';
-
+import 'angular2-toaster/lib/toaster.css';
 
 // Angular2 Imports
 import '@angular/platform-browser';

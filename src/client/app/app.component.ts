@@ -1,6 +1,8 @@
 import { Component, ViewContainerRef } from '@angular/core';
 import { Overlay } from 'angular2-modal';
 import { ConfigService } from './core/config.service';
+import { MessageHandlerService } from './messages/message-handler.service';
+import { SocketService } from './core/socket.service';
 
 @Component({
 	selector: 'app-component',
@@ -13,7 +15,9 @@ export class AppComponent {
 	constructor(
 		private configService: ConfigService,
 		private overlay: Overlay,
-		viewContainerRef: ViewContainerRef
+		viewContainerRef: ViewContainerRef,
+		private socketService: SocketService,
+		private messageHandlerServce: MessageHandlerService,
 	) {
 		// This is necessary for angular2-modal.
 		overlay.defaultViewContainer = viewContainerRef;
@@ -24,5 +28,9 @@ export class AppComponent {
 			.subscribe( (config: any) =>  {
 				this.banner = config.banner;
 			});
+
+		// Subscribe to the user-loaded event and initialize the socket/messaging system
+		this.socketService.initialize();
+		this.messageHandlerServce.initialize();
 	}
 }
