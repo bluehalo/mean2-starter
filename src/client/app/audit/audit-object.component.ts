@@ -2,13 +2,13 @@ import {
 	Component, Input, ViewChild, ViewContainerRef, ComponentRef, ComponentFactoryResolver,
 	ComponentFactory
 } from '@angular/core';
-import { AuditObjectTypes } from '../model/audit.classes';
+import { AuditObjectTypes } from './audit.classes';
 
 export let auditObjects: any[] = [];
 
 @Component({
 	selector: 'default',
-	templateUrl: '../views/templates/default.audit.client.view.html'
+	templateUrl: './templates/default.audit.view.html'
 })
 export class DefaultAudit {
 	@Input() auditObject: any = {};
@@ -18,7 +18,7 @@ AuditObjectTypes.registerType('default', DefaultAudit);
 
 @Component({
 	selector: 'url',
-	templateUrl: '../views/templates/url.audit.client.view.html'
+	templateUrl: './templates/url.audit.view.html'
 })
 export class UrlAudit extends DefaultAudit {}
 auditObjects.push(UrlAudit);
@@ -26,7 +26,7 @@ AuditObjectTypes.registerType('url', UrlAudit);
 
 @Component({
 	selector: 'user-authentication',
-	templateUrl: '../views/templates/user-authentication.audit.client.view.html'
+	templateUrl: './templates/user-authentication.audit.view.html'
 })
 export class UserAuthenticationAudit extends DefaultAudit {}
 auditObjects.push(UserAuthenticationAudit);
@@ -34,7 +34,7 @@ AuditObjectTypes.registerType('user-authentication', UserAuthenticationAudit);
 
 @Component({
 	selector: 'user',
-	templateUrl: '../views/templates/user.audit.client.view.html'
+	templateUrl: './templates/user.audit.view.html'
 })
 export class UserAudit extends DefaultAudit {}
 auditObjects.push(UserAudit);

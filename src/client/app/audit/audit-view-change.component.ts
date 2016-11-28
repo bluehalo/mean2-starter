@@ -13,7 +13,7 @@ export class AuditViewDetailModalContext extends BSModalContext {
 }
 
 @Component({
-	templateUrl: '../views/audit-view-details.client.view.html'
+	templateUrl: './audit-view-details.component.html'
 })
 export class AuditViewDetailModal implements ModalComponent<AuditViewDetailModalContext> {
 	protected context: AuditViewDetailModalContext;
@@ -43,7 +43,7 @@ export class AuditViewDetailModal implements ModalComponent<AuditViewDetailModal
 }
 
 @Component({
-	templateUrl: '../views/audit-view-change.client.view.html'
+	templateUrl: './audit-view-change.component.html'
 })
 export class AuditViewChangeModal extends AuditViewDetailModal {
 
