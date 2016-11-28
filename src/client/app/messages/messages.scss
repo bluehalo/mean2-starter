@@ -1,14 +1,5 @@
 @import '../shared/colors';
 
-.welcome {
-	* {
-		.list-group-item {
-			border-top-left-radius: 0;
-			border-top-right-radius: 0;
-		}
-	}
-}
-
 .alert-heading {
 	padding: 10px;
 }
@@ -49,7 +40,7 @@
   i {
 
 	&.toaster-icon {
-	  background-image: none !important;
+	  background-image: none !important; // sass-lint:disable-line no-important
 	  color: $color-black;
 
 	  &.icon-info {

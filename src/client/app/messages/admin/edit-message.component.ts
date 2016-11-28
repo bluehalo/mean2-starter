@@ -28,7 +28,6 @@ export class UpdateMessageComponent extends ManageMessageComponent {
 
 	initialize() {
 		this.route.params.subscribe((params: Params) => {
-			console.log(params);
 			this.id = params[`id`];
 
 			this.title = 'Edit Message';
