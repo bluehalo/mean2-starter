@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { Ng2BootstrapModule } from 'ng2-bootstrap';
@@ -9,7 +8,7 @@ import { EuaService } from './end-user-agreement/eua.service';
 import { AdminService } from './admin.service';
 import { AdminComponent } from './admin.component';
 import { AuthenticationModule } from './authentication/authentication.module';
-import { AdminRoutingModule } from './admin-routes.module';
+import { AdminRoutingModule } from './admin-routing.module';
 import { AdminUserModule } from './user-management/admin-user.module';
 import { AdminEuaModule } from './end-user-agreement/admin-eua.module';
 import { UtilModule } from '../shared/util.module';
@@ -29,7 +28,6 @@ import { AdminMessagesModule } from '../messages/admin/admin-messages.module';
 
 		CommonModule,
 		FormsModule,
-		RouterModule,
 		Ng2BootstrapModule,
 		UtilModule
 	],
