@@ -117,7 +117,6 @@ export class MessageService {
 	}
 
 	private payloadRouterFn: Function = (payload: any) => {
-		console.log(this.subscribed);
 		if (this.subscribed > 0) {
 			let message = new Message();
 			message.setFromModel(payload.wrappedPayload.p.message);

@@ -1,103 +1,109 @@
 @import '../shared/colors';
 
 .welcome {
-  .welcome-header {
-	h2 {
-	  margin-bottom: 20px;
-	  margin-top: 0;
-	}
-  }
 
-  *  {
-	.logo {
-	  height: 50px;
-	  margin-left: 8px;
-	  position: relative;
-	  top: 5px;
-	  vertical-align: bottom;
+	.welcome-header {
+		h2 {
+			margin-bottom: 20px;
+			margin-top: 0;
+		}
 	}
 
-	.panel {
-	  border-radius: 0;
-	}
-
-	.panel-heading > .panel-title {
-	  max-width: 100%;
-	}
-
-	.panel-title {
-	  color: $color-panel-title;
-	}
-
-	.accordion-heading {
-	  cursor: pointer;
-	}
-
-	a {
-	  :focus {
-		outline: 0 none;
-	  }
-	}
-
-	.callout {
-	  h4 {
-
-		.pull-right {
-		  font-size: 14px;
+	* {
+		.list-group-item {
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
 		}
 
-		i {
-		  &.fa-exclamation-circle {
-			color: $color-warning-med;
-		  }
+		.logo {
+			height: 50px;
+			margin-left: 8px;
+			position: relative;
+			top: 5px;
+			vertical-align: bottom;
+		}
 
-		  &.fa-exclamation-triangle {
-			color: $color-danger-med;
-		  }
+		.panel {
+			border-radius: 0;
+		}
+
+		.panel-heading > .panel-title {
+			max-width: 100%;
+		}
+
+		.panel-title {
+			color: $color-panel-title;
+		}
+
+		.accordion-heading {
+			cursor: pointer;
+		}
+
+		a {
+			:focus {
+				outline: 0 none;
+			}
+		}
+
+		.callout {
+			h4 {
+
+				.pull-right {
+					font-size: 14px;
+				}
+
+				i {
+					&.fa-exclamation-circle {
+						color: $color-warning-med;
+					}
+
+					&.fa-exclamation-triangle {
+						color: $color-danger-med;
+					}
+
+				}
+
+			}
 
 		}
 
-	  }
-
-	}
-
-	.glyphicon-chevron-right,
-	.glyphicon-chevron-down {
-	  font-size: 10px;
-	  margin-top: 2px;
-	}
-
-	.jumbotron {
-	  border: 1px solid $color-white;
-	  border-radius: 0;
-	  box-shadow: 0 2px 2px $color-box-shadow;
-	  font-size: 63px;
-	  padding: 20px;
-
-	  &.motd {
-		font-size: 63px;
-		padding: 1px 28px;
-
-		h1 {
-		  font-size: 14px;
+		.fa-chevron-right,
+		.fa-chevron-down {
+			font-size: 10px;
+			margin-top: 2px;
 		}
-	  }
-	}
 
-  }
+		.jumbotron {
+			border: 1px solid $color-white;
+			border-radius: 0;
+			box-shadow: 0 2px 2px $color-box-shadow;
+			font-size: 63px;
+			padding: 20px;
+
+			&.motd {
+				font-size: 63px;
+				padding: 1px 28px;
+
+				h1 {
+					font-size: 14px;
+				}
+			}
+		}
+
+	}
 }
 
 .accordion-heading {
-   * > a {
-	 font-weight: normal;
-   }
+	* > a {
+		font-weight: normal;
+	}
 }
 
 .motd-header {
-  border-bottom: 1px solid $color-motd-header;
+	border-bottom: 1px solid $color-motd-header;
 }
 
 .motd-title {
-  font-size: 24px;
-  margin: 0 0 0 10px;
+	font-size: 24px;
+	margin: 0 0 0 10px;
 }
