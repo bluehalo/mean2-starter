@@ -1,0 +1,70 @@
+<section>
+
+	<!-- Show a breadcrumb to the list messages page -->
+	<a *ngIf="mode === 'admin-edit' || mode === 'admin-create'" class="back-link" [routerLink]="['/admin/messages']">
+		<i class="fa fa-angle-double-left"></i> Back to Messages
+	</a>
+
+	<form *ngIf="message" #form="ngForm" autocomplete="off" class="form-horizontal" role="form" novalidate >
+
+		<div class="page-header">
+			<h3>
+				{{title}}
+				<small>{{subtitle}}</small>
+			</h3>
+		</div>
+
+		<!-- Alert Notifications -->
+		<alert *ngFor="let alert of alertService.getAlerts(); let i = index" [type]="alert.type" (close)="alertService.clear(i)" dismissible="true" >{{alert.msg}}</alert>
+
+		<!-- Type -->
+		<div class="form-group row">
+			<label class="col-md-12" for="messageType">Type<span class="text-danger"><strong> *</strong></span></label>
+			<div class="col-md-12">
+				<select id="messageType" class="input-sm" name="type" [(ngModel)]="message.type">
+					<option *ngFor="let opt of typeOptions" [value]="opt.value">{{opt.display}}</option>
+				</select>
+			</div>
+		</div>
+
+		<!-- Title -->
+		<div class="form-group row">
+			<label class="col-md-12" for="title">Title<span class="text-danger"><strong> *</strong></span></label>
+			<div class="col-md-12"><input type="text" class="form-control" id="title" name="title" [(ngModel)]="message.title" required /></div>
+		</div>
+
+		<!-- Tearline -->
+		<div class="form-group row">
+			<label class="col-md-12" for="tearline">Tearline<span class="text-danger"></span></label>
+			<div class="col-md-12"><input type="text" class="form-control" id="tearline" name="tearline" [(ngModel)]="message.tearline" /></div>
+		</div>
+
+		<!-- Body -->
+		<div class="form-group row">
+			<label class="col-md-12" for="text">Message Body<span class="text-danger"><strong> *</strong></span></label>
+			<div class="col-md-12">
+				<textarea class="form-control" id="text" name="text" [(ngModel)]="message.body" required></textarea>
+			</div>
+		</div>
+
+		<div class="form-group row" *ngIf="error">
+			<div class="col-md-12">
+				<div class="text-danger">
+					<strong>{{error}}</strong>
+				</div>
+			</div>
+		</div>
+
+		<!-- Butttons -->
+		<div class="form-group row">
+			<div class="col-md-12">
+				<div class="pull-right">
+					<button class="btn btn-default" (click)="submit()" [disabled]="okDisabled">{{okButtonText}}</button>
+					<a type="button" [routerLink]="['/admin/messages']"> Cancel</a>
+				</div>
+			</div>
+		</div>
+
+	</form>
+
+</section>

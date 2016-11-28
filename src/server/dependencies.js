@@ -14,8 +14,8 @@ module.exports.auditLogger = require(path.resolve('./src/server/lib/bunyan.js'))
 module.exports.dbs = require(path.resolve('./src/server/lib/mongoose.js')).dbs;
 
 // Kafka
-//module.exports.kafkaProducer = require(path.resolve('./config/lib/kafka-producer'));
-//module.exports.kafkaConsumer = require(path.resolve('./config/lib/kafka-consumer'));
+module.exports.kafkaProducer = require(path.resolve('./src/server/lib/kafka-producer'));
+module.exports.kafkaConsumer = require(path.resolve('./src/server/lib/kafka-consumer'));
 
 // Socket IO
 module.exports.socketIO = require(path.resolve('./src/server/lib/socket.io.js'));

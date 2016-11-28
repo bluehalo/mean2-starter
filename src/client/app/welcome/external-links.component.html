@@ -1,0 +1,11 @@
+<accordion [closeOthers]="true" >
+	<accordion-group class="accordion-heading" [isOpen]="link.isOpen" (click)="link.isOpen = !link.isOpen" *ngFor="let link of links">
+		<div accordion-heading>
+			<a target="_blank" href="{{ link.href }}" (click)="handleLinkClick($event)">{{ link.title }}</a>
+			<i class="pull-right glyphicon"
+			   [ngClass]="{'fa fa-chevron-down': link.isOpen, 'fa fa-chevron-right': !link.isOpen}"></i>
+		</div>
+
+		<div>{{link.description}}</div>
+	</accordion-group>
+</accordion>

@@ -25,8 +25,10 @@ import { UtilModule } from './shared/util.module';
 import { ClientConfiguration } from './config/configurator';
 import { BaseService } from './config/test/test-stub-service.service';
 import { HelpModule } from './help/help.module';
+import { ToasterModule } from 'angular2-toaster';
 import { TeamsModule } from './teams/teams.module';
 import { TeamsService } from './teams/teams.service';
+import { WelcomeModule } from './welcome/welcome.module';
 
 
 export function initializerFactory () {
@@ -49,12 +51,15 @@ export function initializerFactory () {
 		Ng2BootstrapModule,
 		ModalModule.forRoot(),
 		BootstrapModalModule,
+		ToasterModule,
 
 		AccessCheckerModule,
 		AdminModule,
 		AuditModule,
 		HelpModule,
 		TeamsModule,
+		UtilModule,
+		WelcomeModule,
 		UtilModule
 	],
 	declarations: [
