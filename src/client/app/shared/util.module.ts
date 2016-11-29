@@ -15,6 +15,8 @@ import { AlertService } from './alert.service';
 import { AsyHttp } from './asy-http.service';
 import { ExportConfigService } from './export-config.service';
 import { AddRemoveList } from './add-remove-list.component';
+import {CamelToHumanPipe} from './camel-to-human.pipe';
+import {BigNumberPipe} from './big-number.pipe';
 
 @NgModule({
 	imports: [
@@ -29,7 +31,9 @@ import { AddRemoveList } from './add-remove-list.component';
 		ConfirmModal,
 		ConstrainedQuery,
 		InLineEdit,
-		Pager
+		Pager,
+		CamelToHumanPipe,
+		BigNumberPipe
 	],
 
 	declarations: [
@@ -39,7 +43,9 @@ import { AddRemoveList } from './add-remove-list.component';
 		ConfirmModal,
 		ConstrainedQuery,
 		InLineEdit,
-		Pager
+		Pager,
+		CamelToHumanPipe,
+		BigNumberPipe
 	],
 	providers: [
 		AlertService,
