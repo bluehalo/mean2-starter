@@ -17,7 +17,7 @@
 						<span class="sr-only">Toggle Navbar</span>
 						<i class="fa fa-bars fa-lg"></i>
 					</button>
-					<div>
+					<div class="navbar-brand">
 						<img class="logo" src="../img/brand/logo.png"/>
 					</div>
 
@@ -28,16 +28,16 @@
 
 					<!-- Left part of navbar -->
 					<ul class="nav navbar-nav">
+						<!-- Demo -->
+						<li><a [routerLink]="['/demo']">Demo</a></li>
+
 					</ul>
 
 					<!-- Right side Signin/Signup area -->
 					<ul class="nav navbar-nav navbar-right" *ngIf="!user.isAuthenticated()">
-						<li class="divider-vertical"></li>
 						<li>
-							<a [routerLink]="'/signin'">Sign In</a>
+							<a [routerLink]="['/signin']">Sign In</a>
 						</li>
-					</ul>
-					<ul class="nav navbar-nav navbar-right" *ngIf="!user.isAuthenticated()">
 						<li class="divider-vertical"></li>
 						<li>
 							<a [routerLink]="['/signup']">Request Account</a>
@@ -60,7 +60,7 @@
 						</li>
 
 						<li class="dropdown" dropdown>
-							<a data-ng-href="/#!/" class="dropdown-toggle" dropdownToggle>{{user.userModel.name}} <span class="caret"></span></a>
+							<a href="/#!/" class="dropdown-toggle" dropdownToggle>{{user.userModel.name}} <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
 
 								<!-- Manage User Account -->
@@ -73,7 +73,7 @@
 								<li *ngIf="user.isAuditor()"><a [routerLink]="['/audit']">Audit Activity</a></li>
 
 								<!-- Admin Page (only admins should see this) -->
-								<li *ngIf="user.isAdmin()"><a routerLink="/admin">ADMIN</a></li>
+								<li *ngIf="user.isAdmin()"><a [routerLink]="['/admin']">ADMIN</a></li>
 
 								<!-- User Signout -->
 								<li [hidden]="pki" class="divider"></li>
@@ -82,7 +82,7 @@
 							</ul>
 						</li>
 						<li class="dropdown" dropdown>
-							<a data-ng-href="/#!/" class="dropdown-toggle btn-icon" dropdownToggle>
+							<a href="/#!/" class="dropdown-toggle btn-icon" dropdownToggle>
 								<span class="fa-stack fa">
 									<i class="fa fa-circle-o fa-stack-2x"></i>
 									<i class="fa fa-question fa-stack-1x"></i>
