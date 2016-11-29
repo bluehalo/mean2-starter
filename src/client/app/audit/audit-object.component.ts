@@ -25,46 +25,6 @@ auditObjects.push(UrlAudit);
 AuditObjectTypes.registerType('url', UrlAudit);
 
 @Component({
-	selector: 'user-authentication',
-	templateUrl: './templates/user-authentication.audit.view.html'
-})
-export class UserAuthenticationAudit extends DefaultAudit {}
-auditObjects.push(UserAuthenticationAudit);
-AuditObjectTypes.registerType('user-authentication', UserAuthenticationAudit);
-
-@Component({
-	selector: 'user',
-	templateUrl: './templates/user.audit.view.html'
-})
-export class UserAudit extends DefaultAudit {}
-auditObjects.push(UserAudit);
-AuditObjectTypes.registerType('user', UserAudit);
-
-@Component({
-	selector: 'eua-audit',
-	template: `
-			<span *ngIf='auditObject'>
-				<i class='fa fa-search'></i> {{auditObject?.title}}
-			</span>
-			`
-})
-export class EuaAudit extends DefaultAudit {}
-auditObjects.push(EuaAudit);
-AuditObjectTypes.registerType('eua', EuaAudit);
-
-@Component({
-	selector: 'message-audit',
-	template: `
-			<span *ngIf='auditObject'>
-				<i class='fa fa-envelope-o'></i> {{auditObject?.title}} ({{auditObject?.type}})
-			</span>
-			`
-})
-export class MessageAudit extends DefaultAudit {}
-auditObjects.push(MessageAudit);
-AuditObjectTypes.registerType('message', MessageAudit);
-
-@Component({
 	selector: 'asy-audit-component',
 	template: '<div #content></div>'
 })
@@ -81,6 +41,11 @@ export class AuditObjectComponent {
 	) {}
 
 	ngOnInit() {
+		if (!AuditObjectTypes.objects.hasOwnProperty(this.auditType)) {
+			console.warn(`WARNING: Improperly configured audit type: ${this.auditType}.  Using default.`);
+			this.auditType = 'default';
+		}
+
 		let factory: ComponentFactory<Component> =
 			this.componentFactoryResolver.resolveComponentFactory(AuditObjectTypes.objects[this.auditType]);
 

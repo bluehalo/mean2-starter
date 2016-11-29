@@ -9,7 +9,7 @@ import { AuditViewChangeModal, AuditViewDetailModal } from './audit-view-change.
 import { AuditService } from './audit.service';
 import { AuditComponent } from './audit.component';
 import {
-	AuditObjectComponent, UrlAudit, UserAuthenticationAudit, UserAudit,
+	AuditObjectComponent, UrlAudit,
 	auditObjects
 } from './audit-object.component';
 import { UtilModule } from '../shared/util.module';
@@ -35,8 +35,6 @@ import { UserService } from '../admin/users.service';
 		AuditViewChangeModal,
 		AuditViewDetailModal,
 		UrlAudit,
-		UserAuthenticationAudit,
-		UserAudit,
 		AuditObjectComponent,
 
 		...auditObjects
