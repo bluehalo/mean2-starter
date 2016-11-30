@@ -48,7 +48,7 @@ MessageSocket.prototype.getTopic = function(userId) {
 MessageSocket.prototype.disconnect = function() {
 	logger.info('MessageSocket: Disconnected from client.');
 
-	clearInterval(this.intervalId);
+	this.unsubscribe(this.getTopic());
 
 };
 
@@ -58,7 +58,7 @@ MessageSocket.prototype.disconnect = function() {
 MessageSocket.prototype.error = function(err) {
 	logger.error(err, 'MessageSocket: Client connection error');
 
-	clearInterval(this.intervalId);
+	this.unsubscribe(this.getTopic());
 };
 
 /**
