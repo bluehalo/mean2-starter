@@ -29,7 +29,7 @@ import { UserService } from '../admin/users.service';
 		...auditObjects
 	],
 	exports: [],
-	declarations: 	[
+	declarations: [
 		AuditComponent,
 		AuditObjectComponent,
 		AuditViewChangeModal,

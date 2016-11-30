@@ -22,13 +22,13 @@ module.exports = {
 	// Server files
 	server: {
 		allJS: [ 'config/env/**/*.js', 'config/assets.js', 'src/server/**/*.js' ],
-		models: [ 'src/server/app/*/models/**/*.model!(.spec).js' ],
-		controllers: [ 'src/server/app/*/models/**/*.controller!(.spec).js' ],
-		routes: [ 'src/server/app/!(core)/routes/*.routes!(.spec).js', 'src/server/app/core/routes/*!(.spec).js' ],
-		sockets: [ 'src/server/app/*/sockets/**/*.socket!(.spec).js' ],
-		config: [ 'src/server/app/*/config/*.config!(.spec).js' ],
-		policies: [ 'src/server/app/*/policies/*.policies!(.spec).js' ],
-		views: [ 'src/server/app/*/views/**/*.html' ]
+		models: [ 'src/server/app/**/models/*.model!(.spec).js' ],
+		controllers: [ 'src/server/app/**/controllers/*.controller!(.spec).js' ],
+		routes: [ 'src/server/app/**/routes/*.routes!(.spec).js' ],
+		sockets: [ 'src/server/app/**/sockets/**/*.socket!(.spec).js' ],
+		config: [ 'src/server/app/**/config/*.config!(.spec).js' ],
+		policies: [ 'src/server/app/**/policies/*.policies!(.spec).js' ],
+		views: [ 'src/server/app/**/views/**/*.html' ]
 	},
 
 	// Client files
