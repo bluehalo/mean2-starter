@@ -18,6 +18,7 @@ let
 let OwnerSchema = new GetterSchema({
 	type: {
 		type: String,
+		default: 'team',
 		enum: ['team', 'user', 'system'],
 		required: 'Owner type is required'
 	},

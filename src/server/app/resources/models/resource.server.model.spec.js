@@ -3,7 +3,7 @@
 /**
  * Module dependencies.
  */
-let
+let mongoose = require('mongoose'),
 	path = require('path'),
 	q = require('q'),
 	should = require('should'),
@@ -12,7 +12,6 @@ let
 	dbs = deps.dbs,
 
 	Owner = dbs.admin.model('Owner'),
-	TeamOwner = dbs.admin.model('TeamOwner'),
 	Resource = dbs.admin.model('Resource');
 
 /**
@@ -33,6 +32,8 @@ let spec = {
 		title: 'Title'
 	},
 	owner1: {
+		type: 'team',
+		_id: new mongoose.Types.ObjectId()
 	}
 };
 
@@ -44,7 +45,7 @@ describe('Resource Model:', function() {
 		return clearDatabase()
 			.then(function() {
 				resource1 = new Resource(spec.resource1);
-				owner1 = new TeamOwner({});
+				owner1 = new Owner(spec.owner1);
 				done();
 			}, done).done();
 	});
@@ -89,6 +90,7 @@ describe('Resource Model:', function() {
 
 		it('should fail when trying to save without an owner', function(done) {
 			resource1.title = '';
+			resource1.owner = null;
 			resource1.save(function(err) {
 				should.exist(err);
 				done();
