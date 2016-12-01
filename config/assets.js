@@ -22,7 +22,7 @@ module.exports = {
 	// Server files
 	server: {
 		allJS: [ 'config/env/**/*.js', 'config/assets.js', 'src/server/**/*.js' ],
-		models: [ 'src/server/app/**/models/*.model!(.spec).js' ],
+		models: [ 'src/server/app/*/models/*.model!(.spec).js', 'src/server/app/**/models/**/*.model!(.spec).js' ],
 		controllers: [ 'src/server/app/**/controllers/*.controller!(.spec).js' ],
 		routes: [ 'src/server/app/**/routes/*.routes!(.spec).js' ],
 		sockets: [ 'src/server/app/**/sockets/**/*.socket!(.spec).js' ],

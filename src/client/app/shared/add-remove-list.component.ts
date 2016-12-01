@@ -1,10 +1,9 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
 	selector: 'asy-add-remove-list',
 	templateUrl: './add-remove-list.component.html'
 })
-
 export class AddRemoveList {
 
 	@Input() items: string[] = [];
@@ -17,15 +16,15 @@ export class AddRemoveList {
 
 	@Output() itemsChanged = new EventEmitter();
 
-	protected item: string = '';
+	private item: string = '';
 
 	constructor() {}
 
-	protected isAddDisabled(): boolean {
+	private isAddDisabled(): boolean {
 		return (!this.item || this.item === '' || this.items.indexOf(this.item) >= 0);
 	}
 
-	protected addItem() {
+	private addItem() {
 		if (!this.isAddDisabled()) {
 			this.items.push(this.item);
 			this.item = '';
@@ -34,7 +33,7 @@ export class AddRemoveList {
 		}
 	}
 
-	protected deleteItem(index: number) {
+	private deleteItem(index: number) {
 		this.items.splice(index, 1);
 
 		this.itemsChanged.emit({items: this.items});

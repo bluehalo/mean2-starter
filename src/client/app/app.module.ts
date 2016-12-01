@@ -16,6 +16,7 @@ import { AdminModule } from './admin/admin.module';
 import { AuditModule } from './audit/audit.module';
 import { DemoModule } from './demo/demo.module';
 import { HelpModule } from './help/help.module';
+import { ResourcesModule } from './resources/resources.module';
 import { TeamsModule } from './teams/teams.module';
 import { UtilModule } from './shared/util.module';
 import { WelcomeModule } from './welcome/welcome.module';
@@ -61,6 +62,7 @@ export function initializerFactory () {
 		AuditModule,
 		DemoModule,
 		HelpModule,
+		ResourcesModule,
 		TeamsModule,
 		UtilModule,
 		WelcomeModule,
