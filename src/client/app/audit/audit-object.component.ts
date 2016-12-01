@@ -8,7 +8,7 @@ export let auditObjects: any[] = [];
 
 @Component({
 	selector: 'default',
-	templateUrl: './default.audit.component.html'
+	templateUrl: './default-audit.component.html'
 })
 export class DefaultAudit {
 	@Input() auditObject: any = {};
@@ -18,7 +18,7 @@ AuditObjectTypes.registerType('default', DefaultAudit);
 
 @Component({
 	selector: 'url',
-	templateUrl: './url.audit.component.html'
+	templateUrl: './url-audit.component.html'
 })
 export class UrlAudit extends DefaultAudit {}
 auditObjects.push(UrlAudit);
