@@ -1,25 +1,25 @@
 import { Observable } from 'rxjs/Observable';
 import { Component } from '@angular/core';
-import { AuditOption } from '../model/audit.classes';
-import { AuditService } from '../services/audit.client.service';
+import { AuditService } from './audit.service';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 import { overlayConfigFactory } from 'angular2-modal';
 import 'rxjs/Rx';
-
 import {
-	AuditViewDetailModalContext, AuditViewChangeModal,
+	AuditViewDetailModalContext,
+	AuditViewChangeModal,
 	AuditViewDetailModal
-} from './audit-view-change.client.component';
-import { PagingOptions } from '../../shared/pager.component';
-import { SortDisplayOption, SortDirection } from '../../shared/result-utils.class';
-import { UserService } from '../../admin/users.service';
-import { AuthenticationService } from '../../admin/authentication/authentication.service';
+} from './audit-view-change.component';
+import { PagingOptions } from '../shared/pager.component';
+import { SortDisplayOption, SortDirection } from '../shared/result-utils.class';
+import { UserService } from '../admin/users.service';
+import { AuthenticationService } from '../admin/authentication/authentication.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { AuditOption } from './audit.classes';
 
 @Component({
 	selector: 'audit',
-	templateUrl: '../views/audit-list.client.view.html'
+	templateUrl: './audit-list.component.html'
 })
 export class AuditComponent {
 
@@ -135,7 +135,7 @@ export class AuditComponent {
 	private searchUsers() {
 		return this.userService.match({}, this.queryUserSearchTerm, this.userPagingOpts)
 			.map((result) => {
-				return result.elements.map(function(r: any) {
+				return (<any> result.elements).map(function(r: any) {
 					r.displayName = r.name + ' [' + r.username + ']';
 					return r;
 				});

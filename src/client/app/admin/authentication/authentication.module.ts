@@ -14,6 +14,7 @@ import { InvalidCertificateComponent } from './invalid-certificate.component';
 import { InactiveComponent } from './inactive.component';
 import { SigninComponent } from './signin.component';
 import { UnauthorizedComponent } from './unauthorized.component';
+import { UserAuthenticationAudit } from './audit/user-authentication-audit.component';
 
 @NgModule({
 	imports: [
@@ -23,12 +24,18 @@ import { UnauthorizedComponent } from './unauthorized.component';
 		RouterModule,
 		UtilModule
 	],
-	exports: [],
+	exports: [
+		UserAuthenticationAudit
+	],
+	entryComponents: [
+		UserAuthenticationAudit
+	],
 	declarations:   [
 		NoAccessComponent,
 		InactiveComponent,
 		InvalidCertificateComponent,
 		SigninComponent,
+		UserAuthenticationAudit,
 		UnauthorizedComponent,
 	],
 	providers:  [
