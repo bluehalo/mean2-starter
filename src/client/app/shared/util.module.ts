@@ -17,6 +17,7 @@ import { ExportConfigService } from './export-config.service';
 import { AddRemoveList } from './add-remove-list.component';
 import {CamelToHumanPipe} from './camel-to-human.pipe';
 import {BigNumberPipe} from './big-number.pipe';
+import { SafeImageComponent } from './safe-image.component';
 
 @NgModule({
 	imports: [
@@ -32,6 +33,7 @@ import {BigNumberPipe} from './big-number.pipe';
 		ConstrainedQuery,
 		InLineEdit,
 		Pager,
+		SafeImageComponent,
 		CamelToHumanPipe,
 		BigNumberPipe
 	],
@@ -44,6 +46,7 @@ import {BigNumberPipe} from './big-number.pipe';
 		ConstrainedQuery,
 		InLineEdit,
 		Pager,
+		SafeImageComponent,
 		CamelToHumanPipe,
 		BigNumberPipe
 	],

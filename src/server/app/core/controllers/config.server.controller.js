@@ -20,6 +20,8 @@ var getSystemConfig = function() {
 		banner: config.banner,
 		copyright: config.copyright,
 
+		defaultImage: config.defaultImage,
+
 		map: config.map,
 		urlHandler: config.urlHandler,
 
