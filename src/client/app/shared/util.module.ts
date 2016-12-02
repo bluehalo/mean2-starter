@@ -4,19 +4,22 @@ import { CommonModule } from '@angular/common';
 
 import { Ng2BootstrapModule } from 'ng2-bootstrap';
 
-import { ConfirmModal } from './confirm.component';
-import { ConstrainedQuery } from './constrained-query.component';
-import { InLineEdit } from './in-line-edit.component';
-import { AsyLoading } from './loading-animation.component';
-import { Pager } from './pager.component';
+import { AddRemoveList } from './add-remove-list.component';
+import { AddRemoveTypeaheadList } from './add-remove-typeahead-list.component';
 import { AgoDatePipe } from './ago-date.pipe';
-import { AsyUrlHandler } from './asy-url-handler.service';
 import { AlertService } from './alert.service';
 import { AsyHttp } from './asy-http.service';
+import { AsyLoading } from './loading-animation.component';
+import { AsyUrlHandler } from './asy-url-handler.service';
+import { BigNumberPipe } from './big-number.pipe';
+import { CamelToHumanPipe } from './camel-to-human.pipe';
+import { CapitalizePipe } from './capitalize.pipe';
+import { ConfirmModal } from './confirm.component';
+import { ConstrainedQuery } from './constrained-query.component';
 import { ExportConfigService } from './export-config.service';
-import { AddRemoveList } from './add-remove-list.component';
-import {CamelToHumanPipe} from './camel-to-human.pipe';
-import {BigNumberPipe} from './big-number.pipe';
+import { InLineEdit } from './in-line-edit.component';
+import { Pager } from './pager.component';
+
 
 @NgModule({
 	imports: [
@@ -26,26 +29,30 @@ import {BigNumberPipe} from './big-number.pipe';
 	],
 	exports: [
 		AddRemoveList,
+		AddRemoveTypeaheadList,
 		AgoDatePipe,
 		AsyLoading,
+		BigNumberPipe,
+		CamelToHumanPipe,
+		CapitalizePipe,
 		ConfirmModal,
 		ConstrainedQuery,
 		InLineEdit,
-		Pager,
-		CamelToHumanPipe,
-		BigNumberPipe
+		Pager
 	],
 
 	declarations: [
 		AddRemoveList,
+		AddRemoveTypeaheadList,
 		AgoDatePipe,
 		AsyLoading,
+		BigNumberPipe,
+		CamelToHumanPipe,
+		CapitalizePipe,
 		ConfirmModal,
 		ConstrainedQuery,
 		InLineEdit,
-		Pager,
-		CamelToHumanPipe,
-		BigNumberPipe
+		Pager
 	],
 	providers: [
 		AlertService,

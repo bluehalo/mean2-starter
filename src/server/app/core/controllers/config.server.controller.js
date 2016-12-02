@@ -13,7 +13,6 @@ var getSystemConfig = function() {
 		auth: config.auth.strategy,
 		requiredRoles: config.auth.requiredRoles,
 
-		mode: config.mode,
 		clientEnableProdMode: config.clientEnableProdMode,
 
 		version: pjson.version,
