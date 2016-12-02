@@ -142,11 +142,13 @@ EventSocket.prototype.subscribe = function(eventName) {
 	}
 
 	// Simple throttling is done here, if enabled
+
 	if (this._emitRateMs > 0) {
-		eventEmitter.getEventEmitter().on(eventName, _.throttle(this.socketPayloadHandler, this._emitRateMs).bind(this, eventName));
+		this.emitterFunc = _.throttle(this.socketPayloadHandler, this._emitRateMs).bind(this, eventName);
 	} else {
-		eventEmitter.getEventEmitter().on(eventName, this.socketPayloadHandler.bind(this, eventName));
+		this.emitterFunc = this.socketPayloadHandler.bind(this, eventName);
 	}
+	eventEmitter.getEventEmitter().on(eventName, this.emitterFunc);
 };
 
 /**
@@ -154,8 +156,8 @@ EventSocket.prototype.subscribe = function(eventName) {
  *
  * @param {string} topic The topic to unsubscribe from (optional).
  */
-EventSocket.prototype.unsubscribe = function() {
-
+EventSocket.prototype.unsubscribe = function(eventName) {
+	eventEmitter.getEventEmitter().removeListener(eventName, this.emitterFunc);
 };
 
 EventSocket.prototype.socketPayloadHandler = function(eventName, message) {
