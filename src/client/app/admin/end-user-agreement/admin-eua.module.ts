@@ -13,6 +13,7 @@ import { AdminUpdateEuaComponent } from './admin-edit-eua.component';
 import { UserEuaComponent } from './user-eua.component';
 import { UtilModule } from '../../shared/util.module';
 import { AlertService } from '../../shared/alert.service';
+import { EuaAudit } from './audit/eua-audit.component';
 
 @NgModule({
 	imports: [
@@ -22,11 +23,17 @@ import { AlertService } from '../../shared/alert.service';
 		RouterModule,
 		UtilModule
 	],
-	exports: [],
+	exports: [
+		EuaAudit
+	],
+	entryComponents: [
+		EuaAudit
+	],
 	declarations:   [
 		AdminListEuasComponent,
 		AdminCreateEuaComponent,
 		AdminUpdateEuaComponent,
+		EuaAudit,
 		UserEuaComponent
 	],
 	providers:  [

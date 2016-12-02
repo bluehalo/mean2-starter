@@ -13,12 +13,13 @@ var getSystemConfig = function() {
 		auth: config.auth.strategy,
 		requiredRoles: config.auth.requiredRoles,
 
-		mode: config.mode,
 		clientEnableProdMode: config.clientEnableProdMode,
 
 		version: pjson.version,
 		banner: config.banner,
 		copyright: config.copyright,
+
+		defaultImage: config.defaultImage,
 
 		map: config.map,
 		urlHandler: config.urlHandler,

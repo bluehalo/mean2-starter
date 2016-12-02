@@ -104,6 +104,9 @@ module.exports = {
 		admin: 'mongodb://localhost/mean2-dev'
 	},
 
+	// Fallback image if no images are available
+	defaultImage: 'src/client/app/img/brand/logo.png',
+
 	/**
 	 * Environment Settings
 	 */

@@ -1,6 +1,0 @@
-<span *ngIf="auditObject">
-	<div><i class="fa fa-users"></i> {{auditObject?.group.title}}</div>
-	<div tooltip="{{auditObject?.user.username}}" tooltipPlacement="bottom"><i class="fa fa-user"></i> {{auditObject?.user.name}}</div>
-	<!-- optional, so use data-ng-show -->
-	<div *ngIf="auditObject.role"><i class="fa fa-shield"></i> {{auditObject?.role}}</div>
-</span>

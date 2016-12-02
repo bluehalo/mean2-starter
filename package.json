@@ -45,6 +45,7 @@
 		"multer": "1.2",
 		"multipipe": "1.0",
 		"nodemailer": "2.6",
+		"node-uuid": "1.4.7",
 		"passport": "0.3",
 		"passport-local": "1.0",
 		"path": "0.12",

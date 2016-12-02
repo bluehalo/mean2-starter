@@ -5,13 +5,15 @@ import { NgModule } from '@angular/core';
 import { Ng2BootstrapModule } from 'ng2-bootstrap';
 import { BootstrapModalModule, Modal } from 'angular2-modal/plugins/bootstrap';
 
-import { AuditViewChangeModal, AuditViewDetailModal } from './components/audit-view-change.client.component';
-import { AuditService } from './services/audit.client.service';
-import { AuditComponent } from './components/audit.client.component';
-import { AuditObjectComponent, UrlAudit, UserAuthenticationAudit, UserAudit } from './components/audit-object.client.component';
+import { AuditViewChangeModal, AuditViewDetailModal } from './audit-view-change.component';
+import { AuditService } from './audit.service';
+import { AuditComponent } from './audit.component';
+import {
+	AuditObjectComponent, UrlAudit,
+	auditObjects
+} from './audit-object.component';
 import { UtilModule } from '../shared/util.module';
 import { UserService } from '../admin/users.service';
-
 
 @NgModule({
 	imports: [
@@ -22,7 +24,9 @@ import { UserService } from '../admin/users.service';
 	],
 	entryComponents: [
 		AuditViewChangeModal,
-		AuditViewDetailModal
+		AuditViewDetailModal,
+
+		...auditObjects
 	],
 	exports: [],
 	declarations: [
@@ -31,9 +35,9 @@ import { UserService } from '../admin/users.service';
 		AuditViewChangeModal,
 		AuditViewDetailModal,
 		UrlAudit,
-		UserAuthenticationAudit,
-		UserAudit,
-		AuditObjectComponent
+		AuditObjectComponent,
+
+		...auditObjects
 	],
 	providers: [
 		AuditService,

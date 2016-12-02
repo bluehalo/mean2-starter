@@ -16,6 +16,7 @@ import { UserService } from '../users.service';
 import { UtilModule } from '../../shared/util.module';
 import { AlertService } from '../../shared/alert.service';
 import { CacheEntriesService } from '../../access-checker/cache-entries.service';
+import { UserAudit } from './audit/user-audit.component';
 
 @NgModule({
 	imports: [
@@ -25,13 +26,19 @@ import { CacheEntriesService } from '../../access-checker/cache-entries.service'
 		RouterModule,
 		UtilModule
 	],
-	exports: [],
+	exports: [
+		UserAudit
+	],
+	entryComponents: [
+		UserAudit
+	],
 	declarations:   [
 		AdminCreateUserComponent,
 		AdminUpdateUserComponent,
 		AdminListUsersComponent,
 		ExportUsersModal,
 		UpdateUserComponent,
+		UserAudit,
 		UserSignupComponent
 	],
 	providers:  [

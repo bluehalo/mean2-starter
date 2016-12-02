@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { Team } from '../teams.class';
 import { TeamsService } from '../teams.service';
-import { Owner } from './owner.class';
+import { Owner } from '../../resources/owner.class';
 import { Tag } from './tags.class';
 import { TagsService } from './tags.service';
 
@@ -64,7 +64,7 @@ export class ManageTagComponent {
 						if (result) {
 							this.team = result;
 							this.owner = new Owner('team', result._id, result.name);
-							this.tag.owner = this.owner.id;
+							this.tag.owner = this.owner._id;
 						}
 					});
 			}
