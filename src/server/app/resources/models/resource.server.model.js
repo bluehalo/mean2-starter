@@ -1,7 +1,6 @@
 'use strict';
 
-let
-	_ = require('lodash'),
+let _ = require('lodash'),
 	mongoose = require('mongoose'),
 	extend = require('mongoose-schema-extend'),
 	path = require('path'),
@@ -123,7 +122,24 @@ ResourceSchema.statics.auditCopy = function(src) {
 	toReturn.title = src.title;
 	toReturn.description = src.description;
 	toReturn.owner = _.cloneDeep(src.owner);
-	toReturn.tags = _.cloneDeep(src.tags);
+	if (_.isArray(src.tags)) {
+		toReturn.tags = src.tags.map((t) => _.pick(t, ['_id']));
+	}
+
+	return toReturn;
+};
+
+ResourceSchema.statics.auditUpdateCopy = function(src) {
+	let toReturn = {};
+	src = src || {};
+
+	toReturn._id = src._id;
+	toReturn.title = src.title;
+	toReturn.description = src.description;
+	toReturn.owner = _.pick(src.owner, ['_id', 'type']);
+	if (_.isArray(src.tags)) {
+		toReturn.tags = src.tags.map((t) => _.pick(t, ['_id']));
+	}
 
 	return toReturn;
 };
