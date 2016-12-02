@@ -40,8 +40,6 @@ import { Pager } from './pager.component';
 		ConstrainedQuery,
 		InLineEdit,
 		SafeImageComponent,
-		CamelToHumanPipe,
-		BigNumberPipe,
 		Pager
 	],
 
@@ -57,8 +55,6 @@ import { Pager } from './pager.component';
 		ConstrainedQuery,
 		InLineEdit,
 		SafeImageComponent,
-		CamelToHumanPipe,
-		BigNumberPipe,
 		Pager
 	],
 	providers: [
