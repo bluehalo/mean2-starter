@@ -132,7 +132,6 @@ export class AsyHttp {
 
 	protected handleErrorResponse(err: any, caught: Observable<any>): Observable<any> {
 		let errData = JSON.parse(err._body);
-		this.userStateService.authRedirectUrl = this.router.url;
 		switch (err.status) {
 			case 401:
 
