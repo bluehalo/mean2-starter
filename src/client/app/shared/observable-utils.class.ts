@@ -15,8 +15,8 @@ export class ObservableUtils {
 	public static forkJoinSettled(observables: Observable<any>[]): Observable<any> {
 		return Observable.forkJoin(observables.map((obs) => {
 				return obs
-					.map(val => new ObservableResult('success', val))
-					.catch(err => Observable.of(new ObservableResult('error', err)))
+					.map((val: any) => new ObservableResult('success', val))
+					.catch((err: any) => Observable.of(new ObservableResult('error', err)));
 			})
 		);
 	}
