@@ -78,6 +78,8 @@ gulp.task('watch-server-tests', () => {
 });
 
 gulp.task('watch-client', () => {
+	if (!assets.client) return;
+
 	var config = require('./src/server/config');
 
 	// Start livereload
@@ -97,7 +99,6 @@ gulp.task('watch-client', () => {
 	gulp.watch(assets.client.app.dist.development.css).on('change', plugins.livereload.changed);
 	gulp.watch(assets.client.app.views).on('change', plugins.livereload.changed);
 	gulp.watch(assets.client.app.content).on('change', plugins.livereload.changed);
-
 });
 
 
@@ -123,14 +124,20 @@ gulp.task('build-server', () => {
  */
 
 gulp.task('build-client', (done) => {
+	if (!assets.client) return done();
+
 	runSequence('clean-client', ['build-client-code', 'build-client-style'], done);
 });
 
 gulp.task('clean-client', () => {
+	if (!assets.client) return;
+
 	return del([ 'public/**/*' ]);
 });
 
 gulp.task('build-client-code', ['lint-client-code'], (done) => {
+	if (!assets.client) return done();
+
 	let webpackConfig = require(path.resolve('./config/build/webpack.conf.js'));
 
 	webpack(webpackConfig('build'), (err, stats) => {
@@ -148,6 +155,7 @@ gulp.task('build-client-code', ['lint-client-code'], (done) => {
 });
 
 gulp.task('lint-client-code', () => {
+	if (!assets.client) return;
 
 	// Grab the tslint config
 	var config = require(path.resolve('./config/build/tslint.conf.js'));
@@ -164,6 +172,7 @@ gulp.task('lint-client-code', () => {
 });
 
 gulp.task('build-client-style', [ 'clean-client-style' ], () => {
+	if (!assets.client) return;
 
 	// Generate a list of the sources in a deterministic manner
 	let sourceArr = [];
@@ -201,6 +210,8 @@ gulp.task('build-client-style', [ 'clean-client-style' ], () => {
 });
 
 gulp.task('clean-client-style', () => {
+	if (!assets.client) return;
+
 	return del([
 		'public/application*.css',
 		'public/dev/application.css', 'public/dev/application.css.map'
