@@ -20,7 +20,7 @@
 
 	<!-- Tags -->
 	<div class="form-group row col-md-12">
-		<label class="control-label">Tags</label> ({{ resource?.tags?.length }} Tags)
+		<label style="padding-bottom:5px;" class="control-label">Tags</label> ({{ resource?.tags?.length }} Tags)
 		<asy-add-remove-typeahead-list
 			[items]="resource.tags"
 			(itemsChanged)="updateTags($event)"
