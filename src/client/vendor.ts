@@ -26,7 +26,7 @@ import 'zone.js';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import 'font-awesome/css/font-awesome.css';
-
+import 'angular2-toaster/lib/toaster.css';
 
 // Angular2 Imports
 import '@angular/platform-browser';
@@ -42,6 +42,12 @@ import 'angular2-modal';
 
 
 // Other Dependencies
-import 'rxjs';
+import 'd3';
 import 'lodash';
 import 'moment';
+import 'rxjs';
+
+import '@asymmetrik/sentio/dist/sentio.css';
+import '@asymmetrik/sentio';
+import '@asymmetrik/angular2-sentio';
+

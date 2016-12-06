@@ -1,0 +1,38 @@
+<form *ngIf="resource" name="manageResourceForm" autocomplete="off" class="form-horizontal" role="form" novalidate>
+
+	<div class="form-group row col-md-12" *ngIf="mode === 'edit'">
+		<label class="control-label">Owned by: {{ resource?.owner?.name }}</label>
+	</div>
+
+	<!-- Title -->
+	<div class="form-group row col-md-12">
+		<label for="title">Title<span class="text-danger"><strong> *</strong></span></label>
+		<input type="text" class="form-control input-sm" id="title" name="title" [(ngModel)]="resource.title" required />
+	</div>
+
+	<!-- Owner -->
+	<div class="form-group row col-md-12" *ngIf="mode === 'create'">
+		<label for="owner">Owner<span class="text-danger"><strong> *</strong></span></label>
+		<select class="form-control input-sm" id="owner" name="owner" [(ngModel)]="resource.owner" (ngModelChange)="getTagOptions()">
+			<option *ngFor="let owner of ownerOptions" [ngValue]="owner">{{ owner.name }}</option>
+		</select>
+	</div>
+
+	<!-- Tags -->
+	<div class="form-group row col-md-12">
+		<label style="padding-bottom:5px;" class="control-label">Tags</label> ({{ resource?.tags?.length }} Tags)
+		<asy-add-remove-typeahead-list
+			[items]="resource.tags"
+			(itemsChanged)="updateTags($event)"
+			placeholder="Start typing a tag name..."
+			[identifier]="'name'"
+			[availableItems]="tagOptions">
+		</asy-add-remove-typeahead-list>
+	</div>
+
+	<!-- Description -->
+	<div class="form-group row col-md-12">
+		<label for="description">Description</label>
+		<textarea rows="3" class="form-control input-sm" id="description" name="description" [(ngModel)]="resource.description"></textarea>
+	</div>
+</form>

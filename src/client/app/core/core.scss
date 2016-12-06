@@ -1,0 +1,290 @@
+@import '../shared/colors';
+
+//=====================================
+// Fix for Modal backdrop
+//=====================================
+
+html {
+	height: 100%;
+}
+
+body {
+	min-height: 100%;
+}
+
+.modal-backdrop {
+	bottom: -9999px;
+}
+
+//=====================================
+// Page Header Styles
+//=====================================
+h1 {
+	&.page-header {
+		margin-top: 24px;
+	}
+}
+
+h2 {
+	&.page-header {
+		margin-top: 18px;
+	}
+}
+
+h3 {
+	.page-header {
+		margin-top: 12px;
+	}
+}
+
+//=====================================
+// Navigation Bar
+//=====================================
+
+.navbar-asymmetrik {
+	background-color: $color-border-light;
+	border-color: $color-border-med;
+
+	.navbar-container {
+		padding-left: 30px;
+		padding-right: 30px;
+	}
+
+	&.navbar-inverse {
+		.navbar-toggle {
+			border-color: $color-border-dark;
+			color: $color-border-light;
+		}
+	}
+}
+
+img {
+	&.logo {
+		height: 32px;
+		margin: -7px 0 0;
+	}
+}
+
+ul {
+	&.navbar-nav {
+		>li {
+			a {
+				&.btn-icon {
+					padding-bottom: 10px;
+					padding-top: 12px;
+				}
+			}
+		}
+	}
+}
+
+* {
+	:focus {
+		outline: none;
+	}
+}
+
+.navbar-form {
+	i {
+		color: $color-border-med;
+		margin-left: -38px;
+		padding: 10px 12px;
+		pointer-events: none;
+		right: 0;
+		top: 3px;
+	}
+
+	input {
+		padding-right: 30px;
+
+		&:focus {
+			border: 1px solid $color-border-light;
+			box-shadow: none;
+			outline: none;
+		}
+	}
+}
+
+.welcome-text {
+  	font-size: 15px;
+  	margin-top: 20px;
+}
+
+//=====================================
+// Buttons
+//=====================================
+.btn {
+  border-radius: 0;
+}
+
+.form-control {
+  border-radius: 0;
+}
+
+//=====================================
+// Back Links
+//=====================================
+
+a {
+	cursor: pointer;
+
+	&.back-link {
+		color: $color-label-gray;
+		font-size: 12px;
+
+		&:hover {
+			color: $color-black;
+			cursor: pointer;
+		}
+	}
+}
+
+//=====================================
+// Content Area
+//=====================================
+
+.content {
+	padding-bottom: 35px;
+	padding-top: 70px;
+	width: 100%;
+
+	&.banner-enabled {
+		padding-bottom: 55px;
+		padding-top: 85px;
+		width: 100%;
+	}
+}
+
+//=====================================
+// Footer
+//=====================================
+
+.footer {
+	bottom: 0;
+	left: 0;
+	position: fixed;
+	width: 100%;
+	z-index: 1000;
+}
+
+.banner {
+	text-align: center;
+}
+
+.banner-u,
+.banner-s,
+.banner-k {
+	background-color: $color-black;
+	color: $color-white;
+  	text-align: center;
+}
+
+.copyright {
+	background-color: inherit;
+	color: $color-default-dark;
+	font-size: 12px;
+	padding: 2px;
+	text-align: center;
+
+	a {
+		color: $color-link;
+	}
+}
+
+//=====================================
+// Bootstrap
+//=====================================
+
+.undecorated-link {
+	&:hover {
+		text-decoration: none;
+	}
+}
+
+.ng-invalid {
+	&.ng-touched {
+		border-color: $color-danger-light;
+	}
+}
+
+.center {
+	text-align: center;
+}
+
+.tooltip {
+	.tooltip-inner {
+		background-color: $color-bg-tooltip;
+		color: $color-black;
+	}
+
+	.tooltip-arrow {
+		visibility: hidden;
+	}
+}
+
+//csslint ids:false
+#loading-bar-spinner {
+	bottom: 45px;
+	left: auto;
+	right: 5px;
+	top: auto;
+
+	.spinner-icon {
+		border-left-color: $color-danger-med;
+		border-top-color: $color-danger-med;
+		border-width: 3px;
+		height: 24px;
+		width: 24px;
+	}
+
+	&.ng-enter {
+		&.ng-enter-active {
+			opacity: .5;
+		}
+	}
+
+	&.ng-leave {
+		opacity: .5;
+	}
+}
+
+//csslint ids:false
+#loading-bar {
+	display: none;
+}
+
+.highlighted {
+	background: $color-yellow;
+}
+
+//====================================
+// Pills
+//====================================
+.nav-pills > li {
+	> a {
+		color: $color-label-gray;
+		padding: 15px 8px;
+
+		&:hover {
+			background-color: transparent;
+			color: $color-label-dark-gray;
+		}
+	}
+
+	&.active > a {
+		background-color: inherit;
+		border-bottom: 4px solid $color-bg-black;
+		border-radius: 0;
+		color: $color-label-dark-gray;
+
+		&:hover {
+			background-color: transparent;
+			color: $color-label-dark-gray;
+		}
+
+		&:focus {
+			background-color: transparent;
+			color: inherit;
+		}
+	}
+}

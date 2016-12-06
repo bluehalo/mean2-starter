@@ -104,6 +104,9 @@ module.exports = {
 		admin: 'mongodb://localhost/mean2-dev'
 	},
 
+	// Fallback image if no images are available
+	defaultImage: 'src/client/app/img/brand/logo.png',
+
 	/**
 	 * Environment Settings
 	 */
@@ -135,6 +138,15 @@ module.exports = {
 		string: 'Copyright © 2016 <a href="http://www.asymmetrik.com" target="_blank">Asymmetrik, Ltd</a>. All Rights Reserved.'
 	},
 
+	messages: {
+		// Use the following for local eventEmitter
+		publishProvider: './src/server/app/messages/providers/event-message.provider.js',
+		socketProvider: './src/server/app/util/sockets/event.server.socket.js'
+
+		// Use the following for Kafka.  Note, must also uncomment Kafka configuration.
+		// publishProvider: './src/server/app/messages/providers/kafka-message.provider.js',
+		// socketProvider: './src/server/app/util/sockets/kafka.server.socket.js'
+	},
 
 	// Configuration for outgoing mail server
 //	mailer: {
@@ -173,11 +185,18 @@ module.exports = {
 	// Set debugger and node inspector ports
 	devPorts: {
 		karma: 9876,
-		nodeInspector: 1337,
 		debug: 5858,
 		webpack: 9000
 	},
 
+	// Uncomment below if using Kafka messaging
+
+	// kafka: {
+	// 	broker: 'localhost:9092',
+	// 	zookeeper: 'localhost:2181',
+	// 	zookeeperCommTimeoutMs: 1000,
+	// 	kafkaRetryMs: 3000
+	// },
 
 	/**
 	 * Logging Settings
@@ -225,6 +244,19 @@ module.exports = {
 		]
 	},
 
+	/*
+	 * External links for dashboard
+	 */
+	welcomeLinks: {
+		enabled: true,
+		links: [
+			{
+				title: 'Asymmetrik',
+				description: 'Asymmetrik corporate information',
+				href: 'http://www.asymmetrik.com'
+			}
+		]
+	},
 
 	/**
 	 * Not So Environment-Specific Settings

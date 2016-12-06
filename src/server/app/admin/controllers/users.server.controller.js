@@ -3,7 +3,7 @@
 /**
  * Module dependencies.
  */
-var _ = require('lodash'),
+let _ = require('lodash'),
 	path = require('path'),
 	q = require('q'),
 
@@ -47,7 +47,7 @@ module.exports.has = function(requirement) {
  * Apply the array of auth functions in order, using AND logic
  */
 module.exports.hasAll = function() {
-	var requirements = arguments;
+	let requirements = arguments;
 	return function(req, res, next) {
 		module.exports.requiresAll(requirements)(req).then(function(result) {
 			next();
@@ -61,7 +61,7 @@ module.exports.requiresAll = function(requirements) {
 	return function(req) {
 
 		// Apply the requirements
-		var applyRequirement = function(i) {
+		let applyRequirement = function(i) {
 			if(i < requirements.length) {
 				return requirements[i](req).then(function(result) {
 					// Success means try the next one
@@ -81,7 +81,7 @@ module.exports.requiresAll = function(requirements) {
  * Apply the array of auth functions in order, using OR logic
  */
 module.exports.hasAny = function() {
-	var requirements = arguments;
+	let requirements = arguments;
 	return function(req, res, next) {
 		module.exports.requiresAny(requirements)(req).then(function(result) {
 			next();
@@ -95,8 +95,8 @@ module.exports.requiresAny = function(requirements) {
 	return function(req) {
 
 		// Apply the requirements
-		var error;
-		var applyRequirement = function(i) {
+		let error;
+		let applyRequirement = function(i) {
 			if(i < requirements.length) {
 				return requirements[i](req).then(function(result) {
 					// Success means we're done

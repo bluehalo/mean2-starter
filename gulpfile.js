@@ -9,6 +9,7 @@ let
 	gulp = require('gulp'),
 	plugins = require('gulp-load-plugins')(),
 	glob = require('glob'),
+	argv = require('yargs').argv,
 	del = null,
 	webpack = null,
 
@@ -42,6 +43,10 @@ colors.enabled = true;
  * @returns {*}
  */
 function nodemon(nodemonConfig) {
+	let config = require('./src/server/config');
+	let nodeArgs = ['--debug=' + config.devPorts.debug];
+	nodemonConfig.nodeArgs = nodeArgs;
+
 	let stream = plugins.nodemon(nodemonConfig);
 	stream
 		.on('restart', () => {
@@ -68,18 +73,6 @@ gulp.task('watch-server', () => {
 	});
 });
 
-gulp.task('watch-server-tests', () => {
-	return nodemon({
-		script: 'test-server.js',
-		ext: 'js json',
-		env: { 'NODE_ENV': 'test' },
-		watch: _.union(
-			assets.build,
-			assets.tests.server,
-			assets.server.allJS,
-			assets.server.config)
-	});
-});
 
 gulp.task('watch-client', () => {
 	if (!assets.client) return;
@@ -234,11 +227,23 @@ gulp.task('env:test', () => {
 	process.env.NODE_ENV = 'test';
 });
 
+
 gulp.task('test-server', ['env:test'], () => {
+	// Gather some args for custom testing
+	let args = [];
+
+	// --bail will cause mocha to stop on first error
+	if(argv.bail) { args.push('--bail'); }
+
+	// --filter will filter the test files using the glob pattern
+	if(null != argv.filter) { args.push(`--filter='${argv.filter}'`); }
+
 	// Run mocha tests with nodemon
 	return nodemon({
 		script: './config/build/test-server.js',
-		ext: 'js',
+		ext: 'js json',
+		env: { 'NODE_ENV': 'test' },
+		args: args,
 		watch: _.union(
 			assets.tests.server,
 			assets.server.allJS,
@@ -261,7 +266,7 @@ gulp.task('coverage-init', () => {
 		.pipe(plugins.istanbul.hookRequire());
 });
 
-gulp.task('test-server-ci', [ 'env:test'/*, 'coverage-init'*/ ], (done) => {
+gulp.task('test-server-ci', [ 'env:test', 'coverage-init' ], (done) => {
 	// Run mocha tests with coverage and without nodemon
 
 	// Open mongoose connections
@@ -273,7 +278,6 @@ gulp.task('test-server-ci', [ 'env:test'/*, 'coverage-init'*/ ], (done) => {
 
 		gulp.src(sources)
 			.pipe(plugins.mocha({
-				//bail: argv.bail,
 				reporter: 'mochawesome',
 				reporterOptions: {
 					reportDir: 'reports/tests',
@@ -282,10 +286,10 @@ gulp.task('test-server-ci', [ 'env:test'/*, 'coverage-init'*/ ], (done) => {
 					inlineAssets: true
 				}
 			}))
-			// .pipe(plugins.istanbul.writeReports({
-			// 	dir: './reports/coverage',
-			// 	reporters: ['html']
-			// }))
+			.pipe(plugins.istanbul.writeReports({
+				dir: './reports/coverage',
+				reporters: ['html']
+			}))
 			.on('error', (err) => {
 				error = err;
 			})

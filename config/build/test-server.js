@@ -6,6 +6,7 @@
  */
 let	Mocha = require('mocha'),
 	path = require('path'),
+	argv = require('yargs').argv,
 
 	config = require(path.resolve('./src/server/config.js')),
 	mongoose = require(path.resolve('./src/server/lib/mongoose.js'));
@@ -21,12 +22,24 @@ mongoose.connect().then(() => {
 	});
 
 	// Create the mocha instance
-	let mocha = new Mocha({
+	let options = {
 		reporter: 'spec'
-	});
+	};
+	if(argv.bail) {
+		console.log('Mocha: Setting option \'bail\' to true.');
+		options.bail = true;
+	};
+	let mocha = new Mocha(options);
 
 	// Add all the tests to mocha
-	config.files.server.tests.forEach((file) => { mocha.addFile(file); });
+	let testCount = 0;
+	config.files.server.tests.forEach((file) => {
+		if(!(argv.filter) || file.match(new RegExp(argv.filter))) {
+			testCount++;
+			mocha.addFile(file);
+		}
+	});
+	console.log(`Mocha: Executing ${testCount} test files.`);
 
 	try {
 		// Run the tests.
@@ -40,4 +53,4 @@ mongoose.connect().then(() => {
 
 }, () => {
 	console.error('Mongoose initialization failed, tests failed.');
-});
+}).done();

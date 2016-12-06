@@ -1,0 +1,21 @@
+@import '../shared/colors';
+
+.help-content {
+	padding-top: 25px;
+
+	.map-circle-icon {
+		height: 20px;
+		width: 20px;
+	}
+
+	.fa-check {
+		color: $color-green;
+	}
+
+	.awesome-marker {
+		background-position: -106px 0;
+		display: inline-block;
+		position: static;
+		vertical-align: top;
+	}
+}

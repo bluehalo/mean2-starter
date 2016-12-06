@@ -1,0 +1,111 @@
+<header>
+	<div>
+		<nav class="navbar navbar-asymmetrik navbar navbar-fixed-top text-nowrap" role="navigation">
+
+			<div class="banner"
+				[class]="banner.css"
+				*ngIf="banner.showBanner"
+				[innerHTML]="banner.string"></div>
+
+			<div class="navbar-container">
+
+				<!-- The navbar toggle button and logo -->
+				<div class="navbar-header">
+
+					<!-- Toggle Button for collapsing the menu based on media type -->
+					<button type="button" class="navbar-toggle" (click)="collapsed = !collapsed">
+						<span class="sr-only">Toggle Navbar</span>
+						<i class="fa fa-bars fa-lg"></i>
+					</button>
+					<div class="navbar-brand">
+						<img class="logo" src="../img/brand/logo.png"/>
+					</div>
+
+				</div>
+
+				<!-- Main navbar -->
+				<div class="navbar-collapse" [collapse]="collapsed">
+
+					<!-- Left part of navbar -->
+					<ul class="nav navbar-nav">
+						<!-- Demo -->
+						<li><a [routerLink]="['/demo']">Demo</a></li>
+
+					</ul>
+
+					<!-- Right side Signin/Signup area -->
+					<ul class="nav navbar-nav navbar-right" *ngIf="!user.isAuthenticated()">
+						<li>
+							<a [routerLink]="['/signin']">Sign In</a>
+						</li>
+						<li class="divider-vertical"></li>
+						<li>
+							<a [routerLink]="['/signup']">Request Account</a>
+						</li>
+					</ul>
+
+					<!-- Right side user logged in area -->
+					<ul class="nav navbar-nav navbar-right" *ngIf="user.isAuthenticated()">
+
+						<!--Team Quick Select-->
+						<li *ngIf="teams.length > 0" class="dropdown" dropdown>
+							<a class="dropdown-toggle" dropdownToggle>Teams <span class="caret"></span></a>
+							<ul class="dropdown-menu" role="menu">
+								<li *ngFor="let team of teams.slice(0,3)">
+									<a [routerLink]="['/team', team._id]">{{team.name}}</a>
+								</li>
+								<li class="divider"></li>
+								<li><a [routerLink]="['/teams']">View all</a></li>
+							</ul>
+						</li>
+
+						<li class="dropdown" dropdown>
+							<a href="/#!/" class="dropdown-toggle" dropdownToggle>{{user.userModel.name}} <span class="caret"></span></a>
+							<ul class="dropdown-menu" role="menu">
+
+								<!-- Manage User Account -->
+								<li><a [routerLink]="['/update-user']">My Account</a></li>
+
+								<!-- Manage Teams -->
+								<li *ngIf="user.isAdmin()"><a [routerLink]="['/teams', {clearCachedFilter: true}]">My Teams</a></li>
+
+								<!-- Audit Page (only users with audit role should see this) -->
+								<li *ngIf="user.isAuditor()"><a [routerLink]="['/audit']">Audit Activity</a></li>
+
+								<!-- Admin Page (only admins should see this) -->
+								<li *ngIf="user.isAdmin()"><a [routerLink]="['/admin']">ADMIN</a></li>
+
+								<!-- User Signout -->
+								<li [hidden]="pki" class="divider"></li>
+								<li [hidden]="pki"><a href="/auth/signout">Sign out</a></li>
+
+							</ul>
+						</li>
+						<li class="dropdown" dropdown>
+							<a href="/#!/" class="dropdown-toggle btn-icon" dropdownToggle>
+								<span class="fa-stack fa">
+									<i class="fa fa-circle-o fa-stack-2x"></i>
+									<i class="fa fa-question fa-stack-1x"></i>
+								</span>
+								<span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu" role="menu">
+
+								<!-- Help -->
+								<li [hidden]="!pki && !user.isActive()"><a [routerLink]="['/help']">Help</a></li>
+
+								<!-- About -->
+								<li><a [routerLink]="['/about']">About</a></li>
+
+							</ul>
+						</li>
+					</ul>
+
+				</div><!--/.navbar-collapse -->
+			</div>
+
+		</nav>
+
+
+	</div>
+</header>
