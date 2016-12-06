@@ -2,21 +2,25 @@
 
 let
 	_ = require('lodash'),
+	path = require('path'),
 	chalk = require('chalk'),
 	colors = require('colors'),
-	del = require('del'),
-	gulp = require('gulp'),
-	gulpLoadPlugins = require('gulp-load-plugins'),
-	glob = require('glob'),
-	path = require('path'),
 	runSequence = require('run-sequence'),
-	webpack = require('webpack'),
-	//yargs = require('yargs'),
+	gulp = require('gulp'),
+	plugins = require('gulp-load-plugins')(),
+	glob = require('glob'),
+	del = null,
+	webpack = null,
 
 	pkg = require('./package.json'),
-	plugins = gulpLoadPlugins(),
 	assets = require(path.resolve('./config/assets.js'));
 
+// These two dependencies are only needed for client builds
+// If the mean2-starter is installed with yeoman, these dependencies may not exist in package.json
+if (assets.client) {
+	webpack = require('webpack');
+	del = require('del');
+}
 
 // Patch chalk to use colors
 chalk.enabled = true;
