@@ -15,6 +15,9 @@
 	},
 
 	"scripts": {
+		"start": "node /src/server/server.js",
+		"debug": "gulp dev",
+		"test": "gulp test"
 	},
 
 	"dependencies": {
