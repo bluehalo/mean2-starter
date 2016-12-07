@@ -39,7 +39,10 @@ colors.enabled = true;
  */
 function nodemon(nodemonConfig) {
 	let config = require('./src/server/config');
-	let nodeArgs = ['--debug=' + config.devPorts.debug];
+	let nodeArgs = ['--debug=' + config.devPorts.debug, '--inspect'];
+	if (plugins.util.env.debugBrk) {
+		nodeArgs.push('--debug-brk');
+	}
 	nodemonConfig.nodeArgs = nodeArgs;
 
 	let stream = plugins.nodemon(nodemonConfig);
