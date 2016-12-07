@@ -157,7 +157,9 @@ EventSocket.prototype.subscribe = function(eventName) {
  * @param {string} topic The topic to unsubscribe from (optional).
  */
 EventSocket.prototype.unsubscribe = function(eventName) {
-	eventEmitter.getEventEmitter().removeListener(eventName, this.emitterFunc);
+	if (typeof this.emitterFunc === 'function') {
+		eventEmitter.getEventEmitter().removeListener(eventName, this.emitterFunc);
+	}
 };
 
 EventSocket.prototype.socketPayloadHandler = function(eventName, message) {
