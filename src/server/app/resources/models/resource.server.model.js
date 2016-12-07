@@ -24,6 +24,10 @@ let OwnerSchema = new GetterSchema({
 	_id: {
 		type: mongoose.Schema.ObjectId,
 		required: 'Owner ID is required'
+	},
+	name: {
+		type: String,
+		trim: true
 	}
 });
 
@@ -143,6 +147,7 @@ ResourceSchema.statics.auditUpdateCopy = function(src) {
 
 	return toReturn;
 };
+
 
 /**
  * Model Registration

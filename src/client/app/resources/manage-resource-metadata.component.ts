@@ -45,12 +45,11 @@ export class ManageResourceMetadataComponent {
 				(teams: Team[]) => {
 					this.ownerOptions = teams.map((team: Team) => new Owner('team', team._id, team.name));
 
-					// Initialize resource owner to the matching option, or default to the first team in the list
-					let idx = 0;
-					if (this.mode === 'edit') {
-						idx = Math.min(0, _.findIndex(this.ownerOptions, (opt: Owner) => { return this.resource.owner.type === opt.type && this.resource.owner._id === opt._id; }));
+					// Default to the first team in the list
+					if (this.mode === 'create') {
+						this.resource.owner = this.ownerOptions[0];
 					}
-					this.resource.owner = this.ownerOptions[idx];
+
 					this.getTagOptions();
 				},
 				(response: Response) => {
