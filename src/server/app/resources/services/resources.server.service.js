@@ -104,9 +104,9 @@ module.exports = function() {
 							}
 						});
 
-						query.$or = [{'owner.type': 'team', 'owner.id': {$in: teamIds}}, {
+						query.$or = [{'owner.type': 'team', 'owner._id': {$in: teamIds}}, {
 							'owner.type': 'user',
-							'owner.id': user._id
+							'owner._id': user._id
 						}];
 
 						return doSearch(query, sortParams, page, limit);
