@@ -50,24 +50,21 @@ let spec = {
 describe('Tag Model:', function() {
 	let team = {};
 
-	before(function(done) {
-		return clearDatabase().then(function() {
-			new Team(spec.team1).save().then(function(t) {
-				team = t;
+	before(function() {
+		return clearDatabase()
+			.then(
+				() => {
+					return new Team(spec.team1).save().then((t) => {
+						team = t;
+						spec.tag1.owner = team;
 
-				spec.tag1.owner = team;
-
-				tag1 = new Tag(spec.tag1);
-			});
-
-			done();
-		}, done).done();
+						tag1 = new Tag(spec.tag1);
+					});
+				});
 	});
 
-	after(function(done) {
-		clearDatabase().then(function() {
-			done();
-		}, done).done();
+	after(function() {
+		return clearDatabase();
 	});
 
 	describe('Method Save', function() {
