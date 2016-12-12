@@ -8,7 +8,7 @@ export class CoreComponent {
 	protected banner: any;
 	protected copyright: string;
 	protected pki: boolean;
-	protected collapsed: boolean = false;
+	protected collapsed: boolean = true;
 
 	protected user: User;
 
