@@ -1,6 +1,7 @@
 'use strict';
 
-var _ = require('lodash');
+var _ = require('lodash'),
+	q = require('q');
 
 
 /**
@@ -27,4 +28,12 @@ module.exports.checkExternalRoles = function(user, configAuth) {
 		}
 	}
 	return true;
+};
+
+module.exports.validateAccessToPersonalResource = function(user, resource) {
+	let isAdmin = null != user.roles && user.roles.admin === true;
+	if (isAdmin || resource.creator.equals(user._id)) {
+		return q();
+	}
+	return q.reject({ status: 403, type: 'unauthorized', message: 'The user does not have the necessary permissions to access this resource' });
 };
