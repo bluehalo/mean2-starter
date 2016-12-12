@@ -3,8 +3,7 @@
 /**
  * Module dependencies.
  */
-let _ = require('lodash'),
-	path = require('path'),
+let path = require('path'),
 	should = require('should'),
 	mongoose = require('mongoose'),
 	userAuthorizationService = require(path.resolve('./src/server/app/admin/services/users.authorization.server.service.js'));
