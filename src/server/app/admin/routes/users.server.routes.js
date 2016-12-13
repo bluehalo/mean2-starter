@@ -257,7 +257,28 @@ module.exports = function(app) {
 	/**
 	 * Auth-specific routes
 	 */
+
+	/**
+	 * @swagger
+	 * /auth/signin:
+	 *   post:
+	 *     tags: [auth]
+	 *     description: Signs into the application.
+	 *     parameters:
+	 *     - in: body
+	 *       name: body
+	 *       type: object
+	 *       description: Local or proxy-pki config
+	 */
 	app.route('/auth/signin').post(users.signin);
+
+	/**
+	 * @swagger
+	 * /auth/signout:
+	 *   get:
+	 *     tags: [auth]
+	 *     description: Signs out of the application.
+	 */
 	app.route('/auth/signout')
 		.get(users.has(users.requiresLogin), users.signout);
 
