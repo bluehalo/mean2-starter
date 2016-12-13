@@ -64,7 +64,6 @@ export function initializerFactory () {
 		HelpModule,
 		ResourcesModule,
 		TeamsModule,
-		UtilModule,
 		WelcomeModule,
 		UtilModule
 	],
