@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Http, Headers, URLSearchParams, Response } from '@angular/http';
@@ -32,6 +33,7 @@ export class AsyHttp {
 		private userStateService: UserStateService,
 		private _http: Http,
 		private router: Router,
+		private location: Location,
 		private route: ActivatedRoute) {}
 
 	static defaultErrFn(err: any) {
@@ -59,7 +61,8 @@ export class AsyHttp {
 
 	post(opts: HttpOptions) {
 		let headers = new Headers({
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			'Interface-URL': this.location.path()
 		});
 
 		let observable = this._http.post(opts.url, JSON.stringify(opts.data), {
@@ -82,7 +85,8 @@ export class AsyHttp {
 
 	put(opts: HttpOptions) {
 		let headers = new Headers({
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			'Interface-URL': this.location.path()
 		});
 
 		let observable = this._http.put(opts.url, JSON.stringify(opts.data), {

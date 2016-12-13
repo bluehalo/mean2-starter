@@ -1,7 +1,6 @@
-
 'use strict';
 
-var _ = require('lodash'),
+let _ = require('lodash'),
 	path = require('path'),
 	q = require('q'),
 
@@ -21,13 +20,13 @@ var _ = require('lodash'),
 function searchUsers(req, res, copyUserFn) {
 
 	// Handle the query/search/page
-	var query = req.body.q;
-	var search = req.body.s;
+	let query = req.body.q;
+	let search = req.body.s;
 
-	var page = req.query.page;
-	var size = req.query.size;
-	var sort = req.query.sort;
-	var dir = req.query.dir;
+	let page = req.query.page;
+	let size = req.query.size;
+	let sort = req.query.sort;
+	let dir = req.query.dir;
 
 	// Limit has to be at least 1 and no more than 100
 	if(null == size){ size = 20; }
@@ -41,9 +40,9 @@ function searchUsers(req, res, copyUserFn) {
 	if(null != sort && dir == null){ dir = 'DESC'; }
 
 	// Create the variables to the search call
-	var limit = size;
-	var offset = page*size;
-	var sortArr;
+	let limit = size;
+	let offset = page*size;
+	let sortArr;
 	if(null != sort){
 		sortArr = [{ property: sort, direction: dir }];
 	}
@@ -51,13 +50,13 @@ function searchUsers(req, res, copyUserFn) {
 	User.search(query, search, limit, offset, sortArr).then(function(result){
 
 		// Create the return copy of the users
-		var users = [];
+		let users = [];
 		result.results.forEach(function(element){
 			users.push(copyUserFn(element));
 		});
 
 		// success
-		var toReturn = {
+		let toReturn = {
 			totalSize: result.count,
 			pageNumber: page,
 			pageSize: size,
@@ -83,7 +82,7 @@ function searchUsers(req, res, copyUserFn) {
 exports.getCurrentUser = function(req, res) {
 
 	// The user that is a parameter of the request is stored in 'userParam'
-	var user = req.user;
+	let user = req.user;
 
 	if(null == user){
 		res.status(400).json({
@@ -112,7 +111,7 @@ exports.updateCurrentUser = function(req, res) {
 		_id: req.user._id
 	}).exec(function(err, user) {
 
-		var originalUser = User.auditCopy(user);
+		let originalUser = User.auditCopy(user);
 
 		// Copy over the new user properties
 		user.name = req.body.name;
@@ -130,7 +129,7 @@ exports.updateCurrentUser = function(req, res) {
 
 				// Audit failed authentication
 				auditService.audit('user update authentication failed', 'user', 'update authentication failed',
-					User.auditCopy(req.user), {});
+					User.auditCopy(req.user, util.getHeaderField(req.headers, 'x-real-ip')), {}, req.headers);
 
 				res.status(400).json({
 					message: 'Current password invalid'
@@ -151,8 +150,8 @@ exports.updateCurrentUser = function(req, res) {
 
 				// Audit user update
 				auditService.audit('user updated', 'user', 'update',
-					User.auditCopy(req.user),
-					{ before: originalUser, after: User.auditCopy(user) });
+					User.auditCopy(req.user, util.getHeaderField(req.headers, 'x-real-ip')),
+					{ before: originalUser, after: User.auditCopy(user) }, req.headers);
 
 				// Log in with the new info
 				req.login(user, function(err) {
@@ -173,7 +172,7 @@ exports.updateCurrentUser = function(req, res) {
 exports.getUserById = function(req, res) {
 
 	// The user that is a parameter of the request is stored in 'userParam'
-	var user = req.userParam;
+	let user = req.userParam;
 
 	if(null == user){
 		res.status(400).json({
@@ -193,13 +192,13 @@ exports.searchUsers = function(req, res) {
 // Match users given a search fragment
 exports.matchUsers = function(req, res) {
 	// Handle the query/search/page
-	var query = req.body.q;
-	var search = req.body.s;
+	let query = req.body.q;
+	let search = req.body.s;
 
-	var page = req.query.page;
-	var size = req.query.size;
-	var sort = req.query.sort;
-	var dir = req.query.dir;
+	let page = req.query.page;
+	let size = req.query.size;
+	let sort = req.query.sort;
+	let dir = req.query.dir;
 
 	// Limit has to be at least 1 and no more than 100
 	if(null == size){ size = 20; }
@@ -213,9 +212,9 @@ exports.matchUsers = function(req, res) {
 	if(null != sort && dir == null){ dir = 'ASC'; }
 
 	// Create the variables to the search call
-	var limit = size;
-	var offset = page*size;
-	var sortArr;
+	let limit = size;
+	let offset = page*size;
+	let sortArr;
 	if(null != sort){
 		sortArr = [{ property: sort, direction: dir }];
 	}
@@ -223,13 +222,13 @@ exports.matchUsers = function(req, res) {
 	User.containsQuery(query, ['name', 'username', 'email'], search, limit, offset, sortArr).then(function(result){
 
 		// Create the return copy of the users
-		var users = [];
+		let users = [];
 		result.results.forEach(function(element){
 			users.push(User.filteredCopy(element));
 		});
 
 		// success
-		var toReturn = {
+		let toReturn = {
 			totalSize: result.count,
 			pageNumber: page,
 			pageSize: size,
@@ -256,7 +255,7 @@ exports.matchUsers = function(req, res) {
 exports.adminGetUser = function(req, res) {
 
 	// The user that is a parameter of the request is stored in 'userParam'
-	var user = req.userParam;
+	let user = req.userParam;
 
 	if(null == user){
 		res.status(400).json({
@@ -272,17 +271,17 @@ exports.adminGetUser = function(req, res) {
 exports.adminGetAll = function(req, res) {
 
 	// The field that the admin is requesting is a query parameter
-	var field = req.body.field;
+	let field = req.body.field;
 	if( null == field || field.length === 0 ) {
 		res.status(500).json({
 			message: 'Query field must be provided'
 		});
 	}
 
-	var query = req.body.query;
+	let query = req.body.query;
 
 	logger.debug('Querying Users for %s', field);
-	var proj = {};
+	let proj = {};
 	proj[field] = 1;
 	User.find(util.toMongoose(query), proj)
 		.exec(function(error, results) {
@@ -301,10 +300,10 @@ exports.adminGetAll = function(req, res) {
 exports.adminUpdateUser = function(req, res) {
 
 	// The persistence user
-	var user = req.userParam;
+	let user = req.userParam;
 
 	// A copy of the original user for auditing
-	var originalUser = User.auditCopy(user);
+	let originalUser = User.auditCopy(user);
 
 	if(null == user){
 		res.status(400).json({
@@ -335,8 +334,8 @@ exports.adminUpdateUser = function(req, res) {
 		util.catchError(res, err, function() {
 			// Audit user update
 			auditService.audit('admin user updated', 'user', 'admin update',
-				User.auditCopy(req.user),
-				{ before: originalUser, after: User.auditCopy(user) });
+				User.auditCopy(req.user, util.getHeaderField(req.headers, 'x-real-ip')),
+				{ before: originalUser, after: User.auditCopy(user) }, req.headers);
 
 			res.status(200).json(User.fullCopy(user));
 		});
@@ -347,7 +346,7 @@ exports.adminUpdateUser = function(req, res) {
 // Admin Delete a User
 exports.adminDeleteUser = function(req, res) {
 	// Init Variables
-	var user = req.userParam;
+	let user = req.userParam;
 
 	if(null == user){
 		res.status(400).json({
@@ -361,8 +360,8 @@ exports.adminDeleteUser = function(req, res) {
 		util.catchError(res, err, function() {
 			// Audit user delete
 			auditService.audit('admin user deleted', 'user', 'admin delete',
-				User.auditCopy(req.user),
-				User.auditCopy(user));
+				User.auditCopy(req.user, util.getHeaderField(req.headers, 'x-real-ip')),
+				User.auditCopy(user), req.headers);
 
 			res.status(200).json(User.fullCopy(user));
 		});
@@ -383,7 +382,7 @@ exports.canEditProfile = canEditProfile;
 
 // Are allowed to edit user profile info
 exports.hasEdit = function(req) {
-	var defer = q.defer();
+	let defer = q.defer();
 
 	if (canEditProfile(config.auth.strategy, req.user)) {
 		defer.resolve();

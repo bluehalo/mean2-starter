@@ -1,6 +1,6 @@
 'use strict';
 
-var mongoose = require('mongoose'),
+let mongoose = require('mongoose'),
 	q = require('q'),
 
 	ValidationError = mongoose.Error.ValidationError,
@@ -16,18 +16,18 @@ var mongoose = require('mongoose'),
 	Message = dbs.admin.model('Message');
 
 function copyMutableFields(dest, src) {
-	['title', 'type', 'body', 'tearline'].forEach(function(key) {
+	['title', 'type', 'body', 'tearline'].forEach((key) => {
 		if (null != src[key]) {
 			dest[key] = src[key];
 		}
 	});
 }
 
-//Given a message save to mongo and send update to storm
+// Given a message save to mongo and send update to storm
 function save(message, user, res, audit) {
-	var error = new ValidationError(message);
+	let error = new ValidationError(message);
 
-	if(!error.errors || Object.keys(error.errors).length === 0) {
+	if (!error.errors || Object.keys(error.errors).length === 0) {
 		message.save(function (err, result) {
 			util.catchError(res, err, function () {
 				res.status(200).json(result);
@@ -59,7 +59,7 @@ function sendMessage(message) {
 		message = message.toObject();
 	}
 
-	var wp = {
+	let wp = {
 		wrappedPayload: {
 			o: config.app.instanceName,
 			d: config.app.instanceName,
@@ -72,13 +72,13 @@ function sendMessage(message) {
 			}
 		}
 	};
-	var destination = 'message.posted';
+	let destination = 'message.posted';
 	return publish(destination, wp, true);
 }
 
 // Create
 exports.create = function(req, res) {
-	var message = new Message(req.body);
+	let message = new Message(req.body);
 	message.creator = req.user;
 	message.created = Date.now();
 	message.updated = Date.now();
@@ -86,8 +86,8 @@ exports.create = function(req, res) {
 	save(message, req.user, res, function() {
 		// Audit creation of messages
 		auditService.audit('message created', 'message', 'create',
-			User.auditCopy(req.user),
-			Message.auditCopy(message));
+			User.auditCopy(req.user, util.getHeaderField(req.headers, 'x-real-ip')),
+			Message.auditCopy(message), req.headers);
 
 		// Publish message
 		sendMessage(message);
@@ -102,10 +102,10 @@ exports.read = function(req, res) {
 // Update
 exports.update = function(req, res) {
 	// Retrieve the message from persistence
-	var message = req.message;
+	let message = req.message;
 
 	// Make a copy of the original deck for a "before" snapshot
-	var originalMessage = Message.auditCopy(message);
+	let originalMessage = Message.auditCopy(message);
 
 	// Update the updated date
 	message.updated = Date.now();
@@ -115,16 +115,15 @@ exports.update = function(req, res) {
 	// Save
 	save(message, req.user, res, function() {
 		// Audit the save action
-		var type = 'message';
-		auditService.audit(type + ' updated', type, 'update',
-			User.auditCopy(req.user),
-			{ before: originalMessage, after: Message.auditCopy(message) });
+		auditService.audit('message updated', 'message', 'update',
+			User.auditCopy(req.user, util.getHeaderField(req.headers, 'x-real-ip')),
+			{ before: originalMessage, after: Message.auditCopy(message) }, req.headers);
 	});
 };
 
 // Delete
 exports.delete = function(req, res) {
-	var message = req.message;
+	let message = req.message;
 	Message.remove({_id: message._id}, function(err) {
 		util.catchError(res, err, function() {
 			res.status(200).json(message);
@@ -132,10 +131,9 @@ exports.delete = function(req, res) {
 	});
 
 	// Audit the message delete attempt
-	var type = 'message';
-	auditService.audit(type + ' deleted', type, 'delete',
-		User.auditCopy(req.user),
-		Message.auditCopy(req.message));
+	auditService.audit('message deleted', 'message', 'delete',
+		User.auditCopy(req.user, util.getHeaderField(req.headers, 'x-real-ip')),
+		Message.auditCopy(req.message), req.headers);
 
 };
 
@@ -143,13 +141,13 @@ exports.delete = function(req, res) {
 // Search - with paging and sorting
 exports.search = function(req, res) {
 	// Handle the query/search/page
-	var query = req.body.q;
-	var search = req.body.s;
+	let query = req.body.q;
+	let search = req.body.s;
 
-	var page = req.query.page;
-	var size = req.query.size;
-	var sort = req.query.sort;
-	var dir = req.query.dir;
+	let page = req.query.page;
+	let size = req.query.size;
+	let sort = req.query.sort;
+	let dir = req.query.dir;
 
 	// Limit has to be at least 1 and no more than 100
 	if(null == size){ size = 20; }
@@ -163,9 +161,9 @@ exports.search = function(req, res) {
 	if(null != sort && dir == null){ dir = 'DESC'; }
 
 	// Create the variables to the search call
-	var limit = size;
-	var offset = page*size;
-	var sortArr;
+	let limit = size;
+	let offset = page*size;
+	let sortArr;
 	if(null != sort){
 		sortArr = [{ property: sort, direction: dir }];
 	}
@@ -173,13 +171,13 @@ exports.search = function(req, res) {
 	Message.search(query, search, limit, offset, sortArr).then(function(result){
 
 		// Create the return copy of the messages
-		var messages = [];
+		let messages = [];
 		result.results.forEach(function(element){
 			messages.push(Message.fullCopy(element));
 		});
 
 		// success
-		var toReturn = {
+		let toReturn = {
 			totalSize: result.count,
 			pageNumber: page,
 			pageSize: size,
@@ -199,17 +197,17 @@ exports.search = function(req, res) {
 
 // Search - with paging and sorting
 exports.searchTest = function(req, res) {
-	var query = req.body.q || {};
-	var search = req.body.s;
+	let query = req.body.q || {};
+	let search = req.body.s;
 
 	if (search) {
 		query = { '$and': [ query, { title_lowercase: new RegExp(search, 'i') } ] };
 	}
 
-	var page = req.query.page;
-	var size = req.query.size;
-	var sort = req.query.sort;
-	var dir = req.query.dir;
+	let page = req.query.page;
+	let size = req.query.size;
+	let sort = req.query.sort;
+	let dir = req.query.dir;
 
 	// Limit has to be at least 1 and no more than 100
 	if (null == size){ size = 20; }
@@ -223,17 +221,17 @@ exports.searchTest = function(req, res) {
 	if (null != sort && dir == null){ dir = 'ASC'; }
 
 	// Create the variables to the search call
-	var limit = size;
-	var offset = page*size;
-	var sortParams;
+	let limit = size;
+	let offset = page*size;
+	let sortParams;
 	if (null != sort) {
 		sortParams = {};
 		sortParams[sort] = dir === 'ASC' ? 1 : -1;
 	}
 
-	var doSearch = function(query) {
-		var getSearchCount = Message.find(query).count();
-		var getSearchInfo = Message.find(query).sort(sortParams).skip(offset).limit(limit);
+	let doSearch = function(query) {
+		let getSearchCount = Message.find(query).count();
+		let getSearchInfo = Message.find(query).sort(sortParams).skip(offset).limit(limit);
 
 		return q.all([getSearchCount, getSearchInfo])
 			.then(function(results) {
@@ -249,7 +247,7 @@ exports.searchTest = function(req, res) {
 
 
 	// If we aren't an admin, we need to constrain the results
-	var searchPromise = doSearch(query);
+	let searchPromise = doSearch(query);
 
 	// Now execute the search promise
 	searchPromise.then(function(results) {
