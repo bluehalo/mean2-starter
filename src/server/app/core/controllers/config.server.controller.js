@@ -11,6 +11,7 @@ var getSystemConfig = function() {
 	var toReturn = {
 
 		auth: config.auth.strategy,
+		app: config.app,
 		requiredRoles: config.auth.requiredRoles,
 
 		clientEnableProdMode: config.clientEnableProdMode,
@@ -23,6 +24,7 @@ var getSystemConfig = function() {
 
 		map: config.map,
 		urlHandler: config.urlHandler,
+		mailer: config.mailer,
 
 		maxScan: config.maxScan,
 		maxExport: config.maxExport,

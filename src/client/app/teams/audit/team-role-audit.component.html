@@ -1,0 +1,5 @@
+<span *ngIf="auditObject">
+	<div><i class="fa fa-users"></i> {{auditObject?.team?.name}}</div>
+	<div tooltip="{{auditObject?.user?.username}}" tooltipPlacement="bottom"><i class="fa fa-user"></i> {{auditObject?.user?.name}}</div>
+	<div *ngIf="auditObject.role"><i class="fa fa-shield"></i> {{auditObject?.role}}</div>
+</span>

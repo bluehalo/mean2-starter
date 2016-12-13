@@ -33,6 +33,9 @@ import { ConfigService } from './core/config.service';
 import { ClientConfiguration } from './config/configurator';
 import { TeamsService } from './teams/teams.service';
 import { UserStateService } from './admin/authentication/user-state.service';
+import { ForgotPasswordComponent } from './admin/password/forgot-password.component';
+import { ResetPasswordComponent } from './admin/password/reset-password.component';
+import { ResetPasswordSuccessComponent } from './admin/password/reset-password-success.component';
 
 
 export function initializerFactory () {
@@ -70,10 +73,13 @@ export function initializerFactory () {
 	],
 	declarations: [
 		AppComponent,
+		ForgotPasswordComponent,
 		HeaderComponent,
 		LoggedInComponent,
 		InvalidResourceComponent,
-		FooterComponent
+		FooterComponent,
+		ResetPasswordComponent,
+		ResetPasswordSuccessComponent
 	],
 	bootstrap: [ AppComponent ],
 	providers: [

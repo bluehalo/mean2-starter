@@ -17,7 +17,7 @@ let
 
 // Initialize the mailer if it has been configured
 let smtpTransport;
-if(null != config.mailer) {
+if (null != config.mailer) {
 	smtpTransport = nodemailer.createTransport(config.mailer.options);
 }
 
@@ -86,7 +86,7 @@ exports.forgot = function(req, res, next) {
 			res.render('templates/reset-password-email', {
 				name: user.name,
 				appName: config.app.title,
-				url: 'http://' + req.headers.host + '/#!/auth/password/reset/' + token
+				url: 'http://' + req.headers.host + '/#/password/reset/' + token
 			}, function(error, emailHTML) {
 				logger.debug('Rendered email.');
 				done(error, emailHTML, user);
