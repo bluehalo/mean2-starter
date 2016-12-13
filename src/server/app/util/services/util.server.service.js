@@ -3,6 +3,7 @@
 var _ = require('lodash'),
 	path = require('path'),
 	mongoose = require('mongoose'),
+	platform = require('platform'),
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	config = deps.config,
 	errorHandler = deps.errorHandler,
@@ -118,6 +119,27 @@ module.exports.dateParse = function (date) {
 		return null;
 
 	return Date.parse(date);
+};
+
+module.exports.parseHeaders = function (req) {
+	return {
+		uiURL: this.getHeaderField(req,'interface-url'),
+		userIP: this.getHeaderField(req,'x-real-ip'),
+		userSpec: this.parseUAString(this.getHeaderField(req,'user-agent'))
+	};
+};
+
+module.exports.getHeaderField = function(req, field) {
+	return (_.isUndefined(req.headers) || _.isUndefined(req.headers[field]) ) ? null : req.headers[field];
+};
+
+module.exports.parseUAString = function (uaString) {
+	let info = platform.parse(uaString);
+
+	return {
+		browser: `${info.name} ${info.version}`,
+		os: info.os.toString()
+	};
 };
 
 /**
