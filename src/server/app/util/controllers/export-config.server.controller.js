@@ -32,9 +32,9 @@ exports.adminRequestCSV = function(req, res) {
 
 	exportConfigService.generateConfig(req)
 		.then(function(generatedConfig) {
-			return auditService.audit(req.body.type +  ' csv config created', 'export', 'create',
-				User.auditCopy(req.user),
-				ExportConfig.auditCopy(generatedConfig))
+			return auditService.audit(`${req.body.type} csv config created`, 'export', 'create',
+				User.auditCopy(req.user, utilService.getHeaderField(req.headers, 'x-real-ip')),
+				ExportConfig.auditCopy(generatedConfig), req.headers)
 				.then(function() {
 					return q(generatedConfig);
 				});

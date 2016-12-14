@@ -1,7 +1,7 @@
 'use strict';
 
-var
-	path = require('path'),
+let path = require('path'),
+	q = require('q'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	dbs = deps.dbs,
@@ -19,69 +19,84 @@ var
  * ==========================================================
  */
 
-//Login the user
+// Login the user
 function login(user, req, res) {
-	userAuthService.login(user, req).then(function(result) {
-		res.status(200).json(result);
-	}, function(errorResult) {
-		util.handleErrorResponse(res, errorResult);
-	});
+	userAuthService.login(user, req)
+		.then(
+			(result) => {
+				res.status(200).json(result);
+			},
+			(err) => {
+				util.handleErrorResponse(res, err);
+			})
+		.done();
 }
 
 //Authenticate and login the user. Passport handles authentication.
 function authenticateAndLogin(req, res, next) {
-	userAuthService.authenticateAndLogin(req).then(function(result) {
-		res.status(200).json(result);
-	}, function(errorResult) {
-		util.handleErrorResponse(res, errorResult);
-	}).done();
+	userAuthService.authenticateAndLogin(req)
+		.then(
+			(result) => {
+				res.status(200).json(result);
+			},
+			(err) => {
+				util.handleErrorResponse(res, err);
+			})
+		.done();
 }
 
 // Admin creates a user
 function adminCreateUser(user, req, res) {
-
 	// Initialize the user
-	userAuthService.initializeNewUser(user).then(function(result) {
-
-		// Save the new user
-		result.save(function(err) {
-			util.catchError(res, err, function() {
-				// Audit admin creates
-				auditService.audit('admin user create', 'user', 'admin user create',
-					User.auditCopy(req.user),
-					User.auditCopy(result));
-
-				// Return a full copy of the user
-				res.json(User.fullCopy(result));
-			});
-		});
-	}).done();
+	userAuthService.initializeNewUser(user)
+		.then(
+			(result) => {
+				return result.save();
+			})
+		.then(
+			(result) => {
+				return auditService.audit('admin user create', 'user', 'admin user create',
+					User.auditCopy(req.user, util.getHeaderField(req.headers, 'x-real-ip')), User.auditCopy(result), req.headers)
+					.then(
+						() => {
+							return q(result);
+						});
+			})
+		.then(
+			(result) => {
+				res.status(200).json(User.fullCopy(result));
+			},
+			(err) => {
+				util.handleErrorResponse(res, err);
+			})
+		.done();
 }
 
 
-//Signup the user - creates the user object and logs in the user
+// Signup the user - creates the user object and logs in the user
 function signup(user, req, res) {
-
 	// Initialize the user
-	userAuthService.initializeNewUser(user).then(function(result) {
-
-		// Then save the user
-		user.save(function(err, newUser) {
-			if(null != err) {
-				util.handleErrorResponse(res, err);
-			}
-			else {
-				// Audit user signup
-				auditService.audit('user signup', 'user', 'user signup',
-					{},
-					User.auditCopy(newUser));
-
-				// Attempt to login
+	userAuthService.initializeNewUser(user)
+		.then(
+			(result) => {
+				return user.save();
+			})
+		.then(
+			(newUser) => {
+				return auditService.audit('user signup', 'user', 'user signup', {}, User.auditCopy(newUser), req.headers)
+					.then(
+						() => {
+							return q(newUser);
+						});
+			})
+		.then(
+			(newUser) => {
 				login(newUser, req, res);
-			}
-		});
-
-	}).done();
+			},
+			(err) => {
+				util.handleErrorResponse(res, err);
+			})
+		.done();
 }
 
 
@@ -97,7 +112,7 @@ function signup(user, req, res) {
  * and user info in the request body.
  */
 exports.signup = function(req, res) {
-	var user = new User(User.createCopy(req.body));
+	let user = new User(User.createCopy(req.body));
 	user.provider = 'local';
 
 	// Need to set null passwords to empty string for mongoose validation to work
@@ -114,13 +129,13 @@ exports.signup = function(req, res) {
  * and then user info in the request body.
  */
 exports.proxyPkiSignup = function(req, res) {
-	var dn = req.headers[config.auth.header];
-	if(null == dn) {
+	let dn = req.headers[config.auth.header];
+	if (null == dn) {
 		res.status('400').json({ message: 'Missing PKI information.' });
 		return;
 	}
 
-	var user = new User(User.createCopy(req.body));
+	let user = new User(User.createCopy(req.body));
 	user.providerData = { dn: dn, dnLower: dn.toLowerCase() };
 	user.username = dn; //TODO: extract the username
 	user.provider = 'pki';
@@ -133,13 +148,13 @@ exports.proxyPkiSignup = function(req, res) {
  * Admin Create a User (Local Strategy)
  */
 exports.adminCreateUser = function(req, res) {
-	var user = new User(User.createCopy(req.body));
+	let user = new User(User.createCopy(req.body));
 	user.bypassAccessCheck = req.body.bypassAccessCheck;
 	user.roles = req.body.roles;
 	user.provider = 'local';
 
 	// Need to set null passwords to empty string for mongoose validation to work
-	if(null == user.password) {
+	if (null == user.password) {
 		user.password = '';
 	}
 
@@ -151,11 +166,11 @@ exports.adminCreateUser = function(req, res) {
  * Admin Create a User (Pki Strategy)
  */
 exports.adminCreateUserPki = function(req, res) {
-	var user = new User(User.createCopy(req.body));
+	let user = new User(User.createCopy(req.body));
 	user.bypassAccessCheck = req.body.bypassAccessCheck;
 	user.roles = req.body.roles;
 
-	if(null != req.body.username) {
+	if (null != req.body.username) {
 		user.username = req.body.username;
 		user.providerData = { dn: req.body.username, dnLower: req.body.username.toLowerCase() };
 	}

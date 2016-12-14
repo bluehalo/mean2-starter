@@ -61,8 +61,7 @@ export class AuditComponent {
 
 	private queryEndDate: Date = moment.utc().toDate();
 
-
-	private searchUsersRef = this.searchUsers.bind(this);
+	private searchUsersRef: Observable<any>;
 
 	constructor(
 		private auditService: AuditService,
@@ -92,6 +91,19 @@ export class AuditComponent {
 		this.dateRangeFilter = {
 			selected: this.dateRangeOptions[0].value
 		};
+
+		// Bind the search users typeahead to a function
+		this.searchUsersRef = Observable.create((observer: any) => {
+			this.userService.match({}, this.queryUserSearchTerm, this.userPagingOpts)
+				.subscribe((result: any) => {
+					let formatted = result.elements
+						.map((r: any) => {
+							r.displayName = r.name + ' [' + r.username + ']';
+							return r;
+						});
+					observer.next(formatted);
+				});
+		});
 
 		// Load action and audit type options from the server
 		Observable.forkJoin([this.auditService.getDistinctAuditValues('audit.action'), this.auditService.getDistinctAuditValues('audit.auditType')])
@@ -130,16 +142,6 @@ export class AuditComponent {
 	private typeaheadOnSelect(e: any) {
 		this.queryUserObj = e;
 		this.refresh();
-	}
-
-	private searchUsers() {
-		return this.userService.match({}, this.queryUserSearchTerm, this.userPagingOpts)
-			.map((result) => {
-				return (<any> result.elements).map(function(r: any) {
-					r.displayName = r.name + ' [' + r.username + ']';
-					return r;
-				});
-			}).toPromise();
 	}
 
 	private viewMore(auditEntry: any, type: string) {

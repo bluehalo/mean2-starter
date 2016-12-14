@@ -8,6 +8,7 @@ import { ListTagsComponent } from './list-tags.component';
 import { ManageTagComponent } from './manage-tag.component';
 import { TagsRoutingModule } from './tags-routing.module';
 import { UtilModule } from '../../shared/util.module';
+import { TagAudit } from './audit/tag-audit.component';
 
 @NgModule({
 	imports: [
@@ -18,13 +19,17 @@ import { UtilModule } from '../../shared/util.module';
 		TooltipModule,
 		UtilModule
 	],
-	entryComponents: [],
+	entryComponents: [
+		TagAudit
+	],
 	exports: [
-		ListTagsComponent
+		ListTagsComponent,
+		TagAudit
 	],
 	declarations: [
 		ListTagsComponent,
-		ManageTagComponent
+		ManageTagComponent,
+		TagAudit
 	],
 	providers: [
 	]

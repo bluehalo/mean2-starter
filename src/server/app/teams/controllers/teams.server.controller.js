@@ -17,7 +17,7 @@ let
  * Create a new team. The team creator is automatically added as an admin
  */
 module.exports.create = function(req, res) {
-	teamsService.createTeam(req.body, req.user)
+	teamsService.createTeam(req.body, req.user, req.headers)
 		.then(function(result) {
 			res.status(200).json(result);
 		}, function(err) {
@@ -38,7 +38,7 @@ module.exports.read = function(req, res) {
  * Update the team metadata
  */
 module.exports.update = function(req, res) {
-	teamsService.updateTeam(req.team, req.body, req.user)
+	teamsService.updateTeam(req.team, req.body, req.user, req.headers)
 		.then(function(result) {
 			res.status(200).json(result);
 		}, function(err) {
@@ -51,7 +51,7 @@ module.exports.update = function(req, res) {
  * Delete the team
  */
 module.exports.delete = function(req, res) {
-	teamsService.deleteTeam(req.team, req.user)
+	teamsService.deleteTeam(req.team, req.user, req.headers)
 		.then(function(result) {
 			res.status(200).json(req.team);
 		}, function(err) {
@@ -104,7 +104,7 @@ module.exports.addMember = function(req, res) {
 	let team = req.team;
 	let role = req.body.role || 'member';
 
-	teamsService.addMemberToTeam(user, team, role, req.user)
+	teamsService.addMemberToTeam(user, team, role, req.user, req.headers)
 		.then(function() {
 			res.status(204).end();
 		}, function(err) {
@@ -120,7 +120,7 @@ module.exports.removeMember = function(req, res) {
 	let user = req.userParam;
 	let team = req.team;
 
-	teamsService.removeMemberFromTeam(user, team, req.user)
+	teamsService.removeMemberFromTeam(user, team, req.user, req.headers)
 		.then(function() {
 			res.status(204).end();
 		}, function(err) {
@@ -134,7 +134,7 @@ module.exports.updateMemberRole = function(req, res) {
 	let team = req.team;
 	let role = req.body.role || 'member';
 
-	teamsService.updateMemberRole(user, team, role, req.user)
+	teamsService.updateMemberRole(user, team, role, req.user, req.headers)
 		.then(function() {
 			res.status(204).end();
 		}, function(err) {

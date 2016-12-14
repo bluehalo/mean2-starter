@@ -30,9 +30,10 @@ exports.adminGetCSV = function (req, res) {
 					message: 'Export configuration not found. Document may have expired.'
 				});
 			}
-			return auditService.audit(result.type + 'CSV config retrieved', 'export', 'export',
-				TeamMember.auditCopy(req.user),
-				ExportConfig.auditCopy(result))
+
+			return auditService.audit(`${result.type} CSV config retrieved`, 'export', 'export',
+					TeamMember.auditCopy(req.user),
+					ExportConfig.auditCopy(result), req.headers)
 				.then(function () {
 					return q(result);
 				});

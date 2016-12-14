@@ -12,6 +12,8 @@ import { UtilModule } from '../shared/util.module';
 import { TagsModule } from './tags/tags.module';
 import { TeamsRoutingModule } from './teams-routing.module';
 import { TagsService } from './tags/tags.service';
+import { TeamAudit } from './audit/team-audit.component';
+import { TeamRoleAudit } from './audit/team-role-audit.component';
 
 @NgModule({
 	imports: [
@@ -23,12 +25,20 @@ import { TagsService } from './tags/tags.service';
 		Ng2BootstrapModule,
 		UtilModule
 	],
-	entryComponents: [],
-	exports: [],
+	entryComponents: [
+		TeamAudit,
+		TeamRoleAudit
+	],
+	exports: [
+		TeamAudit,
+		TeamRoleAudit
+	],
 	declarations: 	[
 		ListTeamsComponent,
 		ListTeamMembersComponent,
 		ManageTeamComponent,
+		TeamAudit,
+		TeamRoleAudit,
 		TeamSummaryComponent
 	],
 	providers: [
