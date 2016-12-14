@@ -73,13 +73,10 @@ export function initializerFactory () {
 	],
 	declarations: [
 		AppComponent,
-		ForgotPasswordComponent,
 		HeaderComponent,
 		LoggedInComponent,
 		InvalidResourceComponent,
-		FooterComponent,
-		ResetPasswordComponent,
-		ResetPasswordSuccessComponent
+		FooterComponent
 	],
 	bootstrap: [ AppComponent ],
 	providers: [

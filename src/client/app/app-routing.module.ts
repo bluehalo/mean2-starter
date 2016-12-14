@@ -13,9 +13,6 @@ import { UserEuaComponent } from './admin/end-user-agreement/user-eua.component'
 import { NoAccessComponent } from './admin/authentication/no-access.component';
 import { LoggedInComponent } from './core/logged-in.component';
 import { InactiveComponent } from './admin/authentication/inactive.component';
-import { ForgotPasswordComponent } from './admin/password/forgot-password.component';
-import { ResetPasswordComponent } from './admin/password/reset-password.component';
-import { ResetPasswordSuccessComponent } from './admin/password/reset-password-success.component';
 
 @NgModule({
 	imports: [
@@ -108,33 +105,6 @@ import { ResetPasswordSuccessComponent } from './admin/password/reset-password-s
 					path: 'inactive-user',
 					canActivate: [AuthGuard],
 					component: InactiveComponent
-				},
-				{
-					path: 'password/forgot',
-					canActivate: [AuthGuard],
-					component: ForgotPasswordComponent,
-					data: {
-						requiresAuthentication: false,
-						roles: []
-					}
-				},
-				{
-					path: 'password/reset/:token',
-					canActivate: [AuthGuard],
-					component: ResetPasswordComponent,
-					data: {
-						requiresAuthentication: false,
-						roles: []
-					}
-				},
-				{
-					path: 'password/reset-success',
-					canActivate: [AuthGuard],
-					component: ResetPasswordSuccessComponent,
-					data: {
-						requiresAuthentication: false,
-						roles: []
-					}
 				}
 			]
 		, {
