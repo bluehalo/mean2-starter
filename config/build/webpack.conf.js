@@ -112,7 +112,7 @@ module.exports = (mode) => {
 			},
 
 			// CSS loader
-			{ test: /\.css$/, loaders: [ 'style-loader', 'css-loader' ] },
+			{ test: /\.css$/, loaders: [ 'style-loader?insertAt=top', 'css-loader' ] },
 
 			// SCSS loader
 			{ test: /\.scss$/, loaders: [ 'style-loader', 'css-loader', 'sass-loader' ] },
