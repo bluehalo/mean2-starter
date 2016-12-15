@@ -162,19 +162,24 @@ module.exports = (mode) => {
 		));
 	}
 
-	// Chunk common code if we're not running in test mode
 	wpConfig.plugins.push(
 		new webpack.ProvidePlugin({
 			d3: 'd3'
-		}),
-		new webpack.optimize.CommonsChunkPlugin({
-			name: [ 'app', 'vendor' ],
-			filename: '[name].js'
 		}),
 		new webpack.ContextReplacementPlugin(
 			/angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/
 		)
 	);
+
+	// Chunk common code if we're not running in test mode
+	if(!test) {
+		wpConfig.plugins.push(
+			new webpack.optimize.CommonsChunkPlugin({
+				name: [ 'app', 'vendor' ],
+				filename: '[name].js'
+			})
+		);
+	}
 
 	return wpConfig;
 };

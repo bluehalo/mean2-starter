@@ -239,6 +239,38 @@ gulp.task('test-server', ['env:test'], () => {
 	});
 });
 
+function runKarmaTest(callback) {
+	const spawn = require('child_process').spawn;
+	const karma = spawn('node', ['./config/build/test-client.js']);
+
+	karma.stdout.pipe(process.stdout);
+	karma.stderr.pipe(process.stderr);
+
+	karma.on('close', callback);
+}
+
+gulp.task('test-client', ['env:test'], () => {
+
+	const clientFilesToWatch = _.union(
+			assets.tests.client,
+			assets.client.app.src.ts,
+			assets.client.app.src.sass,
+			assets.client.app.views,
+			assets.client.app.content,
+			assets.build
+	);
+
+	const minTimeBetweenTestsCalls = 5000;
+
+	const runKarmaTestWithDebounce = _.throttle(_.partial(runKarmaTest, _.noop), minTimeBetweenTestsCalls);
+
+	gulp.watch(clientFilesToWatch, runKarmaTestWithDebounce);
+	runKarmaTestWithDebounce();
+
+});
+
+gulp.task('test-client-ci', ['env:test'], runKarmaTest);
+
 gulp.task('coverage-init', () => {
 	// Covering all server code minus routes
 	return gulp.src([
@@ -316,13 +348,13 @@ gulp.task('build', [ 'build-client', 'build-server' ]);
 /**
  * test - Run tests in dev mode with nodemon
  */
-gulp.task('test', (done) => { runSequence([ 'test-server' ], done); });
+gulp.task('test', (done) => { runSequence([ 'test-server', 'test-client' ], done); });
 
 
 /**
  * Run tests in CI mode with coverage and no nodemon
  */
-gulp.task('test-ci', (done) => { runSequence([ 'test-server-ci' ], done); });
+gulp.task('test-ci', (done) => { runSequence([ 'test-server-ci', 'test-client-ci' ], done); });
 
 
 /**
