@@ -41,7 +41,11 @@ export class AsyHttp {
 	}
 
 	get(opts: HttpOptions) {
-		let observable = this._http.get(opts.url, {search: opts.urlParams} )
+		let headers = new Headers({
+			'Interface-URL': this.location.path()
+		});
+
+		let observable = this._http.get(opts.url, {search: opts.urlParams, headers: headers} )
 			.map((res) => this.hasContent(res) ? res.json() : null)
 			.share()
 			.catch((error: any, caught: Observable<any>) => {
@@ -108,7 +112,11 @@ export class AsyHttp {
 	}
 
 	delete(opts: HttpOptions) {
-		let observable = this._http.delete(opts.url)
+		let headers = new Headers({
+			'Interface-URL': this.location.path()
+		});
+
+		let observable = this._http.delete(opts.url, { headers: headers})
 			.map((res) => this.hasContent(res) ? res.json() : null)
 			.share()
 			.catch((error: any, caught: Observable<any>) => {
