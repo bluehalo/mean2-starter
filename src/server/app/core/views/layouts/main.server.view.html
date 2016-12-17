@@ -49,8 +49,15 @@
 	</script>
 
 {{#if developmentMode}}
+
+	<!-- APPLICATION RUNNING IN DEVELOPMENT MODE -->
+	<script type="text/javascript">
+		console.log('APPLICATION RUNNING IN DEVELOPMENT MODE');
+	</script>
+
 	<script type="text/javascript" src="dev/vendor.js"></script>
 	<script type="text/javascript" src="dev/application.js"></script>
+
 {{else}}
 	<!-- Application JavaScript Files -->
 {{#each jsFiles}}	<script type="text/javascript" src="{{this}}"></script>
