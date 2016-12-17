@@ -156,71 +156,74 @@ dl {
 //	Buttons
 //=====================================
 
-.btn-link {
-	background: none;
-	border: 0;
+.btn {
 
-	&.subtle {
-		color: $color-label-gray;
+	&.btn-link {
+		background: none;
+		border: 0;
 
-		&:hover {
-			color: $color-border-dark;
+		&.subtle {
+			color: $color-label-gray;
+
+			&:hover {
+				color: $color-border-dark;
+			}
+		}
+
+		&.danger {
+			&:hover {
+				color: $color-danger-med;
+			}
 		}
 	}
 
-	&.danger {
-		&:hover {
-			color: $color-danger-med;
+	&.btn-selected {
+		background-color: $color-bg-btn;
+		background-image: none;
+		border-color: $color-border-btn;
+		color: $color-text-black;
+
+		&:focus {
+			border-color: $color-border-med;
 		}
-	}
-}
 
-.btn-selected {
-	background-color: $color-bg-btn;
-	background-image: none;
-	border-color: $color-border-btn;
-	color: $color-text-black;
+		&:hover {
+			border-color: $color-border-med;
+		}
 
-	&:focus {
-		border-color: $color-border-med;
-	}
-
-	&:hover {
-		border-color: $color-border-med;
-	}
-
-	&:active {
-		border-color: $color-border-med;
-	}
-
-	&.active {
 		&:active {
 			border-color: $color-border-med;
 		}
-	}
-}
 
-.btn-unselected {
-	background-color: $color-white;
-	background-image: none;
-	border-color: $color-border-dark;
-	color: $color-text-black;
-
-	&:focus {
-		border-color: $color-border-med;
+		&.active {
+			&:active {
+				border-color: $color-border-med;
+			}
+		}
 	}
 
-	&:hover {
-		border-color: $color-border-med;
-	}
+	&.btn-unselected {
+		background-color: $color-white;
+		background-image: none;
+		border-color: $color-border-dark;
+		color: $color-text-black;
 
-	&:active {
-		border-color: $color-border-med;
-	}
+		&:focus {
+			border-color: $color-border-med;
+		}
 
-	&.active {
+		&:hover {
+			border-color: $color-border-med;
+		}
+
 		&:active {
 			border-color: $color-border-med;
+		}
+
+		&.active {
+			&:active {
+				border-color: $color-border-med;
+			}
 		}
 	}
 }
