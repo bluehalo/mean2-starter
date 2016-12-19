@@ -1,8 +1,9 @@
-import { ConfigService } from './config.service';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AboutComponent } from './about.component';
 import { DebugElement } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
+
+import { ConfigService } from './config.service';
+import { AboutComponent } from './about.component';
 
 describe('AboutComponent', () => {
 	let aboutComponent: AboutComponent;
@@ -18,13 +19,13 @@ describe('AboutComponent', () => {
 		app: {
 			instanceName: 'TEST_INSTANCE'
 		}
-	}
+	};
 
 	const configServiceStub = {
 		getConfig() {
 			return new BehaviorSubject(testConfig);
 		}
-	}
+	};
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
