@@ -6,6 +6,7 @@
  */
 let
 	_ = require('lodash'),
+	fs = require('fs'),
 	chalk = require('chalk'),
 	glob = require('glob'),
 	path = require('path');
@@ -89,16 +90,24 @@ let validateConfiguration = (config) => {
 /**
  * Initialize the assets configuration object
  */
-let initAssets = (assetsConfig, config) => {
-	let mode = config.mode;
+let initAssets = (config) => {
+	let mode = config.mode,
+		assets = {};
 
-	return {
-		client: {
-			app: assetsConfig.client.app.dist[mode]
-		},
-		server: assetsConfig.server,
-		tests: assetsConfig.tests
-	};
+	function loadAssets(filepath) {
+		if (fs.existsSync(filepath)) {
+			assets = _.merge(assets, require(filepath));
+		}
+	}
+
+	loadAssets(path.resolve('./config/assets.js'));
+	loadAssets(path.resolve('./config/client-assets.js'));
+
+	if (assets.client) {
+		assets.client.mode = assets.client.app.dist[mode]
+	}
+
+	return assets;
 };
 
 /**
@@ -106,13 +115,15 @@ let initAssets = (assetsConfig, config) => {
  */
 let initGlobalConfigFolders = (config, assets) => {
 	// Appending files
-	config.folders = {
-		server: {},
-		client: {}
-	};
+	config.folders = {};
 
-	// Setting globbed client paths
-	config.folders.client = getGlobbedPaths(path.join(process.cwd(), 'src/client/'), process.cwd().replace(new RegExp(/\\/g),'/'));
+	if (assets.server) {
+		config.folders.server = {};
+	}
+	if (assets.client) {
+		// Setting globbed client paths
+		config.folders.client = getGlobbedPaths(path.resolve('./src/client/'), process.cwd().replace(new RegExp(/\\/g),'/'));
+	}
 };
 
 /**
@@ -120,35 +131,35 @@ let initGlobalConfigFolders = (config, assets) => {
  */
 let initGlobalConfigFiles = (config, assets) => {
 	// Appending files
-	config.files = {
-		server: {},
-		client: {}
-	};
+	config.files = {};
 
-	// Setting Globbed model files
-	config.files.server.models = getGlobbedPaths(assets.server.models);
+	if (assets.server) {
+		config.files.server = {};
 
-	// Setting Globbed route files
-	config.files.server.routes = getGlobbedPaths(assets.server.routes);
+		// Setting Globbed files for whatever keys have been provided
+		_.forEach(assets.server, (values, key) => {
+			config.files.server[key] = getGlobbedPaths(values);
+		});
+	}
 
-	// Setting Globbed config files
-	config.files.server.configs = getGlobbedPaths(assets.server.config);
+	if (assets.client) {
+		config.files.client = {};
 
-	// Setting Globbed socket files
-	config.files.server.sockets = getGlobbedPaths(assets.server.sockets);
+		// Setting Globbed css files
+		config.files.client.css = getGlobbedPaths(assets.client.mode.css, 'public');
 
-	// Setting Globbed policies files
-	config.files.server.policies = getGlobbedPaths(assets.server.policies);
+		// Setting Globbed bundle files
+		config.files.client.js = getGlobbedPaths(assets.client.mode.js, 'public');
+	}
 
-	// Setting Globbed server test files
-	config.files.server.tests = getGlobbedPaths(assets.tests.server);
+	if (assets.tests) {
+		config.files.tests = {};
 
-	// Setting Globbed css files
-	config.files.client.css = getGlobbedPaths(assets.client.app.css, 'public');
-
-	// Setting Globbed bundle files
-	config.files.client.js = getGlobbedPaths(assets.client.app.js, 'public');
-
+		// Setting Globbed files for whatever keys have been provided
+		_.forEach(assets.tests, (values, key) => {
+			config.files.tests[key] = getGlobbedPaths(values);
+		});
+	}
 };
 
 /**
@@ -160,10 +171,10 @@ let initGlobalConfig = () => {
 	validateEnvironmentVariable();
 
 	// Get the default config
-	let defaultConfig = require(path.join(process.cwd(), 'config/env/default'));
+	let defaultConfig = require(path.resolve('./config/env/default'));
 
 	// Get the current config
-	let environmentConfig = require(path.join(process.cwd(), 'config/env/', process.env.NODE_ENV)) || {};
+	let environmentConfig = require(path.resolve('./config/env/', process.env.NODE_ENV)) || {};
 
 	// Merge config files
 	let config = _.extend(defaultConfig, environmentConfig);
@@ -172,7 +183,7 @@ let initGlobalConfig = () => {
 	validateConfiguration(config);
 
 	// Get the assets
-	let assets = initAssets(require(path.join(process.cwd(), 'config/assets')), config);
+	let assets = initAssets(config);
 
 	// Initialize global globbed files
 	initGlobalConfigFiles(config, assets);

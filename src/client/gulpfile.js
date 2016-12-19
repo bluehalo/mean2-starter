@@ -18,7 +18,8 @@ let
 	del = require('del'),
 	webpack = require('webpack'),
 
-	assets = require(path.resolve('./config/assets.js'));
+	config = require(path.resolve('./src/config.js')),
+	assets = config.assets;
 
 
 /**

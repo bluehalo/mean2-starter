@@ -5,7 +5,7 @@ let _ = require('lodash'),
 	path = require('path'),
 	q = require('q'),
 
-	config = require(path.resolve('./src/server/config.js')),
+	config = require(path.resolve('./src/config.js')),
 	logger = require(path.resolve('./src/server/lib/bunyan.js')).logger;
 
 // Set the mongoose debugging option based on the configuration, defaulting to false
@@ -19,10 +19,12 @@ mongoose.Promise = require('q').Promise;
 // Load the mongoose models
 module.exports.loadModels = function() {
 	// Globbing model files
-	config.files.server.models.forEach(function(modelPath) {
-		logger.debug('Mongoose: Loading %s', modelPath);
-		require(path.resolve(modelPath));
-	});
+	if (_.has(config, 'files.server.models')) {
+		config.files.server.models.forEach(function(modelPath) {
+			logger.debug('Mongoose: Loading %s', modelPath);
+			require(path.resolve(modelPath));
+		});
+	}
 };
 
 

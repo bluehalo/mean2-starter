@@ -55,7 +55,7 @@ function reqSerializer(req) {
 
 
 // Initialize the Config Object
-let loggerConfig = initializeConfig(require(path.resolve('./src/server/config.js')).logger);
+let loggerConfig = initializeConfig(require(path.resolve('./src/config.js')).logger);
 
 let appLogger = bunyan.createLogger({
 	name: 'application',

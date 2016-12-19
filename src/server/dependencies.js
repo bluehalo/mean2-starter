@@ -4,7 +4,7 @@ let path
 	= require('path');
 
 // Main config module
-module.exports.config = require(path.resolve('./src/server/config.js'));
+module.exports.config = require(path.resolve('./src/config.js'));
 
 // Logging and Auditing
 module.exports.logger      = require(path.resolve('./src/server/lib/bunyan.js')).logger;

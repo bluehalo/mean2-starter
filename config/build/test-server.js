@@ -8,7 +8,7 @@ let	Mocha = require('mocha'),
 	path = require('path'),
 	argv = require('yargs').argv,
 
-	config = require(path.resolve('./src/server/config.js')),
+	config = require(path.resolve('./src/config.js')),
 	mongoose = require(path.resolve('./src/server/lib/mongoose.js'));
 
 console.info('Starting initialization of tests');
@@ -33,7 +33,7 @@ mongoose.connect().then(() => {
 
 	// Add all the tests to mocha
 	let testCount = 0;
-	config.files.server.tests.forEach((file) => {
+	config.files.tests.server.forEach((file) => {
 		if(!(argv.filter) || file.match(new RegExp(argv.filter))) {
 			testCount++;
 			mocha.addFile(file);

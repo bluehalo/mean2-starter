@@ -3,7 +3,7 @@
 var passport = require('passport'),
 	path = require('path'),
 
-	config = require(path.resolve('./src/server/config.js')),
+	config = require(path.resolve('./src/config.js')),
 	User = require('mongoose').model('User');
 
 module.exports.init = function() {

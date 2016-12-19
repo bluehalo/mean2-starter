@@ -14,8 +14,8 @@ let
 	argv = require('yargs').argv,
 
 	pkg = require(path.resolve('./package.json')),
-	assets = require(path.resolve('./config/assets.js'));
-
+	config = require(path.resolve('./src/config.js')),
+	assets = config.assets;
 
 /**
  * --------------------------
@@ -32,7 +32,6 @@ let
  * @returns {*}
  */
 function nodemon(nodemonConfig) {
-	let config = require(path.resolve('./src/server/config'));
 	let nodeArgs = ['--debug=' + config.devPorts.debug, '--inspect'];
 	if (plugins.util.env.debugBrk) {
 		nodeArgs.push('--debug-brk');

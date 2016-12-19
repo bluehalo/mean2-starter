@@ -10,7 +10,7 @@ let
 	session = require('express-session'),
 	MongoStore = require('connect-mongo')(session),
 
-	config = require(path.resolve('./src/server/config.js')),
+	config = require(path.resolve('./src/config.js')),
 	logger = require(path.resolve('./src/server/lib/bunyan.js')).logger;
 
 /**

@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 let path = require('path'),
-	config = require(path.resolve('./src/server/config.js')),
+	config = require(path.resolve('./src/config.js')),
 	logger = require(path.resolve('./src/server/lib/bunyan.js')).logger,
 
 	bodyParser = require('body-parser'),
@@ -69,13 +69,16 @@ function initMiddleware(app) {
 	}));
 
 	// Initialize favicon middleware
-	app.use(favicon(path.resolve('./src/client/app/img/brand/favicon.ico')));
+	if (config.assets.client) {
+		app.use(favicon(path.resolve('./src/client/app/img/brand/favicon.ico')));
+	}
 
 	// Environment dependent middleware
 	if (config.mode === 'development') {
 		// Disable views cache
 		app.set('view cache', false);
-	} else if (config.mode === 'production') {
+	}
+	else if (config.mode === 'production') {
 		app.locals.cache = 'memory';
 	}
 
@@ -158,9 +161,11 @@ function initPassport(app) {
  * Invoke modules server configuration
  */
 function initModulesConfiguration(app, db) {
-	config.files.server.configs.forEach(function (configPath) {
-		require(path.resolve(configPath))(app, db);
-	});
+	if (_.has(config, 'files.server.configs')) {
+		config.files.server.configs.forEach(function (configPath) {
+			require(path.resolve(configPath))(app, db);
+		});
+	}
 }
 
 /**
@@ -206,9 +211,11 @@ function initModulesClientRoutes(app) {
  */
 function initModulesServerPolicies(app) {
 	// Globbing policy files
-	config.files.server.policies.forEach(function (policyPath) {
-		require(path.resolve(policyPath)).invokeRolesPolicies();
-	});
+	if (_.has(config, 'files.server.policies')) {
+		config.files.server.policies.forEach(function (policyPath) {
+			require(path.resolve(policyPath)).invokeRolesPolicies();
+		});
+	}
 }
 
 /**
@@ -216,9 +223,11 @@ function initModulesServerPolicies(app) {
  */
 function initModulesServerRoutes(app) {
 	// Globbing routing files
-	config.files.server.routes.forEach(function (routePath) {
-		require(path.resolve(routePath))(app);
-	});
+	if (_.has(config, 'files.server.routes')) {
+		config.files.server.routes.forEach(function (routePath) {
+			require(path.resolve(routePath))(app);
+		});
+	}
 }
 
 /**
@@ -227,9 +236,11 @@ function initModulesServerRoutes(app) {
  */
 function initModulesServerSockets(app) {
 	// Globbing socket files
-	config.files.server.sockets.forEach(function (socketPath) {
-		require(path.resolve(socketPath));
-	});
+	if (_.has(config, 'files.server.sockets')) {
+		config.files.server.sockets.forEach(function (socketPath) {
+			require(path.resolve(socketPath));
+		});
+	}
 }
 
 /**
@@ -256,7 +267,7 @@ function initErrorRoutes(app) {
 }
 
 function initWebpack(app) {
-	if(config.mode === 'development') {
+	if(config.mode === 'development' && config.assets.client) {
 
 		let webpackDevMiddleware = require('webpack-dev-middleware');
 		let webpackConfig = require(path.resolve('./config/build/webpack.conf.js'))('develop');
