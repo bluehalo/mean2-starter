@@ -7,7 +7,7 @@ let
 	q = require('q'),
 	events = require('events'),
 
-	config = require(path.resolve('./src/server/config.js')),
+	config = require(path.resolve('./src/config.js')),
 	logger = require(path.resolve('./src/server/lib/bunyan.js')).logger;
 
 var _producerPromise = null;

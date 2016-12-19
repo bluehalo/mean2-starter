@@ -4,8 +4,8 @@ let
 	path = require('path'),
 	webpack = require('webpack'),
 
-	config = require(path.resolve('./src/server/config.js')),
-	assets = require(path.resolve('./config/assets.js'));
+	config = require(path.resolve('./src/config.js')),
+	assets = config.assets;
 
 module.exports = (mode) => {
 
