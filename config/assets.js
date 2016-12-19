@@ -14,7 +14,7 @@ module.exports = {
 
 	// Test specific source files
 	tests: {
-		client: [ 'test-client.js', 'src/client/**/*.spec.ts' ],
+		client: [ 'src/client/**/*.spec.ts' ],
 		server: [ 'test-server.js', 'src/server/**/*.spec.js' ],
 		e2e: [ 'e2e/**/*.spec.js' ]
 	},

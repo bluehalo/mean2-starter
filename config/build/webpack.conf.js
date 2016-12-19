@@ -115,7 +115,7 @@ module.exports = (mode) => {
 			{ test: /\.css$/, loaders: [ 'style-loader?insertAt=top', 'css-loader' ] },
 
 			// SCSS loader
-			{ test: /\.scss$/, loaders: [ 'style-loader', 'css-loader', 'sass-loader' ] },
+			{ test: /\.scss$/, loaders: [ 'style-loader?insertAt=top', 'css-loader', 'sass-loader' ] },
 
 			// Image file loader
 			{ test: /\.png$/, loader: 'url-loader?limit=10000&mimetype=image/png' },
@@ -162,19 +162,24 @@ module.exports = (mode) => {
 		));
 	}
 
-	// Chunk common code if we're not running in test mode
 	wpConfig.plugins.push(
 		new webpack.ProvidePlugin({
 			d3: 'd3'
-		}),
-		new webpack.optimize.CommonsChunkPlugin({
-			name: [ 'app', 'vendor' ],
-			filename: '[name].js'
 		}),
 		new webpack.ContextReplacementPlugin(
 			/angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/
 		)
 	);
+
+	// Chunk common code if we're not running in test mode
+	if(!test) {
+		wpConfig.plugins.push(
+			new webpack.optimize.CommonsChunkPlugin({
+				name: [ 'app', 'vendor' ],
+				filename: '[name].js'
+			})
+		);
+	}
 
 	return wpConfig;
 };
