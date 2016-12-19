@@ -1,4 +1,5 @@
 import { CapitalizePipe } from './capitalize.pipe';
+
 describe('CapitalizePipe', () => {
 
 	let capitalize = new CapitalizePipe();
