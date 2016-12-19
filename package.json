@@ -78,7 +78,7 @@
 		"angular2-toaster": "1.0.2",
 		"bootstrap": "3",
 		"font-awesome": "4.7",
-		"ng2-bootstrap": "1.1",
+		"ng2-bootstrap": "1.1.16",
 		"ng2-select": "1.1.2",
 
 		"socket.io-client": "1.4",
