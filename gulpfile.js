@@ -3,17 +3,10 @@
 let
 	_ = require('lodash'),
 	fs = require('fs'),
-	path = require('path'),
 	chalk = require('chalk'),
 	colors = require('colors'),
-	runSequence = require('run-sequence'),
 	gulp = require('gulp'),
-	plugins = require('gulp-load-plugins')(),
-
-	assets = require(path.resolve('./config/assets.js'));
-
-// Initialize gulp-submodule
-require('gulp-submodule')(gulp);
+	runSequence = require('run-sequence').use(gulp);
 
 
 // Patch chalk to use colors
@@ -31,12 +24,12 @@ let hasClient = false, hasServer = false;
 
 if (fs.existsSync('./src/server/gulpfile.js')) {
 	hasServer = true;
-	gulp.submodule('server', { filepath: './src/server/gulpfile.js' });
+	require('./src/server/gulpfile.js');
 }
 
 if (fs.existsSync('./src/client/gulpfile.js')) {
 	hasClient = true;
-	gulp.submodule('client', { filepath: './src/client/gulpfile.js' });
+	require('./src/client/gulpfile.js');
 }
 
 /**
@@ -52,7 +45,13 @@ if (fs.existsSync('./src/client/gulpfile.js')) {
  *   The last argument must be a callback to invoke when all the tasks have completed.
  */
 function run(tasks) {
+
+	// Returns true if the value should be removed from the array, false if it should be kept.
 	function isValidPath(path) {
+		// Don't touch any functions
+		if (_.isFunction(path)) {
+			return false;
+		}
 		// Recursively iterate into arrays of parallel tasks
 		if (_.isArray(path)) {
 			let filteredArray = _.remove(path, isValidPath);
@@ -67,9 +66,21 @@ function run(tasks) {
 		return false;
 	}
 
-	let filteredPaths = _.remove(_.initial(arguments), isValidPath);
-	runSequence(filteredPaths, _.last(arguments));
+	let filteredPaths = _.remove(arguments, isValidPath);
+	runSequence.apply(null, filteredPaths);
 }
+
+
+/**
+ * --------------------------
+ * Testing Tasks
+ * --------------------------
+ */
+
+gulp.task('env:test', () => {
+	// Set the environment to test
+	process.env.NODE_ENV = 'test';
+});
 
 
 /**

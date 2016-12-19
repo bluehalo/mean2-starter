@@ -3,25 +3,19 @@
 /**
  * @module src/server/gulpfile
  *
- * This file is intended to be run as a submodule called from ../../gulpfile.js
+ * This file is intended to be run from ../../gulpfile.js.  Do not attempt to run it by itself.
  */
 
 let
 	_ = require('lodash'),
 	path = require('path'),
-	chalk = require('chalk'),
-	colors = require('colors'),
 	gulp = require('gulp'),
 	plugins = require('gulp-load-plugins')(),
-	glob = require('glob'),
 	argv = require('yargs').argv,
 
-	pkg = require('./package.json'),
+	pkg = require(path.resolve('./package.json')),
 	assets = require(path.resolve('./config/assets.js'));
 
-// Patch chalk to use colors
-chalk.enabled = true;
-colors.enabled = true;
 
 /**
  * --------------------------
@@ -58,7 +52,7 @@ function nodemon(nodemonConfig) {
 	return stream;
 }
 
-gulp.task('watch', () => {
+gulp.task('server:watch', () => {
 	return nodemon({
 		script: 'src/server/server.js',
 		ext: 'js json html',
@@ -67,7 +61,7 @@ gulp.task('watch', () => {
 			assets.server.views,
 			assets.server.allJS,
 			assets.server.config),
-		tasks: [ 'build-server' ]
+		tasks: [ 'server:build' ]
 	});
 });
 
@@ -78,7 +72,7 @@ gulp.task('watch', () => {
  * Server Build Tasks
  * --------------------------
  */
-gulp.task('build', () => {
+gulp.task('server:build', () => {
 	return gulp.src(_.union(assets.server.allJS, assets.tests.server, assets.build))
 		// ESLint
 		.pipe(plugins.eslint('./config/build/eslint.conf.json'))
@@ -94,13 +88,7 @@ gulp.task('build', () => {
  * --------------------------
  */
 
-gulp.task('env:test', () => {
-	// Set the environment to test
-	process.env.NODE_ENV = 'test';
-});
-
-
-gulp.task('test', ['env:test'], () => {
+gulp.task('server:test', ['env:test'], () => {
 	// Gather some args for custom testing
 	let args = [];
 
@@ -125,7 +113,7 @@ gulp.task('test', ['env:test'], () => {
 });
 
 
-gulp.task('coverage-init', () => {
+gulp.task('server:coverage-init', () => {
 	// Covering all server code minus routes
 	return gulp.src([
 			'src/server/**/*.js',
@@ -139,7 +127,7 @@ gulp.task('coverage-init', () => {
 		.pipe(plugins.istanbul.hookRequire());
 });
 
-gulp.task('test-ci', [ 'env:test', 'coverage-init' ], (done) => {
+gulp.task('server:test-ci', [ 'env:test', 'server:coverage-init' ], (done) => {
 	// Run mocha tests with coverage and without nodemon
 
 	// Open mongoose connections
