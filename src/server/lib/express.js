@@ -3,7 +3,8 @@
 /**
  * Module dependencies.
  */
-let path = require('path'),
+let _ = require('lodash'),
+	path = require('path'),
 	config = require(path.resolve('./src/config.js')),
 	logger = require(path.resolve('./src/server/lib/bunyan.js')).logger,
 

@@ -1,9 +1,5 @@
 'use strict';
 
-let
-	path = require('path'),
-	pkg = require(path.resolve('./package.json'));
-
 module.exports = {
 
 	// Build specific files
@@ -11,7 +7,7 @@ module.exports = {
 
 	// Test specific source files
 	tests: {
-		server: [ 'test-server.js', 'src/server/**/*.spec.js' ],
+		server: [ 'test-server.js', 'src/server/**/*.spec.js' ]
 	},
 
 	// Server files

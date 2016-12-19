@@ -30,8 +30,6 @@ let
 
 
 gulp.task('client:watch', () => {
-	// TODO Remove dependency on server?
-	let config = require('./src/server/config');
 
 	// Start livereload
 	plugins.livereload.listen(config.devPorts.liveReload);
