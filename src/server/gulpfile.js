@@ -32,7 +32,7 @@ let
  * @returns {*}
  */
 function nodemon(nodemonConfig) {
-	let config = require('./src/server/config');
+	let config = require(path.resolve('./src/server/config'));
 	let nodeArgs = ['--debug=' + config.devPorts.debug, '--inspect'];
 	if (plugins.util.env.debugBrk) {
 		nodeArgs.push('--debug-brk');
@@ -75,7 +75,7 @@ gulp.task('server:watch', () => {
 gulp.task('server:build', () => {
 	return gulp.src(_.union(assets.server.allJS, assets.tests.server, assets.build))
 		// ESLint
-		.pipe(plugins.eslint('./config/build/eslint.conf.json'))
+		.pipe(plugins.eslint(path.resolve('./config/build/eslint.conf.json')))
 		.pipe(plugins.eslint.format())
 		.pipe(plugins.eslint.failAfterError());
 });
@@ -100,7 +100,7 @@ gulp.task('server:test', ['env:test'], () => {
 
 	// Run mocha tests with nodemon
 	return nodemon({
-		script: './config/build/test-server.js',
+		script: path.resolve('./config/build/test-server.js'),
 		ext: 'js json',
 		env: { 'NODE_ENV': 'test' },
 		args: args,
@@ -131,7 +131,7 @@ gulp.task('server:test-ci', [ 'env:test', 'server:coverage-init' ], (done) => {
 	// Run mocha tests with coverage and without nodemon
 
 	// Open mongoose connections
-	let mongoose = require('./src/server/lib/mongoose.js');
+	let mongoose = require(path.resolve('./src/server/lib/mongoose.js'));
 
 	let error = null;
 	mongoose.connect().then(() => {

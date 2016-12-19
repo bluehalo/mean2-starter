@@ -46,27 +46,26 @@ if (fs.existsSync('./src/client/gulpfile.js')) {
  */
 function run(tasks) {
 
-	// Returns true if the value should be removed from the array, false if it should be kept.
 	function isValidPath(path) {
 		// Don't touch any functions
 		if (_.isFunction(path)) {
-			return false;
+			return path;
 		}
 		// Recursively iterate into arrays of parallel tasks
 		if (_.isArray(path)) {
-			let filteredArray = _.remove(path, isValidPath);
-			return filteredArray.length === 0;
+			let nested = _.chain(path).map(isValidPath).compact().value();
+			return nested.length ? nested : false;
 		}
 		if (!hasServer && path.startsWith('server')) {
-			return true;
+			return false;
 		}
 		if (!hasClient && path.startsWith('client')) {
-			return true;
+			return false;
 		}
-		return false;
+		return path;
 	}
 
-	let filteredPaths = _.remove(arguments, isValidPath);
+	let filteredPaths = _.chain(arguments).clone().map(isValidPath).compact().value();
 	runSequence.apply(null, filteredPaths);
 }
 
