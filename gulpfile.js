@@ -44,7 +44,10 @@ colors.enabled = true;
  */
 function nodemon(nodemonConfig) {
 	let config = require('./src/server/config');
-	let nodeArgs = ['--debug=' + config.devPorts.debug];
+	let nodeArgs = ['--debug=' + config.devPorts.debug, '--inspect'];
+	if (plugins.util.env.debugBrk) {
+		nodeArgs.push('--debug-brk');
+	}
 	nodemonConfig.nodeArgs = nodeArgs;
 
 	let stream = plugins.nodemon(nodemonConfig);
@@ -90,12 +93,15 @@ gulp.task('watch-client', () => {
 	gulp.watch(assets.client.app.src.sass, ['build-client-style']);
 
 	// In dev mode, we just want to re-lint ts code
-	gulp.watch(assets.client.app.src.ts, ['lint-client-code']).on('change', plugins.livereload.changed);
+	gulp.watch(assets.client.app.src.ts, ['lint-client-code'])
+		.on('change', (d) => { setTimeout(() => { plugins.livereload.changed(d); }, 1000); });
 
-	// When generated things change, live reload
+	// When generated css changes, let livereload handle the changes
 	gulp.watch(assets.client.app.dist.development.css).on('change', plugins.livereload.changed);
-	gulp.watch(assets.client.app.views).on('change', plugins.livereload.changed);
-	gulp.watch(assets.client.app.content).on('change', plugins.livereload.changed);
+
+	// When views or content change, force livereload to reload the whole page (we had issues with changes getting missed)
+	gulp.watch(assets.client.app.views).on('change', () => { setTimeout(plugins.livereload.reload, 1000); });
+	gulp.watch(assets.client.app.content).on('change', () => { setTimeout(plugins.livereload.reload, 1000); });
 });
 
 
@@ -252,6 +258,38 @@ gulp.task('test-server', ['env:test'], () => {
 	});
 });
 
+function runKarmaTest(callback) {
+	const spawn = require('child_process').spawn;
+	const karma = spawn('node', ['./config/build/test-client.js']);
+
+	karma.stdout.pipe(process.stdout);
+	karma.stderr.pipe(process.stderr);
+
+	karma.on('close', callback);
+}
+
+gulp.task('test-client', ['env:test'], () => {
+
+	const clientFilesToWatch = _.union(
+			assets.tests.client,
+			assets.client.app.src.ts,
+			assets.client.app.src.sass,
+			assets.client.app.views,
+			assets.client.app.content,
+			assets.build
+	);
+
+	const minTimeBetweenTestsCalls = 5000;
+
+	const runKarmaTestWithDebounce = _.throttle(_.partial(runKarmaTest, _.noop), minTimeBetweenTestsCalls);
+
+	gulp.watch(clientFilesToWatch, runKarmaTestWithDebounce);
+	runKarmaTestWithDebounce();
+
+});
+
+gulp.task('test-client-ci', ['env:test'], runKarmaTest);
+
 gulp.task('coverage-init', () => {
 	// Covering all server code minus routes
 	return gulp.src([
@@ -329,13 +367,13 @@ gulp.task('build', [ 'build-client', 'build-server' ]);
 /**
  * test - Run tests in dev mode with nodemon
  */
-gulp.task('test', (done) => { runSequence([ 'test-server' ], done); });
+gulp.task('test', (done) => { runSequence([ 'test-server', 'test-client' ], done); });
 
 
 /**
  * Run tests in CI mode with coverage and no nodemon
  */
-gulp.task('test-ci', (done) => { runSequence([ 'test-server-ci' ], done); });
+gulp.task('test-ci', (done) => { runSequence([ 'test-server-ci', 'test-client-ci' ], done); });
 
 
 /**

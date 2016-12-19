@@ -1,4 +1,5 @@
-import {AsyUrlHandler} from './asy-url-handler.service';
+import { OpaqueToken } from '@angular/core';
+import { AsyUrlHandler } from './asy-url-handler.service';
 
 export interface IUrlHandler {
 	handleUrl(url: string): any;
@@ -10,4 +11,5 @@ export class UrlHandlerMapping {
 	};
 }
 
-export {AsyUrlHandler} from './asy-url-handler.service';
+export { AsyUrlHandler } from './asy-url-handler.service';
+export const UrlHandler = new OpaqueToken('UrlHandler');

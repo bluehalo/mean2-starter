@@ -14,6 +14,7 @@ import { AdminEuaModule } from './end-user-agreement/admin-eua.module';
 import { UtilModule } from '../shared/util.module';
 import { AlertService } from '../shared/alert.service';
 import { AdminMessagesModule } from '../messages/admin/admin-messages.module';
+import { PasswordModule } from './password/password.module';
 
 @NgModule({
 	imports: [
@@ -25,6 +26,7 @@ import { AdminMessagesModule } from '../messages/admin/admin-messages.module';
 		AdminUserModule,
 
 		AuthenticationModule,
+		PasswordModule,
 
 		CommonModule,
 		FormsModule,

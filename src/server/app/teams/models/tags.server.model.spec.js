@@ -50,53 +50,49 @@ let spec = {
 describe('Tag Model:', function() {
 	let team = {};
 
-	before(function(done) {
-		return clearDatabase().then(function() {
-			new Team(spec.team1).save().then(function(t) {
-				team = t;
+	before(function() {
+		return clearDatabase()
+			.then(
+				() => {
+					return new Team(spec.team1).save().then((t) => {
+						team = t;
+						spec.tag1.owner = team;
 
-				spec.tag1.owner = team;
-
-				tag1 = new Tag(spec.tag1);
-			});
-
-			done();
-		}, done).done();
+						tag1 = new Tag(spec.tag1);
+					});
+				});
 	});
 
-	after(function(done) {
-		clearDatabase().then(function() {
-			done();
-		}, done).done();
+	after(function() {
+		return clearDatabase();
 	});
 
 	describe('Method Save', function() {
-		it('should begin with no tags', function(done) {
-			Tag.find({}).exec().then(function(tags) {
-				tags.should.have.length(0);
-				done();
-			}, done);
+		it('should begin with no tags', function() {
+			return Tag.find({}).exec()
+				.then(
+					(tags) => {
+						should.exist(tags);
+						tags.should.have.length(0);
+					},
+					(err) => {
+						should.not.exist(err);
+					});
 		});
 
-		it('should be able to save without problems', function(done) {
-			tag1.save(done);
+		it('should be able to save without problems', function() {
+			return tag1.save().should.be.fulfilled();
 		});
 
 
-		it('should fail when trying to save without a name', function(done) {
+		it('should fail when trying to save without a name', function() {
 			tag1.name = '';
-			tag1.save(function(err) {
-				should.exist(err);
-				done();
-			});
+			return tag1.save().should.be.rejected();
 		});
 
-		it('should fail when trying to save with an invalid owner', function(done) {
+		it('should fail when trying to save with an invalid owner', function() {
 			tag1.owner = 'badowner';
-			tag1.save(function(err) {
-				should.exist(err);
-				done();
-			});
+			return tag1.save().should.be.rejected();
 		});
 	});
 });

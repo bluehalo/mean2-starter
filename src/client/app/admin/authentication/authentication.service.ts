@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 
+import * as _ from 'lodash';
 import { Observable, BehaviorSubject } from 'rxjs';
 
 import { User } from '../user.class';
@@ -30,7 +31,8 @@ export class AuthenticationService {
 		return this.asyHttp.post(new HttpOptions(
 			'auth/signin',
 			(data: any) => this.getCurrentUser().setFromUserModel(data),
-			user.credentials
+			user.credentials,
+			() => this.initializing$.next(false)
 		));
 	}
 
@@ -51,25 +53,18 @@ export class AuthenticationService {
 		let wasAuthenticated = this.getCurrentUser().isAuthenticated();
 		return this.asyHttp.get(new HttpOptions(
 			'user/me',
-			(user: any) => {
-				this.getCurrentUser().setFromUserModel(user);
-				if (!wasAuthenticated && this.getCurrentUser().isAuthenticated()) {
-					 // this.router.navigateByInstruction(this.router.currentInstruction);
-				}
-			},
-			(err: any) => {},
-			() => {
-				this.initializing$.next(false);
-			}
+			(user: any) => this.getCurrentUser().setFromUserModel(user),
+			{},
+			() => this.initializing$.next(false)
 		));
 	}
 
 	public acceptEua() {
 		return this.asyHttp.post(new HttpOptions(
 			'eua/accept',
-			(user: any) => {
-				this.getCurrentUser().setFromUserModel(user);
-			}
+			(user: any) => this.getCurrentUser().setFromUserModel(user),
+			{},
+			() => this.initializing$.next(false)
 		));
 	}
 
@@ -88,6 +83,35 @@ export class AuthenticationService {
 			'eua',
 			(eua: any) => { this.getCurrentUser().setEua(eua); }
 		));
+	}
+
+	public forgotPassword(username: string): Observable<any> {
+		return this.asyHttp.post(new HttpOptions('auth/forgot', () => {}, { username: username }));
+	}
+
+	public validateToken(token: string): Observable<any> {
+		return this.asyHttp.get(new HttpOptions(`auth/reset/${token}`, () => {}));
+	}
+
+	/**
+	 * Validate a pair of passwords
+	 * The server will perform full validation, so for now all we're really doing is
+	 * verifying that the two passwords are the same.
+	 */
+	public validatePassword(p1: string, p2: string): any {
+		p1 = (_.isString(p1) && !_.isEmpty(p1)) ? p1 : undefined;
+		p2 = (_.isString(p2) && !_.isEmpty(p2)) ? p2 : undefined;
+
+		if (p1 !== p2) {
+			return { valid: false, message: 'Passwords do not match' };
+		}
+		else {
+			return { valid: true };
+		}
+	}
+
+	public resetPassword(token: string, password: string) {
+		return this.asyHttp.post(new HttpOptions(`auth/reset/${token}`, () => {}, { password: password }));
 	}
 
 }

@@ -265,7 +265,11 @@ function initWebpack(app) {
 		// Configure Express to use the webpack dev middleware
 		app.use(webpackDevMiddleware(webpack, {
 			publicPath: webpackConfig.output.publicPath,
-			stats: { colors: true, chunks: false }
+			stats: { colors: true, chunks: false },
+			watchOptions: {
+				aggregateTimeout: 300,
+				poll: 1000
+			}
 		}));
 	}
 }

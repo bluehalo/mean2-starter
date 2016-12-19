@@ -20,6 +20,7 @@ import { ConstrainedQuery } from './constrained-query.component';
 import { ExportConfigService } from './export-config.service';
 import { InLineEdit } from './in-line-edit.component';
 import { Pager } from './pager.component';
+import { AreaPipe } from './area.pipe';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { Pager } from './pager.component';
 		AddRemoveList,
 		AddRemoveTypeaheadList,
 		AgoDatePipe,
+		AreaPipe,
 		AsyLoading,
 		BigNumberPipe,
 		CamelToHumanPipe,
@@ -47,6 +49,7 @@ import { Pager } from './pager.component';
 		AddRemoveList,
 		AddRemoveTypeaheadList,
 		AgoDatePipe,
+		AreaPipe,
 		AsyLoading,
 		BigNumberPipe,
 		CamelToHumanPipe,

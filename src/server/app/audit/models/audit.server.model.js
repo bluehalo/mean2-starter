@@ -1,6 +1,6 @@
 'use strict';
 
-var mongoose = require('mongoose'),
+let mongoose = require('mongoose'),
 	path = require('path'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
@@ -11,7 +11,7 @@ var mongoose = require('mongoose'),
 /**
  * Schema Declaration
  */
-var AuditSchema = new GetterSchema({
+let AuditSchema = new GetterSchema({
 	created: {
 		type: Date,
 		default: Date.now,
@@ -23,7 +23,14 @@ var AuditSchema = new GetterSchema({
 			auditType: { type: String },
 			action: { type: String },
 			actor: { type: String },
-			object: { type: String }
+			interfaceUrl: {type: String},
+			object: { type: String },
+			userSpec: {
+				type: {
+					browser: {type: String},
+					os: {type: String}
+				}
+			}
 		}
 	}
 });

@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs';
+import { ObservableResult } from './observable-result.class';
 
 export class ObservableUtils {
 	constructor() {
@@ -9,6 +10,15 @@ export class ObservableUtils {
 			.from(items)
 			.concatAll()
 			.toArray();
+	}
+
+	public static forkJoinSettled(observables: Observable<any>[]): Observable<any> {
+		return Observable.forkJoin(observables.map((obs) => {
+				return obs
+					.map((val: any) => new ObservableResult('success', val))
+					.catch((err: any) => Observable.of(new ObservableResult('error', err)));
+			})
+		);
 	}
 
 }

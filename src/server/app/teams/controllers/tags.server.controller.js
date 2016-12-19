@@ -17,7 +17,7 @@ let
  * Create a new tag.
  */
 module.exports.create = function(req, res) {
-	tagsService.createTag(req.body, req.user)
+	tagsService.createTag(req.body, req.user, req.headers)
 		.then(function(result) {
 			res.status(200).json(result);
 		}, function(err) {
@@ -38,7 +38,7 @@ module.exports.read = function(req, res) {
  * Update the tag metadata
  */
 module.exports.update = function(req, res) {
-	tagsService.updateTag(req.tag, req.body, req.user)
+	tagsService.updateTag(req.tag, req.body, req.user, req.headers)
 		.then(function(result) {
 			res.status(200).json(result);
 		}, function(err) {
@@ -51,7 +51,7 @@ module.exports.update = function(req, res) {
  * Delete the tag
  */
 module.exports.delete = function(req, res) {
-	tagsService.deleteTag(req.tag, req.user)
+	tagsService.deleteTag(req.tag, req.user, req.headers)
 		.then(function(result) {
 			res.status(200).json(req.tag);
 		}, function(err) {
