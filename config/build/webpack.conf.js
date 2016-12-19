@@ -102,7 +102,7 @@ module.exports = (mode) => {
 				test: /\.ts$/,
 				loader: 'ts-loader',
 				options: {
-					configFileName: path.resolve('./config/build/tsconfig.json')
+					configFileName: path.resolve('./tsconfig.json')
 				}
 			},
 
