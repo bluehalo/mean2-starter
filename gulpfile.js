@@ -88,10 +88,12 @@ gulp.task('watch-client', () => {
 	// In dev mode, we just want to re-lint ts code
 	gulp.watch(assets.client.app.src.ts, ['lint-client-code']).on('change', plugins.livereload.changed);
 
-	// When generated things change, live reload
+	// When generated css changes, let livereload handle the changes
 	gulp.watch(assets.client.app.dist.development.css).on('change', plugins.livereload.changed);
-	gulp.watch(assets.client.app.views).on('change', plugins.livereload.changed);
-	gulp.watch(assets.client.app.content).on('change', plugins.livereload.changed);
+
+	// When views or content change, force livereload to reload the whole page (we had issues with changes getting missed)
+	gulp.watch(assets.client.app.views).on('change', () => { plugins.livereload.reload(); });
+	gulp.watch(assets.client.app.content).on('change',() => { plugins.livereload.reload(); });
 
 });
 
