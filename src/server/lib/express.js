@@ -33,8 +33,10 @@ function initLocalVariables(app) {
 	app.locals.keywords = config.app.keywords;
 
 	// Asset files
-	app.locals.jsFiles = config.files.client.js;
-	app.locals.cssFiles = config.files.client.css;
+	if (_.has(config, 'files.client')) {
+		app.locals.jsFiles = config.files.client.js;
+		app.locals.cssFiles = config.files.client.css;
+	}
 
 	// Development
 	app.locals.developmentMode = config.mode === 'development';

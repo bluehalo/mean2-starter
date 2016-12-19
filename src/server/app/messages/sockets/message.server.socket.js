@@ -4,8 +4,7 @@ var path = require('path'),
 	nodeUtil = require('util'),
 
 	deps = require(path.resolve('./src/server/dependencies')),
-	config = require(path.resolve('./src/server/config')),
-
+	config = deps.config,
 	logger = deps.logger,
 	socketIO = deps.socketIO,
 
