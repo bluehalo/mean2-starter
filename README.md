@@ -96,6 +96,6 @@ Integrating client modules can be more complicated for the following reasons:
 ### Importing a module from NPM ###
 
 1. The first step is to identify the package and add it to the package.json file. All client dependencies are bundled for production by Webpack, therefore all Client-side dependencies are declared in the "devDependencies" section of the package.json file.
-1. The next step is to add the dependency to the vendor.ts file. This isn't necessary to make the application work, but it is how Webpack understands what is application code versus vendor code and bundles it appropriately.
-1. Once you've done that, you can import and reference the code as needed. Dependending on the type of library, you may either do a named import (import { FooModule } from "...") or an aliased import (import * as d3 from "...")
+1. Next, add the dependency to the vendor.ts file. This isn't necessary to make the application work, but it is how Webpack understands what is application code versus vendor code and bundles it into the application and vendor bundles.
+1. Once you've done that, you can import and reference the code as needed. Dependending on the type of library, you may either do a named import (import { FooModule } from "...") or an aliased import (import * as d3 from "..."). There are also situations where you may need to just import the file (import "file"). This situation might arise if you have two modules where one extends the other and the first exports the module in question but the second merely extends it.
 
