@@ -69,22 +69,28 @@ To run the application in development mode:
 ### Testing ###
 To test the application:
 
-Currently, we've only implemented server tests using Mocha. There are two relevant gulp tasks: 'test' and 'test-ci'.
+The mean2 starter supports testing of both server-side code, using mocha, and client-side code, using karma. Currently, only unit and integretion tests have been implemented. There are two relevant gulp tasks: `test` and `test-ci`.
 
 
 #### Test ####
-'gulp test'
+`gulp test`
 
-Executes the tests using a watch on all server test and source files. The tests will re-execute upon any changes. Optionally, you can pass in either of two parameters:
+Executes the server and client tests using a watch on all test and source files for server- and client-side code. The tests will re-execute upon any changes.
 
-1. '--bail': Pass this parameter to make the mocha tests stop on the first test failure. This can be useful if you want to speed up testing.
-1. '--filter=regex': Pass this parameter with a valid request in string format to filter the tests to run by spec filename.
+For the server-side code tests, you can optionally pass in either of two parameters:
+
+1. `--bail`: Pass this parameter to make the mocha tests stop on the first test failure. This can be useful if you want to speed up testing.
+1. `--filter=regex`: Pass this parameter with a valid request in string format to filter the tests to run by spec filename.
+
+These parameters are not currently supported for the client side tests.
+
+You can execute only the server-side test or the client-side tests using `gulp test-server` and `gulp test-client` respectively.
 
 
 #### Test CI ####
-'gulp test-ci'
+`gulp test-ci`
 
-This task is intended to be used by a continuous integration system. When run, it generates both a test report and a coverage report under a ./reports directory. The tests are run without a filesystem watch and will only run once.
+This task is intended to be used by a continuous integration system. When run, it generates both a test report and a coverage report (for server-side test only) under a ./reports directory. The tests are run without a filesystem watch and will only run once.
 
 
 ## Adding External Modules ##
