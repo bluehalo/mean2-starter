@@ -294,16 +294,12 @@ module.exports = {
 
 	urlHandler: 'default',
 
-	showApi: false,
-
-	apiConfig: {
-		info: {
-			title: 'MEAN2 REST API',
-			version: '1.0.0',
-			description: 'This is a REST API for the MEAN2 starter app.',
-			contact: {
-				email: 'reblace@asymmetrik.com'
-			}
-		}
+	/*
+	 * Boolean for whether or not the API Docs will be available
+	 */
+	apiDocs: {
+		enabled: false,
+		url: '/api-docs'
 	}
+
 };

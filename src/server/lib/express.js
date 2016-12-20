@@ -7,6 +7,7 @@ let _ = require('lodash'),
 	path = require('path'),
 	config = require(path.resolve('./src/server/config.js')),
 	logger = require(path.resolve('./src/server/lib/bunyan.js')).logger,
+	pjson = require(path.resolve('./package.json')),
 
 	bodyParser = require('body-parser'),
 	compress = require('compression'),
@@ -235,10 +236,24 @@ function initModulesServerSockets(app) {
 	});
 }
 
+/**
+ * Configure the API Docs using Swagger to interrogate the available
+ * routes and documentation. Must be explicitly enabled in order to
+ * have the docs generated and published.
+ */
 function initSwagger(app) {
-	if (config.showApi === true) {
+	if (_.get(config, 'apiDocs.enabled', false) === true) {
 		let swaggerOptions = {
-			swaggerDefinition: config.apiConfig,
+			swaggerDefinition: {
+				info: {
+					title: config.app.title,
+					version: pjson.version,
+					description: config.app.description,
+					contact: {
+						email: _.get(config.mailer, 'from')
+					}
+				}
+			},
 			apis: config.files.server.routes.map((route) => {return './' + route;})
 		};
 
@@ -250,7 +265,7 @@ function initSwagger(app) {
 			return path.strategy === undefined || path.strategy === config.auth.strategy;
 		});
 
-		app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+		app.use(config.apiDocs.url || '/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 	}
 }
 
