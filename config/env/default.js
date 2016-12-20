@@ -295,7 +295,7 @@ module.exports = {
 	urlHandler: 'default',
 
 	/*
-	 * Boolean for whether or not the API Docs will be available
+	 * API Documentation settings
 	 */
 	apiDocs: {
 		enabled: false,
