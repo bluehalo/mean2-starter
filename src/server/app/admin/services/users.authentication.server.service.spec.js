@@ -39,7 +39,7 @@ function validateDefaultRoles(updatedUser) {
 
 	should.exist(updatedUser.roles);
 
-	_.forEach((keys) => {
+	_.forEach(keys, (key) => {
 		should(updatedUser.roles[key]).equal(testDefaultRoles[key]);
 	});
 
