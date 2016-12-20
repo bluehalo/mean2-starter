@@ -294,7 +294,7 @@ module.exports = {
 
 	urlHandler: 'default',
 
-	showApi: true,
+	showApi: false,
 
 	apiConfig: {
 		info: {

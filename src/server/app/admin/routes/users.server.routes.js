@@ -289,7 +289,20 @@ module.exports = function(app) {
 
 		logger.info('Configuring local user authentication routes.');
 
-		// Admin Create User
+		/**
+		 * @swagger
+	 	 * /admin/user:
+	 	 *   strategy: local
+	 	 *   post:
+	 	 *     tags: [auth]
+	 	 *     description: Creates a new user.
+	 	 *     parameters:
+	 	 *     - in: body
+	 	 *       name: body
+	 	 *       required: true
+	 	 *       schema:
+	 	 *         $ref: '#/definitions/AdminUpdateUserDto'
+	 	 */
 		app.route('/admin/user')
 			.post(users.hasAdminAccess, users.adminCreateUser);
 

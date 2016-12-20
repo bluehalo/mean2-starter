@@ -3,7 +3,8 @@
 /**
  * Module dependencies.
  */
-let path = require('path'),
+let _ = require('lodash'),
+	path = require('path'),
 	config = require(path.resolve('./src/server/config.js')),
 	logger = require(path.resolve('./src/server/lib/bunyan.js')).logger,
 
@@ -238,10 +239,17 @@ function initSwagger(app) {
 	if (config.showApi === true) {
 		let swaggerOptions = {
 			swaggerDefinition: config.apiConfig,
-			apis: config.files.server.routes.map(function(r) {return './' + r;})
+			apis: config.files.server.routes.map((route) => {return './' + route;})
 		};
 
 		let swaggerSpec = swaggerJsDoc(swaggerOptions);
+
+		// Some api calls are dependent on whether local or proxy-pki are used.
+		// If no strategy is defined, assume it is used in both.
+		swaggerSpec.paths = _.pickBy(swaggerSpec.paths, (path) => {
+			return path.strategy === undefined || path.strategy === config.auth.strategy;
+		});
+
 		app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 	}
 }
