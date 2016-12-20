@@ -39,7 +39,7 @@ function validateDefaultRoles(updatedUser) {
 
 	should.exist(updatedUser.roles);
 
-	_.forEach(keys, function(key) {
+	_.forEach((keys) => {
 		should(updatedUser.roles[key]).equal(testDefaultRoles[key]);
 	});
 
@@ -50,71 +50,71 @@ function validateDefaultRoles(updatedUser) {
 /**
  * Unit tests
  */
-describe('User Authentication Service:', function() {
+describe('User Authentication Service:', () => {
 
 	var originalDefaultRoles;
 
-	before(function() {
+	before(() => {
 		originalDefaultRoles = config.auth.defaultRoles;
 		config.auth.defaultRoles = testDefaultRoles;
 	});
 
-	after(function() {
+	after(() => {
 		config.auth.defaultRoles = originalDefaultRoles;
 	});
 
-	describe('initializeNewUser', function() {
+	describe('initializeNewUser', () => {
 
-		it('should set default roles when none are initially set', function(done) {
+		it('should set default roles when none are initially set', (done) => {
 			var user = userSpec('Basic');
 			userAuthenticationService.initializeNewUser(user)
 				.then(validateDefaultRoles)
-				.then(function() { done(); })
+				.then(() => { done(); })
 				.catch(done);
 		});
 
-		it('should set default roles when set to an empty object', function(done) {
+		it('should set default roles when set to an empty object', (done) => {
 			var user = userSpec('Basic');
 			user.roles = {};
 			userAuthenticationService.initializeNewUser(user)
 				.then(validateDefaultRoles)
-				.then(function() { done(); })
+				.then(() => { done(); })
 				.catch(done);
 		});
 
-		it('should set default roles in addition to existing', function(done) {
+		it('should set default roles in addition to existing', (done) => {
 			var user = userSpec('Basic');
 			user.roles = { admin: false, editor: true };
 			userAuthenticationService.initializeNewUser(user)
 				.then(validateDefaultRoles)
-				.then(function(updatedUser) {
+				.then((updatedUser) => {
 					should(updatedUser.roles.admin).equal(false);
 					should(updatedUser.roles.editor).equal(true);
 				})
-				.then(function() { done(); })
+				.then(() => { done(); })
 				.catch(done);
 		});
 
-		it('should not override existing roles', function(done) {
+		it('should not override existing roles', (done) => {
 			var user = userSpec('Basic');
 
 			user.roles = _.clone(testDefaultRoles);
 			// reverse the boolean value of each default role
-			_.forEach(_.keys(testDefaultRoles), function(key) {
+			_.forEach(_.keys(testDefaultRoles), (key) => {
 				user.roles[key] = !user.roles[key];
 			});
 			user.roles.admin = false;
 			user.roles.editor = true;
 
 			userAuthenticationService.initializeNewUser(user)
-				.then(function(updatedUser) {
-					_.forEach(_.keys(testDefaultRoles), function(key) {
+				.then((updatedUser) => {
+					_.forEach(_.keys(testDefaultRoles), (key) => {
 						should(user.roles[key]).equal(!testDefaultRoles[key]);
 					});
 					should(updatedUser.roles.admin).equal(false);
 					should(updatedUser.roles.editor).equal(true);
 				})
-				.then(function() { done(); })
+				.then(() => { done(); })
 				.catch(done);
 		});
 
