@@ -235,22 +235,15 @@ function initModulesServerSockets(app) {
 }
 
 function initSwagger(app) {
-	let swaggerOptions = {
-		swaggerDefinition: {
-			info: {
-				title: 'MEAN2 REST API',
-				version: '1.0.0',
-				description: 'This is a REST API for the MEAN2 starter app.',
-				contact: {
-					email: 'help@asymmetrik.com'
-				}
-			}
-		},
-		apis: config.files.server.routes.map(function(r) {return './' + r;})
-	};
+	if (config.showApi === true) {
+		let swaggerOptions = {
+			swaggerDefinition: config.apiConfig,
+			apis: config.files.server.routes.map(function(r) {return './' + r;})
+		};
 
-	let swaggerSpec = swaggerJsDoc(swaggerOptions);
-	app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+		let swaggerSpec = swaggerJsDoc(swaggerOptions);
+		app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+	}
 }
 
 /**

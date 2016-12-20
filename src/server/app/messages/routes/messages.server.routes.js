@@ -12,7 +12,6 @@ module.exports = function(app) {
 	 *   post:
 	 *     tags: [message]
 	 *     description: Creates a message.
-	 *     required: true
 	 *     parameters:
 	 *     - in: body
 	 *       name: body
@@ -28,7 +27,7 @@ module.exports = function(app) {
 	 * /messages:
 	 *   post:
 	 *     tags: [message]
-	 *     description: Search for messages with a specific property value.
+	 *     description: Search for messages with a specific word in the title, tearline, or type.
 	 *     parameters:
 	 *     - in: body
 	 *       name: body

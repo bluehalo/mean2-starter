@@ -54,7 +54,7 @@ module.exports = function(app) {
 	 * /users:
 	 *   post:
 	 *     tags: [user]
-	 *     description: Search for users with a specific property value.
+	 *     description: Search for users with a specific word in the username, name, or email.
 	 *     parameters:
 	 *     - in: body
 	 *       name: body
@@ -83,7 +83,7 @@ module.exports = function(app) {
 	 * /users/match:
 	 *   post:
 	 *     tags: [user]
-	 *     description: Search for users with a specific fragment as part of one of its property values.
+	 *     description: Search for users with a fragment in the username, name, or email.
 	 *     parameters:
 	 *     - in: body
 	 *       name: body

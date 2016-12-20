@@ -12,7 +12,7 @@ module.exports = function(app) {
 	 * /audit:
 	 *   post:
 	 *     tags: [audit]
-	 *     description: Search for audits with a specific property value.
+	 *     description: Search for messages with a specific word in the message, action, auditType or object.
 	 *     parameters:
 	 *     - in: body
 	 *       name: body

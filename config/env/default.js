@@ -292,6 +292,18 @@ module.exports = {
 		sms: false
 	},
 
-	urlHandler: 'default'
+	urlHandler: 'default',
 
+	showApi: true,
+
+	apiConfig: {
+		info: {
+			title: 'MEAN2 REST API',
+			version: '1.0.0',
+			description: 'This is a REST API for the MEAN2 starter app.',
+			contact: {
+				email: 'reblace@asymmetrik.com'
+			}
+		}
+	}
 };

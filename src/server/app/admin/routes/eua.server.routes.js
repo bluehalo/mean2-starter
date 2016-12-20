@@ -13,10 +13,10 @@ module.exports = function(app) {
 
 	/**
 	 * @swagger
-	 * /messages:
+	 * /euas:
 	 *   post:
 	 *     tags: [eua]
-	 *     description: Search for eaus with a specific property value.
+	 *     description: Search for euas with a specific word in the title or text.
 	 *     parameters:
 	 *     - in: body
 	 *       name: body
@@ -67,11 +67,6 @@ module.exports = function(app) {
 	 *       name: euaId
 	 *       required: true
 	 *       type: string
-	 *     - in: body
-	 *       name: body
-	 *       required: true
-	 *       schema:
-	 *         $ref: '#/definitions/EuaDto'
 	 */
 	app.route('/eua/:euaId/publish')
 		.post(users.hasAdminAccess, users.publishEua);
