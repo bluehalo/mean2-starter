@@ -31,13 +31,13 @@ module.exports = _.extend(
  * Apply the auth requirements as authorization middleware
  * @param requirement The requirement function to invoke
  */
-module.exports.has = function(requirement) {
+module.exports.has = (requirement) => {
 
 	// Return a function that adapts the requirements to middleware
-	return function(req, res, next) {
-		requirement(req).then(function(result) {
+	return (req, res, next) => {
+		requirement(req).then((result) => {
 			next();
-		}, function(errorResult) {
+		}, (errorResult) => {
 			util.handleErrorResponse(res, errorResult);
 		}).done();
 	};
@@ -48,22 +48,22 @@ module.exports.has = function(requirement) {
  */
 module.exports.hasAll = function() {
 	let requirements = arguments;
-	return function(req, res, next) {
-		module.exports.requiresAll(requirements)(req).then(function(result) {
+	return (req, res, next) => {
+		module.exports.requiresAll(requirements)(req).then((result) => {
 			next();
-		}, function(errorResult) {
+		}, (errorResult) => {
 			util.handleErrorResponse(res, errorResult);
 		}).done();
 	};
 };
 
-module.exports.requiresAll = function(requirements) {
-	return function(req) {
+module.exports.requiresAll = (requirements) => {
+	return (req) => {
 
 		// Apply the requirements
-		let applyRequirement = function(i) {
-			if(i < requirements.length) {
-				return requirements[i](req).then(function(result) {
+		let applyRequirement = (i) => {
+			if (i < requirements.length) {
+				return requirements[i](req).then((result) => {
 					// Success means try the next one
 					return applyRequirement(++i);
 				});
@@ -82,26 +82,26 @@ module.exports.requiresAll = function(requirements) {
  */
 module.exports.hasAny = function() {
 	let requirements = arguments;
-	return function(req, res, next) {
-		module.exports.requiresAny(requirements)(req).then(function(result) {
+	return (req, res, next) => {
+		module.exports.requiresAny(requirements)(req).then((result) => {
 			next();
-		}, function(errorResult) {
+		}, (errorResult) => {
 			util.handleErrorResponse(res, errorResult);
 		}).done();
 	};
 };
 
-module.exports.requiresAny = function(requirements) {
-	return function(req) {
+module.exports.requiresAny = (requirements) => {
+	return (req) => {
 
 		// Apply the requirements
 		let error;
-		let applyRequirement = function(i) {
-			if(i < requirements.length) {
-				return requirements[i](req).then(function(result) {
+		let applyRequirement = (i) => {
+			if (i < requirements.length) {
+				return requirements[i](req).then((result) => {
 					// Success means we're done
 					return q();
-				}, function(errorResult) {
+				}, (errorResult) => {
 					// Failure means keep going
 					error = errorResult;
 					return applyRequirement(++i);
@@ -112,7 +112,7 @@ module.exports.requiresAny = function(requirements) {
 			}
 		};
 
-		if(requirements.length > 0) {
+		if (requirements.length > 0) {
 			return applyRequirement(0);
 		}
 		else {
@@ -129,7 +129,7 @@ module.exports.requiresAny = function(requirements) {
  * 	2. The user has accepted the EUA if applicable
  * 	3. The user has the 'user' role
  */
-module.exports.hasAccess = function(req, res, next) {
+module.exports.hasAccess = (req, res, next) => {
 	module.exports.hasAll(
 			module.exports.requiresLogin,
 			module.exports.requiresEua,
@@ -143,7 +143,7 @@ module.exports.hasAccess = function(req, res, next) {
  * 	1. The user has met the base access requirements
  * 	2. The user has the 'editor' role
  */
-module.exports.hasEditorAccess = function(req, res, next) {
+module.exports.hasEditorAccess = (req, res, next) => {
 	module.exports.hasAll(
 			module.exports.requiresLogin,
 			module.exports.requiresEua,
@@ -158,7 +158,7 @@ module.exports.hasEditorAccess = function(req, res, next) {
  * 	1. The user has met the base access requirements
  * 	2. The user has the 'auditor' role
  */
-module.exports.hasAuditorAccess = function(req, res, next) {
+module.exports.hasAuditorAccess = (req, res, next) => {
 	module.exports.hasAll(
 			module.exports.requiresLogin,
 			module.exports.requiresEua,
@@ -173,7 +173,7 @@ module.exports.hasAuditorAccess = function(req, res, next) {
  * 	1. The user has met the base access requirements
  * 	2. The user has the 'admin' role
  */
-module.exports.hasAdminAccess = function(req, res, next) {
+module.exports.hasAdminAccess = (req, res, next) => {
 	module.exports.hasAll(
 			module.exports.requiresLogin,
 			module.exports.requiresAdminRole

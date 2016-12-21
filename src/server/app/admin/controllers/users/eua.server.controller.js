@@ -14,7 +14,7 @@ let path = require('path'),
 
 
 // Search (Retrieve) all user Agreements
-module.exports.searchEuas = function(req, res) {
+module.exports.searchEuas = (req, res) => {
 
 	// Handle the query/search/page
 	let query = req.body.q;
@@ -69,7 +69,7 @@ module.exports.searchEuas = function(req, res) {
 
 
 // Publish the EUA
-module.exports.publishEua = function(req, res) {
+module.exports.publishEua = (req, res) => {
 	// The eua is placed into this parameter by the middleware
 	let eua = req.euaParam;
 	eua.published = Date.now();
@@ -87,7 +87,7 @@ module.exports.publishEua = function(req, res) {
 
 
 // Accept the current EUA
-module.exports.acceptEua = function(req, res) {
+module.exports.acceptEua = (req, res) => {
 	// Make sure the user is logged in
 	if (null == req.user) {
 		util.handleErrorResponse(res, { status: 400, type: 'error', message: 'User is not signed in' });
@@ -115,7 +115,7 @@ module.exports.acceptEua = function(req, res) {
 };
 
 // Create a new User Agreement
-module.exports.createEua = function(req, res) {
+module.exports.createEua = (req, res) => {
 	let eua = new UserAgreement(req.body);
 	eua.created = Date.now();
 	eua.updated = eua.created;
@@ -139,7 +139,7 @@ module.exports.createEua = function(req, res) {
 
 
 // Retrieve the Current User Agreement
-module.exports.getCurrentEua = function(req, res) {
+module.exports.getCurrentEua = (req, res) => {
 	UserAgreement.getCurrentEua()
 		.then(
 			(results) => {
@@ -153,7 +153,7 @@ module.exports.getCurrentEua = function(req, res) {
 
 
 // Retrieve the arbitrary User Agreement
-module.exports.getEuaById = function(req, res) {
+module.exports.getEuaById = (req, res) => {
 	// The eua is placed into this parameter by the middleware
 	let eua = req.euaParam;
 
@@ -167,7 +167,7 @@ module.exports.getEuaById = function(req, res) {
 
 
 // Update a User Agreement
-module.exports.updateEua = function(req, res) {
+module.exports.updateEua = (req, res) => {
 	// The eua is placed into this parameter by the middleware
 	let eua = req.euaParam;
 
@@ -206,7 +206,7 @@ module.exports.updateEua = function(req, res) {
 
 
 // Delete a User Agreement
-module.exports.deleteEua = function(req, res) {
+module.exports.deleteEua = (req, res) => {
 	// The eua is placed into this parameter by the middleware
 	let eua = req.euaParam;
 
@@ -234,7 +234,7 @@ module.exports.deleteEua = function(req, res) {
 
 
 // EUA middleware - stores user corresponding to id in 'euaParam'
-module.exports.euaById = function(req, res, next, id) {
+module.exports.euaById = (req, res, next, id) => {
 	UserAgreement.findOne({ _id: id })
 		.exec()
 		.then(
@@ -253,7 +253,7 @@ module.exports.euaById = function(req, res, next, id) {
 /**
  * Check the state of the EUA
  */
-module.exports.requiresEua = function(req) {
+module.exports.requiresEua = (req) => {
 	return UserAgreement.getCurrentEua()
 		.then(
 			(result) => {

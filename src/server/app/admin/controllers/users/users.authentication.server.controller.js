@@ -111,7 +111,7 @@ function signup(user, req, res) {
  * Local Signup strategy. Provide a username/password
  * and user info in the request body.
  */
-exports.signup = function(req, res) {
+exports.signup = (req, res) => {
 	let user = new User(User.createCopy(req.body));
 	user.provider = 'local';
 
@@ -128,7 +128,7 @@ exports.signup = function(req, res) {
  * Proxy PKI signup. Provide a DN in the request header
  * and then user info in the request body.
  */
-exports.proxyPkiSignup = function(req, res) {
+exports.proxyPkiSignup = (req, res) => {
 	let dn = req.headers[config.auth.header];
 	if (null == dn) {
 		res.status('400').json({ message: 'Missing PKI information.' });
@@ -147,7 +147,7 @@ exports.proxyPkiSignup = function(req, res) {
 /**
  * Admin Create a User (Local Strategy)
  */
-exports.adminCreateUser = function(req, res) {
+exports.adminCreateUser = (req, res) => {
 	let user = new User(User.createCopy(req.body));
 	user.bypassAccessCheck = req.body.bypassAccessCheck;
 	user.roles = req.body.roles;
@@ -165,7 +165,7 @@ exports.adminCreateUser = function(req, res) {
 /**
  * Admin Create a User (Pki Strategy)
  */
-exports.adminCreateUserPki = function(req, res) {
+exports.adminCreateUserPki = (req, res) => {
 	let user = new User(User.createCopy(req.body));
 	user.bypassAccessCheck = req.body.bypassAccessCheck;
 	user.roles = req.body.roles;
@@ -183,7 +183,7 @@ exports.adminCreateUserPki = function(req, res) {
 /**
  * Local Signin
  */
-exports.signin = function(req, res, next) {
+exports.signin = (req, res, next) => {
 	authenticateAndLogin(req, res, next);
 };
 
@@ -191,7 +191,7 @@ exports.signin = function(req, res, next) {
 /**
  * Signout - logs the user out and redirects them
  */
-exports.signout = function(req, res) {
+exports.signout = (req, res) => {
 	req.logout();
 	res.redirect('/');
 };
