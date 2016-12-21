@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - "6.9"
+services:
+ - mongodb
+before_script:
+  - npm install -g gulp
+script:
+  - gulp build
+  - gulp test-ci
+sudo: false

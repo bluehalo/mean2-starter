@@ -33,7 +33,7 @@ module.exports = function() {
 	 * @param creator The user requesting the create
 	 * @returns {Promise} Returns a promise that resolves if tag is successfully created, and rejects otherwise
 	 */
-	function createTag(tagInfo, creator) {
+	function createTag(tagInfo, creator, headers) {
 		let teamId = tagInfo.owner.id || tagInfo.owner || null;
 
 		// Create the new tag model
@@ -44,7 +44,7 @@ module.exports = function() {
 		newTag.updated = Date.now();
 
 		// Audit the creation action
-		return auditService.audit('tag created', 'tag', 'create', TeamMember.auditCopy(creator), Tag.auditCopy(newTag))
+		return auditService.audit('tag created', 'tag', 'create', TeamMember.auditCopy(creator), Tag.auditCopy(newTag), headers)
 			.then(function () {
 				// Get the reference to owner
 				return Team.findOne({_id: teamId}).exec();
@@ -70,7 +70,7 @@ module.exports = function() {
 	 * @param user The user requesting the update
 	 * @returns {Promise} Returns a promise that resolves if tag is successfully updated, and rejects otherwise
 	 */
-	function updateTag(tag, updatedTag, user) {
+	function updateTag(tag, updatedTag, user, headers) {
 		// Make a copy of the original tag for a "before" snapshot
 		let originalTag = Tag.auditCopy(tag);
 
@@ -81,7 +81,7 @@ module.exports = function() {
 		copyTagMutableFields(tag, updatedTag);
 
 		// Audit the update action
-		return auditService.audit('tag updated', 'tag', 'update', TeamMember.auditCopy(user), { before: originalTag, after: Tag.auditCopy(tag) })
+		return auditService.audit('tag updated', 'tag', 'update', TeamMember.auditCopy(user), { before: originalTag, after: Tag.auditCopy(tag) }, headers)
 			.then(function() {
 				// Save the updated tag
 				return tag.save();
@@ -95,9 +95,9 @@ module.exports = function() {
 	 * @param user The user requesting the delete
 	 * @returns {Promise} Returns a promise that resolves if tag is successfully deleted, and rejects otherwise
 	 */
-	function deleteTag(tag, user) {
+	function deleteTag(tag, user, headers) {
 		// Audit the deletion attempt
-		return auditService.audit('tag deleted', 'tag', 'delete', TeamMember.auditCopy(user), Tag.auditCopy(tag))
+		return auditService.audit('tag deleted', 'tag', 'delete', TeamMember.auditCopy(user), Tag.auditCopy(tag), headers)
 			.then(function() {
 				// Delete the tag
 				return tag.remove();

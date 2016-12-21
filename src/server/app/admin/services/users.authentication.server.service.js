@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require('lodash'),
+let _ = require('lodash'),
 	passport = require('passport'),
 	path = require('path'),
 	q = require('q'),
@@ -9,6 +9,7 @@ var _ = require('lodash'),
 	auditService = deps.auditService,
 	config = deps.config,
 	dbs = deps.dbs,
+	util = deps.utilService,
 
 	User = dbs.admin.model('User');
 
@@ -35,6 +36,7 @@ var _ = require('lodash'),
 module.exports.initializeNewUser = function(user) {
 	// Add the default roles
 	if (null != config.auth.defaultRoles) {
+		user.roles = user.roles || {};
 		_.defaults(user.roles, config.auth.defaultRoles);
 	}
 
@@ -50,7 +52,7 @@ module.exports.initializeNewUser = function(user) {
  * Audits the action
  */
 module.exports.login = function(user, req) {
-	var defer = q.defer();
+	let defer = q.defer();
 
 	// Remove sensitive data before login
 	delete user.password;
@@ -79,7 +81,7 @@ module.exports.login = function(user, req) {
 
 			// Audit the login
 			auditService.audit('User successfully logged in', 'user-authentication', 'authentication succeeded',
-				{ }, User.auditCopy(user));
+				{ }, User.auditCopy(user, util.getHeaderField(req.headers, 'x-real-ip')), req.headers);
 		}
 	});
 
@@ -90,7 +92,7 @@ module.exports.login = function(user, req) {
  * Authenticate and then login depending on the outcome
  */
 module.exports.authenticateAndLogin = function(req) {
-	var defer = q.defer();
+	let defer = q.defer();
 
 	// Attempt to authenticate the user using passport
 	passport.authenticate(config.auth.strategy, function(err, user, info, status) {
@@ -114,11 +116,11 @@ module.exports.authenticateAndLogin = function(req) {
 			defer.reject(info);
 
 			// Try to grab the username from the request
-			var username = (req.body && req.body.username)? req.body.username : 'none provided';
+			let username = (req.body && req.body.username)? req.body.username : 'none provided';
 
 			// Audit the failed attempt
 			auditService.audit(info.message, 'user-authentication', 'authentication failed',
-				{ }, { username: username });
+				{ }, { username: username }, req.headers);
 
 		}
 		// Else the authentication was successful

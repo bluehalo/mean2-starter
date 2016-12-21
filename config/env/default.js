@@ -149,16 +149,17 @@ module.exports = {
 	},
 
 	// Configuration for outgoing mail server
-//	mailer: {
-//		from: process.env.MAILER_FROM || 'USERNAME@GMAIL.COM',
-//		options: {
-//			service: process.env.MAILER_SERVICE_PROVIDER || 'gmail',
-//			auth: {
-//				user: process.env.MAILER_EMAIL_ID || 'USERNAME@GMAIL.COM',
-//				pass: process.env.MAILER_PASSWORD || 'PASSWORD'
-//			}
-//		}
-//	},
+	mailer: {
+		from: process.env.MAILER_FROM || 'USERNAME@GMAIL.COM',
+		admin: process.env.MAILER_ADMIN || 'noreply@asymmetrik.com',
+		options: {
+			service: process.env.MAILER_SERVICE_PROVIDER || 'gmail',
+			auth: {
+				user: process.env.MAILER_EMAIL_ID || 'noreply@asymmetrik.com',
+				pass: process.env.MAILER_PASSWORD || 'PASSWORD'
+			}
+		}
+	},
 
 
 	/**

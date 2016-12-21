@@ -1,7 +1,6 @@
 'use strict';
 
-var
-	path = require('path'),
+let path = require('path'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	dbs = deps.dbs,
@@ -14,7 +13,7 @@ var
  * Retrieves the distinct values for a field in the Audit collection
  */
 exports.getDistinctValues = function(req, res) {
-	var fieldToQuery = req.query.field;
+	let fieldToQuery = req.query.field;
 
 	Audit.distinct(fieldToQuery, {}).exec(function(err, results) {
 		if(null != err) {
@@ -28,32 +27,32 @@ exports.getDistinctValues = function(req, res) {
 };
 
 exports.search = function(req, res) {
-	var search = req.body.s || null;
-	var query = req.body.q || {};
+	let search = req.body.s || null;
+	let query = req.body.q || {};
 	query = util.toMongoose(query);
 
 	// Get the limit provided by the user, if there is one.
 	// Limit has to be at least 1 and no more than 100.
-	var limit = Math.floor(req.query.size);
+	let limit = Math.floor(req.query.size);
 	if (null == limit || isNaN(limit)) {
 		limit = 20;
 	}
 	limit = Math.max(1, Math.min(100, limit));
 
 	// default sorting by ID
-	var sortArr = [{ property: '_id', direction: 'DESC' }];
+	let sortArr = [{ property: '_id', direction: 'DESC' }];
 	if(null != req.query.sort && null != req.query.dir) {
 		sortArr = [{ property:  req.query.sort, direction: req.query.dir }];
 	}
 
 	// Page needs to be positive and has no upper bound
-	var page = req.query.page;
+	let page = req.query.page;
 	if (null == page){
 		page = 0;
 	}
 	page = Math.max(0, page);
 
-	var offset = page * limit;
+	let offset = page * limit;
 
 	Audit.search(query, search, limit, offset, sortArr).then(function(result) {
 		// success

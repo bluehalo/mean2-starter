@@ -5,7 +5,6 @@ import { AuthGuard } from '../core/auth-guard.service';
 
 import { DemoComponent } from './demo.component';
 import { DemoLeafletComponent } from './leaflet/demo-leaflet.component';
-import { DemoSentioComponent } from './sentio/demo-sentio.component';
 
 @NgModule({
 	imports: [
@@ -31,10 +30,6 @@ import { DemoSentioComponent } from './sentio/demo-sentio.component';
 					{
 						path: 'leaflet',
 						component: DemoLeafletComponent
-					},
-					{
-						path: 'sentio',
-						component: DemoSentioComponent
 					}
 
 				]

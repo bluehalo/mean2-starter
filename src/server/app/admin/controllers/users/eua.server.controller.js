@@ -1,7 +1,6 @@
 'use strict';
 
-let
-	path = require('path'),
+let path = require('path'),
 	q = require('q'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
@@ -46,96 +45,115 @@ module.exports.searchEuas = function(req, res) {
 	}
 
 	UserAgreement.search(query, search, limit, offset, sortArr)
-		.then(function(result) {
-			let toReturn = {
-				totalSize: result.count,
-				pageNumber: page,
-				pageSize: size,
-				totalPages: Math.ceil(result.count / size),
-				elements: result.results
-			};
+		.then(
+			(result) => {
+				let toReturn = {
+					totalSize: result.count,
+					pageNumber: page,
+					pageSize: size,
+					totalPages: Math.ceil(result.count / size),
+					elements: result.results
+				};
 
-			return q(toReturn);
-		}).then(function(results) {
-			res.status(200).json(results);
-		}, function(err) {
-			util.handleErrorResponse(res, err);
-		}).done();
+				return q(toReturn);
+			})
+		.then(
+			(results) => {
+				res.status(200).json(results);
+			},
+			(err) => {
+				util.handleErrorResponse(res, err);
+			})
+		.done();
 };
 
 
 // Publish the EUA
 module.exports.publishEua = function(req, res) {
-
 	// The eua is placed into this parameter by the middleware
 	let eua = req.euaParam;
 	eua.published = Date.now();
 
-	eua.save().then(function(results) {
-		res.status(200).json(results);
-	}, function(err) {
-		util.handleErrorResponse(res, err);
-	}).done();
+	eua.save()
+		.then(
+			(results) => {
+				res.status(200).json(results);
+			},
+			(err) => {
+				util.handleErrorResponse(res, err);
+			})
+		.done();
 };
 
 
 // Accept the current EUA
 module.exports.acceptEua = function(req, res) {
-
 	// Make sure the user is logged in
 	if (null == req.user) {
 		util.handleErrorResponse(res, { status: 400, type: 'error', message: 'User is not signed in' });
 	}
 	else {
 		// Audit accepted eua
-		auditService.audit('eua accepted', 'eua', 'accepted', User.auditCopy(req.user), {})
-			.then(function() {
-				return User.findOneAndUpdate(
-					{ _id: req.user._id },
-					{ acceptedEua: Date.now() },
-					{ new: true, upsert: false }).exec();
-			}).then(function(user) {
-				res.status(200).json(User.fullCopy(user));
-			}, function(err) {
-				util.handleErrorResponse(res, err);
-			}).done();
+		auditService.audit('eua accepted', 'eua', 'accepted',
+			User.auditCopy(req.user, util.getHeaderField(req.headers, 'x-real-ip')), {}, req.headers)
+			.then(
+				() => {
+					return User.findOneAndUpdate(
+						{ _id: req.user._id },
+						{ acceptedEua: Date.now() },
+						{ new: true, upsert: false }).exec();
+				})
+			.then(
+				(user) => {
+					res.status(200).json(User.fullCopy(user));
+				},
+				(err) => {
+					util.handleErrorResponse(res, err);
+				})
+			.done();
 	}
 };
 
 // Create a new User Agreement
 module.exports.createEua = function(req, res) {
-
 	let eua = new UserAgreement(req.body);
 	eua.created = Date.now();
 	eua.updated = eua.created;
 
 	// Audit eua creates
-	auditService.audit('eua create', 'eua', 'create', User.auditCopy(req.user), UserAgreement.auditCopy(eua))
-		.then(function() {
-			return eua.save();
-		}).then(function(results) {
-			res.status(200).json(results);
-		}, function(err) {
-			util.handleErrorResponse(res, err);
-		}).done();
+	auditService.audit('eua create', 'eua', 'create',
+		User.auditCopy(req.user, util.getHeaderField(req.headers, 'x-real-ip')), UserAgreement.auditCopy(eua), req.headers)
+		.then(
+			() => {
+				return eua.save();
+			})
+		.then(
+			(results) => {
+				res.status(200).json(results);
+			},
+			(err) => {
+				util.handleErrorResponse(res, err);
+			})
+		.done();
 };
 
 
 // Retrieve the Current User Agreement
 module.exports.getCurrentEua = function(req, res) {
-
 	UserAgreement.getCurrentEua()
-		.then(function(results) {
-			res.status(200).json(results);
-		}, function(err){
-			util.handleErrorResponse(res, err);
-		}).done();
+		.then(
+			(results) => {
+				res.status(200).json(results);
+			},
+			(err) => {
+				util.handleErrorResponse(res, err);
+			})
+		.done();
 };
 
 
 // Retrieve the arbitrary User Agreement
 module.exports.getEuaById = function(req, res) {
-
 	// The eua is placed into this parameter by the middleware
 	let eua = req.euaParam;
 
@@ -150,7 +168,6 @@ module.exports.getEuaById = function(req, res) {
 
 // Update a User Agreement
 module.exports.updateEua = function(req, res) {
-
 	// The eua is placed into this parameter by the middleware
 	let eua = req.euaParam;
 
@@ -169,22 +186,27 @@ module.exports.updateEua = function(req, res) {
 		eua.updated = Date.now();
 
 		// Audit user update
-		auditService.audit('end user agreement updated', 'eua', 'update', User.auditCopy(req.user),
-			{ before: originalEua, after: UserAgreement.auditCopy(eua) })
-			.then(function() {
-				return eua.save();
-			}).then(function(results) {
-				res.status(200).json(results);
-			}, function(err) {
-				util.handleErrorResponse(res, err);
-			}).done();
+		auditService.audit('end user agreement updated', 'eua', 'update',
+			User.auditCopy(req.user, util.getHeaderField(req.headers, 'x-real-ip')),
+			{ before: originalEua, after: UserAgreement.auditCopy(eua) }, req.headers)
+			.then(
+				() => {
+					return eua.save();
+				})
+			.then(
+				(results) => {
+					res.status(200).json(results);
+				},
+				(err) => {
+					util.handleErrorResponse(res, err);
+				})
+			.done();
 	}
 };
 
 
 // Delete a User Agreement
 module.exports.deleteEua = function(req, res) {
-
 	// The eua is placed into this parameter by the middleware
 	let eua = req.euaParam;
 
@@ -193,29 +215,38 @@ module.exports.deleteEua = function(req, res) {
 	}
 	else {
 		// Audit eua delete
-		auditService.audit('eua deleted', 'eua', 'delete', User.auditCopy(req.user), UserAgreement.auditCopy(eua))
-			.then(function() {
-				return eua.remove();
-			}).then(function(results) {
-				res.status(200).json(results);
-			}, function(err) {
-				util.handleErrorResponse(res, err);
-			}).done();
+		auditService.audit('eua deleted', 'eua', 'delete',
+			User.auditCopy(req.user, util.getHeaderField(req.headers, 'x-real-ip')), UserAgreement.auditCopy(eua), req.headers)
+			.then(
+				() => {
+					return eua.remove();
+				})
+			.then(
+				(results) => {
+					res.status(200).json(results);
+				},
+				(err) => {
+					util.handleErrorResponse(res, err);
+				})
+			.done();
 	}
 };
 
 
 // EUA middleware - stores user corresponding to id in 'euaParam'
 module.exports.euaById = function(req, res, next, id) {
-
-	UserAgreement.findOne({
-		_id: id
-	}).exec(function(err, eua) {
-		if (err) return next(err);
-		if (!eua) return next(new Error('Failed to load User Agreement ' + id));
-		req.euaParam = eua;
-		next();
-	});
+	UserAgreement.findOne({ _id: id })
+		.exec()
+		.then(
+			(eua) => {
+				if (null == eua) {
+					next(new Error(`Failed to load User Agreement ${id}`));
+				}
+				else {
+					req.euaParam = eua;
+					next();
+				}
+			}, next);
 };
 
 
@@ -223,20 +254,21 @@ module.exports.euaById = function(req, res, next, id) {
  * Check the state of the EUA
  */
 module.exports.requiresEua = function(req) {
-
 	return UserAgreement.getCurrentEua()
-		.then(function(result) {
-			// Compare the current eua to the user's acceptance state
-			if (null == result || null == result.published || (req.user.acceptedEua && req.user.acceptedEua >= result.published)) {
-				// if the user's acceptance is valid, then proceed
-				return q();
-			} else {
-				return q.reject({ status: 403, type: 'eua', message: 'User must accept end-user agreement.'});
-			}
-		}, function(error) {
-			// Failure
-			logger.error(error);
-			return q.reject({ status: 500, type: 'error', error: error });
-		});
+		.then(
+			(result) => {
+				// Compare the current eua to the user's acceptance state
+				if (null == result || null == result.published || (req.user.acceptedEua && req.user.acceptedEua >= result.published)) {
+					// if the user's acceptance is valid, then proceed
+					return q();
+				} else {
+					return q.reject({ status: 403, type: 'eua', message: 'User must accept end-user agreement.'});
+				}
+			},
+			(error) => {
+				// Failure
+				logger.error(error);
+				return q.reject({ status: 500, type: 'error', error: error });
+			});
 };
 

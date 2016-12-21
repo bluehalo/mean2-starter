@@ -3,8 +3,7 @@
 /**
  * Module dependencies.
  */
-var
-	path = require('path'),
+let path = require('path'),
 	should = require('should'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
@@ -25,22 +24,23 @@ function clearDatabase() {
  */
 describe('Audit Service:', function() {
 
-	var startTimestamp;
-	before(function() {
-		return clearDatabase().then(function() {
-			var now = Date.now();
-			startTimestamp = now - (now % 1000); // remove milliseconds
-		});
+	let startTimestamp;
+	before(() => {
+		return clearDatabase()
+			.then(() => {
+				let now = Date.now();
+				startTimestamp = now - (now % 1000); // remove milliseconds
+			});
 	});
 
-	after(function() {
+	after(() => {
 		return clearDatabase();
 	});
 
 	describe('Create new Audit entry', function() {
 
 		it('should begin with no audits', function() {
-			return Audit.find({}).exec().then(function(results) {
+			return Audit.find({}).exec().then((results) => {
 				should(results).be.an.Array();
 				should(results).have.length(0);
 			});
@@ -52,7 +52,7 @@ describe('Audit Service:', function() {
 
 		it('should have one audit entry', function() {
 			return Audit.find({}).exec()
-				.then(function(results) {
+				.then((results) => {
 					should(results).be.an.Array();
 					should(results).have.length(1);
 					/*
@@ -71,7 +71,7 @@ describe('Audit Service:', function() {
 
 		it('should have one distinct action', function() {
 			return Audit.distinct('audit.action', {}).exec()
-				.then(function(results) {
+				.then((results) => {
 					should(results).be.an.Array();
 					should(results.length).equal(1);
 					should(results).containDeep([ 'eventAction' ]);

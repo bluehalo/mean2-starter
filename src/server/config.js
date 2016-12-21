@@ -13,7 +13,7 @@ let
 /**
  * Get files by glob patterns
  */
-let getGlobbedPaths = function(globPatterns, excludes) {
+let getGlobbedPaths = (globPatterns, excludes) => {
 	// URL paths regex
 	let urlRegex = new RegExp('^(?:[a-z]+:)?\/\/', 'i');
 
@@ -56,7 +56,7 @@ let getGlobbedPaths = function(globPatterns, excludes) {
 /**
  * Validate NODE_ENV existence
  */
-let validateEnvironmentVariable = function() {
+let validateEnvironmentVariable = () => {
 
 	if(null == process.env.NODE_ENV) {
 		process.env.NODE_ENV = 'default';
@@ -78,10 +78,18 @@ let validateEnvironmentVariable = function() {
 
 };
 
+let validateConfiguration = (config) => {
+
+	let msg = `Configuration mode set to ${config.mode}`;
+	let chalkFn = (config.mode === 'development') ? chalk.green : (config.mode === 'production') ? chalk.blue : chalk.yellow;
+	console.log(chalkFn(msg));
+
+};
+
 /**
  * Initialize the assets configuration object
  */
-let initAssets = function(assetsConfig, config) {
+let initAssets = (assetsConfig, config) => {
 	let mode = config.mode;
 
 	return {
@@ -96,7 +104,7 @@ let initAssets = function(assetsConfig, config) {
 /**
  * Initialize global configuration files
  */
-let initGlobalConfigFolders = function(config, assets) {
+let initGlobalConfigFolders = (config, assets) => {
 	// Appending files
 	config.folders = {
 		server: {},
@@ -110,7 +118,7 @@ let initGlobalConfigFolders = function(config, assets) {
 /**
  * Initialize global configuration files
  */
-let initGlobalConfigFiles = function(config, assets) {
+let initGlobalConfigFiles = (config, assets) => {
 	// Appending files
 	config.files = {
 		server: {},
@@ -146,7 +154,7 @@ let initGlobalConfigFiles = function(config, assets) {
 /**
  * Initialize global configuration
  */
-let initGlobalConfig = function() {
+let initGlobalConfig = () => {
 
 	// Validate NDOE_ENV existance
 	validateEnvironmentVariable();
@@ -159,6 +167,9 @@ let initGlobalConfig = function() {
 
 	// Merge config files
 	let config = _.extend(defaultConfig, environmentConfig);
+
+	// Validate Critical configuration settings
+	validateConfiguration(config);
 
 	// Get the assets
 	let assets = initAssets(require(path.join(process.cwd(), 'config/assets')), config);

@@ -21,14 +21,14 @@
 						<input type="password" id="password" name="password" class="form-control" [(ngModel)]="user.credentials.password" (keyup.enter)="signin()" placeholder="Password">
 					</div>
 					<div class="text-center form-group">
-						<button type="submit" class="btn btn-primary" (click)="signin()">Sign in</button>
+						<button type="submit" class="btn btn-primary" (click)="signin()">Sign In</button>
 						<a type="button" class="btn btn-link" routerLink="/signup">or Sign Up</a>
 					</div>
 					<div data-ng-show="error" class="text-center text-danger">
 						<strong>{{error}}</strong>
 					</div>
 					<div class="text-center">
-						<a type="button" class="btn btn-link subtle danger" data-ui-sref="auth.password.forgot">Forgot your password?</a>
+						<a type="button" class="btn btn-link subtle danger" routerLink="/password/forgot">Forgot your password?</a>
 					</div>
 				</fieldset>
 			</div>

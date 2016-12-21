@@ -190,7 +190,7 @@ module.exports = function() {
 	 * @param creator The user requesting the create
 	 * @returns {Promise} Returns a promise that resolves if team is successfully created, and rejects otherwise
 	 */
-	function createTeam(teamInfo, creator) {
+	function createTeam(teamInfo, creator, headers) {
 		// Create the new team model
 		let newTeam = new Team(teamInfo);
 
@@ -201,7 +201,7 @@ module.exports = function() {
 		newTeam.creatorName = creator.name;
 
 		// Audit the creation action
-		return auditService.audit('team created', 'team', 'create', TeamMember.auditCopy(creator), Team.auditCopy(newTeam))
+		return auditService.audit('team created', 'team', 'create', TeamMember.auditCopy(creator), Team.auditCopy(newTeam), headers)
 			.then(function() {
 				// Save the new team
 				return newTeam.save();
@@ -220,7 +220,7 @@ module.exports = function() {
 	 * @param user The user requesting the update
 	 * @returns {Promise} Returns a promise that resolves if team is successfully updated, and rejects otherwise
 	 */
-	function updateTeam(team, updatedTeam, user) {
+	function updateTeam(team, updatedTeam, user, headers) {
 		// Make a copy of the original team for auditing purposes
 		let originalTeam = Team.auditCopy(team);
 
@@ -231,7 +231,7 @@ module.exports = function() {
 		copyTeamMutableFields(team, updatedTeam);
 
 		// Audit the update action
-		return auditService.audit('team updated', 'team', 'update', TeamMember.auditCopy(user), {before: originalTeam, after: Team.auditCopy(team)})
+		return auditService.audit('team updated', 'team', 'update', TeamMember.auditCopy(user), {before: originalTeam, after: Team.auditCopy(team)}, headers)
 			.then(function() {
 				// Save the updated team
 				return team.save();
@@ -245,11 +245,11 @@ module.exports = function() {
 	 * @param user The user requesting the delete
 	 * @returns {Promise} Returns a promise that resolves if team is successfully deleted, and rejects otherwise
 	 */
-	function deleteTeam(team, user) {
+	function deleteTeam(team, user, headers) {
 		return verifyNoResourcesInTeam(team)
 			.then(function() {
 				// Audit the team delete attempt
-				return auditService.audit('team deleted', 'team', 'delete', TeamMember.auditCopy(user), Team.auditCopy(team));
+				return auditService.audit('team deleted', 'team', 'delete', TeamMember.auditCopy(user), Team.auditCopy(team), headers);
 			})
 			.then(function() {
 				// Delete the team and update all members in the team
@@ -380,16 +380,16 @@ module.exports = function() {
 	 * @param requester The user requesting the add
 	 * @returns {Promise} Returns a promise that resolves if the user is successfully added to the team, and rejects otherwise
 	 */
-	function addMemberToTeam(user, team, role, requester) {
+	function addMemberToTeam(user, team, role, requester, headers) {
 		// Audit the member add request
-		return auditService.audit(`team ${role} added`, 'team-role', 'user add', TeamMember.auditCopy(requester), Team.auditCopyTeamMember(team, user, role))
+		return auditService.audit(`team ${role} added`, 'team-role', 'user add', TeamMember.auditCopy(requester), Team.auditCopyTeamMember(team, user, role), headers)
 			.then(function() {
 				return TeamMember.update({ _id: user._id }, { $addToSet: { teams: new TeamRole({ _id: team._id, role: role }) } }).exec();
 			});
 	}
 
 
-	function updateMemberRole(user, team, role, requester) {
+	function updateMemberRole(user, team, role, requester, headers) {
 		let currentRole = getTeamRole(user, team);
 		let updateRolePromise = (null != currentRole && currentRole === 'admin') ? verifyNotLastAdmin(user, team) : q();
 
@@ -399,7 +399,7 @@ module.exports = function() {
 			})
 			.then(function() {
 				// Audit the member update request
-				return auditService.audit(`team role changed to ${role}`, 'team-role', 'user add', TeamMember.auditCopy(requester), Team.auditCopyTeamMember(team, user, role));
+				return auditService.audit(`team role changed to ${role}`, 'team-role', 'user add', TeamMember.auditCopy(requester), Team.auditCopyTeamMember(team, user, role), headers);
 			})
 			.then(function() {
 				return TeamMember.findOneAndUpdate({ _id: user._id, 'teams._id': team._id }, { $set: { 'teams.$.role': role } }).exec();
@@ -415,12 +415,12 @@ module.exports = function() {
 	 * @param requester The user requesting the removal
 	 * @returns {Promise} Returns a promise that resolves if the user is successfully removed from the team, and rejects otherwise
 	 */
-	function removeMemberFromTeam(user, team, requester) {
+	function removeMemberFromTeam(user, team, requester, headers) {
 		// Verify the user is not the last admin in the team
 		return verifyNotLastAdmin(user, team)
 			.then(function () {
 				// Audit the user remove
-				return auditService.audit('team member removed', 'team-role', 'user remove', TeamMember.auditCopy(requester), Team.auditCopyTeamMember(team, user, ''));
+				return auditService.audit('team member removed', 'team-role', 'user remove', TeamMember.auditCopy(requester), Team.auditCopyTeamMember(team, user, ''), headers);
 			})
 			.then(function () {
 				// Apply the update

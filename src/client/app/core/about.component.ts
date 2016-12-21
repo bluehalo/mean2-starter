@@ -12,6 +12,10 @@ export class AboutComponent {
 
 	private version: string = '';
 
+	private adminEmail: string = '';
+
+	private instanceName: string = '';
+
 	constructor(private configService: ConfigService) {
 	}
 
@@ -19,6 +23,12 @@ export class AboutComponent {
 		this.configService.getConfig()
 			.subscribe((config: any) => {
 				this.version = config.version;
+				this.adminEmail = config.mailer.admin;
+				this.instanceName = config.app.instanceName;
 			});
+	}
+
+	private getMailToString() {
+		return `mailto:${this.adminEmail}?Subject=${this.instanceName}%20Support`;
 	}
 }

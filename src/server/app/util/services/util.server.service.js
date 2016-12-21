@@ -3,6 +3,8 @@
 var _ = require('lodash'),
 	path = require('path'),
 	mongoose = require('mongoose'),
+	platform = require('platform'),
+
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	config = deps.config,
 	errorHandler = deps.errorHandler,
@@ -145,6 +147,31 @@ module.exports.getLimit = function (queryParams, maxSize) {
 module.exports.getPage = function (queryParams) {
 	let page = queryParams.page || 0;
 	return Math.max(0, page);
+};
+
+/**
+ * Extract given field from request header
+ */
+module.exports.getHeaderField = function (header, fieldName) {
+	return (null == header || null == header[fieldName]) ? null : header[fieldName];
+};
+
+/**
+ * Parses user agent information from request header
+ */
+module.exports.getUserAgentFromHeader = function(header) {
+	let userAgent = this.getHeaderField(header, 'user-agent');
+
+	let data = {};
+	if (null != userAgent) {
+		let info = platform.parse(userAgent);
+		data = {
+			browser: `${info.name} ${info.version}`,
+			os: info.os.toString()
+		};
+	}
+
+	return data;
 };
 
 function propToMongoose(prop, nonMongoFunction) {
