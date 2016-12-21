@@ -1,6 +1,6 @@
 'use strict';
 
-var
+let
 	path = require('path'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
@@ -19,9 +19,9 @@ var
 /**
  * Retrieve the Notification Preferences for this User for a Type and ID
  */
-exports.getNotificationPreferencesByTypeAndId = function(req, res) {
+exports.getNotificationPreferencesByTypeAndId = (req, res) => {
 
-	var userId = req.user._id,
+	let userId = req.user._id,
 		notificationType = req.params.notificationType,
 		referenceId = req.params.referenceId;
 
@@ -32,7 +32,7 @@ exports.getNotificationPreferencesByTypeAndId = function(req, res) {
 			'preferences.notifications.referenceId' : referenceId
 		},
 		{ 'preferences.notifications.$': 1 },
-		function(error, doc) {
+		(error, doc) => {
 			if(error) {
 				return util.send400Error(res, error);
 			}
@@ -53,22 +53,22 @@ exports.getNotificationPreferencesByTypeAndId = function(req, res) {
 /**
  * Set the Notification Preferences for this User for a Type and ID
  */
-exports.setNotificationPreferencesByTypeAndId = function(req, res) {
+exports.setNotificationPreferencesByTypeAndId = (req, res) => {
 
-	var user = req.user;
+	let user = req.user;
 
-	var notificationType = req.params.notificationType,
+	let notificationType = req.params.notificationType,
 		referenceId = req.params.referenceId;
 
-	var np = new NotificationPreference({
+	let np = new NotificationPreference({
 		notificationType: notificationType,
 		referenceId: referenceId,
 		values: req.body
 	});
 
-	user.updateNotificationPreference(np).then(function() {
+	user.updateNotificationPreference(np).then(() => {
 		res.json({ success: true });
-	}, function(err) {
+	}, (err) => {
 		logger.error(err);
 		return util.send400Error(res, err);
 	});

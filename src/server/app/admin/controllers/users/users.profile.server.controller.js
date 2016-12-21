@@ -29,29 +29,29 @@ function searchUsers(req, res, copyUserFn) {
 	let dir = req.query.dir;
 
 	// Limit has to be at least 1 and no more than 100
-	if(null == size){ size = 20; }
+	if (null == size) { size = 20; }
 	size = Math.max(1, Math.min(100, size));
 
 	// Page needs to be positive and has no upper bound
-	if(null == page){ page = 0; }
+	if (null == page){ page = 0; }
 	page = Math.max(0, page);
 
 	// Sort can be null, but if it's non-null, dir defaults to DESC
-	if(null != sort && dir == null){ dir = 'DESC'; }
+	if (null != sort && dir == null) { dir = 'DESC'; }
 
 	// Create the variables to the search call
 	let limit = size;
 	let offset = page*size;
 	let sortArr;
-	if(null != sort){
+	if (null != sort){
 		sortArr = [{ property: sort, direction: dir }];
 	}
 
-	User.search(query, search, limit, offset, sortArr).then(function(result){
+	User.search(query, search, limit, offset, sortArr).then((result) => {
 
 		// Create the return copy of the users
 		let users = [];
-		result.results.forEach(function(element){
+		result.results.forEach((element) => {
 			users.push(copyUserFn(element));
 		});
 
@@ -66,7 +66,7 @@ function searchUsers(req, res, copyUserFn) {
 
 		// Serialize the response
 		res.status(200).json(toReturn);
-	}, function(error){
+	}, (error) => {
 		// failure
 		logger.error(error);
 		return util.send400Error(res, error);
@@ -79,12 +79,12 @@ function searchUsers(req, res, copyUserFn) {
  */
 
 // Get Current User
-exports.getCurrentUser = function(req, res) {
+exports.getCurrentUser = (req, res) => {
 
 	// The user that is a parameter of the request is stored in 'userParam'
 	let user = req.user;
 
-	if(null == user){
+	if (null == user){
 		res.status(400).json({
 			message: 'User not logged in'
 		});
@@ -96,10 +96,10 @@ exports.getCurrentUser = function(req, res) {
 
 
 // Update Current User
-exports.updateCurrentUser = function(req, res) {
+exports.updateCurrentUser = (req, res) => {
 
 	// Make sure the user is logged in
-	if(null == req.user){
+	if (null == req.user){
 		res.status(400).json({
 			message: 'User is not signed in'
 		});
@@ -109,7 +109,7 @@ exports.updateCurrentUser = function(req, res) {
 	// Get the full user (including the password)
 	User.findOne({
 		_id: req.user._id
-	}).exec(function(err, user) {
+	}).exec((err, user) => {
 
 		let originalUser = User.auditCopy(user);
 
@@ -124,8 +124,8 @@ exports.updateCurrentUser = function(req, res) {
 		user.updated = Date.now();
 
 		// If they are changing the password, verify the current password
-		if(_.isString(req.body.password) && !_.isEmpty(req.body.password)) {
-			if(!user.authenticate(req.body.currentPassword)) {
+		if (_.isString(req.body.password) && !_.isEmpty(req.body.password)) {
+			if (!user.authenticate(req.body.currentPassword)) {
 
 				// Audit failed authentication
 				auditService.audit('user update authentication failed', 'user', 'update authentication failed',
@@ -142,8 +142,8 @@ exports.updateCurrentUser = function(req, res) {
 		}
 
 		// Save the user
-		user.save(function(err) {
-			util.catchError(res, err, function() {
+		user.save((err) => {
+			util.catchError(res, err, () => {
 				// Remove the password/salt
 				delete user.password;
 				delete user.salt;
@@ -154,7 +154,7 @@ exports.updateCurrentUser = function(req, res) {
 					{ before: originalUser, after: User.auditCopy(user) }, req.headers);
 
 				// Log in with the new info
-				req.login(user, function(err) {
+				req.login(user, (err) => {
 					if (err) {
 						res.status(400).json(err);
 					} else {
@@ -169,12 +169,12 @@ exports.updateCurrentUser = function(req, res) {
 
 
 // Get a filtered version of a user by id
-exports.getUserById = function(req, res) {
+exports.getUserById = (req, res) => {
 
 	// The user that is a parameter of the request is stored in 'userParam'
 	let user = req.userParam;
 
-	if(null == user){
+	if (null == user){
 		res.status(400).json({
 			message: 'User does not exist'
 		});
@@ -185,12 +185,12 @@ exports.getUserById = function(req, res) {
 };
 
 // Search for users (return filtered version of user)
-exports.searchUsers = function(req, res) {
+exports.searchUsers = (req, res) => {
 	searchUsers(req, res, User.filteredCopy);
 };
 
 // Match users given a search fragment
-exports.matchUsers = function(req, res) {
+exports.matchUsers = (req, res) => {
 	// Handle the query/search/page
 	let query = req.body.q;
 	let search = req.body.s;
@@ -201,29 +201,29 @@ exports.matchUsers = function(req, res) {
 	let dir = req.query.dir;
 
 	// Limit has to be at least 1 and no more than 100
-	if(null == size){ size = 20; }
+	if (null == size){ size = 20; }
 	size = Math.max(1, Math.min(100, size));
 
 	// Page needs to be positive and has no upper bound
-	if(null == page){ page = 0; }
+	if (null == page){ page = 0; }
 	page = Math.max(0, page);
 
 	// Sort can be null, but if it's non-null, dir defaults to DESC
-	if(null != sort && dir == null){ dir = 'ASC'; }
+	if (null != sort && dir == null){ dir = 'ASC'; }
 
 	// Create the variables to the search call
 	let limit = size;
 	let offset = page*size;
 	let sortArr;
-	if(null != sort){
+	if (null != sort){
 		sortArr = [{ property: sort, direction: dir }];
 	}
 
-	User.containsQuery(query, ['name', 'username', 'email'], search, limit, offset, sortArr).then(function(result){
+	User.containsQuery(query, ['name', 'username', 'email'], search, limit, offset, sortArr).then((result) => {
 
 		// Create the return copy of the users
 		let users = [];
-		result.results.forEach(function(element){
+		result.results.forEach((element) => {
 			users.push(User.filteredCopy(element));
 		});
 
@@ -238,7 +238,7 @@ exports.matchUsers = function(req, res) {
 
 		// Serialize the response
 		res.status(200).json(toReturn);
-	}, function(error){
+	}, (error) => {
 		// failure
 		logger.error(error);
 		return util.send400Error(res, error);
@@ -252,12 +252,12 @@ exports.matchUsers = function(req, res) {
  */
 
 // Admin Get a User
-exports.adminGetUser = function(req, res) {
+exports.adminGetUser = (req, res) => {
 
 	// The user that is a parameter of the request is stored in 'userParam'
 	let user = req.userParam;
 
-	if(null == user){
+	if (null == user){
 		res.status(400).json({
 			message: 'User is not signed in'
 		});
@@ -268,11 +268,11 @@ exports.adminGetUser = function(req, res) {
 };
 
 //Admin Get All Users
-exports.adminGetAll = function(req, res) {
+exports.adminGetAll = (req, res) => {
 
 	// The field that the admin is requesting is a query parameter
 	let field = req.body.field;
-	if( null == field || field.length === 0 ) {
+	if ( null == field || field.length === 0 ) {
 		res.status(500).json({
 			message: 'Query field must be provided'
 		});
@@ -284,20 +284,20 @@ exports.adminGetAll = function(req, res) {
 	let proj = {};
 	proj[field] = 1;
 	User.find(util.toMongoose(query), proj)
-		.exec(function(error, results) {
+		.exec((error, results) => {
 
-			if(null != error) {
+			if (null != error) {
 				// failure
 				logger.error(error);
 				return util.send400Error(res, error);
 			}
 
-			res.status(200).json(results.map(function(r) { return r[field]; }));
+			res.status(200).json(results.map((r) => { return r[field]; }));
 		});
 };
 
 // Admin Update a User
-exports.adminUpdateUser = function(req, res) {
+exports.adminUpdateUser = (req, res) => {
 
 	// The persistence user
 	let user = req.userParam;
@@ -305,7 +305,7 @@ exports.adminUpdateUser = function(req, res) {
 	// A copy of the original user for auditing
 	let originalUser = User.auditCopy(user);
 
-	if(null == user){
+	if (null == user){
 		res.status(400).json({
 			message: 'Could not find user'
 		});
@@ -321,7 +321,7 @@ exports.adminUpdateUser = function(req, res) {
 	user.roles = req.body.roles;
 	user.bypassAccessCheck = req.body.bypassAccessCheck;
 
-	if(_.isString(req.body.password) && !_.isEmpty(req.body.password)) {
+	if (_.isString(req.body.password) && !_.isEmpty(req.body.password)) {
 		user.password = req.body.password;
 	}
 
@@ -330,8 +330,8 @@ exports.adminUpdateUser = function(req, res) {
 	user.updated = Date.now();
 
 	// Save the user
-	user.save(function(err) {
-		util.catchError(res, err, function() {
+	user.save((err) => {
+		util.catchError(res, err, () => {
 			// Audit user update
 			auditService.audit('admin user updated', 'user', 'admin update',
 				User.auditCopy(req.user, util.getHeaderField(req.headers, 'x-real-ip')),
@@ -344,11 +344,11 @@ exports.adminUpdateUser = function(req, res) {
 
 
 // Admin Delete a User
-exports.adminDeleteUser = function(req, res) {
+exports.adminDeleteUser = (req, res) => {
 	// Init Variables
 	let user = req.userParam;
 
-	if(null == user){
+	if (null == user){
 		res.status(400).json({
 			message: 'Could not find user'
 		});
@@ -356,8 +356,8 @@ exports.adminDeleteUser = function(req, res) {
 	}
 
 	// Delete the user
-	user.remove(function(err) {
-		util.catchError(res, err, function() {
+	user.remove((err) => {
+		util.catchError(res, err, () => {
 			// Audit user delete
 			auditService.audit('admin user deleted', 'user', 'admin delete',
 				User.auditCopy(req.user, util.getHeaderField(req.headers, 'x-real-ip')),
@@ -370,7 +370,7 @@ exports.adminDeleteUser = function(req, res) {
 
 
 // Admin Search for Users
-exports.adminSearchUsers = function(req, res) {
+exports.adminSearchUsers = (req, res) => {
 	searchUsers(req, res, User.fullCopy);
 };
 
@@ -381,7 +381,7 @@ function canEditProfile(authStrategy, user) {
 exports.canEditProfile = canEditProfile;
 
 // Are allowed to edit user profile info
-exports.hasEdit = function(req) {
+exports.hasEdit = (req) => {
 	let defer = q.defer();
 
 	if (canEditProfile(config.auth.strategy, req.user)) {

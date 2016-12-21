@@ -3,7 +3,7 @@
 /**
  * Module dependencies.
  */
-var _ = require('lodash'),
+let _ = require('lodash'),
 	mongoose = require('mongoose'),
 	path = require('path'),
 	q = require('q'),
@@ -37,48 +37,46 @@ function userSpec(key) {
 /**
  * Unit tests
  */
-describe('User Profile Controller:', function() {
+describe('User Profile Controller:', () => {
 	// specs for tests
-	var spec = { user: {} };
+	let spec = { user: {} };
 
 	// Basic Users
 	spec.user.user1 = userSpec('basic1');
 	spec.user.user2 = userSpec('basic2');
 	spec.user.user3 = userSpec('basic3');
 
-	var user = {};
+	let user = {};
 
-	before(function() {
-		return clearDatabase().then(function() {
-			var defers = [];
+	before(() => {
+		return clearDatabase().then(() => {
+			let defers = [];
 
-			defers = defers.concat(_.keys(spec.user).map(function(k) {
-				return (new User(spec.user[k])).save().then(function(e) {
-					user[k] = e;
-				});
+			defers = defers.concat(_.keys(spec.user).map((k) => {
+				return (new User(spec.user[k])).save().then((e) => { user[k] = e; });
 			}));
 
 			return q.all(defers);
 		});
 	});
 
-	after(function() {
+	after(() => {
 		return clearDatabase();
 	});
 
 
-	describe('adminGetAll', function() {
+	describe('adminGetAll', () => {
 
-		it('should return all usernames', function(done) {
-			var req = {
+		it('should return all usernames', (done) => {
+			let req = {
 				body: { field: 'username', query: {}},
 				query: {}
 			};
-			var res = {
-				status : function(status) {
+			let res = {
+				status : (status) => {
 					should(status).equal(200);
 					return {
-						json: function(results) {
+						json: (results) => {
 							should(results).be.an.Array();
 							should(results).have.length(3);
 							should(results).containDeep([ spec.user.user1.username, spec.user.user2.username, spec.user.user3.username ]);
@@ -92,16 +90,16 @@ describe('User Profile Controller:', function() {
 			userProfileController.adminGetAll(req, res);
 		});
 
-		it('getting one username should return the 1 expected', function(done) {
-			var req = {
+		it('getting one username should return the 1 expected', (done) => {
+			let req = {
 				body: { field: 'username', query: { username: spec.user.user1.username }},
 				query: {}
 			};
-			var res = {
-				status : function(status) {
+			let res = {
+				status : (status) => {
 					should(status).equal(200);
 					return {
-						json: function(results) {
+						json: (results) => {
 							should(results).be.an.Array();
 							should(results).have.length(1);
 							should(results).containDeep([ spec.user.user1.username ]);
@@ -115,16 +113,16 @@ describe('User Profile Controller:', function() {
 			userProfileController.adminGetAll(req, res);
 		});
 
-		it('getting one _id should return the 1 expected', function(done) {
-			var req = {
+		it('getting one _id should return the 1 expected', (done) => {
+			let req = {
 				body: { field: 'username', query: { _id: { $obj: user.user1._id.toString() } }},
 				query: {}
 			};
-			var res = {
-				status : function(status) {
+			let res = {
+				status : (status) => {
 					should(status).equal(200);
 					return {
-						json: function(results) {
+						json: (results) => {
 							should(results).be.an.Array();
 							should(results).have.length(1);
 							should(results).containDeep([ spec.user.user1.username ]);
@@ -140,41 +138,41 @@ describe('User Profile Controller:', function() {
 
 	});
 
-	describe('canEditProfile', function() {
+	describe('canEditProfile', () => {
 
-		it('local auth and undef bypass should be able to edit', function() {
-			var user = { };
-			var result = userProfileController.canEditProfile('local', user);
+		it('local auth and undef bypass should be able to edit', () => {
+			let user = { };
+			let result = userProfileController.canEditProfile('local', user);
 			result.should.equal(true);
 		});
 
-		it('local auth and no bypass should be able to edit', function() {
-			var user = { bypassAccessCheck: false };
-			var result = userProfileController.canEditProfile('local', user);
+		it('local auth and no bypass should be able to edit', () => {
+			let user = { bypassAccessCheck: false };
+			let result = userProfileController.canEditProfile('local', user);
 			result.should.equal(true);
 		});
 
-		it('local auth and bypass should be able to edit', function() {
-			var user = { bypassAccessCheck: true };
-			var result = userProfileController.canEditProfile('local', user);
+		it('local auth and bypass should be able to edit', () => {
+			let user = { bypassAccessCheck: true };
+			let result = userProfileController.canEditProfile('local', user);
 			result.should.equal(true);
 		});
 
-		it('proxy-pki auth and undef bypass should not be able to edit', function() {
-			var user = { };
-			var result = userProfileController.canEditProfile('proxy-pki', user);
+		it('proxy-pki auth and undef bypass should not be able to edit', () => {
+			let user = { };
+			let result = userProfileController.canEditProfile('proxy-pki', user);
 			result.should.equal(false);
 		});
 
-		it('proxy-pki auth and no bypass should not be able to edit', function() {
-			var user = { bypassAccessCheck: false };
-			var result = userProfileController.canEditProfile('proxy-pki', user);
+		it('proxy-pki auth and no bypass should not be able to edit', () => {
+			let user = { bypassAccessCheck: false };
+			let result = userProfileController.canEditProfile('proxy-pki', user);
 			result.should.equal(false);
 		});
 
-		it('proxy-pki auth and bypass should be able to edit', function() {
-			var user = { bypassAccessCheck: true };
-			var result = userProfileController.canEditProfile('proxy-pki', user);
+		it('proxy-pki auth and bypass should be able to edit', () => {
+			let user = { bypassAccessCheck: true };
+			let result = userProfileController.canEditProfile('proxy-pki', user);
 			result.should.equal(true);
 		});
 
