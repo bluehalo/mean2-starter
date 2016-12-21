@@ -18,7 +18,7 @@ let
  * themselves as socket listeners, with function definitions
  * stored here.
  */
-var registeredSocketListeners = [];
+let registeredSocketListeners = [];
 
 // Give each socket connection its own variable scope
 function onConnect(socket) {
@@ -37,14 +37,14 @@ module.exports = function(app, db) {
 
 	// Create a new HTTP server
 	logger.info('Creating HTTP Server');
-	var server = http.createServer(app);
+	let server = http.createServer(app);
 
 	// Create a new Socket.io server
 	logger.info('Creating SocketIO Server');
-	var io = socketio.listen(server);
+	let io = socketio.listen(server);
 
 	// Create a MongoDB storage object
-	var mongoStore = new MongoStore({
+	let mongoStore = new MongoStore({
 		db: db.connection.db,
 		collection: config.auth.sessionCollection
 	});
@@ -54,7 +54,7 @@ module.exports = function(app, db) {
 		// Use the 'cookie-parser' module to parse the request cookies
 		cookieParser(config.auth.sessionSecret)(socket.request, {}, function(err) {
 			// Get the session id from the request cookies
-			var sessionId = socket.request.signedCookies['connect.sid'];
+			let sessionId = socket.request.signedCookies['connect.sid'];
 
 			// Use the mongoStorage instance to get the Express session information
 			mongoStore.get(sessionId, function(err, session) {
@@ -67,7 +67,8 @@ module.exports = function(app, db) {
 						if (socket.request.user) {
 							logger.debug('SocketIO: New authenticated user: %s', socket.request.user.username);
 							next(null, true);
-						} else {
+						}
+						else {
 							logger.info('SocketIO: Unauthenticated user attempting to connect.');
 							next(new Error('User is not authenticated'), false);
 						}
@@ -88,7 +89,7 @@ module.exports = function(app, db) {
  * sent the socket
  */
 module.exports.registerSocketListener = function(s) {
-	var name = s;
+	let name = s;
 	if (null != s.prototype.name) {
 		name = s.prototype.name;
 	}

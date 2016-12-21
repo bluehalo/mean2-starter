@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 let _ = require('lodash'),
+	fs = require('fs'),
 	path = require('path'),
 	config = require(path.resolve('./src/config.js')),
 	logger = require(path.resolve('./src/server/lib/bunyan.js')).logger,
@@ -28,9 +29,9 @@ let _ = require('lodash'),
  */
 function initLocalVariables(app) {
 	// Setting application local variables
-	app.locals.title = config.app.title;
-	app.locals.description = config.app.description;
-	app.locals.keywords = config.app.keywords;
+	app.locals.title = _.get(config, 'app.title', '');
+	app.locals.description = _.get(config, 'app.description', '');
+	app.locals.keywords = _.get(config, 'app.keywords', '');
 
 	// Asset files
 	if (_.has(config, 'files.client')) {
@@ -39,7 +40,7 @@ function initLocalVariables(app) {
 	}
 
 	// Development
-	app.locals.developmentMode = config.mode === 'development';
+	app.locals.developmentMode = (config.mode === 'development');
 	app.locals.liveReload = config.liveReload;
 
 	// Passing the request url to environment locals
@@ -68,12 +69,13 @@ function initMiddleware(app) {
 			// fallback to standard filter function
 			return compress.filter(req, res);
 		},
-		level: 6
+		level: _.get(config, 'express.compressionLevel', 6)
 	}));
 
 	// Initialize favicon middleware
 	if (config.assets.client) {
-		app.use(favicon(path.resolve('./src/client/app/img/brand/favicon.ico')));
+		let faviconPath = _.get(config, 'express.favicon', './src/client/app/img/brand/favicon.ico');
+		app.use(favicon(path.resolve(faviconPath)));
 	}
 
 	// Environment dependent middleware
@@ -111,8 +113,8 @@ function initViewEngine(app) {
 	let hbs = handlebars.create({
 		extname: '.server.view.html',
 		defaultLayout: 'main',
-		layoutsDir: path.resolve('./src/server/app/core/views/layouts'),
-		partialsDir: path.resolve('./src/server/app/core/views'),
+		layoutsDir: path.resolve(_.get(config, 'handlebars.layoutsDir', './src/server/app/core/views/layouts')),
+		partialsDir: path.resolve(_.get(config, 'handlebars.partialsDir', './src/server/app/core/views')),
 		helpers: {
 			block: function(name) {
 				let blocks = this._blocks;
@@ -130,7 +132,7 @@ function initViewEngine(app) {
 
 	// Set views path and view engine
 	app.set('view engine', '.server.view.html');
-	app.set('views', path.resolve('./src/server/app/core/views'));
+	app.set('views', path.resolve(_.get(config, 'handlebars.viewsDir', './src/server/app/core/views')));
 }
 
 /**
@@ -154,10 +156,13 @@ function initSession(app, db) {
  * Configure passport
  */
 function initPassport(app) {
-	app.use(passport.initialize());
-	app.use(passport.session());
+	let path = path.resolve('./src/server/lib/passport.js');
 
-	require(path.resolve('./src/server/lib/passport.js')).init();
+	if (fs.existsSync(path)) {
+		app.use(passport.initialize());
+		app.use(passport.session());
+		require(path).init();
+	}
 }
 
 /**
@@ -203,10 +208,12 @@ function initModulesClientRoutes(app) {
 	// Expose the source application resources that aren't compiled/bundled
 	// These are not cached for the time being since they are served from the subdirs directly and there is no
 	// way to easily cache bust them
-	config.folders.client.forEach(function (staticPath) {
-		app.use(staticPath, express.static(path.resolve('./' + staticPath), { maxAge: 0 }));
-		app.use(staticPath.replace('/client', ''), express.static(path.resolve('./' + staticPath), { maxAge: 0 }));
-	});
+	if (_.has(config, 'folders.client')) {
+		config.folders.client.forEach(function (staticPath) {
+			app.use(staticPath, express.static(path.resolve('./' + staticPath), { maxAge: 0 }));
+			app.use(staticPath.replace('/client', ''), express.static(path.resolve('./' + staticPath), { maxAge: 0 }));
+		});
+	}
 }
 
 /**
@@ -270,7 +277,7 @@ function initErrorRoutes(app) {
 }
 
 function initWebpack(app) {
-	if(config.mode === 'development' && config.assets.client) {
+	if (config.mode === 'development' && config.assets.client) {
 
 		let webpackDevMiddleware = require('webpack-dev-middleware');
 		let webpackConfig = require(path.resolve('./config/build/webpack.conf.js'))('develop');
@@ -292,11 +299,14 @@ function initWebpack(app) {
  * Configure Socket.io
  */
 function configureSocketIO(app, db) {
-	// Load the Socket.io configuration
-	var server = require(path.resolve('./src/server/lib/socket.io.js'))(app, db);
+	let path = path.resolve('./src/server/lib/socket.io.js');
 
-	// Return server object
-	return server;
+	if (fs.existsSync(path)) {
+		// Load the Socket.io configuration
+		return require(path)(app, db);
+	}
+	return app;
+
 }
 
 /**
@@ -306,7 +316,7 @@ module.exports.init = function (db) {
 
 	// Initialize express app
 	logger.info('Initializing Express');
-	var app = express();
+	let app = express();
 
 	// Initialize local variables
 	initLocalVariables(app);

@@ -190,6 +190,17 @@ module.exports = {
 		webpack: 9000
 	},
 
+	express: {
+		compressionLevel: 6,
+		favicon: './src/client/app/img/brand/favicon.ico'
+	},
+
+	handlebars: {
+		viewsDir: './src/server/app/core/views',
+		partialsDir: './src/server/app/core/views',
+		layoutsDir: './src/server/app/core/views/layouts'
+	},
+
 	// Uncomment below if using Kafka messaging
 
 	// kafka: {
