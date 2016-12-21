@@ -156,12 +156,12 @@ function initSession(app, db) {
  * Configure passport
  */
 function initPassport(app) {
-	let path = path.resolve('./src/server/lib/passport.js');
+	let confPath = path.resolve('./src/server/lib/passport.js');
 
-	if (fs.existsSync(path)) {
+	if (fs.existsSync(confPath)) {
 		app.use(passport.initialize());
 		app.use(passport.session());
-		require(path).init();
+		require(confPath).init();
 	}
 }
 
@@ -299,11 +299,11 @@ function initWebpack(app) {
  * Configure Socket.io
  */
 function configureSocketIO(app, db) {
-	let path = path.resolve('./src/server/lib/socket.io.js');
+	let confPath = path.resolve('./src/server/lib/socket.io.js');
 
-	if (fs.existsSync(path)) {
+	if (fs.existsSync(confPath)) {
 		// Load the Socket.io configuration
-		return require(path)(app, db);
+		return require(confPath)(app, db);
 	}
 	return app;
 
