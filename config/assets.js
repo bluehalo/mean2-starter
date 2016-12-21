@@ -20,5 +20,14 @@ module.exports = {
 		config: [ 'src/server/app/**/config/*.config!(.spec).js' ],
 		policies: [ 'src/server/app/**/policies/*.policies!(.spec).js' ],
 		views: [ 'src/server/app/**/views/**/*.html' ]
-	}
+	},
+
+	handlebars: {
+		viewsDir: 'src/server/app/core/views',
+		partialsDir: 'src/server/app/core/views',
+		layoutsDir: 'src/server/app/core/views/layouts'
+	},
+
+	favicon: 'src/client/app/img/brand/favicon.ico'
+
 };

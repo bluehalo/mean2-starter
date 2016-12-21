@@ -74,7 +74,7 @@ function initMiddleware(app) {
 
 	// Initialize favicon middleware
 	if (config.assets.client) {
-		let faviconPath = _.get(config, 'express.favicon', './src/client/app/img/brand/favicon.ico');
+		let faviconPath = _.get(config, 'assets.favicon', 'src/client/app/img/brand/favicon.ico');
 		app.use(favicon(path.resolve(faviconPath)));
 	}
 
@@ -113,8 +113,8 @@ function initViewEngine(app) {
 	let hbs = handlebars.create({
 		extname: '.server.view.html',
 		defaultLayout: 'main',
-		layoutsDir: path.resolve(_.get(config, 'handlebars.layoutsDir', './src/server/app/core/views/layouts')),
-		partialsDir: path.resolve(_.get(config, 'handlebars.partialsDir', './src/server/app/core/views')),
+		layoutsDir: path.resolve(_.get(config, 'assets.handlebars.layoutsDir', 'src/server/app/core/views/layouts')),
+		partialsDir: path.resolve(_.get(config, 'assets.handlebars.partialsDir', 'src/server/app/core/views')),
 		helpers: {
 			block: function(name) {
 				let blocks = this._blocks;
@@ -132,7 +132,7 @@ function initViewEngine(app) {
 
 	// Set views path and view engine
 	app.set('view engine', '.server.view.html');
-	app.set('views', path.resolve(_.get(config, 'handlebars.viewsDir', './src/server/app/core/views')));
+	app.set('views', path.resolve(_.get(config, 'assets.handlebars.viewsDir', 'src/server/app/core/views')));
 }
 
 /**

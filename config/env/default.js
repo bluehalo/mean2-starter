@@ -191,14 +191,7 @@ module.exports = {
 	},
 
 	express: {
-		compressionLevel: 6,
-		favicon: './src/client/app/img/brand/favicon.ico'
-	},
-
-	handlebars: {
-		viewsDir: './src/server/app/core/views',
-		partialsDir: './src/server/app/core/views',
-		layoutsDir: './src/server/app/core/views/layouts'
+		compressionLevel: 6
 	},
 
 	// Uncomment below if using Kafka messaging
