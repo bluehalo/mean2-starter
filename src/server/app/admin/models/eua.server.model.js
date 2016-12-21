@@ -77,7 +77,7 @@ UserAgreementSchema.statics.getCurrentEua = getCurrentEua;
 
 
 //Copy a user for audit logging
-UserAgreementSchema.statics.auditCopy = (eua) => {
+UserAgreementSchema.statics.auditCopy = function(eua) {
 	let newEua = {};
 	eua = eua || {};
 
