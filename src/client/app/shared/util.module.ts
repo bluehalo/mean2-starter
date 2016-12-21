@@ -21,6 +21,8 @@ import { ExportConfigService } from './export-config.service';
 import { InLineEdit } from './in-line-edit.component';
 import { Pager } from './pager.component';
 import { AreaPipe } from './area.pipe';
+import { KeysPipe } from './keys.pipe';
+import { ExportAudit } from './export-audit.component';
 
 
 @NgModule({
@@ -42,7 +44,9 @@ import { AreaPipe } from './area.pipe';
 		ConstrainedQuery,
 		InLineEdit,
 		SafeImageComponent,
-		Pager
+		Pager,
+		KeysPipe,
+		ExportAudit
 	],
 
 	declarations: [
@@ -58,7 +62,9 @@ import { AreaPipe } from './area.pipe';
 		ConstrainedQuery,
 		InLineEdit,
 		SafeImageComponent,
-		Pager
+		Pager,
+		KeysPipe,
+		ExportAudit
 	],
 	providers: [
 		AlertService,
@@ -66,5 +72,8 @@ import { AreaPipe } from './area.pipe';
 		AsyUrlHandler,
 		ExportConfigService
 	],
+	entryComponents: [
+		ExportAudit
+	]
 })
 export class UtilModule { }
