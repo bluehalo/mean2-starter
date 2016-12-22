@@ -133,15 +133,19 @@ gulp.task('build-client-code', ['lint-client-code'], (done) => {
 
 	webpack(webpackConfig('build'), (err, stats) => {
 
-		// Fail if there were errors
-		if(err) throw new plugins.util.PluginError('webpack', err);
+		// Fail if there were errors initiating webpack
+		if(err) return done(new plugins.util.PluginError('webpack', err));
 
 		// log the stats from webpack
 		plugins.util.log('[webpack]', stats.toString({
 			colors: true, chunks: false
 		}));
 
-		done();
+		let buildErrors;
+		if (stats.hasErrors()) {
+			buildErrors = new plugins.util.PluginError('webpack', 'Errors during webpack build. See webpack output for details.');
+		}
+		done(buildErrors);
 	});
 });
 

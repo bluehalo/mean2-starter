@@ -4,7 +4,6 @@ let _ = require('lodash'),
 	crypto = require('crypto'),
 	mongoose = require('mongoose'),
 	path = require('path'),
-	q = require('q'),
 	uniqueValidator = require('mongoose-unique-validator'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
@@ -238,28 +237,23 @@ UserSchema.methods.authenticate = function(password) {
  * append it to the existing notification preferences.
  */
 UserSchema.methods.updateNotificationPreference = function(np) {
-	let defer = q.defer();
 	let user = this;
-
 	let notifType = np.notificationType.toLowerCase();
 
-	user.update(
-		{ $pull: { 'preferences.notifications': { 'notificationType' : notifType, 'referenceId' : np.referenceId  } } },
-		function(err) {
-			if(err) {
-				defer.reject(err);
+	return user.update({
+		$pull: {
+			'preferences.notifications': {
+				'notificationType' : notifType,
+				'referenceId' : np.referenceId
 			}
-
-			user.update(
-				{ $push: { 'preferences.notifications': np } },
-				function(error) {
-					if(error) {
-						defer.reject(error);
-					}
-					defer.resolve();
-				});
+		}
+	}).exec()
+		.then(() => {
+			return user.update({
+				$push: { 'preferences.notifications': np }
+			}).exec();
 		});
-	return defer.promise;
+
 };
 
 /**
@@ -267,19 +261,16 @@ UserSchema.methods.updateNotificationPreference = function(np) {
  * instead of having a fully fledged schema, filter out the one to remove.
  */
 UserSchema.methods.removeNotificationPreference = function(type, referenceId) {
-	let defer = q.defer();
-
 	type = type.toLowerCase();
 
-	this.update(
-		{ $pull: { 'preferences.notifications': { 'notificationType' : type, 'referenceId' : referenceId  } } },
-		function(err) {
-			if(err) {
-				defer.reject(err);
+	return this.update({
+		$pull: {
+			'preferences.notifications': {
+				'notificationType' : type,
+				'referenceId' : referenceId
 			}
-			defer.resolve();
-		});
-	return defer.promise;
+		}
+	}).exec();
 };
 
 

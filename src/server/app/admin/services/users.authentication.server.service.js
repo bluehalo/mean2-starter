@@ -36,6 +36,7 @@ let _ = require('lodash'),
 module.exports.initializeNewUser = function(user) {
 	// Add the default roles
 	if (null != config.auth.defaultRoles) {
+		user.roles = user.roles || {};
 		_.defaults(user.roles, config.auth.defaultRoles);
 	}
 

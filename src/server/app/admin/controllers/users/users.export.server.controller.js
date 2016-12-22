@@ -18,11 +18,11 @@ let _ = require('lodash'),
 	exportConfigService = require(path.resolve('./src/server/app/util/services/export-config.server.service.js'));
 
 // GET the requested CSV using a special configuration from the export config collection
-exports.adminGetCSV = function (req, res) {
+exports.adminGetCSV = (req, res) => {
 	let exportId = req.params.exportId;
 
 	exportConfigService.getConfigById(exportId)
-		.then(function (result) {
+		.then((result) => {
 			if (null == result) {
 				return q.reject({
 					status: 404,
@@ -34,11 +34,11 @@ exports.adminGetCSV = function (req, res) {
 			return auditService.audit(`${result.type} CSV config retrieved`, 'export', 'export',
 					TeamMember.auditCopy(req.user),
 					ExportConfig.auditCopy(result), req.headers)
-				.then(function () {
+				.then(() => {
 					return q(result);
 				});
 		})
-		.then(function (result) {
+		.then((result) => {
 			let userData = [],
 				columns = result.config.cols,
 				query = (result.config.q) ? JSON.parse(result.config.q) : null,
@@ -50,14 +50,14 @@ exports.adminGetCSV = function (req, res) {
 
 			// Based on which columns are requested, handle property-specific behavior (ex. callbacks for the
 			// CSV service to make booleans and dates more human-readable)
-			columns.forEach(function (col) {
+			columns.forEach((col) => {
 				switch (col.key) {
 					case 'roles.user':
 					case 'roles.editor':
 					case 'roles.auditor':
 					case 'roles.admin':
 					case 'bypassAccessCheck':
-						col.callback = function (value) {
+						col.callback = (value) => {
 							return (value) ? 'true' : '';
 						};
 						break;
@@ -65,7 +65,7 @@ exports.adminGetCSV = function (req, res) {
 					case 'created':
 					case 'updated':
 					case 'acceptedEua':
-						col.callback = function (value) {
+						col.callback = (value) => {
 							return (value) ? new Date(value).toISOString() : '';
 						};
 						break;
@@ -76,16 +76,16 @@ exports.adminGetCSV = function (req, res) {
 			});
 
 			return TeamMember.search(query, search, null, null, sortArr)
-				.then(function (userResult) {
+				.then((userResult) => {
 					// Process user data to be usable for CSV
-					userData = (null != userResult.results) ? userResult.results.map(function (user) {
+					userData = (null != userResult.results) ? userResult.results.map((user) => {
 						return TeamMember.fullCopy(user);
 					}) : [];
 
 					if (isTeamRequested) {
 						let teamIds = [];
-					userData.forEach(function (user) {
-							teamIds = teamIds.concat(user.teams.map(function(t) { return t._id; }));
+					userData.forEach((user) => {
+							teamIds = teamIds.concat(user.teams.map((t) => { return t._id; }));
 						});
 						return Team.find({_id: {$in: teamIds}}).exec();
 					}
@@ -93,13 +93,13 @@ exports.adminGetCSV = function (req, res) {
 						return q();
 							}
 				})
-				.then(function (teamResults) {
+				.then((teamResults) => {
 					if (null != teamResults) {
 						teamTitleMap = _.keyBy(teamResults, '_id');
 
 						// Convert user.groups to human readable groups string
-						userData.forEach(function (user) {
-							let teamNames = user.teams.map(function(t) {
+						userData.forEach((user) => {
+							let teamNames = user.teams.map((t) => {
 								return (teamTitleMap.hasOwnProperty(t._id) ? teamTitleMap[t._id].name : '<missing>');
 							});
 
@@ -109,7 +109,7 @@ exports.adminGetCSV = function (req, res) {
 					}
 					exportConfigController.exportData(req, res, fileName, columns, userData);
 				});
-		}, function (error) {
+		}, (error) => {
 			utilService.handleErrorResponse(res, error);
 		})
 		.done();
