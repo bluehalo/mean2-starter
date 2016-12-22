@@ -22,7 +22,6 @@ import { InLineEdit } from './in-line-edit.component';
 import { Pager } from './pager.component';
 import { AreaPipe } from './area.pipe';
 import { KeysPipe } from './keys.pipe';
-import { ExportAudit } from './export-audit.component';
 
 
 @NgModule({
@@ -45,8 +44,7 @@ import { ExportAudit } from './export-audit.component';
 		InLineEdit,
 		SafeImageComponent,
 		Pager,
-		KeysPipe,
-		ExportAudit
+		KeysPipe
 	],
 
 	declarations: [
@@ -63,8 +61,7 @@ import { ExportAudit } from './export-audit.component';
 		InLineEdit,
 		SafeImageComponent,
 		Pager,
-		KeysPipe,
-		ExportAudit
+		KeysPipe
 	],
 	providers: [
 		AlertService,
@@ -73,7 +70,6 @@ import { ExportAudit } from './export-audit.component';
 		ExportConfigService
 	],
 	entryComponents: [
-		ExportAudit
 	]
 })
 export class UtilModule { }
