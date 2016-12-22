@@ -185,8 +185,11 @@ export class AsyHttp {
 				break;
 		}
 
-		if (err.status === 401 && !_.endsWith(err.url, 'auth/signin')) {
-			this.router.navigate(['/signin']);
+		if (err.status === 401
+			&& !_.endsWith(err.url, 'auth/signin')) {
+			if (!_.endsWith(err.url, 'user/me')) {
+				this.router.navigate(['/signin']);
+			}
 			return Observable.empty();
 		}
 		else {

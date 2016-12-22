@@ -18,13 +18,19 @@ export class AuthenticationService {
 		private userStateService: UserStateService,
 		private asyHttp: AsyHttp
 	) {
-		ObservableUtils.wrapArray([
-			this.reloadCurrentUser(),
-			this.reloadCurrentEua()
-		]).subscribe(
-			() => this.initializing$.next(false),
-			(err: any) => Observable.throw(err)
-		);
+		this.reloadCurrentUser()
+			.subscribe(
+				() => {},
+				(err: any) => {
+					Observable.throw(err);
+				},
+				() => {
+					if (this.getCurrentUser().isAuthenticated()) {
+						this.reloadCurrentEua();
+					}
+					this.initializing$.next(false);
+				}
+			);
 	}
 
 	public signin(user: User) {
