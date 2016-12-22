@@ -36,7 +36,7 @@ module.exports = {
 			"no-namespace": true,
 			"no-reference": true,
 			"no-shadowed-variable": true,
-			"no-string-literal": true,
+			"no-string-literal": false,
 			"no-switch-case-fall-through": false,
 			"no-trailing-whitespace": true,
 			"no-unreachable": true,

@@ -3,7 +3,7 @@
 /**
  * Module dependencies.
  */
-var
+let
 	_ = require('lodash'),
 	path = require('path'),
 	q = require('q'),
@@ -35,22 +35,22 @@ function clearDatabase() {
 
 function userSpec(key) {
 	return {
-		name: key + ' Name',
-		email: key + '@mail.com',
-		username: key + '_username',
-		organization: key + ' Organization'
+		name: `${key} Name`,
+		email: `${key}@mail.com`,
+		username: `${key}_username`,
+		organization: `${key} Organization`
 	};
 }
 
 function localUserSpec(key) {
-	var spec = userSpec(key);
+	let spec = userSpec(key);
 	spec.provider = 'local';
 	spec.password = 'password';
 	return spec;
 }
 
 function proxyPkiUserSpec(key) {
-	var spec = userSpec(key);
+	let spec = userSpec(key);
 	spec.provider = 'proxy-pki';
 	spec.providerData = {
 		dn: key,
@@ -63,10 +63,10 @@ function cacheSpec(key) {
 	return {
 		key: key.toLowerCase(),
 		value: {
-			name: key + ' Name',
-			organization: key + ' Organization',
-			email: key + '@mail.com',
-			username: key + '_username'
+			name: `${key} Name`,
+			organization: `${key} Organization`,
+			email: `${key}@mail.com`,
+			username: `${key}_username`
 		}
 	};
 }
@@ -74,26 +74,26 @@ function cacheSpec(key) {
 /**
  * Unit tests
  */
-describe('User Auth Controller:', function() {
+describe('User Auth Controller:', () => {
 
-	before(function() {
+	before(() => {
 		return clearDatabase();
 	});
 
-	after(function() {
+	after(() => {
 		return clearDatabase();
 	});
 
 
-	describe('\'local\' Strategy', function() {
-		var spec = { user: localUserSpec('user1') };
-		var user;
+	describe('\'local\' Strategy', () => {
+		let spec = { user: localUserSpec('user1') };
+		let user;
 
-		before(function() {
-			return clearDatabase().then(function() {
+		before(() => {
+			return clearDatabase().then(() => {
 				// Create the user
 				return (new User(spec.user)).save()
-					.then(function (result) {
+					.then((result) =>{
 						user = result;
 
 						//setup to use local passport
@@ -103,23 +103,23 @@ describe('User Auth Controller:', function() {
 			});
 		});
 
-		after(function() {
+		after(() => {
 			return clearDatabase();
 		});
 
-		describe('login', function() {
-			it('should succeed with correct credentials', function(done) {
-				var req = {};
+		describe('login', () => {
+			it('should succeed with correct credentials', (done) => {
+				let req = {};
 				req.body = { username: spec.user.username, password: spec.user.password };
 				req.headers = {};
-				req.login = function(u, cb) { return cb && cb(); };
+				req.login = (u, cb) => { return cb && cb(); };
 
-				var res = {};
-				res.status = function(status) {
+				let res = {};
+				res.status = (status) => {
 					should(status).equal(200);
 
 					return {
-						json: function(result) {
+						json: (result) => {
 							// Should return the user
 							should.exist(result);
 							should(result.username).equal(user.username);
@@ -133,21 +133,21 @@ describe('User Auth Controller:', function() {
 					};
 				};
 
-				userAuthenticationController.signin(req, res, function() {});
+				userAuthenticationController.signin(req, res, () => {});
 			});
 
-			it('should fail with incorrect password', function(done) {
-				var req = {};
+			it('should fail with incorrect password', (done) => {
+				let req = {};
 				req.body = { username: user.username, password: 'wrong' };
 				req.headers = {};
-				req.login = function(u, cb) { return cb && cb(); };
+				req.login = (u, cb) => { return cb && cb(); };
 
-				var res = {};
-				res.status = function (status) {
+				let res = {};
+				res.status = (status) => {
 					should(status).equal(401);
 
 					return {
-						json: function(info) {
+						json: (info) => {
 							should.exist(info);
 							should(info.type).equal('invalid-credentials');
 
@@ -156,21 +156,21 @@ describe('User Auth Controller:', function() {
 					};
 				};
 
-				userAuthenticationController.signin(req, res, function() {});
+				userAuthenticationController.signin(req, res, () => {});
 			});
 
-			it('should fail with missing password', function(done) {
-				var req = {};
+			it('should fail with missing password', (done) => {
+				let req = {};
 				req.body = { username: user.username, password: undefined };
 				req.headers = {};
-				req.login = function(user, cb) { return cb && cb(); };
+				req.login = (user, cb) => { return cb && cb(); };
 
-				var res = {
-					status: function (status) {
+				let res = {
+					status: (status) => {
 						should(status).equal(400);
 
 						return {
-							json: function(info) {
+							json: (info) => {
 								should.exist(info);
 								should(info.type).equal('missing-credentials');
 
@@ -180,21 +180,21 @@ describe('User Auth Controller:', function() {
 					}
 				};
 
-				userAuthenticationController.signin(req, res, function() {});
+				userAuthenticationController.signin(req, res, () => {});
 			});
 
-			it('should fail with missing username', function(done) {
-				var req = {};
+			it('should fail with missing username', (done) => {
+				let req = {};
 				req.body = { username: undefined, password: 'asdfasdf' };
 				req.headers = {};
-				req.login = function(user, cb) { return cb && cb(); };
+				req.login = (user, cb) => { return cb && cb(); };
 
-				var res = {
-					status: function (status) {
+				let res = {
+					status: (status) => {
 						should(status).equal(400);
 
 						return {
-							json: function(info) {
+							json: (info) => {
 								should.exist(info);
 								should(info.type).equal('missing-credentials');
 
@@ -204,21 +204,21 @@ describe('User Auth Controller:', function() {
 					}
 				};
 
-				userAuthenticationController.signin(req, res, function() {});
+				userAuthenticationController.signin(req, res, () => {});
 			});
 
-			it('should fail with unknown user', function(done) {
-				var req = {};
+			it('should fail with unknown user', (done) => {
+				let req = {};
 				req.body = { username: 'totally doesnt exist', password: 'asdfasdf' };
 				req.headers = {};
-				req.login = function(user, cb) { return cb && cb(); };
+				req.login = (user, cb) => { return cb && cb(); };
 
-				var res = {
-					status: function (status) {
+				let res = {
+					status: (status) => {
 						should(status).equal(401);
 
 						return {
-							json: function(info) {
+							json: (info) => {
 								should.exist(info);
 								should(info.type).equal('invalid-credentials');
 
@@ -228,7 +228,7 @@ describe('User Auth Controller:', function() {
 					}
 				};
 
-				userAuthenticationController.signin(req, res, function() {});
+				userAuthenticationController.signin(req, res, () => {});
 			});
 
 		}); // describe - login
@@ -237,10 +237,10 @@ describe('User Auth Controller:', function() {
 
 
 
-	describe('Proxy PKI Strategy', function() {
+	describe('Proxy PKI Strategy', () => {
 
 		// Specs for tests
-		var spec = { cache: {}, user: {} };
+		let spec = { cache: {}, user: {} };
 
 		// Synced User/Cache Entry
 		spec.cache.synced = cacheSpec('synced');
@@ -294,27 +294,27 @@ describe('User Auth Controller:', function() {
 		spec.cache.cacheOnly.value.roles = ['role1', 'role2', 'role3'];
 		spec.cache.cacheOnly.value.groups = ['group1', 'group2', 'group3'];
 
-		var cache = {};
-		var user = {};
+		let cache = {};
+		let user = {};
 
-		before(function() {
-			return clearDatabase().then(function() {
-				var defers = [];
+		before(() => {
+			return clearDatabase().then(() => {
+				let defers = [];
 
-				defers = defers.concat(_.keys(spec.cache).map(function(k) {
-					return (new CacheEntry(spec.cache[k])).save().then(function(e) {
+				defers = defers.concat(_.keys(spec.cache).map((k) => {
+					return (new CacheEntry(spec.cache[k])).save().then((e) => {
 						cache[k] = e;
 					});
 				}));
 
-				defers = defers.concat(_.keys(spec.user).map(function(k) {
-					return (new User(spec.user[k])).save().then(function(e) {
+				defers = defers.concat(_.keys(spec.user).map((k) => {
+					return (new User(spec.user[k])).save().then((e) => {
 						user[k] = e;
 					});
 				}));
 
-				return q.all(defers).then(function() {
-					var accessCheckerConfig = {
+				return q.all(defers).then(() => {
+					let accessCheckerConfig = {
 						userbypassed: {
 							name: 'Invalid Name',
 							organization: 'Invalid Org',
@@ -337,7 +337,7 @@ describe('User Auth Controller:', function() {
 			});
 		});
 
-		after(function() {
+		after(() => {
 			return clearDatabase();
 		});
 
@@ -345,18 +345,18 @@ describe('User Auth Controller:', function() {
 		 * Test basic login where access checker isn't really involved.
 		 * Granting access and denying access based on known/unknown dn
 		 */
-		describe('basic login', function() {
+		describe('basic login', () => {
 
-			var req = {};
-			req.login = function(user, cb) { return cb && cb(); };
+			let req = {};
+			req.login = (user, cb) => { return cb && cb(); };
 
-			it('should work when user is synced with access checker', function(done) {
+			it('should work when user is synced with access checker', (done) => {
 				req.headers = { 'x-ssl-client-s-dn': spec.user.synced.providerData.dn };
-				var res = {
-					status: function (status) {
+				let res = {
+					status: (status) => {
 						should(status).equal(200);
 						return {
-							json: function(info) {
+							json: (info) => {
 								should.exist(info);
 								should(info.name).equal(spec.user.synced.name);
 								should(info.organization).equal(spec.user.synced.organization);
@@ -373,17 +373,17 @@ describe('User Auth Controller:', function() {
 					}
 				};
 
-				userAuthenticationController.signin(req, res, function() {});
+				userAuthenticationController.signin(req, res, () => {});
 			});
 
 
 			// No DN header
-			it('should fail when there is no dn', function(done) {
+			it('should fail when there is no dn', (done) => {
 				req.headers = {};
-				var res = {
-					status: function (status) {
+				let res = {
+					status: (status) => {
 						return {
-							json: function(info) {
+							json: (info) => {
 								should(info.type).equal('missing-credentials');
 								should(status).equal(400);
 
@@ -393,17 +393,17 @@ describe('User Auth Controller:', function() {
 					}
 				};
 
-				userAuthenticationController.signin(req, res, function() {});
+				userAuthenticationController.signin(req, res, () => {});
 			});
 
 			// Unknown DN header
-			it('should fail when the dn is unknown and auto create is disabled', function(done) {
+			it('should fail when the dn is unknown and auto create is disabled', (done) => {
 				config.auth.autoCreateAccounts = false;
 				req.headers = { 'x-ssl-client-s-dn': 'unknown' };
-				var res = {
-					status: function (status) {
+				let res = {
+					status: (status) => {
 						return {
-							json: function(info) {
+							json: (info) => {
 								should(info.type).equal('invalid-credentials');
 								should(status).equal(401);
 
@@ -415,7 +415,7 @@ describe('User Auth Controller:', function() {
 					}
 				};
 
-				userAuthenticationController.signin(req, res, function() {});
+				userAuthenticationController.signin(req, res, () => {});
 			});
 
 		});
@@ -424,18 +424,18 @@ describe('User Auth Controller:', function() {
 		 * Test situations where access checking is more involved because the cache
 		 * is not in sync with the user
 		 */
-		describe('syncing with access checker', function() {
+		describe('syncing with access checker', () => {
 
-			var req = {};
-			req.login = function(user, cb) { return cb && cb(); };
+			let req = {};
+			req.login = (user, cb) => { return cb && cb(); };
 
-			it('should update the user info from access checker on login', function(done) {
+			it('should update the user info from access checker on login', (done) => {
 				req.headers = { 'x-ssl-client-s-dn': spec.user.oldMd.providerData.dn };
-				var res = {
-					status: function (status) {
+				let res = {
+					status: (status) => {
 						should(status).equal(200);
 						return {
-							json: function(info) {
+							json: (info) => {
 								should.exist(info);
 								should(info.name).equal(spec.cache.oldMd.value.name);
 								should(info.organization).equal(spec.cache.oldMd.value.organization);
@@ -448,16 +448,16 @@ describe('User Auth Controller:', function() {
 					}
 				};
 
-				userAuthenticationController.signin(req, res, function() {});
+				userAuthenticationController.signin(req, res, () => {});
 			});
 
-			it('should sync roles and groups from access checker on login', function(done) {
+			it('should sync roles and groups from access checker on login', (done) => {
 				req.headers = { 'x-ssl-client-s-dn': spec.user.differentRolesAndGroups.providerData.dn };
-				var res = {
-					status: function (status) {
+				let res = {
+					status: (status) => {
 						should(status).equal(200);
 						return {
-							json: function(info) {
+							json: (info) => {
 								should.exist(info);
 
 								should(info.externalRoles).be.an.Array();
@@ -474,21 +474,21 @@ describe('User Auth Controller:', function() {
 					}
 				};
 
-				userAuthenticationController.signin(req, res, function() {});
+				userAuthenticationController.signin(req, res, () => {});
 			});
 		});
 
-		describe('missing or expired cache entries with no bypass', function() {
-			var req = {};
-			req.login = function(user, cb) { return cb && cb(); };
+		describe('missing or expired cache entries with no bypass', () => {
+			let req = {};
+			req.login = (user, cb) => { return cb && cb(); };
 
-			it('should have external roles and groups removed on login when missing from cache', function(done) {
+			it('should have external roles and groups removed on login when missing from cache', (done) => {
 				req.headers = { 'x-ssl-client-s-dn': spec.user.missingUser.providerData.dn };
-				var res = {
-					status: function (status) {
+				let res = {
+					status: (status) => {
 						should(status).equal(200);
 						return {
-							json: function(info) {
+							json: (info) => {
 								should.exist(info);
 								should(info.name).equal(spec.user.missingUser.name);
 								should(info.organization).equal(spec.user.missingUser.organization);
@@ -507,17 +507,17 @@ describe('User Auth Controller:', function() {
 					}
 				};
 
-				userAuthenticationController.signin(req, res, function() {});
+				userAuthenticationController.signin(req, res, () => {});
 			});
 
 
-			it('should have external roles and groups removed on login when cache expired', function(done) {
+			it('should have external roles and groups removed on login when cache expired', (done) => {
 				req.headers = { 'x-ssl-client-s-dn': spec.user.expiredUser.providerData.dn };
-				var res = {
-					status: function (status) {
+				let res = {
+					status: (status) => {
 						should(status).equal(200);
 						return {
-							json: function(info) {
+							json: (info) => {
 								should.exist(info);
 								should(info.name).equal(spec.user.expiredUser.name);
 								should(info.organization).equal(spec.user.expiredUser.organization);
@@ -536,22 +536,22 @@ describe('User Auth Controller:', function() {
 					}
 				};
 
-				userAuthenticationController.signin(req, res, function() {});
+				userAuthenticationController.signin(req, res, () => {});
 			});
 
 		});
 
-		describe('missing cache entries with bypass access checker enabled', function() {
-			var req = {};
-			req.login = function(user, cb) { return cb && cb(); };
+		describe('missing cache entries with bypass access checker enabled', () => {
+			let req = {};
+			req.login = (user, cb) => { return cb && cb(); };
 
-			it('should preserve user info, roles and groups on login', function(done) {
+			it('should preserve user info, roles and groups on login', (done) => {
 				req.headers = { 'x-ssl-client-s-dn': spec.user.missingUserBypassed.providerData.dn };
-				var res = {
-					status: function (status) {
+				let res = {
+					status: (status) => {
 						should(status).equal(200);
 						return {
-							json: function(info) {
+							json: (info) => {
 								should.exist(info);
 								should(info.name).equal(spec.user.missingUserBypassed.name);
 								should(info.organization).equal(spec.user.missingUserBypassed.organization);
@@ -572,22 +572,22 @@ describe('User Auth Controller:', function() {
 					}
 				};
 
-				userAuthenticationController.signin(req, res, function() {});
+				userAuthenticationController.signin(req, res, () => {});
 			});
 
 		});
 
-		describe('in cache, access checker enabled, but with fields modified locally', function() {
-			var req = {};
-			req.login = function(user, cb) { return cb && cb(); };
+		describe('in cache, access checker enabled, but with fields modified locally', () => {
+			let req = {};
+			req.login = (user, cb) => { return cb && cb(); };
 
-			it('should preserve user info, roles and groups on login', function(done) {
+			it('should preserve user info, roles and groups on login', (done) => {
 				req.headers = { 'x-ssl-client-s-dn': spec.user.userBypassed.providerData.dn };
-				var res = {
-					status: function (status) {
+				let res = {
+					status: (status) => {
 						should(status).equal(200);
 						return {
-							json: function(info) {
+							json: (info) => {
 								should.exist(info);
 								should(info.name).equal(spec.user.userBypassed.name);
 								should(info.organization).equal(spec.user.userBypassed.organization);
@@ -606,22 +606,22 @@ describe('User Auth Controller:', function() {
 					}
 				};
 
-				userAuthenticationController.signin(req, res, function() {});
+				userAuthenticationController.signin(req, res, () => {});
 			});
 
 		});
 
-		describe('auto create accounts', function() {
-			var req = {};
-			req.login = function(user, cb) { return cb && cb(); };
+		describe('auto create accounts', () => {
+			let req = {};
+			req.login = (user, cb) => { return cb && cb(); };
 
-			it('should create a new account from access checker information', function(done) {
+			it('should create a new account from access checker information', (done) => {
 				req.headers = { 'x-ssl-client-s-dn': spec.cache.cacheOnly.key };
-				var res = {
-					status: function (status) {
+				let res = {
+					status: (status) => {
 						should(status).equal(200);
 						return {
-							json: function(info) {
+							json: (info) => {
 								should.exist(info);
 								should(info.name).equal(spec.cache.cacheOnly.value.name);
 								should(info.organization).equal(spec.cache.cacheOnly.value.organization);
@@ -642,7 +642,7 @@ describe('User Auth Controller:', function() {
 					}
 				};
 
-				userAuthenticationController.signin(req, res, function() {});
+				userAuthenticationController.signin(req, res, () => {});
 			});
 		});
 

@@ -1,6 +1,6 @@
 'use strict';
 
-var
+let
 	path = require('path'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
@@ -9,7 +9,7 @@ var
 
 	users = require(path.resolve('./src/server/app/admin/controllers/users.server.controller.js'));
 
-module.exports = function(app) {
+module.exports = (app) => {
 	/**
 	 * User Routes (don't require admin)
 	 */
@@ -285,7 +285,7 @@ module.exports = function(app) {
 	/**
 	 * Routes that only apply to the 'local' passport strategy
 	 */
-	if(config.auth.strategy === 'local') {
+	if (config.auth.strategy === 'local') {
 
 		logger.info('Configuring local user authentication routes.');
 
@@ -317,7 +317,7 @@ module.exports = function(app) {
 	/**
 	 * Routes that only apply to the 'proxy-pki' passport strategy
 	 */
-	else if(config.auth.strategy === 'proxy-pki') {
+	else if (config.auth.strategy === 'proxy-pki') {
 
 		logger.info('Configuring proxy-pki user authentication routes.');
 

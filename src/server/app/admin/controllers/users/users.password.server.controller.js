@@ -25,7 +25,7 @@ if (null != config.mailer) {
 /**
  * Forgot for reset password (forgot POST)
  */
-exports.forgot = function(req, res, next) {
+exports.forgot = (req, res, next) => {
 
 	// Make sure that the mailer is configured
 	if(null == smtpTransport) {
@@ -43,8 +43,8 @@ exports.forgot = function(req, res, next) {
 
 	async.waterfall([
 		// Generate random token
-		function(done) {
-			crypto.randomBytes(20, function(error, buffer) {
+		(done) => {
+			crypto.randomBytes(20, (error, buffer) => {
 				let token = buffer.toString('hex');
 				logger.debug('Generated reset token.');
 				done(error, token);
@@ -52,12 +52,12 @@ exports.forgot = function(req, res, next) {
 		},
 
 		// Lookup user by username
-		function(token, done) {
+		(token, done) => {
 
 			// Try to find the user
 			User.findOne({
 				username: req.body.username
-			}, '-salt -password', function(error, user) {
+			}, '-salt -password', (error, user) => {
 
 				// If we failed to find the user by username
 				if (null != error || null == user) {
@@ -73,7 +73,7 @@ exports.forgot = function(req, res, next) {
 				logger.debug('Found the user.');
 
 				// Save the user with the token
-				user.save(function(error) {
+				user.save((error) => {
 					logger.debug('Saved the user with reset token.');
 					done(error, token, user);
 				});
@@ -82,19 +82,19 @@ exports.forgot = function(req, res, next) {
 		},
 
 		// Generate the email message (from template)
-		function(token, user, done) {
+		(token, user, done) => {
 			res.render('templates/reset-password-email', {
 				name: user.name,
 				appName: config.app.title,
 				url: `http://${req.headers.host}/#/password/reset/${token}`
-			}, function(error, emailHTML) {
+			}, (error, emailHTML) => {
 				logger.debug('Rendered email.');
 				done(error, emailHTML, user);
 			});
 		},
 
 		// Send the email
-		function(emailHTML, user, done) {
+		(emailHTML, user, done) => {
 			let mailOptions = {
 				to: user.email,
 				from: config.mailer.from,
@@ -102,7 +102,7 @@ exports.forgot = function(req, res, next) {
 				html: emailHTML
 			};
 
-			smtpTransport.sendMail(mailOptions, function(error) {
+			smtpTransport.sendMail(mailOptions, (error) => {
 				if (null == error) {
 					logger.debug('Sent email to: %s', user.email);
 					res.json('An email has been sent to ' + user.email + ' with further instructions.');
@@ -114,7 +114,7 @@ exports.forgot = function(req, res, next) {
 				done(error);
 			});
 		}
-	], function(error) {
+	], (error) => {
 		if (error) return next(error);
 	});
 };
@@ -123,13 +123,13 @@ exports.forgot = function(req, res, next) {
 /**
  * Reset password GET from email token
  */
-exports.validateResetToken = function(req, res) {
+exports.validateResetToken = (req, res) => {
 	User.findOne({
 		resetPasswordToken: req.params.token,
 		resetPasswordExpires: {
 			$gt: Date.now()
 		}
-	}, function(error, user) {
+	}, (error, user) => {
 		if (!user) {
 			return res.status('400').json({ message: 'invalid-token' });
 		}
@@ -142,7 +142,7 @@ exports.validateResetToken = function(req, res) {
 /**
  * Reset password POST from email token
  */
-exports.reset = function(req, res, next) {
+exports.reset = (req, res, next) => {
 
 	// Init Variables
 	let password = req.body.password;
@@ -162,13 +162,13 @@ exports.reset = function(req, res, next) {
 
 	async.waterfall([
 
-		function(done) {
+		(done) => {
 			User.findOne({
 				resetPasswordToken: req.params.token,
 				resetPasswordExpires: {
 					$gt: Date.now()
 				}
-			}, function(error, user) {
+			}, (error, user) => {
 
 				if(null != error || null == user) {
 					return res.status(400).json({
@@ -179,13 +179,13 @@ exports.reset = function(req, res, next) {
 				user.resetPasswordToken = undefined;
 				user.resetPasswordExpires = undefined;
 
-				user.save(function(error) {
+				user.save((error) => {
 					if (error) {
 						return res.status(400).json({
 							message: errorHandler.getErrorMessage(error)
 						});
 					} else {
-						req.login(user, function(error) {
+						req.login(user, (error) => {
 							if (error) {
 								return res.status(400).json({
 									message: errorHandler.getErrorMessage(error)
@@ -201,17 +201,17 @@ exports.reset = function(req, res, next) {
 			});
 		},
 
-		function(user, done) {
+		(user, done) => {
 			res.render('templates/reset-password-confirm-email', {
 				name: user.name,
 				appName: config.app.title
-			}, function(error, emailHTML) {
+			}, (error, emailHTML) => {
 				done(error, emailHTML, user);
 			});
 		},
 
 		// If valid email, send reset email using service
-		function(emailHTML, user, done) {
+		(emailHTML, user, done) => {
 			let mailOptions = {
 				to: user.email,
 				from: config.mailer.from,
@@ -219,11 +219,11 @@ exports.reset = function(req, res, next) {
 				html: emailHTML
 			};
 
-			smtpTransport.sendMail(mailOptions, function(error) {
+			smtpTransport.sendMail(mailOptions, (error) => {
 				done(error, 'done');
 			});
 		}
-	], function(error) {
+	], (error) => {
 		if (error) return next(error);
 	});
 };
