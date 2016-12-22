@@ -3,7 +3,6 @@
 var
 	mongoose = require('mongoose'),
 	path = require('path'),
-	q = require('q'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	util = deps.utilService,
@@ -13,7 +12,7 @@ var
 /**
  * User Schema
  */
-var UserAgreementSchema = new GetterSchema({
+let UserAgreementSchema = new GetterSchema({
 	title: {
 		type: String,
 		trim: true,
@@ -69,26 +68,17 @@ UserAgreementSchema.statics.search = function(queryTerms, searchTerms, limit, of
 };
 
 //Get the most recent eua
-var getCurrentEua = function() {
-	var defer = q.defer();
-
-	this.findOne({ 'published': { '$ne': null, '$exists': true } })
+let getCurrentEua = function() {
+	return this.findOne({ 'published': { '$ne': null, '$exists': true } })
 		.sort({ 'published': -1 })
-		.exec(function(err, eua) {
-			if (err) {
-				defer.reject(err);
-			}
-			defer.resolve(eua);
-		});
-
-	return defer.promise;
+		.exec();
 };
 UserAgreementSchema.statics.getCurrentEua = getCurrentEua;
 
 
 //Copy a user for audit logging
 UserAgreementSchema.statics.auditCopy = function(eua) {
-	var newEua = {};
+	let newEua = {};
 	eua = eua || {};
 
 	newEua._id = eua._id;
