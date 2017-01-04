@@ -80,27 +80,27 @@ describe('Team Service:', function() {
 	let user = {};
 	let team = {};
 
-	before(function(done) {
-		clearDatabase().then(function() {
+	before(function() {
+		return clearDatabase().then(() => {
 			let teamDefers = [];
 
 			// Create the teams
-			_.keys(spec.team).forEach(function(k) {
-				teamDefers.push((new Team(spec.team[k])).save().then(function(e) {
+			_.keys(spec.team).forEach((k) => {
+				teamDefers.push((new Team(spec.team[k])).save().then((e) => {
 					team[k] = e;
 				}));
 			});
 
-			return q.all(teamDefers).then(function(result) {
+			return q.all(teamDefers).then((result) => {
 
 				let userDefers = [];
-				_.keys(spec.user).forEach(function(k) {
+				_.keys(spec.user).forEach((k) => {
 					userDefers.push((new User(spec.user[k])).save().then(function(e) {
 						user[k] = e;
 
 						// Do this here because of issues using extended mongo schema in tests
 						if (k === 'explicit') {
-							TeamMember.update(
+							return TeamMember.update(
 								{ _id: e._id },
 								{ $addToSet: { teams: new TeamRole({ _id: team.teamWithNoExternalTeam._id, role: 'member' }) } }
 								)
@@ -112,47 +112,40 @@ describe('Team Service:', function() {
 				return q.all(userDefers);
 			});
 
-		}).then(function() {
-			done();
-		}, done).done();
+		});
 
 	});
 
-	after(function(done) {
-		clearDatabase().then(function() {
-			done();
-		}, done).done();
+	after(function() {
+		return clearDatabase();
 	});
 
 	// Test implicit team membership
-	it('Search team membership; user implicitly added to a team via externalGroups', function() {
+	it('Search team membership; user implicitly added to a team via externalGroups', () => {
 		let queryParams = { dir: 'ASC', page: '0', size: '5', sort: 'name' };
 
-		Team.findOne({ name: 'external' })
-			.exec()
-			.then(function(team) {
-				let searchResults = teamsService.searchTeamMembers(null, {}, queryParams, team);
+		return Team.findOne({ name: 'external' }).exec().then((team) => {
+			return teamsService.searchTeamMembers(null, {}, queryParams, team).then((searchResults) => {
 				(searchResults.elements).should.have.length(1);
 				(searchResults.elements[0].name).should.equal('implicit Name');
 			});
-
+		});
 	});
 
 	// Test explicit team membership
-	it('Search team membership; user explicitly added to a team through the user.teams property', function() {
+	it('Search team membership; user explicitly added to a team through the user.teams property', () => {
 		let queryParams = { dir: 'ASC', page: '0', size: '5', sort: 'name' };
 
-		Team.findOne({ name: 'no-external' })
-			.exec()
-			.then(function(team) {
-				let searchResults = teamsService.searchTeamMembers(null, {}, queryParams, team);
+		return Team.findOne({ name: 'no-external' }).exec().then(function(team) {
+			return teamsService.searchTeamMembers(null, {}, queryParams, team).then((searchResults) => {
 				(searchResults.elements).should.be.an.Array();
 				(searchResults.elements).should.have.length(1);
 				(searchResults.elements[0].name).should.equal('explicit Name');
 			});
+		});
 	});
 
-	it('meetsRequiredExternalTeams', function() {
+	it('meetsRequiredExternalTeams', () => {
 		let user = { bypassAccessCheck: true };
 		let team = {};
 
