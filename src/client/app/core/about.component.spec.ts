@@ -13,9 +13,7 @@ describe('AboutComponent', () => {
 
 	const testConfig = {
 		version: 'TEST_VERSION_0.1.0',
-		mailer: {
-			admin: 'admin@email.com'
-		},
+		contactEmail: 'admin@example.com',
 		app: {
 			instanceName: 'TEST_INSTANCE'
 		}
@@ -48,7 +46,7 @@ describe('AboutComponent', () => {
 
 	it('should display the admin email address', () => {
 		fixture.detectChanges();
-		expect(rootNativeElement.textContent).toContain(testConfig.mailer.admin);
+		expect(rootNativeElement.textContent).toContain(testConfig.contactEmail);
 	});
 
 });

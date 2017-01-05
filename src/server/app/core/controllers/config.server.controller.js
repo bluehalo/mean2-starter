@@ -1,7 +1,6 @@
 'use strict';
 
 var path = require('path'),
-	_ = require('lodash'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	config = deps.config,
@@ -25,7 +24,7 @@ var getSystemConfig = function() {
 
 		map: config.map,
 		urlHandler: config.urlHandler,
-		mailer: _.pick(config.mailer, 'admin'),
+		contactEmail: config.contactEmail,
 
 		maxScan: config.maxScan,
 		maxExport: config.maxExport,

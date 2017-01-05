@@ -138,6 +138,8 @@ module.exports = {
 		string: 'Copyright © 2016 <a href="http://www.asymmetrik.com" target="_blank">Asymmetrik, Ltd</a>. All Rights Reserved.'
 	},
 
+	contactEmail: process.env.CONTACT_EMAIL || process.env.MAILER_ADMIN || 'noreply@asymmetrik.com',
+
 	messages: {
 		// Use the following for local eventEmitter
 		publishProvider: './src/server/app/messages/providers/event-message.provider.js',

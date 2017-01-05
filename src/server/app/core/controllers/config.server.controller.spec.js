@@ -5,16 +5,16 @@ describe('Config Server Controller', function() {
 	var configController = require('./config.server.controller');
 
 	describe('#getSystemConfig', function() {
-		it('should only include the admin email address for the mailer configuration', function() {
+
+		it('should not include the mailer configuration', function() {
 			var systemConfig = configController.getSystemConfig();
+			systemConfig.should.not.have.property('mailer');
+		});
 
-			var clientSideMailerConfig = systemConfig.mailer;
-			clientSideMailerConfig.should.have.properties('admin');
-			clientSideMailerConfig.admin.should.be.a.String();
-
-			delete clientSideMailerConfig.admin;
-
-			clientSideMailerConfig.should.be.empty();
+		it('should only include a contact email address', function() {
+			var systemConfig = configController.getSystemConfig();
+			systemConfig.should.have.property('contactEmail');
+			systemConfig.contactEmail.should.be.a.String();
 		});
 	});
 });
