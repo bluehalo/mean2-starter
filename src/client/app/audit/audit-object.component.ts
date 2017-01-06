@@ -54,7 +54,6 @@ export class AuditObjectComponent {
 
 	ngOnInit() {
 		if (!AuditObjectTypes.objects.hasOwnProperty(this.auditType)) {
-			console.warn(`WARNING: Improperly configured audit type: ${this.auditType}.  Using default.`);
 			this.auditType = 'default';
 		}
 

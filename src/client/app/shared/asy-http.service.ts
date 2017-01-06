@@ -37,7 +37,7 @@ export class AsyHttp {
 		private route: ActivatedRoute) {}
 
 	static defaultErrFn(err: any) {
-		console.log(`Error retrieving url`, err);
+
 	}
 
 	get(opts: HttpOptions) {
@@ -153,7 +153,6 @@ export class AsyHttp {
 
 				if (errData.type === 'invalid-certificate') {
 					// Redirect to invalid credentials page
-					console.log(`UserState: Server doesn't recognize the submitted cert, go to the invalid cert page`);
 					this.router.navigate(['/invalid-certificate']);
 				}
 				else {
@@ -163,20 +162,16 @@ export class AsyHttp {
 				break;
 			case 403:
 				if (errData.type === 'eua') {
-					console.log(`UserState: Server thinks the user needs to accept eua, go to eua`);
 					this.router.navigate(['/user-eua']);
 				}
 				else if (errData.type === 'inactive') {
-					console.log(`UserState: Server thinks the user is inactive, go to inactive`);
 					this.router.navigate(['/inactive-user']);
 				}
 				else if (errData.type === 'noaccess') {
-					console.log(`UserState: Server thinks the user does not have the required access, go to user.noaccess`);
 					this.router.navigate(['/no-access']);
 				}
 				else {
 					// Add unauthorized behavior
-					console.log(`UserState: Server thinks the user accessed something they shouldn\'t, go to user.unauthorized`);
 					this.router.navigate(['/unauthorized']);
 				}
 				break;

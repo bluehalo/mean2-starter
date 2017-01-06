@@ -22,9 +22,7 @@ export class AuthGuard implements CanActivate {
 		return Observable.create( (observer: Observer<boolean>) => {
 			this.authService.initializing$
 				.subscribe( (isInitializing: boolean) => {
-					console.log(`AuthService isInitializing: ${isInitializing}`);
 					if (!isInitializing) {
-						console.log('AuthService done initializing, AuthGuard is evaluating access');
 						let url: string = state.url;
 						observer.next(this.checkAccess(url, route));
 						observer.complete();
@@ -54,7 +52,6 @@ export class AuthGuard implements CanActivate {
 
 		// If the route requires authentication and the user is not authenticated, then go to the signin route
 		if (url !== '/signin' && requiresAuthentication && !this.userStateService.isAuthenticated()) {
-			console.log('UserState: User is not authenticated, go to signin');
 			// Store the attempted URL so we can redirect after successful login
 			this.userStateService.authRedirectUrl = url;
 			this.router.navigate(['/signin']);
@@ -68,7 +65,6 @@ export class AuthGuard implements CanActivate {
 		if (this.userStateService.isAuthenticated() && !this.userStateService.user.isAdmin() && !this.userStateService.user.isEuaCurrent() ) {
 			if (url !== '/user-eua') {
 				this.userStateService.authRedirectUrl = url;
-				console.log('UserState: User is authenticated, but needs to accept EUA, go to user-eua');
 				this.router.navigate(['/user-eua']);
 				return false;
 			}
@@ -100,7 +96,6 @@ export class AuthGuard implements CanActivate {
 					// If the user is missing the user role, they are pending
 					if (url !== '/inactive-user') {
 						this.userStateService.authRedirectUrl = url;
-						console.log('UserState: User is authenticated, but account is not active, go to inactive-user');
 						this.router.navigate(['/inactive-user']);
 						return false;
 					}
@@ -109,7 +104,6 @@ export class AuthGuard implements CanActivate {
 					// The user doesn't have the needed roles to view the page
 					if (url !== '/unauthorized') {
 						this.userStateService.authRedirectUrl = url;
-						console.log('UserState: User is authenticated, but doesn\'t have the roles needed to view the page, go to user.unauthorized');
 						this.router.navigate(['/unauthorized']);
 						return false;
 					}
