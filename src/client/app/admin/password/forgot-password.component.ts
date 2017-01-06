@@ -52,7 +52,7 @@ export class ForgotPasswordComponent {
 			this.error = 'Missing username.';
 		}
 		else {
-			console.debug(`Requesting password reset for user ${this.username}`);
+			console.log(`Requesting password reset for user ${this.username}`);
 			this.pending = 'Processing request...';
 			this.authService.forgotPassword(this.username)
 				.subscribe(

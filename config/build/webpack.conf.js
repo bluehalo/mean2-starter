@@ -4,7 +4,6 @@ let
 	path = require('path'),
 	webpack = require('webpack'),
 
-	config = require(path.resolve('./src/server/config.js')),
 	assets = require(path.resolve('./config/assets.js'));
 
 module.exports = (mode) => {
@@ -70,7 +69,7 @@ module.exports = (mode) => {
 	// If develop mode, set up for dev middleware
 	else if(develop) {
 		wpConfig.output.path = path.resolve('./public');
-		wpConfig.output.publicPath = 'http://localhost:' + config.port + '/dev';
+		wpConfig.output.publicPath = '/dev/';
 		wpConfig.output.filename = '[name].js';
 		wpConfig.output.chunkFilename = '[name].js';
 	}
