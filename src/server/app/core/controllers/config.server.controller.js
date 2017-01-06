@@ -24,7 +24,7 @@ var getSystemConfig = function() {
 
 		map: config.map,
 		urlHandler: config.urlHandler,
-		mailer: config.mailer,
+		contactEmail: config.contactEmail,
 
 		maxScan: config.maxScan,
 		maxExport: config.maxExport,
