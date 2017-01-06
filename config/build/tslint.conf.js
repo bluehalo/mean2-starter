@@ -25,7 +25,7 @@ module.exports = {
 			"no-bitwise": true,
 			"no-conditional-assignment": true,
 			"no-consecutive-blank-lines": false,
-			"no-console": [ false ],
+			"no-console": [ true, 'debug' ],
 			"no-construct": true,
 			"no-debugger": true,
 			"no-duplicate-key": true,

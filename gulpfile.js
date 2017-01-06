@@ -39,7 +39,7 @@ colors.enabled = true;
  */
 function nodemon(nodemonConfig) {
 	let config = require('./src/server/config');
-	let nodeArgs = ['--debug=' + config.devPorts.debug, '--inspect'];
+	let nodeArgs = ['--inspect=' + config.devPorts.debug];
 	if (plugins.util.env.debugBrk) {
 		nodeArgs.push('--debug-brk');
 	}
@@ -76,7 +76,7 @@ gulp.task('watch-client', () => {
 	var config = require('./src/server/config');
 
 	// Start livereload
-	plugins.livereload.listen(config.devPorts.liveReload);
+	plugins.livereload.listen(config.liveReload.port);
 
 	/*
 	 * Add watch rules to trigger livereload

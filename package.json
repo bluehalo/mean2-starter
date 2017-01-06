@@ -70,6 +70,8 @@
 		"@angular/router": "3.1.1",
 
 		"core-js": "2.4",
+		"classlist.js": "1.1",
+		"console-polyfill": "0.2.3",
 		"reflect-metadata": "0.1",
 		"rxjs": "5.0.0-rc.4",
 		"zone.js": "0.7",

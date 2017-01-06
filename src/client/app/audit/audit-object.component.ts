@@ -25,6 +25,18 @@ auditObjects.push(UrlAudit);
 AuditObjectTypes.registerType('url', UrlAudit);
 
 @Component({
+	selector: 'export-audit',
+	template: `
+			<span *ngIf='auditObject'>
+				<i class='fa fa-download'></i> Export config
+			</span>
+			`
+})
+export class ExportAudit extends DefaultAudit {}
+auditObjects.push(ExportAudit);
+AuditObjectTypes.registerType('export', ExportAudit);
+
+@Component({
 	selector: 'asy-audit-component',
 	template: '<div #content></div>'
 })
@@ -42,7 +54,6 @@ export class AuditObjectComponent {
 
 	ngOnInit() {
 		if (!AuditObjectTypes.objects.hasOwnProperty(this.auditType)) {
-			console.warn(`WARNING: Improperly configured audit type: ${this.auditType}.  Using default.`);
 			this.auditType = 'default';
 		}
 

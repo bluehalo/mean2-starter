@@ -23,7 +23,7 @@ export class AboutComponent {
 		this.configService.getConfig()
 			.subscribe((config: any) => {
 				this.version = config.version;
-				this.adminEmail = config.mailer.admin;
+				this.adminEmail = config.contactEmail;
 				this.instanceName = config.app.instanceName;
 			});
 	}
