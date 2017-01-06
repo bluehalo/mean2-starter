@@ -31,7 +31,7 @@
 	</div>
 
 	<!-- Description -->
-	<div class="form-group row col-md-12">
+	<div class="form-group row col-md-12" *ngIf="!hideDescription">
 		<label for="description">Description</label>
 		<textarea rows="3" class="form-control input-sm" id="description" name="description" [(ngModel)]="resource.description"></textarea>
 	</div>
