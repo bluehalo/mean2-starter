@@ -5,7 +5,7 @@
 	</div>
 
 	<!-- Title -->
-	<div class="form-group row col-md-12">
+	<div class="form-group row col-md-12" *ngIf="!hideTitle">
 		<label for="title">Title<span class="text-danger"><strong> *</strong></span></label>
 		<input type="text" class="form-control input-sm" id="title" name="title" [(ngModel)]="resource.title" required />
 	</div>
