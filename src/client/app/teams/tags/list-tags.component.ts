@@ -81,7 +81,6 @@ export class ListTagsComponent {
 					}
 				},
 				(err: any) => {
-					console.error(err);
 					this.loading = false;
 				},
 				() => {

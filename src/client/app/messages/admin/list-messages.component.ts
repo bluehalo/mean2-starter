@@ -119,7 +119,6 @@ export class ListMessagesComponent {
 				this.results.resolved = true;
 			}, (error) => {
 				this.alertService.addAlert(error.message);
-				console.error(error);
 				this.results.resolved = true;
 			});
 	}

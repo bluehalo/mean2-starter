@@ -23,7 +23,6 @@ export class UserStateService {
 		let redirect = this.authRedirectUrl ? this.authRedirectUrl : '/';
 		redirect = redirect.split(';')[0];
 		// Redirect the user
-		console.debug(`Redirecting user to ${redirect}`);
 		this.router.navigate([redirect]);
 	}
 

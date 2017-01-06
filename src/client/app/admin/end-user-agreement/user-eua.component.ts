@@ -29,12 +29,10 @@ export class UserEuaComponent {
 	private accept() {
 		this.authService.acceptEua()
 			.subscribe(() => {
-				console.log('Accepted EUA for user.');
 				this.userStateService.goToRedirectRoute();
 			},
 			(error: any) => {
 				this.alertService.addAlert(error.message);
-				console.error('Error persisting EUA accept');
 			});
 	};
 }

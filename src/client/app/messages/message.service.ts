@@ -70,7 +70,6 @@ export class MessageService {
 	public subscribe() {
 		if (this.subscribed === 0) {
 			this.socketService.emit('message:subscribe');
-			console.log('Socket.io: Subscribing to messages');
 		}
 		this.subscribed++;
 	}
@@ -80,7 +79,6 @@ export class MessageService {
 
 		if (this.subscribed === 0) {
 			this.socketService.emit('message:unsubscribe');
-			console.log('Socket.io: Unsubscribed from messages');
 		}
 		else if (this.subscribed < 0) {
 			this.subscribed = 0;
@@ -103,14 +101,11 @@ export class MessageService {
 		this.socketService.on('message:data', this.payloadRouterFn);
 
 		this.socketService.on('disconnect', () => {
-			if (this.subscribed > 0) {
-				console.info('Socket.io: Disconnected from message...');
-			}
+
 		});
 
 		this.socketService.on('reconnect', () => {
 			if (this.subscribed > 0) {
-				console.info('Socket.io: Reconnecting to message...');
 				this.socketService.emit('feedstatus:subscribe');
 			}
 		});
