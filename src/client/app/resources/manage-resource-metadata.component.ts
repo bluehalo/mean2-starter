@@ -24,6 +24,8 @@ export class ManageResourceMetadataComponent {
 
 	@Input() hideTitle: boolean = false;
 
+	@Input() hideDescription: boolean = false;
+
 	@Output() alertError = new EventEmitter();
 
 	private ownerOptions: Owner[] = [];
