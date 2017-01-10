@@ -8,9 +8,7 @@ export class ClientConfiguration {
 
 	public static config: any = {
 		providers: {
-		},
-
-		urlHandlers: []
+		}
 	};
 
 	public static applyConfig(overrides: any) {

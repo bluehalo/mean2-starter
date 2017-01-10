@@ -1,0 +1,12 @@
+@import '../colors';
+
+asy-dropdown-item {
+	a {
+		clear: both;
+		color: $color-black;
+		cursor: pointer;
+		display: block;
+		padding: 3px 20px;
+		white-space: nowrap;
+	}
+}
