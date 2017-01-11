@@ -40,61 +40,46 @@ let spec = {
 /**
  * Unit tests
  */
-describe('Resource Model:', function() {
-	before(function(done) {
-		return clearDatabase()
-			.then(function() {
-				resource1 = new Resource(spec.resource1);
-				owner1 = new Owner(spec.owner1);
-				done();
-			}, done).done();
+describe('Resource Model:', () => {
+	before(() => {
+		return clearDatabase().then(() => {
+			resource1 = new Resource(spec.resource1);
+			owner1 = new Owner(spec.owner1);
+		});
 	});
 
-	after(function(done) {
-		clearDatabase()
-			.then(function() {
-				done();
-			}, done).done();
+	after(() => {
+		return clearDatabase();
 	});
 
-	describe('Method Save', function() {
-		it('should begin with no resources', function(done) {
-			Resource.find({}).exec()
-				.then(function(resources) {
-					resources.should.have.length(0);
-					done();
-				}, done);
-		});
-
-		it('should be able to save resource without problems', function(done) {
-			resource1.owner = owner1;
-			resource1.save(done);
-		});
-
-		it('should have one resource', function(done) {
-			Resource.find({}).exec()
-				.then(function(resources) {
-					resources.should.have.length(1);
-					done();
-				}, done);
-		});
-
-		it('should fail when trying to save without a title', function(done) {
-			resource1.title = '';
-			resource1.owner = owner1;
-			resource1.save(function(err) {
-				should.exist(err);
-				done();
+	describe('Method Save', () => {
+		it('should begin with no resources', () => {
+			return Resource.find({}).exec().then((resources) => {
+				resources.should.have.length(0);
 			});
 		});
 
-		it('should fail when trying to save without an owner', function(done) {
+		it('should be able to save resource without problems', () => {
+			resource1.owner = owner1;
+			return resource1.save().should.be.fulfilled();
+		});
+
+		it('should have one resource', () => {
+			return Resource.find({}).exec().then((resources) => {
+				resources.should.have.length(1);
+			});
+		});
+
+		it('should fail when trying to save without a title', () => {
+			resource1.title = '';
+			resource1.owner = owner1;
+			return resource1.save().should.be.rejected();
+		});
+
+		it('should fail when trying to save without an owner', () => {
 			resource1.title = '';
 			resource1.owner = null;
-			resource1.save(function(err) {
-				should.exist(err);
-				done();
-			});
+			return resource1.save().should.be.rejected();
 		});
 
 	});
