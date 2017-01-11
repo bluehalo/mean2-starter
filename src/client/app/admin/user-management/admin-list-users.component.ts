@@ -1,14 +1,14 @@
-import { Component, ViewContainerRef } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Response } from '@angular/http';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 
 import * as _ from 'lodash';
-import { DialogRef, overlayConfigFactory } from 'angular2-modal';
+import { Observable } from 'rxjs';
+import { overlayConfigFactory } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 
 import { User } from '../user.class';
 import { AdminService } from '../admin.service';
-import { AuthenticationService } from '../authentication/authentication.service';
 import { Role } from './role.class';
 import { ExportUsersModalContext, ExportUsersModal } from './export-users.component';
 import { PagingOptions } from '../../shared/pager.component';
@@ -16,24 +16,41 @@ import { SortDisplayOption, SortDirection } from '../../shared/result-utils.clas
 import { AlertService } from '../../shared/alert.service';
 import { ExportConfigService } from '../../shared/export-config.service';
 import { ConfigService } from '../../core/config.service';
+import { Team, TeamMember } from '../../teams/teams.class';
+import { SelectTeamsComponent } from '../../teams/select-teams.component';
+import { TeamsService } from '../../teams/teams.service';
 
 @Component({
 	templateUrl: './admin-list-users.component.html'
 })
 export class AdminListUsersComponent {
 
-	private users: User[] = [];
-	private pagingOpts: PagingOptions;
-	private search: string = '';
-	private userToDelete: User = null;
-	private exportModalVisible: boolean = false;
-	private requiredExternalRoles: string[];
+	@ViewChild(SelectTeamsComponent)
+
+	selectTeamsComponent: SelectTeamsComponent;
+
+	selectedTeam: Team;
+
+	teamMap: any = {};
+
+	users: TeamMember[] = [];
+
+	pagingOpts: PagingOptions;
+
+	search: string = '';
+
+	userToDelete: User = null;
+
+	exportModalVisible: boolean = false;
+
+	requiredExternalRoles: string[];
 
 	// Columns to show/hide in user table
-	private columns: any = {
+	columns: any = {
 		name: {show: true, title: 'Name'},
 		username: {show: true, title: 'Username'},
 		_id: {show: false, title: 'ID'},
+		teams: {show: true, title: 'Teams'},
 		organization: {show: false, title: 'Organization'},
 		email: {show: false, title: 'Email'},
 		phone: {show: false, title: 'Phone'},
@@ -46,46 +63,54 @@ export class AdminListUsersComponent {
 		externalGroups: {show: false, title: 'External Groups'},
 		roles: {show: true, title: 'Roles'}
 	};
-	private columnKeys: string[] = _.keys(this.columns);
-	private defaultColumns: any = JSON.parse(JSON.stringify(this.columns));
-	private columnMode: string = 'default';
 
-	private sortOpts: any = {
+	columnKeys: string[] = _.keys(this.columns);
+
+	defaultColumns: any = JSON.parse(JSON.stringify(this.columns));
+
+	columnMode: string = 'default';
+
+	sortOpts: any = {
 		name: new SortDisplayOption('Name', 'name', SortDirection.asc),
 		username: new SortDisplayOption('Username', 'username', SortDirection.asc),
 		created: new SortDisplayOption('Created', 'created', SortDirection.desc),
 		relevance: new SortDisplayOption('Relevance', 'score', SortDirection.desc)
 	};
-	private filters: any;
-	private possibleRoles: Role[] = Role.ROLES;
 
-	private sub: any;
+	filters: any;
+
+	possibleRoles: Role[] = Role.ROLES;
+
+	sub: any;
 
 	constructor(
-		// private router: Router,
-		private adminService: AdminService,
-		private auth: AuthenticationService,
-		private alertService: AlertService,
-		private exportConfigService: ExportConfigService,
-		private route: ActivatedRoute,
-		private configService: ConfigService,
-		private modal: Modal
+		public modal: Modal,
+		public route: ActivatedRoute,
+		public adminService: AdminService,
+		public alertService: AlertService,
+		public exportConfigService: ExportConfigService,
+		public configService: ConfigService,
+		public teamsService: TeamsService
 	) {}
 
 	ngOnInit() {
-		this.sub = this.route.params.subscribe((params: any) => {
-			this.configService.getConfig().subscribe((config: any) => {
-				this.requiredExternalRoles = _.isArray(config.requiredRoles) ? config.requiredRoles : [];
-			});
-
+		this.sub = this.route.params.subscribe((params: Params) => {
+			// Clear any alerts
 			this.alertService.clearAllAlerts();
-			if (_.toString(params.clearCachedFilter) === 'true' || null == this.adminService.cache.listUsers) {
+
+			// Clear cache if requested
+			let clearCachedFilter = params[`clearCachedFilter`];
+			if (_.toString(clearCachedFilter) === 'true' || null == this.adminService.cache.listUsers) {
 				this.adminService.cache.listUsers = {};
 			}
 
-			this.initializeUserFilters();
+			this.configService.getConfig().subscribe(
+				(config: any) => {
+					this.requiredExternalRoles = _.isArray(config.requiredRoles) ? config.requiredRoles : [];
 
-			this.loadUsers();
+					this.initialize();
+					this.loadUsers();
+				});
 		});
 	}
 
@@ -96,7 +121,7 @@ export class AdminListUsersComponent {
 	/**
 	 * Initialize query, search, and paging options, possibly from cached user settings
 	 */
-	initializeUserFilters() {
+	initialize() {
 		let cachedFilter = this.adminService.cache.listUsers;
 
 		this.search = cachedFilter.search ? cachedFilter.search : '';
@@ -115,24 +140,70 @@ export class AdminListUsersComponent {
 			this.pagingOpts.sortField = this.sortOpts.name.sortField;
 			this.pagingOpts.sortDir = this.sortOpts.name.sortDir;
 		}
+
+		if (cachedFilter.team) {
+			this.selectedTeam = new Team(cachedFilter.team._id, cachedFilter.team.name);
+		}
+
+		this.selectTeamsComponent.setSelectionInput(null, this.selectedTeam);
 	}
-	private loadUsers() {
+
+	resolveTeamNames() {
+		// Get unique list of team ids to query
+		let teamIds: string[] = _.uniq(_.flatMap(this.users, (user: TeamMember) => user.userModel.teams.map((t: any) => t._id)));
+
+		// Check to see if these ids have been cached
+		let idsToQuery = teamIds.filter((id: string) => !this.teamMap.hasOwnProperty(id));
+
+		// Retrieve data about unknown team ids
+		Observable.forkJoin(idsToQuery.map((id: string) => this.teamsService.get(id)))
+			.subscribe(
+				(results: any[]) => {
+					if (_.isArray(results)) {
+						// Cache the id to name mapping
+						results.forEach((r: any) => this.teamMap[r._id] = r.name);
+					}
+				},
+				(err: any) => {
+					// If unable to resolve teams, hide the team column
+					this.columns.teams.show = false;
+					this.alertService.addAlert(err.message);
+				});
+	}
+
+	loadUsers() {
 		let options: any = {};
-		this.adminService.cache.listUsers = {filters: this.filters, search: this.search, paging: this.pagingOpts};
-		this.adminService.search(this.getQuery(), this.search, this.pagingOpts, options)
-			.subscribe((result: any) => {
+
+		this.adminService.cache.listUsers = {
+			filters: this.filters,
+			search: this.search,
+			paging: this.pagingOpts,
+			team: this.selectedTeam,
+		};
+
+		let obs: Observable<Response> = (null != this.selectedTeam) ?
+			this.teamsService.searchMembers(this.selectedTeam._id, this.getQuery(), this.search, this.pagingOpts) :
+			this.adminService.search(this.getQuery(), this.search, this.pagingOpts, options);
+
+		obs.subscribe(
+			(result: any) => {
 				if (result && Array.isArray(result.elements)) {
-					this.users = result.elements.map((element: any) => {
-						return new User().setFromUserModel(element);
-					});
 					this.pagingOpts.set(result.pageNumber, result.pageSize, result.totalPages, result.totalSize);
+
+					// Set the user list
+					this.users = result.elements.map((element: any) => new TeamMember().setFromTeamMemberModel(null, element));
+
+					// Resolve team names for users' teams
+					this.resolveTeamNames();
+
 				} else {
 					this.pagingOpts.reset();
 				}
-			}, (err: any): any => null );
+			},
+			(err: any): any => null );
 	}
 
-	private getQuery(): any {
+	getQuery(): any {
 		let query: any;
 		let elements: any[] = [];
 
@@ -172,69 +243,71 @@ export class AdminListUsersComponent {
 		return query;
 	}
 
-	private applySearch(event: any) {
+	applySearch(event: any) {
 		this.pagingOpts.setPageNumber(0);
 		this.loadUsers();
 	}
 
-	private goToPage(event: any) {
+	goToPage(event: any) {
 		this.pagingOpts.update(event.pageNumber, event.pageSize);
 		this.loadUsers();
 	}
 
-	private setSort(sortOpt: SortDisplayOption) {
+	setSort(sortOpt: SortDisplayOption) {
 		this.pagingOpts.sortField = sortOpt.sortField;
 		this.pagingOpts.sortDir = sortOpt.sortDir;
 		this.loadUsers();
-	};
+	}
 
-	private confirmDeleteUser(user: User) {
+	setSelectedTeam(event: any) {
+		if (event.hasOwnProperty('team')) {
+			this.selectedTeam = event.team;
+		}
+		this.loadUsers();
+	}
+
+	confirmDeleteUser(user: User) {
 		this.userToDelete = user;
 
-		let dialogPromise: Promise<DialogRef<any>>;
-		dialogPromise = this.modal.confirm()
+		this.modal.confirm()
 			.size('lg')
 			.showClose(true)
 			.isBlocking(true)
 			.title('Delete user?')
 			.body(`Are you sure you want to delete user: '${user.userModel.username}" ?`)
 			.okBtn('Delete')
-			.open();
-
-		dialogPromise.then(
-			(resultPromise: any) => resultPromise.result.then(
-				// Success
-				() => {
-					let id = user.userModel._id;
-					let username = user.userModel.username;
-					this.adminService.removeUser(id).subscribe(() => {
-							this.alertService.addAlert(`Deleted user: ${username}`, 'success');
-							this.loadUsers();
-						},
-						(response: Response) => { this.alertService.addAlert(response.json().message); });
-				},
-				// Fail
-				() => {}
-			)
-		);
+			.open()
+			.then(
+				(resultPromise: any) => resultPromise.result.then(
+					// Confirmed
+					() => {
+						let id = user.userModel._id;
+						let username = user.userModel.username;
+						this.adminService.removeUser(id).subscribe(
+							() => {
+								this.alertService.addAlert(`Deleted user: ${username}`, 'success');
+								this.loadUsers();
+							},
+							(response: Response) => {
+								this.alertService.addAlert(response.json().message);
+							});
+					},
+					// Cancelled
+					() => {}
+				)
+			);
 	}
 
-	private exportUserData() {
+	exportUserData() {
 		this.modal.open(ExportUsersModal, overlayConfigFactory({}, ExportUsersModalContext));
 	}
 
-	private exportCurrentView() {
+	exportCurrentView() {
 		let viewColumns = _.keys(this.columns)
-			.filter((key: string) => {
-				return this.columns[key].show;
-			})
-			.map((key: any) => {
-				return {key: key, title: this.columns[key].title};
-			});
+			.filter((key: string) => this.columns[key].show)
+			.map((key: any) => ({key: key, title: this.columns[key].title}));
 
-		let rolesIndex = _.findIndex(viewColumns, (pair: any) => {
-			return pair.key === 'roles';
-		});
+		let rolesIndex = _.findIndex(viewColumns, (pair: any) => pair.key === 'roles');
 
 		if (rolesIndex !== -1) {
 			viewColumns.splice(rolesIndex, 1,
@@ -255,11 +328,11 @@ export class AdminListUsersComponent {
 			});
 	}
 
-	private doneExporting() {
+	doneExporting() {
 		this.exportModalVisible = false;
 	}
 
-	private checkColumnConfiguration() {
+	checkColumnConfiguration() {
 			// Check first to see if all columns are turned on
 		this.columnMode = 'all';
 		this.columnKeys.some((name: string) => {
@@ -283,7 +356,7 @@ export class AdminListUsersComponent {
 		});
 	}
 
-	private quickColumnSelect(selection: string) {
+	quickColumnSelect(selection: string) {
 		if (selection === 'all') {
 			this.columnKeys.forEach( (name: string) =>	this.columns[name].show = true);
 
@@ -291,5 +364,11 @@ export class AdminListUsersComponent {
 			this.columns = JSON.parse(JSON.stringify(this.defaultColumns));
 		}
 		this.checkColumnConfiguration();
+	}
+
+	showAlertMessage(event: any) {
+		if (null != event && null != event.message) {
+			this.alertService.addAlert(event.message);
+		}
 	}
 }

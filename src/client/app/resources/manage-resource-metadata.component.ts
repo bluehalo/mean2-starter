@@ -28,14 +28,16 @@ export class ManageResourceMetadataComponent {
 
 	@Output() alertError = new EventEmitter();
 
-	private ownerOptions: Owner[] = [];
+	ownerOptions: Owner[] = [];
 
-	private tagOptions: Tag[] = [];
+	tagOptions: Tag[] = [];
+
+	filteredTagOptions: Tag[] = [];
 
 	constructor(
-		private authService: AuthenticationService,
-		private tagsService: TagsService,
-		private teamsService: TeamsService
+		public authService: AuthenticationService,
+		public tagsService: TagsService,
+		public teamsService: TeamsService
 	) {
 	}
 
@@ -61,15 +63,24 @@ export class ManageResourceMetadataComponent {
 				});
 	}
 
-	private getTagOptions() {
+	processTags() {
+		this.filteredTagOptions = [];
+
+		this.tagOptions.forEach((t: Tag) => {
+			if (-1 === _.findIndex(this.resource.tags, (r: any) => r._id === t._id)) {
+				this.filteredTagOptions.push(t);
+			}
+		});
+	}
+
+	getTagOptions() {
 		this.tagsService.searchTags({'owner': this.resource.owner._id}, null, new PagingOptions(0, 1000), {})
 			.subscribe(
 				(result: any) => {
 					if (null != result && null != result.elements && result.elements.length > 0) {
 						this.tagOptions = result.elements;
-						this.resource.tags = this.tagOptions.filter((p: any) => {
-							return (-1 !== _.findIndex(this.resource.tags, (o: any) => { return o._id === p._id; }));
-						});
+						this.resource.tags = this.tagOptions.filter((p: any) => (-1 !== _.findIndex(this.resource.tags, (o: any) => o._id === p._id)));
+						this.processTags();
 					}
 					else {
 						this.tagOptions = [];
@@ -84,6 +95,7 @@ export class ManageResourceMetadataComponent {
 	private updateTags(event: any) {
 		if (event.hasOwnProperty('items')) {
 			this.resource.tags = event.items;
+			this.processTags();
 		}
 	}
 }

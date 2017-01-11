@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Response } from '@angular/http';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 
@@ -19,28 +19,28 @@ export class ListTagsComponent {
 
 	@Input() readOnly: boolean = true;
 
-	private tags: any[] = [];
+	tags: any[] = [];
 
-	private teamId: string;
+	teamId: string;
 
-	private user: User;
+	user: User;
 
-	private search: string;
+	search: string;
 
-	private sortOptions: any = {};
+	sortOptions: any = {};
 
-	private pagingOptions: PagingOptions;
+	pagingOptions: PagingOptions;
 
-	private maxResourcesShownInline = 3;
+	maxResourcesShownInline = 3;
 
-	private loading: boolean = false;
+	loading: boolean = false;
 
 	constructor(
-		private modal: Modal,
-		private route: ActivatedRoute,
-		private alertService: AlertService,
-		private auth: AuthenticationService,
-		private tagsService: TagsService
+		public modal: Modal,
+		public route: ActivatedRoute,
+		public alertService: AlertService,
+		public auth: AuthenticationService,
+		public tagsService: TagsService
 	) {
 	}
 
@@ -62,7 +62,7 @@ export class ListTagsComponent {
 			});
 	}
 
-	private getTags() {
+	getTags() {
 		let query: any = {
 			owner: {'$in': this.teamId}
 		};
@@ -88,17 +88,17 @@ export class ListTagsComponent {
 				});
 	}
 
-	private goToPage(event: any) {
+	goToPage(event: any) {
 		this.pagingOptions.update(event.pageNumber, event.pageSize);
 		this.getTags();
 	}
 
-	private applySearch() {
+	applySearch() {
 		this.pagingOptions.setPageNumber(0);
 		this.getTags();
 	}
 
-	private setSort(sortOpt: SortDisplayOption) {
+	setSort(sortOpt: SortDisplayOption) {
 		if (sortOpt.sortField === this.pagingOptions.sortField) {
 			this.pagingOptions.sortDir = (this.pagingOptions.sortDir === SortDirection.asc) ? SortDirection.desc : SortDirection.asc;
 		} else {
@@ -108,7 +108,7 @@ export class ListTagsComponent {
 		this.getTags();
 	};
 
-	private removeTag(tag: any) {
+	removeTag(tag: any) {
 		this.modal.confirm()
 			.size('lg')
 			.showClose(true)

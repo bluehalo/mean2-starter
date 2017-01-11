@@ -1,0 +1,41 @@
+<div class="row">
+	<!--Teams-->
+	<div [ngClass]="{'col-md-12': !showTags, 'col-md-6': showTags}">
+		<div style="padding-left:0;" class="col-md-12 pull-left btn-group" dropdown>
+			<button style="text-align: left;" type="button" class="form-control input-sm dropdown-toggle hide-overflow" dropdownToggle>
+				{{ selectedTeam.name }}
+				<span class="pull-right">
+						<span class="caret"></span>
+					</span>
+			</button>
+			<ul class="dropdown-menu" role="menu">
+				<li (click)="applyTeamFilter(allTeamOption)">
+					<a class="no-href">{{ allTeamOption.name }}</a>
+				</li>
+				<li *ngFor="let team of teamOptions" (click)="applyTeamFilter(team)">
+					<a class="no-href">{{ team.name }}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<!--Tags-->
+	<div *ngIf="showTags" class="col-md-6">
+		<div style="padding-left:0;" class="col-md-12 pull-left btn-group" dropdown>
+			<button style="text-align: left;" type="button" class="form-control input-sm dropdown-toggle hide-overflow" dropdownToggle>
+				{{ selectedTag.name }}
+				<span class="pull-right">
+						<span class="caret"></span>
+					</span>
+			</button>
+			<ul class="dropdown-menu" role="menu">
+				<li (click)="applyTagFilter(allTagOption)">
+					<a class="no-href">{{ allTagOption.name }}</a>
+				</li>
+				<li *ngFor="let tag of tagOptions" (click)="applyTagFilter(tag)">
+					<a class="no-href">{{ tag.name }}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

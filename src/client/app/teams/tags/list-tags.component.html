@@ -73,22 +73,28 @@
 					<tr class="list-row" *ngFor="let tag of tags">
 
 						<!-- Tag Name -->
-						<td style="width:200px;">
-							<div class="hide-overflow">
-								<div class="hide-overflow" style="max-width:400px;">{{tag.name}}</div>
+						<td>
+							<div style="width:200px;"
+								 class="hide-overflow"
+								 [attr.title]="tag.name">
+								{{tag.name}}
 							</div>
 						</td>
 
 						<td>
-							<div class="hide-overflow" style="max-width:400px;">{{tag.description}}</div>
+							<div style="width:200px;"
+								 class="hide-overflow"
+								 [attr.title]="tag.description">
+								{{tag.description}}
+							</div>
 						</td>
 
 						<td >
-							<div class="hide-overflow" style="max-width:400px;">{{tag.created | agoDate:false}}</div>
+							<div>{{tag.created | agoDate:false}}</div>
 						</td>
 
 						<td >
-							<div class="hide-overflow" style="max-width:400px;">{{tag.updated | agoDate:false}}</div>
+							<div>{{tag.updated | agoDate:false}}</div>
 						</td>
 
 						<td>
