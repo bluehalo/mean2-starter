@@ -1,0 +1,12 @@
+
+<span class="dropdown" dropdown appendToBody="true">
+	<a class="no-href dropdown-toggle" (click)="initializeMenu()" dropdownToggle>
+		<span *ngIf="mode !== 'image'">{{ valueToDisplay }}</span>
+		<span *ngIf="mode === 'image'"><asy-safe-image [showDefault]="options.showDefault" [imgClass]="options.class" [imgSource]="valueToDisplay"></asy-safe-image></span>
+	</a>
+	<ul class="dropdown-menu menu-icon">
+		<li *ngFor="let item of menuItems">
+			<asy-dropdown-item-wrapper [item]="item" [value]="value" [options]="options"></asy-dropdown-item-wrapper>
+		</li>
+	</ul>
+</span>

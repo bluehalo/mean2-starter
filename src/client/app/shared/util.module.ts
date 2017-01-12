@@ -12,7 +12,6 @@ import { AddRemoveList } from './add-remove-list.component';
 import { CamelToHumanPipe } from './camel-to-human.pipe';
 import { SafeImageComponent } from './safe-image.component';
 import { AsyLoading } from './loading-animation.component';
-import { AsyUrlHandler } from './asy-url-handler.service';
 import { BigNumberPipe } from './big-number.pipe';
 import { CapitalizePipe } from './capitalize.pipe';
 import { ConfirmModal } from './confirm.component';
@@ -22,7 +21,11 @@ import { InLineEdit } from './in-line-edit.component';
 import { Pager } from './pager.component';
 import { AreaPipe } from './area.pipe';
 import { KeysPipe } from './keys.pipe';
-
+import { AsyDropdownComponent } from './dropdown/asy-dropdown.component';
+import { AsyDropdownItemComponent } from './dropdown/asy-dropdown-item.component';
+import { AsyDropdownService } from './dropdown/asy-dropdown.service';
+import { AsyDropdownItemWrapperComponent } from './dropdown/asy-dropdown-item-wrapper.component';
+import { ClientConfiguration } from '../config/configurator';
 
 @NgModule({
 	imports: [
@@ -30,7 +33,13 @@ import { KeysPipe } from './keys.pipe';
 		FormsModule,
 		Ng2BootstrapModule
 	],
+	entryComponents: [
+		ClientConfiguration.config.components.urlHandler.useClass
+	],
 	exports: [
+		AsyDropdownComponent,
+		AsyDropdownItemComponent,
+
 		AddRemoveList,
 		AddRemoveTypeaheadList,
 		AgoDatePipe,
@@ -52,6 +61,9 @@ import { KeysPipe } from './keys.pipe';
 		AddRemoveTypeaheadList,
 		AgoDatePipe,
 		AreaPipe,
+		AsyDropdownComponent,
+		AsyDropdownItemComponent,
+		AsyDropdownItemWrapperComponent,
 		AsyLoading,
 		BigNumberPipe,
 		CamelToHumanPipe,
@@ -61,15 +73,14 @@ import { KeysPipe } from './keys.pipe';
 		InLineEdit,
 		SafeImageComponent,
 		Pager,
-		KeysPipe
+		KeysPipe,
+		ClientConfiguration.config.components.urlHandler.useClass
 	],
 	providers: [
 		AlertService,
+		AsyDropdownService,
 		AsyHttp,
-		AsyUrlHandler,
 		ExportConfigService
-	],
-	entryComponents: [
 	]
 })
 export class UtilModule { }

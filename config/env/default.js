@@ -292,8 +292,5 @@ module.exports = {
 	notifications: {
 		email: true,
 		sms: false
-	},
-
-	urlHandler: 'default'
-
+	}
 };

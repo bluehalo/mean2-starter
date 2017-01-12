@@ -23,7 +23,6 @@ var getSystemConfig = function() {
 		defaultImage: config.defaultImage,
 
 		map: config.map,
-		urlHandler: config.urlHandler,
 		contactEmail: config.contactEmail,
 
 		maxScan: config.maxScan,
