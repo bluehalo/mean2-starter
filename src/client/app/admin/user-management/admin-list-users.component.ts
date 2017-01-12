@@ -16,11 +16,9 @@ import { SortDisplayOption, SortDirection } from '../../shared/result-utils.clas
 import { AlertService } from '../../shared/alert.service';
 import { ExportConfigService } from '../../shared/export-config.service';
 import { ConfigService } from '../../core/config.service';
-import { Team, TeamMember } from '../../teams/teams.class';
+import { Team } from '../../teams/teams.class';
 import { SelectTeamsComponent } from '../../teams/select-teams.component';
 import { TeamsService } from '../../teams/teams.service';
-import { ObservableUtils } from '../../shared/observable-utils.class';
-import { ObservableResult } from '../../shared/observable-result.class';
 
 @Component({
 	templateUrl: './admin-list-users.component.html'
@@ -117,6 +115,7 @@ export class AdminListUsersComponent {
 	}
 
 	ngOnDestroy() {
+		this.teamsService.teamMap = {};
 		this.sub.unsubscribe();
 	}
 
@@ -150,32 +149,6 @@ export class AdminListUsersComponent {
 		this.selectTeamsComponent.setSelectionInput(null, this.selectedTeam);
 	}
 
-	resolveTeamNames() {
-		// Defensive checking against null teams field
-		this.users.forEach((user: any) => {
-			user.userModel.teams = user.userModel.teams || [];
-		});
-
-		// Get unique list of team ids to query
-		let teamIds: string[] = _.uniq(_.flatMap(this.users, (user: any) => user.userModel.teams.map((t: any) => t._id)));
-
-		// Check to see if these ids have been cached
-		let idsToQuery = teamIds.filter((id: string) => !this.teamMap.hasOwnProperty(id));
-
-		// Retrieve data about unknown team ids
-		ObservableUtils.forkJoinSettled(idsToQuery.map((id: string) => this.teamsService.get(id)))
-			.subscribe(
-				(results: ObservableResult[]) => {
-					results.forEach((result, i) => {
-						if (result.state === 'success') {
-							this.teamMap[result.value._id] = result.value.name;
-						} else {
-							this.teamMap[idsToQuery[i]] = '<missing>';
-						}
-					});
-			});
-	}
-
 	loadUsers() {
 		let options: any = {};
 
@@ -198,8 +171,8 @@ export class AdminListUsersComponent {
 					// Set the user list
 					this.users = result.elements;
 
-					// Resolve team names for users' teams
-					this.resolveTeamNames();
+					// Get latest team cache
+					this.teamMap = this.teamsService.teamMap;
 
 				} else {
 					this.pagingOpts.reset();

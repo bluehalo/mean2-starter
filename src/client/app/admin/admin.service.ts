@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { User } from './user.class';
 import { AsyHttp, HttpOptions } from '../shared/asy-http.service';
 import { PagingOptions } from '../shared/pager.component';
+import { TeamsService } from '../teams/teams.service';
 
 @Injectable()
 /**
@@ -16,7 +17,8 @@ export class AdminService {
 	cache: any = {};
 
 	constructor(
-		private asyHttp: AsyHttp
+		private asyHttp: AsyHttp,
+		private teamsService: TeamsService
 	) {}
 
 	search(query: any, search: string, paging: PagingOptions, options: any): Observable<any> {
@@ -26,6 +28,7 @@ export class AdminService {
 					(results: any) => {
 						if (null != results && _.isArray(results.elements)) {
 							results.elements = results.elements.map((element: any) => new User().setFromUserModel(element));
+							this.teamsService.resolveTeamNames(results.elements);
 						}
 						observer.next(results);
 					},
