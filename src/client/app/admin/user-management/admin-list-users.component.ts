@@ -19,6 +19,8 @@ import { ConfigService } from '../../core/config.service';
 import { Team, TeamMember } from '../../teams/teams.class';
 import { SelectTeamsComponent } from '../../teams/select-teams.component';
 import { TeamsService } from '../../teams/teams.service';
+import { ObservableUtils } from '../../shared/observable-utils.class';
+import { ObservableResult } from '../../shared/observable-result.class';
 
 @Component({
 	templateUrl: './admin-list-users.component.html'
@@ -33,7 +35,7 @@ export class AdminListUsersComponent {
 
 	teamMap: any = {};
 
-	users: TeamMember[] = [];
+	users: any[] = [];
 
 	pagingOpts: PagingOptions;
 
@@ -149,26 +151,29 @@ export class AdminListUsersComponent {
 	}
 
 	resolveTeamNames() {
+		// Defensive checking against null teams field
+		this.users.forEach((user: any) => {
+			user.userModel.teams = user.userModel.teams || [];
+		});
+
 		// Get unique list of team ids to query
-		let teamIds: string[] = _.uniq(_.flatMap(this.users, (user: TeamMember) => user.userModel.teams.map((t: any) => t._id)));
+		let teamIds: string[] = _.uniq(_.flatMap(this.users, (user: any) => user.userModel.teams.map((t: any) => t._id)));
 
 		// Check to see if these ids have been cached
 		let idsToQuery = teamIds.filter((id: string) => !this.teamMap.hasOwnProperty(id));
 
 		// Retrieve data about unknown team ids
-		Observable.forkJoin(idsToQuery.map((id: string) => this.teamsService.get(id)))
+		ObservableUtils.forkJoinSettled(idsToQuery.map((id: string) => this.teamsService.get(id)))
 			.subscribe(
-				(results: any[]) => {
-					if (_.isArray(results)) {
-						// Cache the id to name mapping
-						results.forEach((r: any) => this.teamMap[r._id] = r.name);
-					}
-				},
-				(err: any) => {
-					// If unable to resolve teams, hide the team column
-					this.columns.teams.show = false;
-					this.alertService.addAlert(err.message);
-				});
+				(results: ObservableResult[]) => {
+					results.forEach((result, i) => {
+						if (result.state === 'success') {
+							this.teamMap[result.value._id] = result.value.name;
+						} else {
+							this.teamMap[idsToQuery[i]] = '<missing>';
+						}
+					});
+			});
 	}
 
 	loadUsers() {
@@ -182,7 +187,7 @@ export class AdminListUsersComponent {
 		};
 
 		let obs: Observable<Response> = (null != this.selectedTeam) ?
-			this.teamsService.searchMembers(this.selectedTeam._id, this.getQuery(), this.search, this.pagingOpts) :
+			this.teamsService.searchMembers(this.selectedTeam._id, null, this.getQuery(), this.search, this.pagingOpts) :
 			this.adminService.search(this.getQuery(), this.search, this.pagingOpts, options);
 
 		obs.subscribe(
@@ -191,7 +196,7 @@ export class AdminListUsersComponent {
 					this.pagingOpts.set(result.pageNumber, result.pageSize, result.totalPages, result.totalSize);
 
 					// Set the user list
-					this.users = result.elements.map((element: any) => new TeamMember().setFromTeamMemberModel(null, element));
+					this.users = result.elements;
 
 					// Resolve team names for users' teams
 					this.resolveTeamNames();

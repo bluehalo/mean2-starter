@@ -117,7 +117,7 @@
 					<td [hidden]="!columns._id.show">{{user.userModel._id}}</td>
 					<td [hidden]="!columns.teams.show">
 						<div class="hide-overflow" style="max-width: 300px;">
-							<span *ngFor="let team of user.userModel.teams; let last = last">{{ teamMap[team._id] }}{{ last? '' : ', ' }}</span>
+							<span *ngFor="let team of user.userModel.teams; let last = last" [attr.title]="team._id">{{ teamMap[team._id] }}{{ last? '' : ', ' }}</span>
 						</div>
 					</td>
 					<td [hidden]="!columns.organization.show">{{user.userModel.organization}}</td>
