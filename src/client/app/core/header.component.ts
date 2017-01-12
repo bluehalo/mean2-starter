@@ -35,7 +35,7 @@ export class HeaderComponent extends CoreComponent {
 		// Subscribe to user initialization observable and load teams when done
 		this.authService.initializing$.subscribe(
 			(isInitializing: boolean) => {
-				if (!isInitializing) {
+				if (!isInitializing && this.user.isAuthenticated()) {
 					this.teamsService.selectionList().subscribe(
 						(result: any) => {
 							if (null != result && null != result.elements && result.elements.length > 0) {
