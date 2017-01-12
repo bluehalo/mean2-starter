@@ -3,9 +3,11 @@
 /**
  * Module dependencies.
  */
-let path = require('path'),
+let _ = require('lodash'),
+	path = require('path'),
 	config = require(path.resolve('./src/server/config.js')),
 	logger = require(path.resolve('./src/server/lib/bunyan.js')).logger,
+	pjson = require(path.resolve('./package.json')),
 
 	bodyParser = require('body-parser'),
 	compress = require('compression'),
@@ -19,6 +21,8 @@ let path = require('path'),
 	methodOverride = require('method-override'),
 	morgan = require('morgan'),
 	passport = require('passport'),
+	swaggerJsDoc = require('swagger-jsdoc'),
+	swaggerUi = require('swagger-ui-express'),
 
 	MongoStore = require('connect-mongo')(session);
 
@@ -233,6 +237,39 @@ function initModulesServerSockets(app) {
 }
 
 /**
+ * Configure the API Docs using Swagger to interrogate the available
+ * routes and documentation. Must be explicitly enabled in order to
+ * have the docs generated and published.
+ */
+function initSwagger(app) {
+	if (_.get(config, 'apiDocs.enabled', false) === true) {
+		let swaggerOptions = {
+			swaggerDefinition: {
+				info: {
+					title: config.app.title,
+					version: pjson.version,
+					description: config.app.description,
+					contact: {
+						email: _.get(config.mailer, 'from')
+					}
+				}
+			},
+			apis: config.files.server.routes.map((route) => {return './' + route;})
+		};
+
+		let swaggerSpec = swaggerJsDoc(swaggerOptions);
+
+		// Some api calls are dependent on whether local or proxy-pki are used.
+		// If no strategy is defined, assume it is used in both.
+		swaggerSpec.paths = _.pickBy(swaggerSpec.paths, (path) => {
+			return path.strategy === undefined || path.strategy === config.auth.strategy;
+		});
+
+		app.use(config.apiDocs.url || '/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+	}
+}
+
+/**
  * Configure error handling
  */
 function initErrorRoutes(app) {
@@ -329,6 +366,9 @@ module.exports.init = function (db) {
 
 	// Initialize modules sockets
 	initModulesServerSockets(app);
+
+	// Initialize Swagger
+	initSwagger(app);
 
 	// Initialize error routes
 	initErrorRoutes(app);

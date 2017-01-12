@@ -53,6 +53,8 @@
 		"q": "1.4",
 		"serve-favicon": "2.3",
 		"socket.io": "1.5",
+		"swagger-jsdoc": "1.8.3",
+		"swagger-ui-express": "1.0.2",
 		"through2": "2.0",
 		"validator": "6.1",
 

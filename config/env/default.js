@@ -294,6 +294,14 @@ module.exports = {
 		sms: false
 	},
 
-	urlHandler: 'default'
+	urlHandler: 'default',
+
+	/*
+	 * API Documentation settings
+	 */
+	apiDocs: {
+		enabled: false,
+		url: '/api-docs'
+	}
 
 };

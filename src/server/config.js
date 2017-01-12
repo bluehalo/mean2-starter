@@ -156,7 +156,7 @@ let initGlobalConfigFiles = (config, assets) => {
  */
 let initGlobalConfig = () => {
 
-	// Validate NDOE_ENV existance
+	// Validate NODE_ENV existence
 	validateEnvironmentVariable();
 
 	// Get the default config
