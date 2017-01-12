@@ -34,7 +34,7 @@ export class PagingOptions {
 		this.pageNumber = pageNumber;
 	}
 
-	public toObj(): any {
+	toObj(): any {
 		return {
 			page: this.pageNumber,
 			size: this.pageSize,
@@ -62,15 +62,15 @@ export class Pager {
 
 	@Output() onChange: EventEmitter<any> = new EventEmitter();
 
-	private sortdir: SortDirection = SortDirection.desc;
+	sortdir: SortDirection = SortDirection.desc;
 
-	private totalPages: number = 0;
+	totalPages: number = 0;
 
-	private startFormatted: string = '';
+	startFormatted: string = '';
 
-	private endFormatted: string = '';
+	endFormatted: string = '';
 
-	private totalFormatted: string = 'unknown';
+	totalFormatted: string = 'unknown';
 
 	constructor() {}
 
@@ -89,10 +89,10 @@ export class Pager {
 		}
 	}
 
-	private format() {
+	format() {
 		this.startFormatted = ((this.pageSize * this.pageNumber) + 1).toLocaleString();
 
-		let end = (this.pageSize * this.pageNumber) + this.maxPageSize;
+		let end = (this.pageSize * this.pageNumber) + Math.max(this.pageSize, this.currentSize);
 		end = (end > this.totalSize) ? this.totalSize : end;
 		this.endFormatted = end.toLocaleString();
 
@@ -101,7 +101,7 @@ export class Pager {
 		}
 	}
 
-	private calculateTotalPages() {
+	calculateTotalPages() {
 		// Constrain the page size to the max
 		this.pageSize = Math.min(this.maxPageSize, Math.max(this.pageSize, 1));
 
@@ -109,7 +109,7 @@ export class Pager {
 		this.totalPages = Math.ceil(this.totalSize / this.pageSize);
 	}
 
-	private goToPage(pageNumber: number) {
+	goToPage(pageNumber: number) {
 		// Go to specific page number
 		this.pageNumber = Math.min(this.totalPages - 1, Math.max(pageNumber, 0));
 		this.format();
@@ -118,7 +118,7 @@ export class Pager {
 		this.onChange.emit({pageNumber: this.pageNumber, pageSize: this.pageSize, sortdir: this.sortdir});
 	}
 
-	private setPageSize(pageSize: number) {
+	setPageSize(pageSize: number) {
 		// Page size can never exceed the max
 		this.pageSize = Math.min(this.maxPageSize, Math.max(pageSize, 0));
 
@@ -129,7 +129,7 @@ export class Pager {
 		this.onChange.emit({pageNumber: this.pageNumber, pageSize: this.pageSize, sortdir: this.sortdir});
 	}
 
-	private sort(direction: SortDirection) {
+	sort(direction: SortDirection) {
 		this.sortdir = direction;
 
 		// Emit change event

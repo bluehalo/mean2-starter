@@ -1,22 +1,24 @@
 import { Component } from '@angular/core';
 import { Response } from '@angular/http';
 
-import { AdminService } from '../admin.service';
+import { BSModalContext } from 'angular2-modal/plugins/bootstrap/index';
 
-export class ExportUsersModalContext {
-// extends BSModalContext {
-// 	constructor(
-// 	){
-// 		super();
-// 		this.size ='lg';
-// 	}
+import { AdminService } from '../admin.service';
+import { ModalComponent, DialogRef } from 'angular2-modal';
+
+export class ExportUsersModalContext extends BSModalContext {
+
+	constructor() {
+		super();
+		this.size = 'lg';
+	}
 }
 
 @Component({
 	selector: 'export-users-modal',
 	templateUrl: './export-users.component.html'
 })
-export class ExportUsersModal /*implements ModalComponent<ExportUsersModalContext>*/ {
+export class ExportUsersModal implements ModalComponent<ExportUsersModalContext> {
 
 	private selectedField = 'username';
 	private delimiter = '; ';
@@ -27,8 +29,10 @@ export class ExportUsersModal /*implements ModalComponent<ExportUsersModalContex
 	private context: ExportUsersModalContext;
 
 	constructor(
+		public dialog: DialogRef<ExportUsersModalContext>,
 		public adminService: AdminService,
 	) {
+		this.context = dialog.context;
 	}
 
 	private static isJsonString(str: string): boolean {
@@ -45,7 +49,7 @@ export class ExportUsersModal /*implements ModalComponent<ExportUsersModalContex
 	}
 
 	private done() {
-		// this.dialog.close();
+		this.dialog.close();
 	}
 
 	private retrieveUsers() {

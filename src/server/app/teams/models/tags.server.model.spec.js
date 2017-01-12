@@ -3,8 +3,7 @@
 /**
  * Module dependencies.
  */
-let
-	path = require('path'),
+let path = require('path'),
 	q = require('q'),
 	should = require('should'),
 

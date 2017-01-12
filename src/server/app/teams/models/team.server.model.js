@@ -142,14 +142,7 @@ TeamUserSchema.statics.teamCopy = function(user, teamId) {
 	if(null != user){
 		toReturn = user.toObject();
 
-		toReturn.teams = [];
-		if(null != user.teams) {
-			user.teams.forEach(function(element){
-				if(null != element._id && element._id.equals(teamId)) {
-					toReturn.teams.push(element);
-				}
-			});
-		}
+		toReturn.teams = user.teams;
 	}
 
 	return toReturn;

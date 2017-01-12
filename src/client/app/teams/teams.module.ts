@@ -14,6 +14,7 @@ import { TeamsRoutingModule } from './teams-routing.module';
 import { TagsService } from './tags/tags.service';
 import { TeamAudit } from './audit/team-audit.component';
 import { TeamRoleAudit } from './audit/team-role-audit.component';
+import { SelectTeamsComponent } from './select-teams.component';
 
 @NgModule({
 	imports: [
@@ -30,6 +31,7 @@ import { TeamRoleAudit } from './audit/team-role-audit.component';
 		TeamRoleAudit
 	],
 	exports: [
+		SelectTeamsComponent,
 		TeamAudit,
 		TeamRoleAudit
 	],
@@ -37,6 +39,7 @@ import { TeamRoleAudit } from './audit/team-role-audit.component';
 		ListTeamsComponent,
 		ListTeamMembersComponent,
 		ManageTeamComponent,
+		SelectTeamsComponent,
 		TeamAudit,
 		TeamRoleAudit,
 		TeamSummaryComponent

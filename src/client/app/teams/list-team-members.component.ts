@@ -119,10 +119,10 @@ export class ListTeamMembersComponent {
 	};
 
 	private getTeamMembers() {
-		this.teamsService.searchMembers(this.teamId, null, null, this.pagingOptions)
+		this.teamsService.searchMembers(this.teamId, this.team, null, null, this.pagingOptions)
 			.subscribe((result: any) => {
 				if (null != result && null != result.elements && result.elements.length > 0) {
-					this.teamMembers = result.elements.map((e: any) => new TeamMember().setFromTeamMemberModel(this.team, e));
+					this.teamMembers = result.elements;
 					this.pagingOptions.set(result.pageNumber, result.pageSize, result.totalPages, result.totalSize);
 				} else {
 					this.teamMembers = [];

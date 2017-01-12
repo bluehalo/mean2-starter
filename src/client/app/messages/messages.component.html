@@ -1,7 +1,7 @@
 <div class="wf-messages">
 	<div *ngIf="motd">
 		<div class="jumbotron motd">
-			<h1>{{ motd.title }} <span class="pull-right">{{ motd.created | agoDate:false}} ago</span></h1>
+			<h1>{{ motd.title }} <span class="pull-right">{{ motd.created | agoDate:false}}</span></h1>
 			<p [innerHTML]="motd.body"></p>
 		</div>
 	</div>
@@ -16,7 +16,7 @@
 	</div>
 	<div class="">
 		<div *ngFor="let message of messages" class="callout callout-{{ getTypeAlertClass(message) }}">
-		<h4><i class="fa {{ getTypeIcon(message) }}"></i> {{ message.title }} <span class="pull-right">{{ message.created | agoDate:false }} ago</span></h4>
+		<h4><i class="fa {{ getTypeIcon(message) }}"></i> {{ message.title }} <span class="pull-right">{{ message.created | agoDate:false }}</span></h4>
 		<p [innerHTML]="message.body"></p>
 	</div>
 

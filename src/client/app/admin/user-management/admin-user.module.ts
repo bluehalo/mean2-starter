@@ -17,6 +17,7 @@ import { UtilModule } from '../../shared/util.module';
 import { AlertService } from '../../shared/alert.service';
 import { CacheEntriesService } from '../../access-checker/cache-entries.service';
 import { UserAudit } from './audit/user-audit.component';
+import { TeamsModule } from '../../teams/teams.module';
 
 @NgModule({
 	imports: [
@@ -24,12 +25,14 @@ import { UserAudit } from './audit/user-audit.component';
 		FormsModule,
 		Ng2BootstrapModule,
 		RouterModule,
+		TeamsModule,
 		UtilModule
 	],
 	exports: [
 		UserAudit
 	],
 	entryComponents: [
+		ExportUsersModal,
 		UserAudit
 	],
 	declarations:   [
