@@ -1,7 +1,18 @@
 // Karma configuration
 // Generated on Wed Dec 14 2016 15:07:52 GMT-0500 (EST)
 
-const webpackConfig = require('./build/webpack.conf')('test');
+const includeCodeCoverage = !!process.env.CODE_COVERAGE_ENABLED;
+const webpackEnvironment = includeCodeCoverage ? 'test-coverage' : 'test';
+
+const webpackConfig = require('./build/webpack.conf')(webpackEnvironment);
+
+const karmaTestShim = includeCodeCoverage ? './karma-test-shim-coverage.js' : './karma-test-shim.js';
+
+const karmaReporters = ['mocha'];
+
+if(includeCodeCoverage) {
+	karmaReporters.push('coverage', 'karma-remap-istanbul');
+}
 
 module.exports = function(config) {
   config.set({
@@ -17,7 +28,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-		{pattern: './karma-test-shim.js', watched: false}
+		{pattern: karmaTestShim, watched: false}
 	],
 
 
@@ -29,7 +40,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-		'./karma-test-shim.js': ['webpack', 'sourcemap']
+		'./karma-test-shim*.js': ['webpack', 'sourcemap']
     },
 
 	webpack: webpackConfig,
@@ -42,10 +53,17 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['mocha'],
+    reporters: karmaReporters,
 
-	mochaReporter: {
-		maxLogLines: -1
+	coverageReporter: {
+		type: 'in-memory'
+	},
+
+	remapIstanbulReporter: {
+		reports: {
+			'text-summary': null,
+			html: './reports/coverage/client'
+		}
 	},
 
     // web server port
