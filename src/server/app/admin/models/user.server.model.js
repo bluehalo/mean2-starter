@@ -371,6 +371,7 @@ UserSchema.statics.auditCopy = function(user, userIP) {
 	toReturn.organization = user.organization;
 	toReturn.email = user.email;
 	toReturn.phone = user.phone;
+	toReturn.messagesViewed = toReturn.messagesViewed;
 	if (null != userIP) {
 		toReturn.ip = userIP;
 	}
