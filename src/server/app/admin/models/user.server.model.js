@@ -153,6 +153,11 @@ let UserSchema = new GetterSchema({
 		default: Date.now,
 		get: util.dateParse
 	},
+	messagesViewed: {
+		type: Date,
+		default: Date.now,
+		get: util.dateParse
+	},
 	/* For reset password */
 	resetPasswordToken: {
 		type: String
@@ -316,7 +321,8 @@ UserSchema.statics.filteredCopy = function(user) {
 		toReturn.name = user.name;
 		toReturn.username = user.username;
 		toReturn.created = user.created;
-		toReturn.lastLogin = toReturn.lastLogin;
+		toReturn.lastLogin = user.lastLogin;
+		toReturn.messagesViewed = user.messagesViewed;
 	}
 
 	return toReturn;
@@ -349,6 +355,7 @@ UserSchema.statics.createCopy = function(user) {
 	toReturn.password = user.password;
 	toReturn.created = Date.now();
 	toReturn.updated = toReturn.created;
+	toReturn.messagesViewed = user.messagesViewed;
 
 	return toReturn;
 };
@@ -364,6 +371,7 @@ UserSchema.statics.auditCopy = function(user, userIP) {
 	toReturn.organization = user.organization;
 	toReturn.email = user.email;
 	toReturn.phone = user.phone;
+	toReturn.messagesViewed = user.messagesViewed;
 	if (null != userIP) {
 		toReturn.ip = userIP;
 	}
