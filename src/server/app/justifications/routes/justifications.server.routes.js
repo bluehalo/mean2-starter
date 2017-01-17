@@ -7,8 +7,6 @@ let path = require('path'),
 
 module.exports = function(app) {
 
-	app.post('/justi', justifications.create);
-
 	app.route('/justifications')
 		.post(users.hasAccess, justifications.search);
 };
