@@ -318,7 +318,7 @@ gulp.task('test-server-ci', [ 'env:test', 'coverage-init' ], (done) => {
 			}))
 			.pipe(plugins.istanbul.writeReports({
 				dir: './reports/coverage/server',
-				reporters: ['html', 'text-summary']
+				reporters: ['text-summary', 'lcov']
 			}))
 			.on('error', (err) => {
 				error = err;
