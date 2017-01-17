@@ -1,0 +1,43 @@
+<div class="modal fade" tabindex="-1" role="dialog"
+     bsModal
+     #fhJustificationsModal="bs-modal"
+     (onHidden)="onHidden()"
+     (onShown)="onShown()">
+
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" (click)="cancel()">
+					<span>&times;</span>
+				</button>
+				<h3 *ngIf="title" class="modal-title single-line">{{title}}</h3>
+				<span *ngIf="showLoadingIcon">
+					&nbsp;
+					<i class="glyphicon glyphicon-refresh ng-hide single-line"></i>
+				</span>
+
+			</div>
+			<div class="modal-body">
+				<justificationsTypeahead
+					[placeholder]="placeholder"
+					(justificationChange)="onJustificationChange($event)"
+					(typeaheadLoadingChange)="showLoadingIcon=$event"
+				    [waitMs]="500"
+				    [optionsLimit]="10"
+				    [searchFn]="searchFn"
+					(keyup.enter)="ok()">
+				</justificationsTypeahead>
+			</div>
+			<div class="modal-footer">
+				<div *ngIf="error" data-ng-bind-html-unsafe="error" class="form-group row">
+					<div class="col-sm-12 text-danger">
+						<strong style="white-space: pre;">{{ error }}</strong>
+					</div>
+				</div>
+
+				<button class="btn btn-default" (click)="ok()">{{ okText }}</button>
+				<button class="btn btn-link" (click)="cancel()">{{ cancelText }}</button>
+			</div>
+		</div>
+	</div>
+</div>
