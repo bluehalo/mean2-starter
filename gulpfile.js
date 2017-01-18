@@ -221,6 +221,10 @@ gulp.task('env:test', () => {
 	process.env.NODE_ENV = 'test';
 });
 
+gulp.task('env:test-with-coverage', () => {
+	process.env.CODE_COVERAGE_ENABLED = '1';
+});
+
 
 gulp.task('test-server', ['env:test'], () => {
 	// Gather some args for custom testing
@@ -276,7 +280,7 @@ gulp.task('test-client', ['env:test'], () => {
 
 });
 
-gulp.task('test-client-ci', ['env:test'], runKarmaTest);
+gulp.task('test-client-ci', ['env:test', 'env:test-with-coverage'], runKarmaTest);
 
 gulp.task('coverage-init', () => {
 	// Covering all server code minus routes
@@ -313,8 +317,8 @@ gulp.task('test-server-ci', [ 'env:test', 'coverage-init' ], (done) => {
 				}
 			}))
 			.pipe(plugins.istanbul.writeReports({
-				dir: './reports/coverage',
-				reporters: ['html']
+				dir: './reports/coverage/server',
+				reporters: ['text-summary', 'lcov']
 			}))
 			.on('error', (err) => {
 				error = err;

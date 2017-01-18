@@ -17,7 +17,8 @@ module.exports = (mode) => {
 	 */
 	let build = (mode === 'build');
 	let develop = (mode === 'develop');
-	let test = (mode === 'test');
+	let test = (mode === 'test' || mode === 'test-coverage');
+	let coverage = (mode === 'test-coverage');
 
 
 	// The main webpack config object to return
@@ -178,6 +179,18 @@ module.exports = (mode) => {
 				filename: '[name].js'
 			})
 		);
+	}
+
+	if(coverage) {
+		wpConfig.module.loaders.push({
+			test: /\.(js|ts)$/,
+			loader: 'sourcemap-istanbul-instrumenter-loader?force-sourcemap=true',
+			enforce: 'post',
+			exclude: [
+				/\.spec.ts$/,
+				/node_modules/
+			]
+		});
 	}
 
 	return wpConfig;
