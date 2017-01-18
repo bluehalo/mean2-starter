@@ -26,6 +26,7 @@ import { FooterComponent } from './core/footer.component';
 import { LoggedInComponent } from './core/logged-in.component';
 import { InvalidResourceComponent } from './core/invalid-resource.component';
 
+import { AppReadyEvent } from './app-ready-event.class';
 import { AuthenticationService } from './admin/authentication/authentication.service';
 import { AuthGuard } from './core/auth-guard.service';
 import { BaseService } from './config/test/test-stub-service.service';
@@ -77,6 +78,7 @@ export function initializerFactory () {
 	],
 	bootstrap: [ AppComponent ],
 	providers: [
+		AppReadyEvent,
 		AuthenticationService,
 		AuthGuard,
 		ClientConfiguration,

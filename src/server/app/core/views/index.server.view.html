@@ -1,1 +1,67 @@
 <app-component></app-component>
+
+<div id="pre-bootstrap-container">
+	<script type="text/javascript">
+		// Listen for the 'appready' event
+		document.addEventListener('appready', handleAppReady);
+
+		// Handle the 'appready' event and fade out the loading screen
+		function handleAppReady(event) {
+			var preBootstrapContainer = document.getElementById('pre-bootstrap-container');
+			var preBootstrap = document.getElementById('pre-bootstrap');
+
+			preBootstrap.className = 'loaded';
+
+			setTimeout(function removeLoadingScreen() {
+				preBootstrapContainer.parentNode.removeChild(preBootstrapContainer);
+			}, 300);
+		}
+	</script>
+
+	<style type="text/css">
+		#pre-bootstrap {
+			background-color: #eee;
+			bottom: 0px;
+			left: 0px;
+			opacity: 1.0;
+			position: fixed;
+			right: 0px;
+			top: 0px;
+			transition: all linear 300ms;
+			-webkit-transition: all linear 300ms;
+			z-index: 999999;
+		}
+		#pre-bootstrap.loaded {
+			opacity: 0.0;
+		}
+		#pre-bootstrap div.messaging {
+			left: 0px;
+			position: absolute;
+			right: 0px;
+			text-align: center;
+			top: 30%;
+		}
+		#pre-bootstrap img.loading {
+			width: 500px;
+		}
+		#pre-bootstrap div.loading {
+			font-family: sans-serif;
+			font-size: 24px;
+			line-height: 30px;
+			margin: 10px;
+		}
+	</style>
+
+	<div id="pre-bootstrap">
+		<div class="messaging">
+
+			<img class="loading" src="./src/client/app/img/brand/logo.png">
+
+			<div class="loading">
+				Loading...
+			</div>
+
+		</div>
+	</div>
+
+</div>
