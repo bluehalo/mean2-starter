@@ -30,6 +30,8 @@ export class AppReadyEvent {
 	private createEvent(eventType: string, bubbles: boolean, cancelable: boolean): Event {
 		let customEvent: any;
 
+		// Try/catch for handling IE which uses a different type of event initialization. Try
+		// the 'normal' event generation first, then fallback to use IE version.
 		try {
 			customEvent = new CustomEvent(eventType, {bubbles: bubbles, cancelable: cancelable});
 		}
