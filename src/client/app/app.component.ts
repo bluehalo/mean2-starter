@@ -3,7 +3,6 @@ import { Overlay } from 'angular2-modal';
 import { ConfigService } from './core/config.service';
 import { MessageHandlerService } from './messages/message-handler.service';
 import { SocketService } from './core/socket.service';
-import { AppReadyEvent } from './app-ready-event.class';
 
 @Component({
 	selector: 'app-component',
@@ -19,8 +18,7 @@ export class AppComponent {
 		public overlay: Overlay,
 		public viewContainerRef: ViewContainerRef,
 		public socketService: SocketService,
-		public messageHandlerServce: MessageHandlerService,
-		public appReadyEvent: AppReadyEvent
+		public messageHandlerServce: MessageHandlerService
 	) {
 		// This is necessary for angular2-modal.
 		overlay.defaultViewContainer = viewContainerRef;
@@ -35,8 +33,5 @@ export class AppComponent {
 		// Subscribe to the user-loaded event and initialize the socket/messaging system
 		this.socketService.initialize();
 		this.messageHandlerServce.initialize();
-
-		// Trigger the app ready event to remove the loading screen
-		this.appReadyEvent.trigger();
 	}
 }
