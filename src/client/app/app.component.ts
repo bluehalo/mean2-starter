@@ -10,14 +10,15 @@ import { SocketService } from './core/socket.service';
 })
 
 export class AppComponent {
-	private banner: any;
-	private viewContainerRef: ViewContainerRef;
+
+	banner: any;
+
 	constructor(
-		private configService: ConfigService,
-		private overlay: Overlay,
-		viewContainerRef: ViewContainerRef,
-		private socketService: SocketService,
-		private messageHandlerServce: MessageHandlerService,
+		public configService: ConfigService,
+		public overlay: Overlay,
+		public viewContainerRef: ViewContainerRef,
+		public socketService: SocketService,
+		public messageHandlerServce: MessageHandlerService
 	) {
 		// This is necessary for angular2-modal.
 		overlay.defaultViewContainer = viewContainerRef;
