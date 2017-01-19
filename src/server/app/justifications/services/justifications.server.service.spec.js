@@ -61,86 +61,95 @@ describe('Justification Service:', function() {
 	let users = [];
 
 	before(function(done) {
-		return clearDatabase().then(function() {
-			// Create two users
-			let userDefers = [];
-			for (let i = 0; i < 2; ++i) {
-				userDefers[i] = (new User(userSpec(i.toString()))).save();
-			}
+		return clearDatabase()
+			.then(() => {
+				// Create two users
+				let userDefers = [];
+				for (let i = 0; i < 2; ++i) {
+					userDefers[i] = (new User(userSpec(i.toString()))).save();
+				}
 
-			return q.all(userDefers);
-		}).then(function(result) {
-			users = result;
-			return q();
-		}).then(function() {
-			done();
-		}, done).done();
+				return q.all(userDefers);
+			}).then((result) => {
+				users = result;
+				return q();
+			}).then(() => {
+				done();
+			}, done)
+			.done();
 	});
 
 	after(function(done) {
-		return clearDatabase().then(function() {
-			done();
-		}, done).done();
+		return clearDatabase()
+			.then(() => {
+				done();
+			}, done)
+			.done();
 	});
 
-	it('Create new justification, with and without duplicates', function() {
+	it('Creating new justification completes without problems, with and without duplicates', function() {
 		let justification1 = justificationSpec('Justification 1', users[0]);
 
-		return justificationsService.createJustification(justification1).then((result) => {
-			// create new justification should return null
-			should(result).be.null();
-			return justificationsService.createJustification(justification1);
-		}).then((result) => {
-			// update new justification should return the updated justification
-			should(result).not.be.null();
-		});
+		return justificationsService.createJustification(justification1)
+			.then((result) => {
+				// create new justification should return null
+				should(result).be.null();
+				return justificationsService.createJustification(justification1);
+			}).then((result) => {
+				// update new justification should return the updated justification
+				should(result).not.be.null();
+			});
 	});
 
-	it('Touch new justification creates it', function() {
+	it('Touching new justification creates a new justification', function() {
 		let justification1 = new Justification(justificationSpec('Justification 2', users[0]));
 
-		return clearJustifications().then(() => {
-			return justificationsService.touchJustification(justification1);
-		}).then((result) => {
-			return justificationsService.searchJustifications(null, {}, {});
-		}).then((result) => {
-			should(result).not.be.null();
-			(result.elements).should.have.length(1);
-		});
+		return clearJustifications()
+			.then(() => {
+				return justificationsService.touchJustification(justification1);
+			}).then(() => {
+				return justificationsService.searchJustifications(null, {}, {});
+			}).then((result) => {
+				should(result).not.be.null();
+				(result.elements).should.have.length(1);
+			});
 	});
 
-	it('Touching existing justification updates it', function() {
+	it('Touching existing justification updates its timestamp', function() {
 		let justification1 = justificationSpec('Justification 3', users[0]);
 
-		return clearJustifications().then(() => {
-			return justificationsService.createJustification(justification1);
-		}).then((result) => {
-			return justificationsService.searchJustifications(null, {}, {});
-		}).then((result) => {
-			should(result).not.be.null();
-			(result.elements).should.have.length(1);
-
-			return sleep(1000).then(() => {
-				return justificationsService.touchJustification(result.elements[0]);
+		return clearJustifications()
+			.then(() => {
+				return justificationsService.createJustification(justification1);
+			}).then(() => {
+				return justificationsService.searchJustifications(null, {}, {});
 			}).then((result) => {
-				should(result.updated).not.equal(result.created);
+				should(result).not.be.null();
+				(result.elements).should.have.length(1);
+
+				return sleep(1000)
+					.then(() => {
+						return justificationsService.touchJustification(result.elements[0]);
+					}).then((result) => {
+						should(result.updated).not.equal(result.created);
+					});
 			});
-		});
 	});
 
-	it('Creating justifications with same text but different owners creates two justifications', function() {
+	it('Creating two justifications with same text but different owners creates two different justifications', function() {
 		let justification1 = justificationSpec('Justification 4', users[0]);
 		let justification2 = justificationSpec('Justification 4', users[1]);
 
-		return clearJustifications().then(() => {
-			return justificationsService.createJustification(justification1);
-		}).then(() => {
-			return justificationsService.createJustification(justification2);
-		}).then(() => {
-			return justificationsService.searchJustifications(null, {}, {});
-		}).then((result) => {
-			should(result).not.be.null();
-			(result.elements).should.have.length(2);
-		});
+		return clearJustifications()
+			.then(() => {
+				return justificationsService.createJustification(justification1);
+			}).then(() => {
+				return justificationsService.createJustification(justification2);
+			}).then(() => {
+				return justificationsService.searchJustifications(null, {}, {});
+			}).then((result) => {
+				should(result).not.be.null();
+				(result.elements).should.have.length(2);
+			});
 	});
 });

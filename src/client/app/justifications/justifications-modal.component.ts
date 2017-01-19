@@ -1,4 +1,3 @@
-'use strict';
 import { Component, Input, EventEmitter, Output, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ng2-bootstrap';
 
@@ -11,6 +10,12 @@ export class JustificationsModalComponent {
 	@Input() title: string;
 
 	@Input() placeholder: string = 'Enter justification...';
+
+	@Input() warning: string;
+
+	@Input() titleMessage: string;
+
+	@Input() titlePlaceholder: string;
 
 	@Input() okText: string = 'Submit';
 
@@ -28,15 +33,17 @@ export class JustificationsModalComponent {
 			this.modal.show();
 		}
 	}
-	@Output() showModalChange = new EventEmitter<boolean>();
+	@Output() showModalChange = new EventEmitter<any>();
 
-	@Output() userSubmit = new EventEmitter<boolean>();
+	@Output() userSubmit = new EventEmitter<any>();
 
 	@ViewChild('fhJustificationsModal') private modal: ModalDirective;
 
 	private showModalValue: boolean = false;
 
 	private internalJustification: any;
+
+	private internalTitleMessage: any;
 
 	private error: string;
 
@@ -49,7 +56,7 @@ export class JustificationsModalComponent {
 		}
 		else {
 			this.modal.hide();
-			this.userSubmit.emit(this.internalJustification);
+			this.userSubmit.emit({justification: this.internalJustification, titleMessage: this.internalTitleMessage});
 		}
 	}
 

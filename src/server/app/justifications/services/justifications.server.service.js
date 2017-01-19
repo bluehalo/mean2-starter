@@ -25,15 +25,16 @@ module.exports = function() {
 	function createJustification(justificationInfo) {
 		let ownerId = justificationInfo.owner;
 
-		return User.findOne({_id: ownerId}).exec().then(function(user) {
-			if (null == user) {
-				return q.reject({status: 400, type: 'bad-request', message: 'Invalid user specified'});
-			}
+		return User.findOne({_id: ownerId}).exec()
+			.then((user) => {
+				if (null == user) {
+					return q.reject({status: 400, type: 'bad-request', message: 'Invalid user specified'});
+				}
 
-			// see if justification's text already exists and if so, just update it
-			let query = { text: justificationInfo.text, owner: user};
-			return Justification.findOneAndUpdate(query, {$set: {updated: Date.now()}}, {upsert: true}).exec();
-		});
+				// see if justification's text already exists and if so, just update it
+				let query = { text: justificationInfo.text, owner: user};
+				return Justification.findOneAndUpdate(query, {$set: {updated: Date.now()}}, {upsert: true}).exec();
+			});
 	}
 
 	/**
@@ -47,14 +48,15 @@ module.exports = function() {
 
 		let ownerId = justification.owner;
 
-		return User.findOne({_id: ownerId}).exec().then(function(user) {
-			if (null == user) {
-				return q.reject({status: 400, type: 'bad-request', message: 'Invalid user specified'});
-			}
-			else {
-				return justification.save();
-			}
-		});
+		return User.findOne({_id: ownerId}).exec()
+			.then((user) => {
+				if (null == user) {
+					return q.reject({status: 400, type: 'bad-request', message: 'Invalid user specified'});
+				}
+				else {
+					return justification.save();
+				}
+			});
 	}
 
 	function searchJustifications(search, query, queryParams) {

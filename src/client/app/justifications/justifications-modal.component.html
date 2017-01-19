@@ -27,6 +27,17 @@
 				    [searchFn]="searchFn"
 					(keyup.enter)="ok()">
 				</justificationsTypeahead>
+
+				<div *ngIf="titleMessage" style="padding-top:10px">
+					<label class="control-label">{{ titleMessage }}</label>
+					<input autofocus style="padding-top:5px;" [placeholder]="titlePlaceholder" type="text" class="form-control input-sm" [(ngModel)]="internalTitleMessage" (keyup.enter)="ok()" required>
+				</div>
+
+				<div style="padding-top: 10px;" *ngIf="warning" class="form-group row">
+					<div class="col-sm-12 text-warning">
+						<strong style="white-space: pre-wrap;">{{ warning }}</strong>
+					</div>
+				</div>
 			</div>
 			<div class="modal-footer">
 				<div *ngIf="error" data-ng-bind-html-unsafe="error" class="form-group row">
