@@ -37,7 +37,7 @@ export class JustificationsModalComponent {
 
 	@Output() userSubmit = new EventEmitter<any>();
 
-	@ViewChild('fhJustificationsModal') private modal: ModalDirective;
+	@ViewChild('justificationsModalChild') private modal: ModalDirective;
 
 	private showModalValue: boolean = false;
 
