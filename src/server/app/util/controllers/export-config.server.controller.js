@@ -32,7 +32,7 @@ exports.requestExport = function(req, res) {
 	exportConfigService.generateConfig(req)
 		.then(
 			(generatedConfig) => {
-				return auditService.audit(`${req.body.type} csv config created`, 'export', 'create',
+				return auditService.audit(`${req.body.type} config created`, 'export', 'create',
 					User.auditCopy(req.user, utilService.getHeaderField(req.headers, 'x-real-ip')),
 					ExportConfig.auditCopy(generatedConfig), req.headers)
 					.then(() => {
@@ -82,6 +82,46 @@ exports.exportCSV = function(req, res, filename, columns, data) {
 		// If the client drops the connection, stop processing the stream
 		req.on('close', () => {
 			logger.info('CSV export aborted because client dropped the connection');
+			if (s != null) {
+				s.destroy();
+			}
+			// End the download.
+			res.end();
+		});
+	}
+};
+
+exports.exportPlaintext = function(req, res, filename, text) {
+
+	if (null !== text) {
+		// Set up streaming res
+		res.set('Content-Type', 'text/plain;charset=utf-8');
+		res.set('Content-Disposition', 'attachment;filename=' + filename);
+		res.set('Transfer-Encoding', 'chunked');
+
+		// Put into stream the data object
+		let s = new stream.Readable({objectMode:true});
+		s._read = () => {
+			text.split(os.EOL).forEach((row) => {
+				s.push(row);
+			});
+			s.push(null);
+		};
+
+		// Pipe each row to the response
+		s.pipe(res);
+
+		// If an error occurs, close the stream
+		s.on('error', (err) => {
+			logger.error(err, 'Plaintext export error occurred');
+
+			// End the download
+			res.end();
+		});
+
+		// If the client drops the connection, stop processing the stream
+		req.on('close', () => {
+			logger.info('Plaintext export aborted because client dropped the connection');
 			if (s != null) {
 				s.destroy();
 			}
