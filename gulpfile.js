@@ -105,13 +105,14 @@ gulp.task('watch-client', () => {
  * Server Build Tasks
  * --------------------------
  */
-gulp.task('build-server', () => {
+gulp.task('lint-server', () => {
 	return gulp.src(_.union(assets.server.allJS, assets.tests.server, assets.build))
 		// ESLint
 		.pipe(plugins.eslint('./config/build/eslint.conf.json'))
 		.pipe(plugins.eslint.format())
 		.pipe(plugins.eslint.failAfterError());
 });
+gulp.task('build-server', ['lint-server']);
 
 
 /**

@@ -10,7 +10,7 @@ module.exports = {
 	bannerString: '/* @license ' + pkg.name + ' Version: ' + pkg.version + ' Copyright Asymmetrik, Ltd. ' + new Date().getFullYear() + ' - All Rights Reserved.*/\n',
 
 	// Build specific files
-	build: [ 'gulpfile.js', 'config/build/!(typings)/**/*.js' ],
+	build: [ 'gulpfile.js', 'config/build/**/*.js' ],
 
 	// Test specific source files
 	tests: {
