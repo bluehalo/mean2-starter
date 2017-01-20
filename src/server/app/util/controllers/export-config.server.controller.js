@@ -7,12 +7,14 @@ let path = require('path'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	dbs = deps.dbs,
+	config = deps.config,
 	utilService = deps.utilService,
 	logger = deps.logger,
 	auditService = deps.auditService,
 	csvStream = deps.csvStream,
 
 	exportConfigService = require(path.resolve('./src/server/app/util/services/export-config.server.service.js')),
+	TeamMember = dbs.admin.model('TeamUser'),
 	User = dbs.admin.model('User'),
 	ExportConfig = dbs.admin.model('ExportConfig');
 
@@ -46,6 +48,38 @@ exports.requestExport = function(req, res) {
 			},
 			(err) => {
 				utilService.handleErrorResponse(res, err);
+			})
+		.done();
+};
+
+exports.getExport = function(req, res) {
+	let exportId = req.params.exportId;
+
+	exportConfigService.getConfigById(exportId)
+		.then((result) => {
+			if (null == result) {
+				return q.reject({
+					status: 404,
+					type: 'bad-argument',
+					message: 'Export configuration not found. Document may have expired.'
+				});
+			}
+
+			return auditService.audit('Example export config retrieved', 'export', 'export',
+				TeamMember.auditCopy(req.user),
+				ExportConfig.auditCopy(result), req.headers)
+				.then(
+					() => {
+						return q(result);
+					});
+		})
+		.then(
+			(result) => {
+				let fileName = config.app.instanceName + '-' + result.type + '.txt';
+				exports.exportPlaintext(req, res, fileName, result.config.value);
+			},
+			(error) => {
+				utilService.handleErrorResponse(res, error);
 			})
 		.done();
 };
