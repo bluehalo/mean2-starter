@@ -3,6 +3,7 @@
 let path = require('path'),
 	stream = require('stream'),
 	q = require('q'),
+	os = require('os'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	dbs = deps.dbs,
