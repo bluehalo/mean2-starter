@@ -9,6 +9,6 @@ var
 
 module.exports = function(app) {
 	// Admin post CSV config parameters
-	app.route('/admin/requestCSV')
-		.post(users.hasAdminAccess, exportConfig.adminRequestCSV);
+	app.route('/requestExport')
+		.post(users.hasAccess, exportConfig.requestExport);
 };
