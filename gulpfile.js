@@ -222,11 +222,6 @@ gulp.task('env:test', () => {
 	process.env.NODE_ENV = 'test';
 });
 
-gulp.task('env:test-with-coverage', () => {
-	process.env.CODE_COVERAGE_ENABLED = '1';
-});
-
-
 gulp.task('test-server', ['env:test'], () => {
 	// Gather some args for custom testing
 	let args = [];
@@ -251,9 +246,12 @@ gulp.task('test-server', ['env:test'], () => {
 	});
 });
 
-function runKarmaTest(callback) {
+function runKarmaTest(additionalEnvironmentVariables, callback) {
+	const clientEnv = _.merge({}, process.env, additionalEnvironmentVariables);
 	const spawn = require('child_process').spawn;
-	const karma = spawn('node', ['./config/build/test-client.js']);
+	const karma = spawn('node', ['./config/build/test-client.js'], {
+		env: clientEnv
+	});
 
 	karma.stdout.pipe(process.stdout);
 	karma.stderr.pipe(process.stderr);
@@ -274,14 +272,16 @@ gulp.task('test-client', ['env:test'], () => {
 
 	const minTimeBetweenTestsCalls = 5000;
 
-	const runKarmaTestWithDebounce = _.throttle(_.partial(runKarmaTest, _.noop), minTimeBetweenTestsCalls);
+	const runKarmaTestWithDebounce = _.throttle(_.partial(runKarmaTest, {}, _.noop), minTimeBetweenTestsCalls);
 
 	gulp.watch(clientFilesToWatch, runKarmaTestWithDebounce);
 	runKarmaTestWithDebounce();
 
 });
 
-gulp.task('test-client-ci', ['env:test', 'env:test-with-coverage'], runKarmaTest);
+gulp.task('test-client-ci', ['env:test'], (done) => {
+	runKarmaTest({CODE_COVERAGE_ENABLED: '1'}, done);
+});
 
 gulp.task('coverage-init', () => {
 	// Covering all server code minus routes
