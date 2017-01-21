@@ -4,7 +4,7 @@ describe('KeysPipe', () => {
 
 	let keys = new KeysPipe();
 
-	it('transforms object with 2 keys to array of length 2]', () => {
+	it('transforms object with 2 keys to array of length 2', () => {
 		let transformed = keys.transform({foo: 'bar', one: 'two'});
 		transformed.sort(sortTransformedArray);
 		expect(transformed).toEqual([{key: 'foo', value: 'bar'}, {key: 'one', value: 'two'}]);

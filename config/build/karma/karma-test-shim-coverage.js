@@ -11,10 +11,10 @@ require('zone.js/dist/jasmine-patch');
 require('zone.js/dist/async-test');
 require('zone.js/dist/fake-async-test');
 
-require('../src/client/vendor.ts');
-require('../src/client/configuration.ts');
+require('../../../src/client/vendor.ts');
+require('../../../src/client/configuration.ts');
 
-var appContext = require.context('../src/client/app', true, /\.ts$/);
+var appContext = require.context('../../../src/client/app', true, /\.ts$/);
 
 appContext.keys().forEach(appContext);
 

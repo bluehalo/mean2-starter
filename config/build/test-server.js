@@ -1,9 +1,6 @@
 /* eslint-disable no-console */
 'use strict';
 
-/**
- * Module dependencies.
- */
 let	Mocha = require('mocha'),
 	path = require('path'),
 	argv = require('yargs').argv,
@@ -25,10 +22,10 @@ mongoose.connect().then(() => {
 	let options = {
 		reporter: 'spec'
 	};
-	if(argv.bail) {
+	if (argv.bail) {
 		console.log('Mocha: Setting option \'bail\' to true.');
 		options.bail = true;
-	};
+	}
 	let mocha = new Mocha(options);
 
 	// Add all the tests to mocha
