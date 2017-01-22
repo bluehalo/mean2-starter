@@ -1,6 +1,8 @@
 # Angular2 MEAN Starter #
 
 [![Build Status](https://travis-ci.org/Asymmetrik/mean2-starter.svg?branch=staging)](https://travis-ci.org/Asymmetrik/mean2-starter)
+[![Code Climate](https://codeclimate.com/github/Asymmetrik/mean2-starter/badges/gpa.svg)](https://codeclimate.com/github/Asymmetrik/mean2-starter)
+[![Test Coverage](https://codeclimate.com/github/Asymmetrik/mean2-starter/badges/coverage.svg)](https://codeclimate.com/github/Asymmetrik/mean2-starter/coverage)
 
 MEAN starter with MongoDB, Express, Angular 2, and Node.
 

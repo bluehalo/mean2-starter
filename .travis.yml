@@ -9,3 +9,7 @@ script:
   - gulp build
   - gulp test-ci
 sudo: false
+after_success:
+  - npm install -g codeclimate-test-reporter lcov-result-merger
+  - lcov-result-merger reports/coverage/**/*/lcov.info reports/coverage/lcov-combined.info
+  - codeclimate-test-reporter < reports/coverage/lcov-combined.info
