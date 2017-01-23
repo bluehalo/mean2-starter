@@ -49,7 +49,7 @@ module.exports = (mode) => {
 	 *   'application' - Application code
 	 */
 	wpConfig.entry = (test)? {
-		application: path.resolve('./src/client/main.ts'),
+		application: path.resolve('./src/client/main.ts')
 	} : {
 		application: path.resolve('./src/client/main.ts'),
 		vendor: path.resolve('./src/client/vendor.ts')
