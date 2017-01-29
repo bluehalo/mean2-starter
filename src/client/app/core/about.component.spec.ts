@@ -1,5 +1,5 @@
 import { DebugElement } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 
 import { ConfigService } from './config.service';
@@ -25,11 +25,14 @@ describe('AboutComponent', () => {
 		}
 	};
 
-	beforeEach(() => {
+	beforeEach(async(() => {
 		TestBed.configureTestingModule({
 			declarations: [AboutComponent],
 			providers: [{provide: ConfigService, useValue: configServiceStub}]
-		});
+		}).compileComponents();  // compile template and css
+	}));
+
+	beforeEach(() => {
 
 		fixture = TestBed.createComponent(AboutComponent);
 
@@ -37,6 +40,7 @@ describe('AboutComponent', () => {
 
 		rootDebugElement = fixture.debugElement;
 		rootNativeElement = rootDebugElement.nativeElement;
+
 	});
 
 	it('should display the current version', () => {
