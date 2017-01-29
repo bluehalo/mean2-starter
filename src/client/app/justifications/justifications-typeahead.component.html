@@ -1,0 +1,9 @@
+<input autofocus required type="text" class="form-control input-sm"
+       [typeahead]="justificationOptions"
+       [(ngModel)]="justification"
+       [typeaheadOptionsLimit]="optionsLimit"
+       [typeaheadMinLength]="0"
+       [typeaheadWaitMs]="waitMs"
+       [placeholder]="placeholder"
+       (typeaheadLoading)="changeTypeaheadLoading($event)"
+		>
