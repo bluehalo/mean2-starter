@@ -116,10 +116,20 @@ module.exports.toLowerCase = function (v){
 };
 
 module.exports.dateParse = function (date) {
-	if (null == date)
+	if (_.isNil(date)) {
 		return null;
+	}
+	if(_.isDate(date)) {
+		return date.getTime();
+	}
+	if(_.isFinite(date)) {
+		return date;
+	}
+	if(_.isString(date)) {
+		return Date.parse(date);
+	}
 
-	return Date.parse(date);
+	return null;
 };
 
 /**
