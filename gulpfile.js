@@ -108,7 +108,7 @@ gulp.task('watch-client', () => {
 gulp.task('lint-server', () => {
 	return gulp.src(_.union(assets.server.allJS, assets.tests.server, assets.build))
 		// ESLint
-		.pipe(plugins.eslint('./config/build/eslint.conf.json'))
+		.pipe(plugins.eslint())
 		.pipe(plugins.eslint.format())
 		.pipe(plugins.eslint.failAfterError());
 });
