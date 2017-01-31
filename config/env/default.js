@@ -60,8 +60,7 @@ module.exports = {
 //		autoLogin: true,
 //		autoCreateAccounts: true,
 //		requiredRoles: ['ROLE'],
-
-		defaultRoles: { user: true },
+//		defaultRoles: { user: true },
 
 		/*
 		 * Session settings are required regardless of auth strategy
