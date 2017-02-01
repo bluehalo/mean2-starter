@@ -14,7 +14,7 @@ export class HttpOptions {
 
 	constructor (
 		public url: string,
-		public dataFn?: Function,
+		public dataFn: Function = () => {},
 		public data: any = {},
 		public completeFn: Function = (): any => null,
 		public errFn: Function = AsyHttp.defaultErrFn,
