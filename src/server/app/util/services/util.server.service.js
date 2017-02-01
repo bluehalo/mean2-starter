@@ -115,10 +115,31 @@ module.exports.toLowerCase = function (v){
 	return (null != v)? v.toLowerCase(): undefined;
 };
 
+/**
+ * Parse an input as a date. Handles various types
+ * of inputs, such as Strings, Date objects, and Numbers.
+ *
+ * @param {date} The input representing a date / timestamp
+ * @returns The timestamp in milliseconds since the Unix epoch
+ */
 module.exports.dateParse = function (date) {
-	if (null == date)
-		return null;
 
+	// Handle nil values by simply returning null
+	if (_.isNil(date)) {
+		return null;
+	}
+
+	// Date object should return its time in milliseconds
+	if (_.isDate(date)) {
+		return date.getTime();
+	}
+
+	// A number that exists will be interpretted as millisecond
+	if (_.isFinite(date)) {
+		return date;
+	}
+
+	// Handle String, Object, etc.
 	return Date.parse(date);
 };
 
