@@ -57,16 +57,31 @@ describe('Utils:', () => {
 
 	describe('Date Parse:', () => {
 
-		[
-			{ input: '2017-01-01T12:34:56.789Z',           expected: 1483274096789, name: 'should properly parse a date string' },
-			{ input: '2017-01-01T12:34Z',                  expected: 1483274040000, name: 'should properly parse a date without seconds' },
-			{ input: new Date('2017-01-01T12:34:56.789Z'), expected: 1483274096789, name: 'should properly parse a date object' },
-			{ input: 1483274096789,                        expected: 1483274096789, name: 'should properly parse a number' },
-			{ input: 1483274096,                           expected: 1483274096,    name: 'should properly parse a number that is not actually a date' },
-			{ input: null,                                 expected: null,          name: 'should handle null inputs' },
-			{ input: [1234],                               expected: null,          name: 'should return null for arrays' },
-			{ input: { id: 1 },                            expected: null,          name: 'should return null for objects' }
-		].forEach((test) => {
+		[{
+			input: '2017-01-01T12:34:56.789Z',
+			expected: 1483274096789,
+			name: 'should properly parse a date string'
+		}, {
+			input: '2017-01-01T12:34Z',
+			expected: 1483274040000,
+			name: 'should properly parse a date without seconds'
+		}, {
+			input: new Date('2017-01-01T12:34:56.789Z'),
+			expected: 1483274096789,
+			name: 'should properly parse a date object'
+		}, {
+			input: 1483274096789,
+			expected: 1483274096789,
+			name: 'should properly parse a number'
+		}, {
+			input: 1483274096,
+			expected: 1483274096,
+			name: 'should properly parse a number that is not actually a date'
+		}, {
+			input: null,
+			expected: null,
+			name: 'should handle null inputs'
+		}].forEach((test) => {
 			it(test.name, () => {
 				const actual = util.dateParse(test.input);
 				should(actual).equal(test.expected);
