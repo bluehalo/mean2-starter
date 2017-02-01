@@ -107,7 +107,7 @@ exports.adminGetCSV = (req, res) => {
 							user.teams = teamNames.join(', ');
 						});
 					}
-					exportConfigController.exportData(req, res, fileName, columns, userData);
+					exportConfigController.exportCSV(req, res, fileName, columns, userData);
 				});
 		}, (error) => {
 			utilService.handleErrorResponse(res, error);

@@ -9,8 +9,8 @@ export class ExportConfigService {
 	constructor(private asyHttp: AsyHttp) {
 	}
 
-	postCSVParams(type: string, config: any) {
-		return this.asyHttp.post(new HttpOptions('/admin/requestCSV',
+	postExportConfig(type: string, config: any) {
+		return this.asyHttp.post(new HttpOptions('/requestExport',
 			() => {},
 			{type: type, config: config}));
 	};

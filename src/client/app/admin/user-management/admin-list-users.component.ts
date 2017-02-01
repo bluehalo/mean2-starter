@@ -295,7 +295,7 @@ export class AdminListUsersComponent {
 				{key: 'roles.admin', title: 'Admin Role'});
 		}
 
-		this.exportConfigService.postCSVParams('user', {
+		this.exportConfigService.postExportConfig('user', {
 			q: this.getQuery(),
 			s: this.search,
 			cols: viewColumns,

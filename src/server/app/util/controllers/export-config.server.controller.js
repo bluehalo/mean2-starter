@@ -1,9 +1,9 @@
 'use strict';
 
-var
-	path = require('path'),
+let path = require('path'),
 	stream = require('stream'),
 	q = require('q'),
+	os = require('os'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	dbs = deps.dbs,
@@ -21,7 +21,7 @@ var
  * expire after a number of minutes (see export-config.server.service).
  */
 
-exports.adminRequestCSV = function(req, res) {
+exports.requestExport = function(req, res) {
 	if (null != req.body.config.q) {
 		// Stringify the query JSON because '$' is reserved in Mongo.
 		req.body.config.q = JSON.stringify(req.body.config.q);
@@ -31,25 +31,26 @@ exports.adminRequestCSV = function(req, res) {
 	}
 
 	exportConfigService.generateConfig(req)
-		.then(function(generatedConfig) {
-			return auditService.audit(`${req.body.type} csv config created`, 'export', 'create',
-				User.auditCopy(req.user, utilService.getHeaderField(req.headers, 'x-real-ip')),
-				ExportConfig.auditCopy(generatedConfig), req.headers)
-				.then(function() {
-					return q(generatedConfig);
-				});
-		})
-		.then(function(result) {
-			res.status(200).json({ _id: result._id});
-		}, function(err) {
-			utilService.handleErrorResponse(res, err);
-		}).done();
+		.then(
+			(generatedConfig) => {
+				return auditService.audit(`${req.body.type} config created`, 'export', 'create',
+					User.auditCopy(req.user, utilService.getHeaderField(req.headers, 'x-real-ip')),
+					ExportConfig.auditCopy(generatedConfig), req.headers)
+					.then(() => {
+						return q(generatedConfig);
+					});
+			})
+		.then(
+			(result) => {
+				res.status(200).json({ _id: result._id});
+			},
+			(err) => {
+				utilService.handleErrorResponse(res, err);
+			})
+		.done();
 };
 
-/**
- * Generic function to create CSV from data with the requested filename and columns
- */
-exports.exportData = function(req, res, filename, columns, data) {
+exports.exportCSV = function(req, res, filename, columns, data) {
 
 	if (null !== data) {
 		// Set up streaming res
@@ -58,21 +59,21 @@ exports.exportData = function(req, res, filename, columns, data) {
 		res.set('Transfer-Encoding', 'chunked');
 
 		// Put into stream the data object
-		var s = new stream.Readable({objectMode:true});
-		s._read = function() {
-			data.forEach(function(row) {
+		let s = new stream.Readable({objectMode:true});
+		s._read = () => {
+			data.forEach((row) => {
 				s.push(row);
 			});
 			s.push(null);
 		};
 
-		var sc = s.pipe(csvStream(columns));
+		let sc = s.pipe(csvStream(columns));
 
 		// Pipe each row to the response
 		sc.pipe(res);
 
 		// If an error occurs, close the stream
-		s.on('error', function(err) {
+		s.on('error', (err) => {
 			logger.error(err, 'CSV export error occurred');
 
 			// End the download
@@ -80,8 +81,48 @@ exports.exportData = function(req, res, filename, columns, data) {
 		});
 
 		// If the client drops the connection, stop processing the stream
-		req.on('close', function() {
+		req.on('close', () => {
 			logger.info('CSV export aborted because client dropped the connection');
+			if (s != null) {
+				s.destroy();
+			}
+			// End the download.
+			res.end();
+		});
+	}
+};
+
+exports.exportPlaintext = function(req, res, filename, text) {
+
+	if (null !== text) {
+		// Set up streaming res
+		res.set('Content-Type', 'text/plain;charset=utf-8');
+		res.set('Content-Disposition', 'attachment;filename=' + filename);
+		res.set('Transfer-Encoding', 'chunked');
+
+		// Put into stream the data object
+		let s = new stream.Readable({objectMode:true});
+		s._read = () => {
+			text.split(os.EOL).forEach((row) => {
+				s.push(row);
+			});
+			s.push(null);
+		};
+
+		// Pipe each row to the response
+		s.pipe(res);
+
+		// If an error occurs, close the stream
+		s.on('error', (err) => {
+			logger.error(err, 'Plaintext export error occurred');
+
+			// End the download
+			res.end();
+		});
+
+		// If the client drops the connection, stop processing the stream
+		req.on('close', () => {
+			logger.info('Plaintext export aborted because client dropped the connection');
 			if (s != null) {
 				s.destroy();
 			}
