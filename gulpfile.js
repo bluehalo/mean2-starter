@@ -260,27 +260,14 @@ function runKarmaTest(additionalEnvironmentVariables, callback) {
 }
 
 gulp.task('test-client', ['env:test'], () => {
-
-	const clientFilesToWatch = _.union(
-			assets.tests.client,
-			assets.client.app.src.ts,
-			assets.client.app.src.sass,
-			assets.client.app.views,
-			assets.client.app.content,
-			assets.build
-	);
-
-	const minTimeBetweenTestsCalls = 5000;
-
-	const runKarmaTestWithDebounce = _.throttle(_.partial(runKarmaTest, {}, _.noop), minTimeBetweenTestsCalls);
-
-	gulp.watch(clientFilesToWatch, runKarmaTestWithDebounce);
-	runKarmaTestWithDebounce();
-
+	runKarmaTest({}, _.noop);
 });
 
 gulp.task('test-client-ci', ['env:test'], (done) => {
-	runKarmaTest({CODE_COVERAGE_ENABLED: '1'}, done);
+	runKarmaTest({
+		KARMA_CODE_COVERAGE_ENABLED: '1',
+		KARMA_CI_MODE: '1'
+	}, done);
 });
 
 gulp.task('coverage-init', () => {
