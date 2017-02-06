@@ -138,6 +138,10 @@ module.exports = {
 	},
 
 	contactEmail: process.env.CONTACT_EMAIL || process.env.MAILER_ADMIN || 'noreply@asymmetrik.com',
+	newUserEmail: {
+		enabled: false,
+		email: process.env.MAILER_ADMIN || 'noreply@asymmetrik.com'
+	},
 
 	messages: {
 		// Use the following for local eventEmitter
