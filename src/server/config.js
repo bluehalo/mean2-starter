@@ -151,6 +151,18 @@ let initGlobalConfigFiles = (config, assets) => {
 
 };
 
+let initDerivedConfig = (config) => {
+	if (config.app && config.app.url && config.app.url.protocol && config.app.url.host) {
+		config.app.baseUrlWithoutPort = `${config.app.url.protocol}://${config.app.url.host}`;
+
+		if (config.app.url.port) {
+			config.app.baseUrl = `${config.app.baseUrlWithoutPort}:${config.app.url.port}`;
+		} else {
+			config.app.baseUrl = config.app.baseUrlWithoutPort;
+		}
+	}
+};
+
 /**
  * Initialize global configuration
  */
@@ -187,6 +199,9 @@ let initGlobalConfig = () => {
 	config.utils = {
 		getGlobbedPaths: getGlobbedPaths
 	};
+
+	// Initialize derived config values
+	initDerivedConfig(config);
 
 	return config;
 };

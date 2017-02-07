@@ -82,8 +82,8 @@ function signupAlert(user, req, res) {
 	res.render('../../admin/templates/user-signup-alert-email', {
 		name: user.name,
 		username: user.username,
-		appName: config.app.instanceName,
-		url: `https://${req.headers.host}/#/admin/users`
+		appName: config.app.title,
+		url: `${config.app.baseUrl}/#/admin/users`
 	}, (error, html) => {
 		if (error) {
 			logger.error({err: error, req: req}, 'Failure rendering template.');
