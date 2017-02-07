@@ -83,7 +83,7 @@ function signupAlert(user, req, res) {
 		name: user.name,
 		username: user.username,
 		appName: config.app.instanceName,
-		url: 'http://' + req.headers.host + '/#/admin/users'
+		url: `http://${req.headers.host}/#/admin/users`
 	}, function(error, html) {
 		if (error) {
 			logger.error({err: error, req: req}, 'Failure rendering template.');
@@ -122,15 +122,15 @@ function signup(user, req, res) {
 	userAuthService.initializeNewUser(user)
 		.then(
 			(result) => {
+				return user.save();
+			})
+		.then(
+			(newUser) => {
 				// Send email for new user if enabled, no reason to wait for success
 				if (config.newUserEmail && config.newUserEmail.enabled) {
 					signupAlert(user, req, res);
 				}
 
-				return user.save();
-			})
-		.then(
-			(newUser) => {
 				return auditService.audit('user signup', 'user', 'user signup', {}, User.auditCopy(newUser), req.headers)
 					.then(
 						() => {
