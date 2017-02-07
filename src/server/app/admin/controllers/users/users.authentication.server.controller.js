@@ -83,8 +83,8 @@ function signupAlert(user, req, res) {
 		name: user.name,
 		username: user.username,
 		appName: config.app.instanceName,
-		url: `http://${req.headers.host}/#/admin/users`
-	}, function(error, html) {
+		url: `https://${req.headers.host}/#/admin/users`
+	}, (error, html) => {
 		if (error) {
 			logger.error({err: error, req: req}, 'Failure rendering template.');
 			defer.reject(error);
