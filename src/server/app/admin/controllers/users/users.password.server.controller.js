@@ -3,7 +3,6 @@
 let
 	async = require('async'),
 	crypto = require('crypto'),
-	nodemailer = require('nodemailer'),
 	path = require('path'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
@@ -11,28 +10,14 @@ let
 	config = deps.config,
 	errorHandler = deps.errorHandler,
 	logger = deps.logger,
+	emailService = deps.emailService,
 
 	User = dbs.admin.model('User');
-
-
-// Initialize the mailer if it has been configured
-let smtpTransport;
-if (null != config.mailer) {
-	smtpTransport = nodemailer.createTransport(config.mailer.options);
-}
-
 
 /**
  * Forgot for reset password (forgot POST)
  */
 exports.forgot = (req, res, next) => {
-
-	// Make sure that the mailer is configured
-	if(null == smtpTransport) {
-		let error = { message: 'Email not configured on server.'};
-		logger.warn({req: req, error: error}, error.message);
-		return res.status(500).json(error);
-	}
 
 	// Make sure there is a username
 	if(null == req.body.username) {
@@ -102,17 +87,16 @@ exports.forgot = (req, res, next) => {
 				html: emailHTML
 			};
 
-			smtpTransport.sendMail(mailOptions, (error) => {
-				if (null == error) {
-					logger.debug('Sent email to: %s', user.email);
-					res.json('An email has been sent to ' + user.email + ' with further instructions.');
-				} else {
+			emailService.sendMail(mailOptions)
+				.then((result) => {
+					logger.debug(`Sent email to: ${user.email}`);
+					res.json(`An email has been sent to ${user.email} with further instructions.`);
+					done(null);
+
+				}, (error) => {
 					logger.error({err: error, req: req}, 'Failure sending email.');
 					return res.status(400).json({ message: 'Failure sending email.' });
-				}
-
-				done(error);
-			});
+				});
 		}
 	], (error) => {
 		if (error) return next(error);
@@ -146,13 +130,6 @@ exports.reset = (req, res, next) => {
 
 	// Init Variables
 	let password = req.body.password;
-
-	// Make sure that the mailer is configured
-	if(null == smtpTransport) {
-		let error = { message: 'Email not configured on server.'};
-		logger.warn({req: req, error: error}, error.message);
-		return res.status(500).json(error);
-	}
 
 	// Make sure there is a username
 	if(null == password) {
@@ -219,9 +196,15 @@ exports.reset = (req, res, next) => {
 				html: emailHTML
 			};
 
-			smtpTransport.sendMail(mailOptions, (error) => {
-				done(error, 'done');
-			});
+			emailService.sendMail(mailOptions)
+				.then((result) => {
+					logger.debug(`Sent email to: ${user.email}`);
+					res.json(`An email has been sent to ${user.email} letting them know their password was reset.`);
+					done(null);
+				}, (error) => {
+					logger.error({err: error, req: req}, 'Failure sending email.');
+					return res.status(400).json({ message: 'Failure sending email.' });
+				});
 		}
 	], (error) => {
 		if (error) return next(error);

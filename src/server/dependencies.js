@@ -28,3 +28,4 @@ module.exports.utilService   = require(path.resolve('./src/server/app/util/servi
 module.exports.schemaService = require(path.resolve('./src/server/app/util/services/schema.server.service.js'));
 module.exports.csvStream     = require(path.resolve('./src/server/app/util/services/csv-stream.server.service.js'));
 module.exports.delayedStream = require(path.resolve('./src/server/app/util/services/delayed-stream.server.service.js'));
+module.exports.emailService  = require(path.resolve('./src/server/app/util/services/email.server.service.js'));
