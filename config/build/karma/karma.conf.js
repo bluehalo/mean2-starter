@@ -1,8 +1,10 @@
 // Karma configuration
 // Generated on Wed Dec 14 2016 15:07:52 GMT-0500 (EST)
 
-const includeCodeCoverage = !!process.env.CODE_COVERAGE_ENABLED;
-const webpackEnvironment = includeCodeCoverage ? 'test-coverage' : 'test';
+const includeCodeCoverage = !!process.env.KARMA_CODE_COVERAGE_ENABLED;
+const ciMode = !!process.env.KARMA_CI_MODE;
+
+const webpackEnvironment = `test${ciMode ? ':ci' : ''}${includeCodeCoverage ? ':coverage' : ''}`;
 
 const webpackConfig = require('../webpack.conf')(webpackEnvironment);
 
@@ -26,7 +28,7 @@ module.exports = function(config) {
 
 		// list of files / patterns to load in the browser
 		files: [
-			{ pattern: karmaTestShim, watched: false }
+			{ pattern: karmaTestShim, watched: true }
 		],
 
 		// list of files to exclude
@@ -72,7 +74,7 @@ module.exports = function(config) {
 		logLevel: config.LOG_INFO,
 
 		// enable / disable watching file and executing tests whenever any file changes
-		autoWatch: false,
+		autoWatch: true,
 
 		// start these browsers
 		// available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
@@ -80,7 +82,7 @@ module.exports = function(config) {
 
 		// Continuous Integration mode
 		// if true, Karma captures browsers, runs the tests and exits
-		singleRun: true,
+		singleRun: ciMode,
 
 		// Concurrency level
 		// how many browser should be started simultaneous

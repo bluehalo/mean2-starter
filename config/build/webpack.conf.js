@@ -15,10 +15,10 @@ module.exports = (mode) => {
 	 *  'develop' - Running webpack dev middleware for development
 	 *  'test' - Running webpack for executing tests
 	 */
-	let build = (mode === 'build');
-	let develop = (mode === 'develop');
-	let test = (mode === 'test' || mode === 'test-coverage');
-	let coverage = (mode === 'test-coverage');
+	const build = (mode === 'build');
+	const develop = (mode === 'develop');
+	const test = mode.startsWith('test');
+	const coverage = mode.includes(':coverage');
 
 
 	// The main webpack config object to return
