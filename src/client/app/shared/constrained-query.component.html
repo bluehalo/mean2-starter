@@ -1,17 +1,17 @@
 <div class="constrained-query">
-	<div class="col-md-12 input-group" data-ng-show="!readOnly">
+	<div [hidden]="readOnly">
 		<input type="text"
-			   placeholder="{{placeholder}}"
+			   placeholder="{{ placeholder }}"
 			   class="form-control input-sm"
 			   [(ngModel)]="query"
-			   [typeahead]="allowedQueries"
+			   [typeahead]="availableQueries"
 			   (typeaheadOnSelect)='typeaheadOnSelect($event)'/>
 	</div>
 	<div>
 		<ul class="items inline">
-			<li *ngFor="let value of selectedQueries">
+			<li *ngFor="let value of _selectedQueries">
 				<div class="item">
-					<div class="item-label hideOverflow">{{value}}</div>
+					<div class="item-label hideOverflow">{{ value }}</div>
 					<div class="item-delete" [hidden]="readOnly"><a (click)="removeFromQuery(value)" class="no-href danger btn-icon btn-xs"><i class="fa fa-trash-o"></i></a></div>
 					<br style="clear:both;"/>
 				</div>
