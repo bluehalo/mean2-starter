@@ -198,10 +198,12 @@ exports.reset = (req, res, next) => {
 
 			emailService.sendMail(mailOptions)
 				.then((result) => {
+					logger.debug(`Sent email to: ${user.email}`);
+					res.json(`An email has been sent to ${user.email} letting them know their password was reset.`);
 					done(null);
-
 				}, (error) => {
 					logger.error({err: error, req: req}, 'Failure sending email.');
+					return res.status(400).json({ message: 'Failure sending email.' });
 				});
 		}
 	], (error) => {

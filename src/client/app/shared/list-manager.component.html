@@ -1,0 +1,20 @@
+<div class="list-manager">
+	<textarea class="form-control input-sm custom-control"
+			  [placeholder]="placeholder"
+			  [(ngModel)]="itemsRaw"
+			  [rows]="rows"
+			  [disabled]="disabled">
+	</textarea>
+	<span>
+		<ul class="items inline">
+			<li *ngFor="let item of items">
+				<div class="item">
+					<div class="item-label hide-overflow">{{item}}</div>
+					<div class="item-delete"><a (click)="deleteItem(item)" class="no-href danger btn-icon btn-xs"><i class="fa fa-trash-o"></i></a></div>
+					<br/>
+				</div>
+			</li>
+		</ul>
+		<br />
+	</span>
+</div>
