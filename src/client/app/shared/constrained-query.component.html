@@ -1,20 +1,22 @@
-<div class="col-md-12 input-group" data-ng-show="!readOnly">
-	<input type="text"
-		   placeholder="{{placeholder}}"
-		   class="form-control input-sm"
-		   [(ngModel)]="query"
-		   [typeahead]="allowedQueries"
-		   (typeaheadOnSelect)='typeaheadOnSelect($event)'/>
-</div>
-<div>
-	<ul class="items inline">
-		<li *ngFor="let value of selectedQueries">
-			<div class="item">
-				<div class="item-label hideOverflow">{{value}}</div>
-				<div class="item-delete" [hidden]="readOnly"><a (click)="removeFromQuery(value)" class="no-href danger btn-icon btn-xs"><i class="fa fa-trash-o"></i></a></div>
-				<br style="clear:both;"/>
-			</div>
-		</li>
-	</ul>
-	<br style="clear:both;"/>
+<div class="constrained-query">
+	<div class="col-md-12 input-group" data-ng-show="!readOnly">
+		<input type="text"
+			   placeholder="{{placeholder}}"
+			   class="form-control input-sm"
+			   [(ngModel)]="query"
+			   [typeahead]="allowedQueries"
+			   (typeaheadOnSelect)='typeaheadOnSelect($event)'/>
+	</div>
+	<div>
+		<ul class="items inline">
+			<li *ngFor="let value of selectedQueries">
+				<div class="item">
+					<div class="item-label hideOverflow">{{value}}</div>
+					<div class="item-delete" [hidden]="readOnly"><a (click)="removeFromQuery(value)" class="no-href danger btn-icon btn-xs"><i class="fa fa-trash-o"></i></a></div>
+					<br style="clear:both;"/>
+				</div>
+			</li>
+		</ul>
+		<br style="clear:both;"/>
+	</div>
 </div>
