@@ -119,7 +119,7 @@ export class ListTeamMembersComponent {
 	};
 
 	private getTeamMembers() {
-		this.teamsService.searchMembers(this.teamId, this.team, null, null, this.pagingOptions)
+		this.teamsService.searchMembers(this.teamId, this.team, null, null, this.pagingOptions, false)
 			.subscribe((result: any) => {
 				if (null != result && null != result.elements && result.elements.length > 0) {
 					this.teamMembers = result.elements;
