@@ -33,21 +33,21 @@ MessageSocket.prototype.name = 'MessageSocket';
  * @override
  *
  */
-MessageSocket.prototype.getEmitMessageKey = function() {
+MessageSocket.prototype.getEmitMessageKey = () => {
 	return '';
 };
 
 /**
  * Returns the topic for a user ID.
  */
-MessageSocket.prototype.getTopic = function(userId) {
+MessageSocket.prototype.getTopic = (userId) => {
 	return this._topicName;
 };
 
 /**
  * Handle socket disconnects
  */
-MessageSocket.prototype.disconnect = function() {
+MessageSocket.prototype.disconnect = () => {
 	logger.info('MessageSocket: Disconnected from client.');
 
 	this.unsubscribe(this.getTopic());
@@ -57,7 +57,7 @@ MessageSocket.prototype.disconnect = function() {
 /**
  * Handle socket errors
  */
-MessageSocket.prototype.error = function(err) {
+MessageSocket.prototype.error = (err) => {
 	logger.error(err, 'MessageSocket: Client connection error');
 
 	this.unsubscribe(this.getTopic());
@@ -66,7 +66,7 @@ MessageSocket.prototype.error = function(err) {
 /**
  *
  */
-MessageSocket.prototype.handleSubscribe = function(payload) {
+MessageSocket.prototype.handleSubscribe = (payload) => {
 	let self = this;
 
 	if(logger.debug()) {
@@ -76,12 +76,12 @@ MessageSocket.prototype.handleSubscribe = function(payload) {
 	// Check that the user account has access
 	self.applyMiddleware([
 		users.hasAccess
-	]).then(function () {
+	]).then(() => {
 		// Subscribe to the user's message topic
 		let topic = self.getTopic();
 		self.subscribe(topic);
 		self._subscriptionCount++;
-	}, function (err) {
+	}, (err) => {
 		logger.warn(`Unauthorized access to notifications by inactive user ${self.getUserId()}: ${err}`);
 	});
 };
@@ -89,7 +89,7 @@ MessageSocket.prototype.handleSubscribe = function(payload) {
 /**
  *
  */
-MessageSocket.prototype.handleUnsubscribe = function(payload) {
+MessageSocket.prototype.handleUnsubscribe = (payload) => {
 	if(logger.debug()) {
 		logger.debug(`MessageSocket: ${emitName}:unsubscribe event with payload: ${JSON.stringify(payload)}`);
 	}
@@ -107,7 +107,7 @@ MessageSocket.prototype.handleUnsubscribe = function(payload) {
 /**
  *
  */
-MessageSocket.prototype.addListeners = function() {
+MessageSocket.prototype.addListeners = () => {
 	let s = this.getSocket();
 
 	if(typeof s.on === 'function') {
