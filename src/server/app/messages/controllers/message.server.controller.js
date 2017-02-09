@@ -11,7 +11,7 @@ let mongoose = require('mongoose'),
 	logger = deps.logger,
 	auditService = deps.auditService,
 	util = deps.utilService,
-	publishProvider = require(path.resolve(config.messages.publishProvider)),
+	publishProvider = require(path.resolve(config.publishProvider)),
 	User = dbs.admin.model('User'),
 	Message = dbs.admin.model('Message');
 
@@ -72,7 +72,7 @@ function sendMessage(message) {
 			}
 		}
 	};
-	let destination = 'message.posted';
+	let destination = config.messages.topic;
 	return publish(destination, wp, true);
 }
 

@@ -1,6 +1,6 @@
 'use strict';
 
-var path = require('path'),
+let path = require('path'),
 	nodeUtil = require('util'),
 
 	deps = require(path.resolve('./src/server/dependencies')),
@@ -9,16 +9,18 @@ var path = require('path'),
 	logger = deps.logger,
 	socketIO = deps.socketIO,
 
-	socketProvider = require(path.resolve(config.messages.socketProvider)),
-	users = require(path.resolve('./src/server/app/admin/controllers/users.server.controller.js'));
+	socketProvider = require(path.resolve(config.socketProvider)),
+	users = require(path.resolve('./src/server/app/admin/controllers/users.server.controller.js')),
+
+	emitName = 'message';
 
 /**
  * MessageSocket Socket Controller that overrides Base Socket Controller
  * methods to handle specifics of Messages
  */
 function MessageSocket(socketConfig) {
-	this._emitType = 'message:data';
-	this._topicName = 'message.posted';
+	this._emitType = `${emitName}:data`;
+	this._topicName = config.messages.topic;
 	this._subscriptionCount = 0;
 	socketProvider.apply(this, arguments);
 }
@@ -65,10 +67,10 @@ MessageSocket.prototype.error = function(err) {
  *
  */
 MessageSocket.prototype.handleSubscribe = function(payload) {
-	var self = this;
+	let self = this;
 
 	if(logger.debug()) {
-		logger.debug('MessageSocket: message:subscribe event with payload: %s', JSON.stringify(payload));
+		logger.debug(`MessageSocket: ${emitName}:subscribe event with payload: ${JSON.stringify(payload)}`);
 	}
 
 	// Check that the user account has access
@@ -76,11 +78,11 @@ MessageSocket.prototype.handleSubscribe = function(payload) {
 		users.hasAccess
 	]).then(function () {
 		// Subscribe to the user's message topic
-		var topic = self.getTopic();
+		let topic = self.getTopic();
 		self.subscribe(topic);
 		self._subscriptionCount++;
 	}, function (err) {
-		logger.warn('Unauthorized access to notifications by inactive user %s: %s', self.getUserId(), err);
+		logger.warn(`Unauthorized access to notifications by inactive user ${self.getUserId()}: ${err}`);
 	});
 };
 
@@ -89,10 +91,10 @@ MessageSocket.prototype.handleSubscribe = function(payload) {
  */
 MessageSocket.prototype.handleUnsubscribe = function(payload) {
 	if(logger.debug()) {
-		logger.debug('MessageSocket: message:unsubscribe event with payload: %s', JSON.stringify(payload));
+		logger.debug(`MessageSocket: ${emitName}:unsubscribe event with payload: ${JSON.stringify(payload)}`);
 	}
 
-	var topic = this.getTopic();
+	let topic = this.getTopic();
 	this.unsubscribe(topic);
 
 	this._subscriptionCount = Math.max(0, this._subscriptionCount - 1);
@@ -106,14 +108,14 @@ MessageSocket.prototype.handleUnsubscribe = function(payload) {
  *
  */
 MessageSocket.prototype.addListeners = function() {
-	var s = this.getSocket();
+	let s = this.getSocket();
 
 	if(typeof s.on === 'function') {
 		// Set up Subscribe events
-		s.on('message:subscribe', this.handleSubscribe.bind(this));
+		s.on(`${emitName}:subscribe`, this.handleSubscribe.bind(this));
 
 		// Set up Unsubscribe events
-		s.on('message:unsubscribe', this.handleUnsubscribe.bind(this));
+		s.on(`${emitName}:unsubscribe`, this.handleUnsubscribe.bind(this));
 	}
 };
 

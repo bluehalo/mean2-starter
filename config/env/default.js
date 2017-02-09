@@ -139,14 +139,16 @@ module.exports = {
 
 	contactEmail: process.env.CONTACT_EMAIL || process.env.MAILER_ADMIN || 'noreply@asymmetrik.com',
 
-	messages: {
-		// Use the following for local eventEmitter
-		publishProvider: './src/server/app/util/providers/event.server.provider.js',
-		socketProvider: './src/server/app/util/sockets/event.server.socket.js'
+	// Use the following for local eventEmitter
+	publishProvider: './src/server/app/util/providers/event.server.provider.js',
+	socketProvider: './src/server/app/util/sockets/event.server.socket.js',
 
-		// Use the following for Kafka.  Note, must also uncomment Kafka configuration.
-		// publishProvider: './src/server/app/util/providers/kafka.server.provider.js',
-		// socketProvider: './src/server/app/util/sockets/kafka.server.socket.js'
+	// Use the following for Kafka.  Note, must also uncomment Kafka configuration.
+	// publishProvider: './src/server/app/util/providers/kafka.server.provider.js',
+	// socketProvider: './src/server/app/util/sockets/kafka.server.socket.js',
+
+	messages: {
+		topic: 'message.posted'
 	},
 
 	// Configuration for outgoing mail server
