@@ -141,11 +141,11 @@ module.exports = {
 
 	messages: {
 		// Use the following for local eventEmitter
-		publishProvider: './src/server/app/messages/providers/event-message.provider.js',
+		publishProvider: './src/server/app/util/providers/event.server.provider.js',
 		socketProvider: './src/server/app/util/sockets/event.server.socket.js'
 
 		// Use the following for Kafka.  Note, must also uncomment Kafka configuration.
-		// publishProvider: './src/server/app/messages/providers/kafka-message.provider.js',
+		// publishProvider: './src/server/app/util/providers/kafka.server.provider.js',
 		// socketProvider: './src/server/app/util/sockets/kafka.server.socket.js'
 	},
 
