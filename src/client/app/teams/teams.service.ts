@@ -65,14 +65,16 @@ export class TeamsService {
 		return this.asyHttp.get(new HttpOptions(`team/${teamId}`, () => {}));
 	}
 
-	searchMembers(teamId: string, team: Team, query: any, search: any, paging: PagingOptions): Observable<any> {
+	searchMembers(teamId: string, team: Team, query: any, search: any, paging: PagingOptions, resolveTeamNames: boolean = true): Observable<any> {
 		return Observable.create((observer: any) => {
 			this.asyHttp.post(new HttpOptions(`team/${teamId}/members?${this.asyHttp.urlEncode(paging.toObj())}`, () => {}, { s: search , q: query }))
 				.subscribe(
 					(results: any) => {
 						if (null != results && _.isArray(results.elements)) {
 							results.elements = results.elements.map((element: any) => new TeamMember().setFromTeamMemberModel(team, element));
-							this.resolveTeamNames(results.elements);
+							if (resolveTeamNames) {
+								this.resolveTeamNames(results.elements);
+							}
 						}
 						observer.next(results);
 					},
