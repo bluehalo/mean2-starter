@@ -8,6 +8,8 @@ let path = require('path'),
 	config = deps.config,
 	util = deps.utilService,
 	auditService = deps.auditService,
+	emailService = deps.emailService,
+	logger = deps.logger,
 
 	userAuthService = require(path.resolve('./src/server/app/admin/services/users.authentication.server.service.js')),
 	User = dbs.admin.model('User');
@@ -73,6 +75,47 @@ function adminCreateUser(user, req, res) {
 }
 
 
+// Send email alert about new account request
+function signupAlert(user, req, res) {
+	let defer = q.defer();
+
+	res.render('../../admin/templates/user-signup-alert-email', {
+		name: user.name,
+		username: user.username,
+		appName: config.app.title,
+		url: `${config.app.baseUrl}/#/admin/users`
+	}, (error, html) => {
+		if (error) {
+			logger.error({err: error, req: req}, 'Failure rendering template.');
+			defer.reject(error);
+		}
+		else {
+			let to = config.newUserEmail.email;
+
+			let mailOptions = {
+				to: to,
+				from: config.mailer.from,
+				subject: 'New Account Request',
+				html: html
+			};
+
+			emailService.sendMail(mailOptions)
+				.then((result) => {
+					logger.debug(`Sent new user(${user.username}) email to: ${to}`);
+					defer.resolve(user);
+				}, (error) => {
+					// Log the error but this shouldn't block
+					// the user from signing up
+					logger.error({err: error, req: req}, 'Failure sending email.');
+					defer.resolve(user);
+				});
+		}
+	});
+
+	return defer.promise;
+}
+
+
 // Signup the user - creates the user object and logs in the user
 function signup(user, req, res) {
 	// Initialize the user
@@ -83,6 +126,11 @@ function signup(user, req, res) {
 			})
 		.then(
 			(newUser) => {
+				// Send email for new user if enabled, no reason to wait for success
+				if (config.newUserEmail && config.newUserEmail.enabled) {
+					signupAlert(user, req, res);
+				}
+
 				return auditService.audit('user signup', 'user', 'user signup', {}, User.auditCopy(newUser), req.headers)
 					.then(
 						() => {
