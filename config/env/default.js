@@ -113,7 +113,12 @@ module.exports = {
 	// Basic title and instance name
 	app: {
 		title: 'MEAN2 UI (Default Settings)',
-		instanceName: 'mean2ui'
+		instanceName: 'mean2ui',
+		url: {
+			protocol: 'http',
+			host: 'localhost',
+			port: 3000
+		}
 	},
 
 	// Header/footer
@@ -138,6 +143,10 @@ module.exports = {
 	},
 
 	contactEmail: process.env.CONTACT_EMAIL || process.env.MAILER_ADMIN || 'noreply@asymmetrik.com',
+	newUserEmail: {
+		enabled: false,
+		email: process.env.MAILER_ADMIN || 'noreply@asymmetrik.com'
+	},
 
 	// Use the following for local eventEmitter
 	publishProvider: './src/server/app/util/providers/event.server.provider.js',
