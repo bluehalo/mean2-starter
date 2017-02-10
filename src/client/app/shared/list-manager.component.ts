@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 
 export class ListManager {
 
-	@Input() delimiter: string = '"([^"]*)"|\'([^\']*)\'|([^\\s|,"]+)';
+	@Input() delimiter: string = '“([^“]*)”|"([^"]*)"|\'([^\']*)\'|([^\\s|,"]+)';
 
 	@Input() placeholder: string = 'Enter a comma separated list of user accounts. This can be a mixture of user handles, user ids and user display names (ie. user1, @user2, 78934543, User 4)';
 
@@ -34,8 +34,11 @@ export class ListManager {
 	set itemsRaw(newValue: string) {
 		if (newValue) {
 			let split = new RegExp(this.delimiter, 'g');
-			this._items = _.map(newValue.match(split), function(val) {
-				if ((val.charAt(0) === '"' || val.charAt(0) === '\'') && (val.charAt(val.length - 1) === '"' || val.charAt(val.length - 1) === '\'')) {
+			this._items = _.map(newValue.match(split), function(val: string) {
+				if (
+					(val.charAt(0) === '"' || val.charAt(0) === '\'' || val.charAt(0) === '“') &&
+					(val.charAt(val.length - 1) === '"' || val.charAt(val.length - 1) === '\'' || val.charAt(val.length - 1) === '”')) {
+
 					val = val.substring(1, val.length - 1);
 				}
 				return val;
