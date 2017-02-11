@@ -34,14 +34,6 @@ module.exports = (app) => {
 		.post(users.hasAccess, users.matchUsers);
 
 	/**
-	 * Notification Preferences Routes
-	 */
-
-	app.route('/users/me/preferences/notifications/:notificationType/:referenceId')
-		.get(users.hasAccess, users.getNotificationPreferencesByTypeAndId)
-		.post(users.hasAccess, users.setNotificationPreferencesByTypeAndId);
-
-	/**
 	 * Admin User Routes (requires admin)
 	 */
 

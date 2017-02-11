@@ -31,40 +31,6 @@ let validatePassword = function(password) {
 let passwordMessage = 'Password must be at least 6 characters long';
 
 /**
- * Ensure that the notification type is one of the allowed values
- */
-let validNotificationTypes = [''];
-let validateNotificationType = function(inputType) {
-	// is it in the allowed enumerations defined below?
-	return validNotificationTypes.indexOf(inputType) !== -1;
-};
-
-let NotificationPreferenceSchema = new GetterSchema({
-	notificationType: {
-		type: String,
-		required: 'Notification Type is required',
-		validate: [validateNotificationType, 'Invalid Notification Type']
-	},
-	// ObjectId of the domain object that the notification preference applies to (e.g., report ID)
-	referenceId: {
-		type: String,
-		required: 'Notification Reference is required'
-	},
-	values: {
-		type: {
-			email: {
-				type: Boolean,
-				default: false
-			},
-			sms: {
-				type: Boolean,
-				default: false
-			}
-		}
-	}
-});
-
-/**
  * User Schema
  */
 
@@ -175,14 +141,6 @@ let UserSchema = new GetterSchema({
 		type: Date,
 		default: null,
 		get: util.dateParse
-	},
-	preferences: {
-		type: {
-			notifications: {
-				type: [NotificationPreferenceSchema],
-				default: []
-			}
-		}
 	}
 });
 UserSchema.plugin(uniqueValidator);
@@ -234,48 +192,6 @@ UserSchema.methods.hashPassword = function(password) {
 // Authenticate a password against the user
 UserSchema.methods.authenticate = function(password) {
 	return this.password === this.hashPassword(password);
-};
-
-/**
- * In order to update a notification preference, dive into the user's preferences object
- * instead of having a fully fledged schema, remove any existing subdocuments, then
- * append it to the existing notification preferences.
- */
-UserSchema.methods.updateNotificationPreference = function(np) {
-	let user = this;
-	let notifType = np.notificationType.toLowerCase();
-
-	return user.update({
-		$pull: {
-			'preferences.notifications': {
-				'notificationType' : notifType,
-				'referenceId' : np.referenceId
-			}
-		}
-	}).exec()
-		.then(() => {
-			return user.update({
-				$push: { 'preferences.notifications': np }
-			}).exec();
-		});
-
-};
-
-/**
- * In order to remove a notification preference, dive into the user's preferences object
- * instead of having a fully fledged schema, filter out the one to remove.
- */
-UserSchema.methods.removeNotificationPreference = function(type, referenceId) {
-	type = type.toLowerCase();
-
-	return this.update({
-		$pull: {
-			'preferences.notifications': {
-				'notificationType' : type,
-				'referenceId' : referenceId
-			}
-		}
-	}).exec();
 };
 
 
@@ -390,4 +306,3 @@ UserSchema.statics.auditCopy = function(user, userIP) {
  * Model Registration
  */
 mongoose.model('User', UserSchema);
-mongoose.model('NotificationPreference', NotificationPreferenceSchema);

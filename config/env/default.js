@@ -296,11 +296,5 @@ module.exports = {
 	/*
 	 * The maximum number of records allowed to be exported to csv
 	 */
-	maxExport: 1000,
-
-
-	notifications: {
-		email: true,
-		sms: false
-	}
+	maxExport: 1000
 };
