@@ -10,6 +10,9 @@
 
 		"noImplicitAny": true,
 		"suppressImplicitAnyIndexErrors": true,
+		"allowUnreachableCode": false,
+		"noUnusedParameters": false,
+		"noUnusedLocals": false,
 
 		"sourceMap": true
 
@@ -19,3 +22,4 @@
 		"node_modules"
 	]
 }
+

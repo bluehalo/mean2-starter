@@ -39,7 +39,7 @@ export class MessagesComponent {
 
 				let messages = _.orderBy(result.elements, ['created'], ['desc']);
 				// find the first motd
-				let motdIdx = _.findIndex(messages, function(msg: Message) {
+				let motdIdx = _.findIndex(messages, (msg: Message) => {
 					return msg.type === MessageType.MOTD;
 				});
 				if (motdIdx >= 0) {

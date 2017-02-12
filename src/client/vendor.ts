@@ -30,19 +30,23 @@ import 'zone.js';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import 'font-awesome/css/font-awesome.css';
-import 'angular2-toaster/lib/toaster.css';
+import 'angular2-toaster/toaster.css';
+
 
 // Angular2 Imports
+import '@angular/common';
+import '@angular/core';
+import '@angular/forms';
+import '@angular/http';
 import '@angular/platform-browser';
 import '@angular/platform-browser-dynamic';
-import '@angular/core';
-import '@angular/common';
-import '@angular/http';
 import '@angular/router';
 
 
 // Angular2 Third-Party
 import 'angular2-modal';
+import 'angular2-toaster';
+import 'ng2-bootstrap';
 
 
 // Other Dependencies
