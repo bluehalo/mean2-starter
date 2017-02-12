@@ -40,14 +40,14 @@ MessageSocket.prototype.getEmitMessageKey = () => {
 /**
  * Returns the topic for a user ID.
  */
-MessageSocket.prototype.getTopic = (userId) => {
+MessageSocket.prototype.getTopic = function(userId) {
 	return this._topicName;
 };
 
 /**
  * Handle socket disconnects
  */
-MessageSocket.prototype.disconnect = () => {
+MessageSocket.prototype.disconnect = function() {
 	logger.info('MessageSocket: Disconnected from client.');
 
 	this.unsubscribe(this.getTopic());
@@ -57,7 +57,7 @@ MessageSocket.prototype.disconnect = () => {
 /**
  * Handle socket errors
  */
-MessageSocket.prototype.error = (err) => {
+MessageSocket.prototype.error = function(err) {
 	logger.error(err, 'MessageSocket: Client connection error');
 
 	this.unsubscribe(this.getTopic());
@@ -66,7 +66,7 @@ MessageSocket.prototype.error = (err) => {
 /**
  *
  */
-MessageSocket.prototype.handleSubscribe = (payload) => {
+MessageSocket.prototype.handleSubscribe = function(payload) {
 	let self = this;
 
 	if(logger.debug()) {
@@ -89,7 +89,7 @@ MessageSocket.prototype.handleSubscribe = (payload) => {
 /**
  *
  */
-MessageSocket.prototype.handleUnsubscribe = (payload) => {
+MessageSocket.prototype.handleUnsubscribe = function(payload) {
 	if(logger.debug()) {
 		logger.debug(`MessageSocket: ${emitName}:unsubscribe event with payload: ${JSON.stringify(payload)}`);
 	}
@@ -107,7 +107,7 @@ MessageSocket.prototype.handleUnsubscribe = (payload) => {
 /**
  *
  */
-MessageSocket.prototype.addListeners = () => {
+MessageSocket.prototype.addListeners = function() {
 	let s = this.getSocket();
 
 	if(typeof s.on === 'function') {

@@ -8,6 +8,7 @@ let _ = require('lodash'),
 	config = deps.config,
 	dbs = deps.dbs,
 
+	userProfileService = require(path.resolve('./src/server/app/admin/services/users.profile.server.service.js')),
 	userAuthService = require(path.resolve('./src/server/app/admin/services/users.authentication.server.service.js')),
 	User = dbs.admin.model('User');
 
@@ -19,14 +20,15 @@ let _ = require('lodash'),
 
 // User middleware - stores user corresponding to id in 'userParam'
 module.exports.userById = (req, res, next, id) => {
-	User.findOne({
-		_id: id
-	}).exec((err, user) => {
-		if (err) return next(err);
-		if (!user) return next(new Error('Failed to load User ' + id));
-		req.userParam = user;
-		next();
-	});
+	userProfileService.userById(id)
+		.then((user) => {
+			req.userParam = user;
+			next();
+		})
+		.fail((err) => {
+			next(err);
+		})
+		.done();
 };
 
 
