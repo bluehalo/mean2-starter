@@ -18,12 +18,11 @@
  */
 
 // Polyfills
-import 'core-js/es6';
-import 'core-js/es7/reflect';
 import 'classlist.js';
 import 'console-polyfill';
-import 'reflect-metadata';
-import 'zone.js';
+import 'core-js/es6';
+import 'core-js/es7/reflect';
+import 'ts-helpers';
 
 
 // Global Imports
@@ -53,3 +52,4 @@ import 'ng2-bootstrap';
 import 'lodash';
 import 'moment';
 import 'rxjs';
+import 'zone.js';
