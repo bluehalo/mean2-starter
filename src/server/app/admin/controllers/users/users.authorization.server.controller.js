@@ -24,11 +24,9 @@ module.exports.userById = (req, res, next, id) => {
 		.then((user) => {
 			req.userParam = user;
 			next();
-		})
-		.fail((err) => {
+		}, (err) => {
 			next(err);
-		})
-		.done();
+		});
 };
 
 
