@@ -17,8 +17,13 @@ module.exports = {
 
 	// Basic title and instance name
 	app: {
-		title: 'MEAN2 UI Development Settings)',
-		instanceName: 'mean2ui'
+		title: 'MEAN2 UI (Development Settings)',
+		instanceName: 'mean2ui',
+		url: {
+			protocol: 'http',
+			host: 'localhost',
+			port: 3000
+		}
 	},
 
 	// Header/footer
