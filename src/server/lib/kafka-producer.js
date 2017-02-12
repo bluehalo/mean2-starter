@@ -244,3 +244,21 @@ module.exports.send = send;
 module.exports.sendMessageForTopic = function(topic, message, retry) {
 	return send([{topic: topic, messages: message}], retry);
 };
+
+/**
+ * Sends an array of payloads to Kafka.  If the payload fails and the retry flag is set, we will continue
+ * retrying the send until it is successful.
+ *
+ * @param {String} topic The topic to send the message to.
+ * @param {String} message An array or string containing the message or messages to send.
+ * @param {String} key a string that is the key for the message
+ * @param {Boolean} retry If true, the payload will continue to be sent until it is successful.  If false,
+ *   the payload will be sent once and will be ignored if it fails.
+ *
+ * @returns {Promise} A promise that is resolved when the send is successful, and rejected if it fails and
+ *   retry is set to false.  If retry is true, the promise will only be resolved when a successful send
+ *   is finally made.
+ */
+module.exports.sendMessageForTopicWithKey = function(topic, message, key, retry) {
+	return send([{topic: topic, messages: message, key: key}], retry);
+};
