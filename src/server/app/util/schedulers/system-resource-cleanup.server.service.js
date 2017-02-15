@@ -19,8 +19,9 @@ module.exports.run = function() {
 			results.forEach((result, idx) => {
 				if (result.state === 'rejected') {
 					logger.error(`Error running service=${services[idx].name}. Error=${JSON.stringify(result.reason)}`);
+				} else {
+					logger.debug(`Ran service=${services[idx].name} during system-resource-cleanup`);
 				}
-				logger.debug(`Ran service=${services[idx].name} during system-resource-cleanup`);
 			});
 
 		});
