@@ -95,7 +95,7 @@ module.exports = {
 //				config: {}
 //			}
 			{
-				file: './src/server/app/preferences/schedulers/preference-cleanup.server.service.js',
+				file: './src/server/app/util/schedulers/system-resource-cleanup.server.service.js',
 				interval: 1800000, // every 30 minutes
 				config: {}
 			}
