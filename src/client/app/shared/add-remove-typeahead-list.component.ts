@@ -6,6 +6,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 })
 export class AddRemoveTypeaheadList {
 
+	@Input() readOnly = false;
+
 	@Input() items: any[] = [];
 
 	@Input() placeholder: string = '';

@@ -261,3 +261,5 @@ module.exports.toProvenance = function(user) {
 		updated: now.getTime()
 	};
 };
+
+module.exports.emailMatcher = /.+\@.+\..+/;
