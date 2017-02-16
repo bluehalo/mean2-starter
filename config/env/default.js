@@ -80,8 +80,8 @@ module.exports = {
 	},
 
 	// Scheduled task runner
-//	scheduler: {
-//		services: [
+	scheduler: {
+		services: [
 //			{
 //				file: 'app/access-checker/server/services/cache-refresh.server.service.js',
 //				interval: 5000,
@@ -94,9 +94,14 @@ module.exports = {
 //				interval: 10000,
 //				config: {}
 //			}
-//		],
-//		interval: 10000
-//	},
+			{
+				file: './src/server/app/util/schedulers/system-resource-cleanup.server.service.js',
+				interval: 1800000, // every 30 minutes
+				config: {}
+			}
+		],
+		interval: 10000
+	},
 
 	// MongoDB
 	db: {

@@ -49,7 +49,7 @@ let UserSchema = new GetterSchema({
 		type: String,
 		trim: true,
 		required: 'Email is required',
-		match: [/.+\@.+\..+/, 'A valid email address is required']
+		match: [util.emailMatcher, 'A valid email address is required']
 	},
 	phone: {
 		type: String,
@@ -173,7 +173,6 @@ UserSchema.pre('save', function(next) {
 	next();
 });
 
-
 /**
  * Instance Methods
  */
@@ -193,7 +192,6 @@ UserSchema.methods.hashPassword = function(password) {
 UserSchema.methods.authenticate = function(password) {
 	return this.password === this.hashPassword(password);
 };
-
 
 /**
  * Static Methods

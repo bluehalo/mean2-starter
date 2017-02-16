@@ -1,27 +1,28 @@
 <form *ngIf="resource" name="manageResourceForm" autocomplete="off" class="form-horizontal" role="form" novalidate>
 
-	<div class="form-group row col-md-12" *ngIf="mode === 'edit'">
-		<label class="control-label">Owned by: {{ resource?.owner?.name }}</label>
-	</div>
-
 	<!-- Title -->
 	<div class="form-group row col-md-12" *ngIf="!hideTitle">
 		<label for="title">Title<span class="text-danger"><strong> *</strong></span></label>
-		<input type="text" class="form-control input-sm" id="title" name="title" [(ngModel)]="resource.title" required />
+		<input *ngIf="!readOnly" type="text" class="form-control input-sm" id="title" name="title" [(ngModel)]="resource.title" required />
+		<div *ngIf="readOnly">{{ resource.title }}</div>
 	</div>
 
 	<!-- Owner -->
-	<div class="form-group row col-md-12" *ngIf="mode === 'create'">
+	<div class="form-group row col-md-12">
 		<label for="owner">Owner<span class="text-danger"><strong> *</strong></span></label>
-		<select class="form-control input-sm" id="owner" name="owner" [(ngModel)]="resource.owner" (ngModelChange)="getTagOptions()">
+		<select *ngIf="mode === 'create' && !readOnly" class="form-control input-sm" id="owner" name="owner" [(ngModel)]="resource.owner" (ngModelChange)="getTagOptions()">
 			<option *ngFor="let owner of ownerOptions" [ngValue]="owner">{{ owner.name }}</option>
 		</select>
+		<div *ngIf="mode !== 'create' || readOnly">
+			{{ resource?.owner?.name }}
+		</div>
 	</div>
 
 	<!-- Tags -->
 	<div class="form-group row col-md-12">
 		<label style="padding-bottom:5px;" class="control-label">Tags</label> ({{ resource?.tags?.length }} Tags)
 		<asy-add-remove-typeahead-list
+			[readOnly]="readOnly"
 			[items]="resource.tags"
 			(itemsChanged)="updateTags($event)"
 			placeholder="Start typing a tag name..."
@@ -31,8 +32,14 @@
 	</div>
 
 	<!-- Description -->
-	<div class="form-group row col-md-12" *ngIf="!hideDescription">
+	<div class="form-group row col-md-12" *ngIf="!hideDescription && !readOnly">
 		<label for="description">Description</label>
 		<textarea rows="3" class="form-control input-sm" id="description" name="description" [(ngModel)]="resource.description"></textarea>
 	</div>
+
+	<div class="form-group row col-md-12" *ngIf="!hideDescription && readOnly && haveDescription()">
+		<label for="description">Description</label>
+		<div>{{ resource.description }}</div>
+	</div>
+
 </form>

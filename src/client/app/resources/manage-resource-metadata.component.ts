@@ -20,6 +20,8 @@ export class ManageResourceMetadataComponent {
 
 	@Input() resource: Resource;
 
+	@Input() readOnly = false;
+
 	@Input() mode: string;
 
 	@Input() hideTitle: boolean = false;
@@ -89,7 +91,10 @@ export class ManageResourceMetadataComponent {
 				(response: Response) => {
 					this.alertError.emit({err: response.json().message});
 				});
+	}
 
+	haveDescription() {
+		return this.resource.description != null && !_.isEmpty(this.resource.description.trim());
 	}
 
 	private updateTags(event: any) {
