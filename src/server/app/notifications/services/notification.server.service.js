@@ -9,7 +9,11 @@ let path = require('path'),
 
 function doSearch(query, sortParams, page, limit) {
 	let countPromise = Notification.find(query).count();
-	let searchPromise = Notification.find(query).sort(sortParams);
+	let searchPromise = Notification.find(query);
+
+	if (sortParams) {
+		searchPromise = searchPromise.sort(sortParams);
+	}
 
 	if (limit) {
 		searchPromise = searchPromise.skip(page * limit).limit(limit);
@@ -26,6 +30,11 @@ function doSearch(query, sortParams, page, limit) {
 			});
 		});
 }
+
+module.exports.searchAll = function(query) {
+	return Notification.find(query).exec();
+};
+
 
 module.exports.search = function(query, queryParams, user) {
 	if (!user || !user._id) {
