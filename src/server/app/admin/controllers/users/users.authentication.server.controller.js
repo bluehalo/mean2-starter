@@ -83,7 +83,7 @@ function signupAlert(user, req, res) {
 		name: user.name,
 		username: user.username,
 		appName: config.app.title,
-		url: `${config.app.baseUrl}/#/admin/users`
+		url: `${config.app.baseUrl}/admin/users`
 	}, (error, html) => {
 		if (error) {
 			logger.error({err: error, req: req}, 'Failure rendering template.');

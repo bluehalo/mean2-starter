@@ -122,7 +122,8 @@ module.exports = {
 		url: {
 			protocol: 'http',
 			host: 'localhost',
-			port: 3000
+			port: 3000,
+			extraRoute: '/#'
 		}
 	},
 
