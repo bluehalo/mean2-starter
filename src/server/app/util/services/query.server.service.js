@@ -182,9 +182,10 @@ module.exports.count = function(schema, query) {
  * @param schema
  * @param ids
  * @param fieldsToReturn Optional array of fields to include in results. If empty will include all fields.
+ * @param lean If true, will return as plain javascript objects instead of mongoose docs
  * @returns {Promise}
  */
-module.exports.getAllByIdAsMap = function(schema, ids, fieldsToReturn) {
+module.exports.getAllByIdAsMap = function(schema, ids, fieldsToReturn, lean) {
 	fieldsToReturn = fieldsToReturn || [];
 
 	let projection = {};
@@ -192,25 +193,22 @@ module.exports.getAllByIdAsMap = function(schema, ids, fieldsToReturn) {
 		projection[field] = 1;
 	});
 
-	return schema.find( { _id: { $in: ids } }, projection ).lean()
-		.then((results) => {
-			let resultsMap = {};
-			if (_.isArray(results)) {
-				results.forEach((result) => {
-					if (result != null) {
-						if (!_.isEmpty(projection)) {
-							resultsMap[result._id] = { _id: result._id };
-							fieldsToReturn.forEach((field) => {
-								resultsMap[result._id][field] = result[field];
-							});
-						} else {
-							resultsMap[result._id] = result;
-						}
-					}
-				});
-			}
-			return resultsMap;
-		});
+	let promise = schema.find( { _id: { $in: ids } }, projection );
+	if (lean) {
+		promise = promise.lean();
+	}
+
+	return promise.then((results) => {
+		let resultsMap = {};
+		if (_.isArray(results)) {
+			results.forEach((result) => {
+				if (result != null) {
+					resultsMap[result._id] = result;
+				}
+			});
+		}
+		return resultsMap;
+	});
 
 };
 
