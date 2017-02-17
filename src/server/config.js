@@ -161,8 +161,8 @@ let initDerivedConfig = (config) => {
 			config.app.baseUrl = config.app.baseUrlWithoutPort;
 		}
 
-		if (config.app.extraRoute) {
-			config.app.baseUrl += config.app.extraRoute;
+		if (config.app.url.extra) {
+			config.app.baseUrl += config.app.url.extra;
 		}
 	}
 };
