@@ -198,18 +198,7 @@ module.exports.getAllByIdAsMap = function(schema, ids, fieldsToReturn, lean) {
 		promise = promise.lean();
 	}
 
-	return promise.then((results) => {
-		let resultsMap = {};
-		if (_.isArray(results)) {
-			results.forEach((result) => {
-				if (result != null) {
-					resultsMap[result._id] = result;
-				}
-			});
-		}
-		return resultsMap;
-	});
-
+	return promise.then((results) => _.keyBy(results, (result) => result._id));
 };
 
 module.exports.mongooseToObject = function(doc) {
