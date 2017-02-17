@@ -19,8 +19,7 @@ module.exports = _.extend(
 	require(path.resolve('./src/server/app/admin/controllers/users/users.password.server.controller.js')),
 	require(path.resolve('./src/server/app/admin/controllers/users/users.profile.server.controller.js')),
 	require(path.resolve('./src/server/app/admin/controllers/users/users.export.server.controller.js')),
-	require(path.resolve('./src/server/app/admin/controllers/users/eua.server.controller.js')),
-	require(path.resolve('./src/server/app/admin/controllers/users/preferences.notifications.server.controller.js'))
+	require(path.resolve('./src/server/app/admin/controllers/users/eua.server.controller.js'))
 );
 
 /*=====================================
