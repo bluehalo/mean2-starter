@@ -1,6 +1,6 @@
 'use strict';
 
-var
+var _ = require('lodash'),
 	q = require('q'),
 	path = require('path'),
 	deps = require(path.resolve('./src/server/dependencies.js')),
@@ -175,4 +175,48 @@ module.exports.count = function(schema, query) {
 	});
 
 	return countDefer.promise;
+};
+
+/**
+ * Query for multiple documents by ID and get results as a map from id -> result.
+ * @param schema
+ * @param ids
+ * @param fieldsToReturn Optional array of fields to include in results. If empty will include all fields.
+ * @returns {Promise}
+ */
+module.exports.getAllByIdAsMap = function(schema, ids, fieldsToReturn) {
+	fieldsToReturn = fieldsToReturn || [];
+
+	let projection = {};
+	fieldsToReturn.forEach((field) => {
+		projection[field] = 1;
+	});
+
+	return schema.find( { _id: { $in: ids } }, projection ).lean()
+		.then((results) => {
+			let resultsMap = {};
+			if (_.isArray(results)) {
+				results.forEach((result) => {
+					if (result != null) {
+						if (!_.isEmpty(projection)) {
+							resultsMap[result._id] = { _id: result._id };
+							fieldsToReturn.forEach((field) => {
+								resultsMap[result._id][field] = result[field];
+							});
+						} else {
+							resultsMap[result._id] = result;
+						}
+					}
+				});
+			}
+			return resultsMap;
+		});
+
+};
+
+module.exports.mongooseToObject = function(doc) {
+	if (doc.constructor.name === 'model') {
+		return doc.toObject();
+	}
+	return doc;
 };
