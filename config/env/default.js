@@ -166,6 +166,8 @@ module.exports = {
 		topic: 'message.posted'
 	},
 
+	notificationExpires: 15552000, // 180 days
+
 	// Configuration for outgoing mail server
 	mailer: {
 		from: process.env.MAILER_FROM || 'USERNAME@GMAIL.COM',

@@ -5,6 +5,7 @@ let mongoose = require('mongoose'),
 	path = require('path'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
+	config = deps.config,
 	util = deps.utilService;
 
 /**
@@ -21,7 +22,8 @@ let NotificationSchema = new mongoose.Schema({
 	created: {
 		type: Date,
 		default: Date.now,
-		get: util.dateParse
+		get: util.dateParse,
+		expires: config.notificationExpires
 	}
 }, module.exports.notificationOptions);
 
