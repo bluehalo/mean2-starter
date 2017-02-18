@@ -9,6 +9,7 @@ let _ = require('lodash'),
 	logger = deps.logger,
 
 	User = dbs.admin.model('User'),
+	queryMongoService = require(path.resolve('./src/server/app/util/services/query.server.service.js')),
 	notificationService = require(path.resolve('./src/server/app/notifications/services/notification.server.service.js'));
 
 /**
@@ -16,16 +17,14 @@ let _ = require('lodash'),
  */
 module.exports.run = function() {
 
-	return notificationService.searchAll({})
-		.then((notifications) => {
+	return notificationService.searchAll({}).then((notifications) => {
 			if (_.isArray(notifications)) {
-				let userPromises = notifications.map((notification) => User.findById(notification.user));
-				return q.all(userPromises)
+				let userIds = _.uniqBy(notifications.map((notification) => notification.user), (id) => id.toString());
+				return queryMongoService.getAllByIdAsMap(User, userIds, ['_id'])
 					.then((users) => {
 						let removals = [];
-						users.forEach((user, idx) => {
-							if (!user) {
-								let notification = notifications[idx];
+						notifications.forEach((notification) => {
+							if (!users[notification.user]) {
 								logger.debug(`Removing notification=${notification._id} owned by nonexistent user=${notification.user}`);
 								removals.push(notification.remove());
 							}
