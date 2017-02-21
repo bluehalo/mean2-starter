@@ -1,17 +1,18 @@
-<input type="text"
-			 class="form-control input-sm"
-			 placeholder="{{ placeholder }}"
-			 [(ngModel)]="selectedItem"
-			 [typeahead]="availableItems"
-			 [typeaheadOptionField]="identifier"
-			 (typeaheadOnSelect)="typeaheadOnSelect($event)"/>
+<input *ngIf="!readOnly"
+	   type="text"
+	   class="form-control input-sm"
+	   placeholder="{{ placeholder }}"
+	   [(ngModel)]="selectedItem"
+	   [typeahead]="availableItems"
+	   [typeaheadOptionField]="identifier"
+	   (typeaheadOnSelect)="typeaheadOnSelect($event)"/>
 
 <div>
 	<ul class="items inline">
 		<li *ngFor="let it of items; let i = index">
 			<div class="item">
 				<div class="item-label hide-overflow">{{ it[identifier] }}</div>
-				<div class="item-delete"><a (click)="deleteItem(i)" class="no-href danger btn-icon btn-xs">
+				<div *ngIf="!readOnly" class="item-delete"><a (click)="deleteItem(i)" class="no-href danger btn-icon btn-xs">
 					<i class="fa fa-trash-o"></i></a></div>
 				<br style="clear:both;"/>
 			</div>

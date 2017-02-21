@@ -61,9 +61,9 @@ module.exports = function() {
 		let offset = page * limit;
 
 		return q.all([
-				Resource.find(query).count(),
-				Resource.find(query).sort(sortParams).skip(offset).limit(limit)
-			])
+			Resource.find(query).count(),
+			Resource.find(query).sort(sortParams).skip(offset).limit(limit)
+		])
 			.then((results) => {
 				return q({
 					totalSize: results[0],
@@ -182,8 +182,13 @@ module.exports = function() {
 		}
 	}
 
+	function resourceById(id) {
+		return Resource.findOne({ _id: id }).exec();
+	}
+
 	return {
 		searchResources: searchResources,
-		filterResourcesByAccess: filterResourcesByAccess
+		filterResourcesByAccess: filterResourcesByAccess,
+		resourceById: resourceById
 	};
 };

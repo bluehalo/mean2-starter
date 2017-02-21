@@ -38,6 +38,9 @@ function initLocalVariables(app) {
 	// Development
 	app.locals.developmentMode = config.mode === 'development';
 	app.locals.liveReload = config.liveReload;
+	if (config.liveReload) {
+		app.locals.liveReloadScript = `${config.app.baseUrlWithoutPort}:${config.liveReload.port}/livereload.js`;
+	}
 
 	// Passing the request url to environment locals
 	app.use(function (req, res, next) {
