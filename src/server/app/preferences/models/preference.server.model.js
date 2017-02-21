@@ -35,7 +35,7 @@ let PreferenceSchema = new mongoose.Schema({
  *****************/
 
 PreferenceSchema.index({ user: 1, updated: -1 });
-PreferenceSchema.index({ user: 1, type: 1, updated: -1 });
+PreferenceSchema.index({ user: 1, preferenceType: 1, updated: -1 });
 
 /*****************
  * Static Methods
