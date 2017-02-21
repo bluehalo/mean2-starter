@@ -37,7 +37,6 @@ export class ManageResourceMetadataComponent {
 	filteredTagOptions: Tag[] = [];
 
 	constructor(
-		public authService: AuthenticationService,
 		public tagsService: TagsService,
 		public teamsService: TeamsService
 	) {

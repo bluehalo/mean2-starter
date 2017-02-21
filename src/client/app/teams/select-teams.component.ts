@@ -44,7 +44,6 @@ export class SelectTeamsComponent {
 	teamOptions: Team[] = [];
 
 	constructor(
-		public authService: AuthenticationService,
 		public tagsService: TagsService,
 		public teamsService: TeamsService
 	) {
