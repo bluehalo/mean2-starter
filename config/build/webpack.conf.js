@@ -135,6 +135,14 @@ module.exports = (mode) => {
 
 	};
 
+	if (develop) {
+		wpConfig.module.loaders.push({
+			test: /node_modules\/@asymmetrik.*\.js$/,
+			loader: 'source-map-loader',
+			enforce: 'pre'
+		});
+	}
+
 
 	/**
 	 * Webpack plugins
