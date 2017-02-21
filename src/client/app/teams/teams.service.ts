@@ -11,6 +11,7 @@ import { User } from '../admin/user.class';
 import { ObservableUtils } from '../shared/observable-utils.class';
 import { ObservableResult } from '../shared/observable-result.class';
 import { Resource } from '../resources/resource.class';
+import { AuthenticationService } from '../admin/authentication/authentication.service';
 
 @Injectable()
 export class TeamsService {
@@ -20,7 +21,8 @@ export class TeamsService {
 	teamMap: any = {};
 
 	constructor(
-		private asyHttp: AsyHttp
+		private asyHttp: AsyHttp,
+		private authService: AuthenticationService
 	) {
 	}
 
@@ -142,5 +144,8 @@ export class TeamsService {
 		return user.canManageTeamResources(new Team(resource.owner._id));
 	}
 
-}
+	getCurrentUserAsTeamMember() {
+		return new TeamMember().setFromTeamMemberModel(null, this.authService.getCurrentUser().userModel);
+	}
 
+}

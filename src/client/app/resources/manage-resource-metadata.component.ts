@@ -45,7 +45,7 @@ export class ManageResourceMetadataComponent {
 
 	ngOnInit() {
 		// Get current user info in order to access permissions
-		let user = new TeamMember().setFromTeamMemberModel(null, this.authService.getCurrentUser().userModel);
+		let user = this.teamsService.getCurrentUserAsTeamMember();
 
 		// Get owner options based on current user permissions
 		this.teamsService.getTeamsCanManageResources(user)
