@@ -3,13 +3,12 @@ import { Response } from '@angular/http';
 
 import * as _ from 'lodash';
 
-import { AuthenticationService } from '../admin/authentication/authentication.service';
 import { Owner } from './owner.class';
 import { PagingOptions } from '../shared/pager.component';
 import { Resource } from './resource.class';
 import { Tag } from '../teams/tags/tags.class';
 import { TagsService } from '../teams/tags/tags.service';
-import { Team, TeamMember } from '../teams/teams.class';
+import { Team } from '../teams/teams.class';
 import { TeamsService } from '../teams/teams.service';
 
 @Component({

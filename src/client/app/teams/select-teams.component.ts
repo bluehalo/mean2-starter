@@ -3,7 +3,6 @@ import { Component, Output, EventEmitter, Input } from '@angular/core';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 
-import { AuthenticationService } from '../admin/authentication/authentication.service';
 import { ObservableUtils } from '../shared/observable-utils.class';
 import { TagsService } from './tags/tags.service';
 import { TeamsService } from './teams.service';
