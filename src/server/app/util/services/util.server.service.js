@@ -263,10 +263,3 @@ module.exports.toProvenance = function(user) {
 };
 
 module.exports.emailMatcher = /.+\@.+\..+/;
-
-module.exports.mongooseToObject = function(doc) {
-	if (doc.constructor.name === 'model') {
-		return doc.toObject();
-	}
-	return doc;
-};

@@ -1,6 +1,6 @@
 'use strict';
 
-var
+var _ = require('lodash'),
 	q = require('q'),
 	path = require('path'),
 	deps = require(path.resolve('./src/server/dependencies.js')),
@@ -175,4 +175,35 @@ module.exports.count = function(schema, query) {
 	});
 
 	return countDefer.promise;
+};
+
+/**
+ * Query for multiple documents by ID and get results as a map from id -> result.
+ * @param schema
+ * @param ids
+ * @param fieldsToReturn Optional array of fields to include in results. If empty will include all fields.
+ * @param lean If true, will return as plain javascript objects instead of mongoose docs
+ * @returns {Promise}
+ */
+module.exports.getAllByIdAsMap = function(schema, ids, fieldsToReturn, lean) {
+	fieldsToReturn = fieldsToReturn || [];
+
+	let projection = {};
+	fieldsToReturn.forEach((field) => {
+		projection[field] = 1;
+	});
+
+	let promise = schema.find( { _id: { $in: ids } }, projection );
+	if (lean) {
+		promise = promise.lean();
+	}
+
+	return promise.then((results) => _.keyBy(results, (result) => result._id));
+};
+
+module.exports.mongooseToObject = function(doc) {
+	if (doc.constructor.name === 'model') {
+		return doc.toObject();
+	}
+	return doc;
 };
