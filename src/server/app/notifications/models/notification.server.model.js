@@ -33,7 +33,6 @@ let NotificationSchema = new mongoose.Schema({
  *****************/
 
 NotificationSchema.index({ user: 1, created: -1 });
-NotificationSchema.index({ user: 1, type: 1, created: -1 });
 
 /*****************
  * Static Methods
