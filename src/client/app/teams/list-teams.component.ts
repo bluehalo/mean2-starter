@@ -39,7 +39,7 @@ export class ListTeamsComponent {
 	}
 
 	ngOnInit() {
-		this.user = new TeamMember().setFromTeamMemberModel(null, this.authService.getCurrentUser().userModel);
+		this.user = this.teamsService.getCurrentUserAsTeamMember();
 		this.initializeTeams();
 	}
 

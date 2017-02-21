@@ -44,7 +44,6 @@ export class SelectTeamsComponent {
 	teamOptions: Team[] = [];
 
 	constructor(
-		public authService: AuthenticationService,
 		public tagsService: TagsService,
 		public teamsService: TeamsService
 	) {
@@ -52,7 +51,7 @@ export class SelectTeamsComponent {
 
 	ngOnInit() {
 		// Get current user info in order to access permissions
-		this.user = new TeamMember().setFromTeamMemberModel(null, this.authService.getCurrentUser().userModel);
+		this.user = this.teamsService.getCurrentUserAsTeamMember();
 
 		ObservableUtils.wrapArray([
 			this.initializeTeams(), this.initializeTags(), this.handleSelection()
