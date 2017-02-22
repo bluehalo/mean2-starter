@@ -19,17 +19,21 @@ if (config.mailer) {
  */
 function getMissingMailOptions(mailOptions) {
 	let requiredOptions = [
-		'to',
+		['to', 'cc', 'bcc'],
 		'from',
 		'subject',
-		'html'
+		['text', 'html']
 	];
 
 	let missingOptions = [];
 
 	requiredOptions.forEach((option) => {
-		if (!mailOptions[option]) {
-			missingOptions.push(option);
+		if (Array.isArray(option)) {
+			if (!option.some((orField) => mailOptions[orField])) {
+				missingOptions.push(`("${option.join('" or "')}")`);
+			}
+		} else if (!mailOptions[option]) {
+			missingOptions.push(`"${option}"`);
 		}
 	});
 

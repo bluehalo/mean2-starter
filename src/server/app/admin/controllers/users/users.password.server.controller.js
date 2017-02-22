@@ -71,7 +71,7 @@ exports.forgot = (req, res, next) => {
 			res.render('templates/reset-password-email', {
 				name: user.name,
 				appName: config.app.title,
-				url: `${config.app.baseUrl}/#/password/reset/${token}`
+				url: `${config.app.baseUrl}/password/reset/${token}`
 			}, (error, emailHTML) => {
 				logger.debug('Rendered email.');
 				done(error, emailHTML, user);

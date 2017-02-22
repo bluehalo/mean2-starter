@@ -122,7 +122,8 @@ module.exports = {
 		url: {
 			protocol: 'http',
 			host: 'localhost',
-			port: 3000
+			port: 3000,
+			extra: '/#'
 		}
 	},
 
@@ -153,15 +154,19 @@ module.exports = {
 		email: process.env.MAILER_ADMIN || 'noreply@asymmetrik.com'
 	},
 
-	messages: {
-		// Use the following for local eventEmitter
-		publishProvider: './src/server/app/messages/providers/event-message.provider.js',
-		socketProvider: './src/server/app/util/sockets/event.server.socket.js'
+	// Use the following for local eventEmitter
+	publishProvider: './src/server/app/util/providers/event.server.provider.js',
+	socketProvider: './src/server/app/util/sockets/event.server.socket.js',
 
-		// Use the following for Kafka.  Note, must also uncomment Kafka configuration.
-		// publishProvider: './src/server/app/messages/providers/kafka-message.provider.js',
-		// socketProvider: './src/server/app/util/sockets/kafka.server.socket.js'
+	// Use the following for Kafka.  Note, must also uncomment Kafka configuration.
+	// publishProvider: './src/server/app/util/providers/kafka.server.provider.js',
+	// socketProvider: './src/server/app/util/sockets/kafka.server.socket.js',
+
+	messages: {
+		topic: 'message.posted'
 	},
+
+	notificationExpires: 15552000, // 180 days
 
 	// Configuration for outgoing mail server
 	mailer: {
@@ -299,11 +304,5 @@ module.exports = {
 	/*
 	 * The maximum number of records allowed to be exported to csv
 	 */
-	maxExport: 1000,
-
-
-	notifications: {
-		email: true,
-		sms: false
-	}
+	maxExport: 1000
 };
