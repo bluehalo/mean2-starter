@@ -61,8 +61,9 @@ function disconnect(connection) {
  *
  * @param {string} topic The topic to connection to.
  * @param {string=} groupId Optionally, a groupId to use for this connection.
+ * @param {boolean=} currentOffset Optionally, use the current offset in zookeeper, otherwise use latest offset [default].
  */
-function KafkaConsumer(topic, groupId) {
+function KafkaConsumer(topic, groupId, currentOffset) {
 	this.topic = topic;
 
 	// The state: disconnected, connecting, connected, reconnecting, closing
@@ -78,7 +79,7 @@ function KafkaConsumer(topic, groupId) {
 	this.groupId = groupId;
 
 	// This will be set to true once we've initialized the offsets for this groupId.
-	this.offsetsInitialized = false;
+	this.offsetsInitialized = (currentOffset === true);
 
 	// This class is an EventEmitter
 	events.EventEmitter.call(this);
