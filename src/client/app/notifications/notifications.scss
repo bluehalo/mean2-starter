@@ -1,0 +1,14 @@
+@import '../shared/colors';
+
+.notification-indicator {
+	width: 48px;
+}
+
+.notification-badge {
+	background-color: $color-red;
+	font-size: 10px;
+	left: -20px;
+	padding: 4px 5px;
+	position: relative;
+	top: -10px;
+}

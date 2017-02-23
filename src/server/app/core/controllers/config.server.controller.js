@@ -29,7 +29,9 @@ var getSystemConfig = function() {
 		maxExport: config.maxExport,
 		sourcing: config.sourcing,
 
-		welcomeLinks: config.welcomeLinks
+		welcomeLinks: config.welcomeLinks,
+
+		dispatcher: config.dispatcher
 	};
 
 	return toReturn;
