@@ -185,8 +185,8 @@ module.exports = (mode) => {
 	if(!test) {
 		wpConfig.plugins.push(
 			new webpack.optimize.CommonsChunkPlugin({
-				name: [ 'app', 'vendor' ],
-				filename: '[name].js'
+				name: [ 'application', 'vendor' ],
+				filename: (build) ? '[name].[chunkhash].js' : '[name].js'
 			})
 		);
 	}
