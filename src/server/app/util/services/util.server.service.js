@@ -145,19 +145,17 @@ module.exports.dateParse = function (date) {
 
 /**
  * Get the limit provided by the user, if there is one.
- * Limit has to be at least 1 and no more than 100.
+ * Limit has to be at least 1 and no more than 100, with
+ * a default value of 20.
  *
  * @param queryParams
- * @param maxSize (optional)
+ * @param maxSize (optional) default: 100
  * @returns {number}
  */
 module.exports.getLimit = function (queryParams, maxSize) {
-	let max = maxSize || 100;
-	let limit = Math.floor(queryParams.size);
-	if (null == limit || isNaN(limit)) {
-		limit = 20;
-	}
-	return Math.max(1, Math.min(max, limit));
+	const max = maxSize || 100;
+	const limit = _.get(queryParams, 'size', 20);
+	return isNaN(limit) ? 20 : Math.max(1, Math.min(max, Math.floor(limit)));
 };
 
 /**
@@ -166,8 +164,8 @@ module.exports.getLimit = function (queryParams, maxSize) {
  * @returns {number}
  */
 module.exports.getPage = function (queryParams) {
-	let page = queryParams.page || 0;
-	return Math.max(0, page);
+	const page = _.get(queryParams, 'page', 0);
+	return isNaN(page) ? 0 : Math.max(0, page);
 };
 
 /**
