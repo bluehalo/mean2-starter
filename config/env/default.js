@@ -22,10 +22,6 @@ module.exports = {
 	 */
 	mode: 'development',
 
-	dispatcher: {
-		enabled: true
-	},
-
 	// Auth system
 	auth: {
 		/*
