@@ -1,7 +1,7 @@
 'use strict';
 
 var through2 = require('through2'),
-	path = require('path'),
+	path = require('path').posix,
 	stringify = require('csv-stringify'),
 	jsonpath = require('JSONPath'),
 	pipe = require('multipipe'),

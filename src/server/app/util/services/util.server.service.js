@@ -1,7 +1,7 @@
 'use strict';
 
 var _ = require('lodash'),
-	path = require('path'),
+	path = require('path').posix,
 	mongoose = require('mongoose'),
 	platform = require('platform'),
 

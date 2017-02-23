@@ -5,7 +5,7 @@ let
 	cookieParser = require('cookie-parser'),
 	http = require('http'),
 	passport = require('passport'),
-	path = require('path'),
+	path = require('path').posix,
 	socketio = require('socket.io'),
 	session = require('express-session'),
 	MongoStore = require('connect-mongo')(session),

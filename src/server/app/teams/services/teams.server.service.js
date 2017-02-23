@@ -1,7 +1,7 @@
 'use strict';
 
 let
-	path = require('path'),
+	path = require('path').posix,
 	q = require('q'),
 	_ = require('lodash'),
 

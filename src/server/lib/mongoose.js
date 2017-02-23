@@ -2,7 +2,7 @@
 
 let _ = require('lodash'),
 	mongoose = require('mongoose'),
-	path = require('path'),
+	path = require('path').posix,
 	q = require('q'),
 
 	config = require(path.resolve('./src/server/config.js')),

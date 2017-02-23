@@ -1,7 +1,7 @@
 'use strict';
 
 let kafka = require('kafka-node'),
-	path = require('path'),
+	path = require('path').posix,
 	q = require('q'),
 	events = require('events'),
 

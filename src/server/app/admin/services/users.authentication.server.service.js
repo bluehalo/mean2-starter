@@ -2,7 +2,7 @@
 
 let _ = require('lodash'),
 	passport = require('passport'),
-	path = require('path'),
+	path = require('path').posix,
 	q = require('q'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),

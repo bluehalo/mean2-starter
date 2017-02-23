@@ -3,7 +3,7 @@
 /**
  * Module dependencies.
  */
-let path = require('path'),
+let path = require('path').posix,
 	should = require('should'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),

@@ -1,6 +1,6 @@
 'use strict';
 
-let path = require('path'),
+let path = require('path').posix,
 
 	users = require(path.resolve('./src/server/app/admin/controllers/users.server.controller.js')),
 	auditController = require(path.resolve('./src/server/app/audit/controllers/audit.server.controller.js'));

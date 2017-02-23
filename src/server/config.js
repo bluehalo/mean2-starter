@@ -8,7 +8,7 @@ let
 	_ = require('lodash'),
 	chalk = require('chalk'),
 	glob = require('glob'),
-	path = require('path');
+	path = require('path').posix;
 
 /**
  * Get files by glob patterns

@@ -1,6 +1,6 @@
 'use strict';
 
-var path = require('path'),
+var path = require('path').posix,
 	q = require('q'),
 	nodeUtil = require('util'),
 	_ = require('lodash'),

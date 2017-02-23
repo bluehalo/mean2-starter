@@ -2,7 +2,7 @@
 
 var
 	_ = require('lodash'),
-	path = require('path'),
+	path = require('path').posix,
 	q = require('q'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),

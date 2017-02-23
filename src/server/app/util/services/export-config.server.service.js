@@ -1,7 +1,7 @@
 'use strict';
 
 var
-	path = require('path'),
+	path = require('path').posix,
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	dbs = deps.dbs,
 

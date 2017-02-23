@@ -2,7 +2,7 @@
 'use strict';
 
 let	Mocha = require('mocha'),
-	path = require('path'),
+	path = require('path').posix,
 	argv = require('yargs').argv,
 
 	config = require(path.resolve('./src/server/config.js')),

@@ -1,7 +1,7 @@
 'use strict';
 
 let
-	path = require('path'),
+	path = require('path').posix,
 	pkg = require(path.resolve('./package.json'));
 
 module.exports = {

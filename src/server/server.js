@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 let
-	path = require('path'),
+	path = require('path').posix,
 
 	config = require(path.resolve('./src/server/config.js')),
 	logger = require(path.resolve('./src/server/lib/bunyan.js')).logger,

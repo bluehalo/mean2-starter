@@ -1,6 +1,6 @@
 'use strict';
 
-var	path = require('path'),
+var	path = require('path').posix,
 	users = require(path.resolve('./src/server/app/admin/controllers/users.server.controller.js')),
 	messages = require(path.resolve('./src/server/app/messages/controllers/message.server.controller.js'));
 

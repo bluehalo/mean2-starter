@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 let
-	path = require('path'),
+	path = require('path').posix,
 	q = require('q'),
 	should = require('should'),
 

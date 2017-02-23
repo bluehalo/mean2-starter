@@ -2,7 +2,7 @@
 
 var
 	mongoose = require('mongoose'),
-	path = require('path'),
+	path = require('path').posix,
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	util = deps.utilService,

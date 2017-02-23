@@ -3,7 +3,7 @@
 let
 	kafka = require('kafka-node'),
 	HighLevelProducer = kafka.HighLevelProducer,
-	path = require('path'),
+	path = require('path').posix,
 	q = require('q'),
 	events = require('events'),
 

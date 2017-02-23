@@ -1,6 +1,6 @@
 'use strict';
 
-var path = require('path'),
+var path = require('path').posix,
 
 	config = require(path.resolve('./src/server/app/core/controllers/config.server.controller.js'));
 

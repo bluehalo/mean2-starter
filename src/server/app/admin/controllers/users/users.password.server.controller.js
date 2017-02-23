@@ -3,7 +3,7 @@
 let
 	async = require('async'),
 	crypto = require('crypto'),
-	path = require('path'),
+	path = require('path').posix,
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	dbs = deps.dbs,

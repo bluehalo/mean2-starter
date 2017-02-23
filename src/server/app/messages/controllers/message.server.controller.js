@@ -4,7 +4,7 @@ let mongoose = require('mongoose'),
 	q = require('q'),
 
 	ValidationError = mongoose.Error.ValidationError,
-	path = require('path'),
+	path = require('path').posix,
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	config = deps.config,
 	dbs = deps.dbs,

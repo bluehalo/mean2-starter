@@ -1,6 +1,6 @@
 'use strict';
 
-let path = require('path'),
+let path = require('path').posix,
 	stream = require('stream'),
 	q = require('q'),
 	os = require('os'),

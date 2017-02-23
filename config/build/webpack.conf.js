@@ -1,7 +1,7 @@
 'use strict';
 
 let
-	path = require('path'),
+	path = require('path').posix,
 	webpack = require('webpack'),
 
 	assets = require(path.resolve('./config/assets.js'));
@@ -104,7 +104,7 @@ module.exports = (mode) => {
 				test: /\.ts$/,
 				loader: 'ts-loader',
 				options: {
-					configFileName: path.resolve('./tsconfig.json')
+					configFileName: path.resolve('/tsconfig.json')
 				}
 			},
 

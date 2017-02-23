@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 var _ = require('lodash'),
-	path = require('path'),
+	path = require('path').posix,
 	should = require('should'),
 	q = require('q'),
 

@@ -8,7 +8,7 @@ let
 	glob = require('glob'),
 	gulp = require('gulp'),
 	gulpLoadPlugins = require('gulp-load-plugins'),
-	path = require('path'),
+	path = require('path').posix,
 	runSequence = require('run-sequence'),
 	argv = require('yargs').argv,
 	webpack = require('webpack'),

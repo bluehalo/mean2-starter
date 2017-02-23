@@ -1,7 +1,7 @@
 'use strict';
 
 var passport = require('passport'),
-	path = require('path'),
+	path = require('path').posix,
 
 	config = require(path.resolve('./src/server/config.js')),
 	User = require('mongoose').model('User');

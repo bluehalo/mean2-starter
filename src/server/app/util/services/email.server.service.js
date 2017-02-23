@@ -1,6 +1,6 @@
 'use strict';
 
-let path = require('path'),
+let path = require('path').posix,
 	q = require('q'),
 	nodemailer = require('nodemailer'),
 	deps = require(path.resolve('./src/server/dependencies.js')),

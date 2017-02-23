@@ -1,7 +1,7 @@
 'use strict';
 
 let path
-	= require('path');
+	= require('path').posix;
 
 // Main config module
 module.exports.config = require(path.resolve('./src/server/config.js'));

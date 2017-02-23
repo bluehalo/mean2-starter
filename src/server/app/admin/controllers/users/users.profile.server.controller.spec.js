@@ -5,7 +5,7 @@
  */
 let _ = require('lodash'),
 	mongoose = require('mongoose'),
-	path = require('path'),
+	path = require('path').posix,
 	q = require('q'),
 	should = require('should'),
 

@@ -3,7 +3,7 @@
 let _ = require('lodash'),
 	crypto = require('crypto'),
 	mongoose = require('mongoose'),
-	path = require('path'),
+	path = require('path').posix,
 	uniqueValidator = require('mongoose-unique-validator'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),

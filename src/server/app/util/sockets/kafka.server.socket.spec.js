@@ -5,7 +5,7 @@
  */
 var
 	should = require('should'),
-	path = require('path'),
+	path = require('path').posix,
 
 	KafkaSocket = require(path.resolve('./src/server/app/util/sockets/kafka.server.socket.js'));
 

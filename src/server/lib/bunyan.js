@@ -2,7 +2,7 @@
 
 let
 	bunyan = require('bunyan'),
-	path = require('path');
+	path = require('path').posix;
 
 /**
  * Initialize the log configuration object

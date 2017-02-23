@@ -3,7 +3,7 @@
 let _ = require('lodash'),
 	mongoose = require('mongoose'),
 	extend = require('mongoose-schema-extend'),
-	path = require('path'),
+	path = require('path').posix,
 	uuid = require('node-uuid'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
