@@ -46,74 +46,47 @@
 		</div>
 	</div>
 
-	<!-- Sorting/Paging Controls -->
-	<div class="row">
-		<div class="col-md-12">
-			<div [hidden]="pagingOpts.totalSize === 0">
-				<div class="controls">
-					<div class="paging-sort" style="float:left;">
-						<span>Sort By:</span>
+	<pageable-table [items]="euas"
+		[pagingOptions]="pagingOpts"
+		[sortOptions]="sortOpts"
+		(onPageChange)="goToPage($event)"
+		(onSortChange)="setSort($event)">
 
-						<a type="button" [ngClass]="{selected: pagingOpts.sortField===sortOpts.title.sortField}" class="no-href btn-link" (click)="setSort(sortOpts.title)">Title</a> /
-						<a type="button" [ngClass]="{selected: pagingOpts.sortField===sortOpts.created.sortField}" class="no-href btn-link" (click)="setSort(sortOpts.created)">Created</a> /
-						<a type="button" [ngClass]="{selected: pagingOpts.sortField===sortOpts.updated.sortField}" class="no-href btn-link" (click)="setSort(sortOpts.updated)">Updated</a> /
-						<a type="button" [ngClass]="{selected: pagingOpts.sortField===sortOpts.published.sortField}" class="no-href btn-link" (click)="setSort(sortOpts.published)">Published</a> /
-						<a type="button" [ngClass]="{selected: pagingOpts.sortField===sortOpts.relevance.sortField}" class="no-href btn-link" (click)="setSort(sortOpts.relevance)">Relevance</a>
-					</div>
-					<div class="paging-controls pull-right">
-						<asy-pager [pageNumber]="pagingOpts.pageNumber" [pageSize]="pagingOpts.pageSize" [totalSize]="pagingOpts.totalSize" [maxPageSize]="50" [currentSize]="euas.length" (onChange)="goToPage($event)">
-						</asy-pager>
-					</div>
+		<template asy-template="table-header">
+			<th [hidden]="!columns._id">ID</th>
+			<th [hidden]="!columns.title">Title</th>
+			<th [hidden]="!columns.text">Text</th>
+			<th [hidden]="!columns.created">Created</th>
+			<th [hidden]="!columns.updated">Updated</th>
+			<th [hidden]="!columns.published">Published</th>
+			<th>&nbsp;</th>
+		</template>
+
+		<template asy-template="table-row" let-eua>
+			<td [hidden]="!columns._id">{{eua.euaModel._id}}</td>
+			<td [hidden]="!columns.title">
+				<div class="hide-overflow" style="max-width:400px;">{{eua.euaModel.title}}</div>
+				</td>
+			<td [hidden]="!columns.text">
+				<div class="hide-overflow" style="max-width:400px;">{{eua.euaModel.text}}</div>
+			</td>
+			<td [hidden]="!columns.created">{{eua.euaModel.created | date:"M/d/yy HH:mm:ss 'Z'":"UTC"}}</td>
+			<td [hidden]="!columns.updated">{{eua.euaModel.updated | date:"M/d/yy HH:mm:ss 'Z'":"UTC"}}</td>
+			<td [hidden]="!columns.published">{{eua.euaModel.published | date:"M/d/yy HH:mm:ss 'Z'":"UTC"}}</td>
+
+			<td style="width: 120px;">
+				<div class="pull-right">
+					<a title="Edit" [routerLink]="['/admin/eua',eua.euaModel._id]" type="button" class="btn btn-default btn-sm"><span class="fa fa-edit"></span></a>
+					<button title="Publish" type="button" class="btn btn-default btn-sm" (click)="publishEua(eua)"><i class="fa fa-share-square-o"></i></button>
+					<button title="Delete" type="button" class="btn btn-danger btn-sm" (click)="confirmDeleteEua(eua)"><span class="fa fa-trash-o"></span></button>
 				</div>
-			</div>
-		</div>
-	</div>
+			</td>
+		</template>
 
-	<!-- Actual results -->
-	<div class="row">
-		<div class="col-md-12">
-			<table class="asymmetrik table table-condensed table-hover table-striped" [hidden]="euas.length === 0">
-				<thead>
-					<tr>
-						<th [hidden]="!columns._id">ID</th>
-						<th [hidden]="!columns.title">Title</th>
-						<th [hidden]="!columns.text">Text</th>
-						<th [hidden]="!columns.created">Created</th>
-						<th [hidden]="!columns.updated">Updated</th>
-						<th [hidden]="!columns.published">Published</th>
-						<th>&nbsp;</th>
-					</tr>
-				</thead>
-
-				<tbody>
-					<tr *ngFor="let eua of euas">
-						<td [hidden]="!columns._id">{{eua.euaModel._id}}</td>
-						<td [hidden]="!columns.title">
-							<div class="hide-overflow" style="max-width:400px;">{{eua.euaModel.title}}</div>
-						 </td>
-						<td [hidden]="!columns.text">
-							<div class="hide-overflow" style="max-width:400px;">{{eua.euaModel.text}}</div>
-						</td>
-						<td [hidden]="!columns.created">{{eua.euaModel.created | date:"M/d/yy HH:mm:ss 'Z'":"UTC"}}</td>
-						<td [hidden]="!columns.updated">{{eua.euaModel.updated | date:"M/d/yy HH:mm:ss 'Z'":"UTC"}}</td>
-						<td [hidden]="!columns.published">{{eua.euaModel.published | date:"M/d/yy HH:mm:ss 'Z'":"UTC"}}</td>
-
-						<td style="width: 120px;">
-							<div class="pull-right">
-								<a title="Edit" [routerLink]="['/admin/eua',eua.euaModel._id]" type="button" class="btn btn-default btn-sm"><span class="fa fa-edit"></span></a>
-								<button title="Publish" type="button" class="btn btn-default btn-sm" (click)="publishEua(eua)"><i class="fa fa-share-square-o"></i></button>
-								<button title="Delete" type="button" class="btn btn-danger btn-sm" (click)="confirmDeleteEua(eua)"><span class="fa fa-trash-o"></span></button>
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-
-			<div class="col-md-6 col-md-offset-3 center" [hidden]="euas.length > 0">
-				<h3>
+		<template asy-template="empty-table">
+			<h3>
 					<small>No End User Agreements? Either there were no EUAs that matched your search or there are no EUAs in the system.</small>
 			</h3>
-			</div>
-		</div>
-	</div>
+		</template>
+	</pageable-table>
 </section>

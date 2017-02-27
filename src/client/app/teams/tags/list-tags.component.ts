@@ -6,6 +6,7 @@ import { Modal } from 'angular2-modal/plugins/bootstrap';
 
 import { User } from '../../admin/user.class';
 import { PagingOptions } from '../../shared/pager.component';
+import { TableSortOptions } from '../../shared/pageable-table/pageable-table.component';
 import { SortDirection, SortDisplayOption } from '../../shared/result-utils.class';
 import { AlertService } from '../../shared/alert.service';
 import { AuthenticationService } from '../../admin/authentication/authentication.service';
@@ -27,7 +28,7 @@ export class ListTagsComponent {
 
 	search: string;
 
-	sortOptions: any = {};
+	sortOptions: TableSortOptions = {};
 
 	pagingOptions: PagingOptions;
 

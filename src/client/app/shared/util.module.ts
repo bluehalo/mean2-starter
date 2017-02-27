@@ -19,6 +19,9 @@ import { ConstrainedQuery } from './constrained-query.component';
 import { ExportConfigService } from './export-config.service';
 import { InLineEdit } from './in-line-edit.component';
 import { Pager } from './pager.component';
+import { AsyTemplate } from './asy-template.directive';
+import { AsyTransclude } from './asy-transclude.directive';
+import { PageableTable } from './pageable-table/pageable-table.component';
 import { AreaPipe } from './area.pipe';
 import { KeysPipe } from './keys.pipe';
 import { AsyDropdownComponent } from './dropdown/asy-dropdown.component';
@@ -53,6 +56,9 @@ import { ClientConfiguration } from '../config/configurator';
 		InLineEdit,
 		SafeImageComponent,
 		Pager,
+		PageableTable,
+		AsyTemplate,
+		AsyTransclude,
 		KeysPipe
 	],
 
@@ -73,6 +79,9 @@ import { ClientConfiguration } from '../config/configurator';
 		InLineEdit,
 		SafeImageComponent,
 		Pager,
+		PageableTable,
+		AsyTemplate,
+		AsyTransclude,
 		KeysPipe,
 		ClientConfiguration.config.components.urlHandler.useClass
 	],

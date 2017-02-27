@@ -1,6 +1,12 @@
 import { Component, Input, Output, SimpleChange, EventEmitter } from '@angular/core';
 import { SortDirection } from './result-utils.class';
 
+export type PageChange = {
+	pageNumber: number;
+	pageSize: number;
+	sortdir: SortDirection;
+};
+
 export class PagingOptions {
 	constructor(
 		private pageNumber: number = 0,
@@ -60,7 +66,7 @@ export class Pager {
 	@Input() showCountWarning: boolean = false;
 	@Input() countWarningMessage: string = '';
 
-	@Output() onChange: EventEmitter<any> = new EventEmitter();
+	@Output() onChange: EventEmitter<PageChange> = new EventEmitter();
 
 	sortdir: SortDirection = SortDirection.desc;
 
