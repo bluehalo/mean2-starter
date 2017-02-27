@@ -171,6 +171,11 @@ module.exports = function() {
 			else if(null == localUser && autoCreateAccounts) {
 				// Create the user
 				createUser(dn, acUser).then(function(newUser) {
+						// Send email for new user if enabled, no reason to wait for success
+						if (config.newUserEmail && config.newUserEmail.enabled) {
+							userAuthService.signupEmail(newUser, req);
+						}
+
 						// Audit user signup
 						return auditService.audit( 'user signup', 'user', 'user signup',
 							{},

@@ -10,6 +10,8 @@ import { Team, TeamMember } from './teams.class';
 import { User } from '../admin/user.class';
 import { ObservableUtils } from '../shared/observable-utils.class';
 import { ObservableResult } from '../shared/observable-result.class';
+import { Resource } from '../resources/resource.class';
+import { AuthenticationService } from '../admin/authentication/authentication.service';
 
 @Injectable()
 export class TeamsService {
@@ -19,7 +21,8 @@ export class TeamsService {
 	teamMap: any = {};
 
 	constructor(
-		private asyHttp: AsyHttp
+		private asyHttp: AsyHttp,
+		private authService: AuthenticationService
 	) {
 	}
 
@@ -131,5 +134,18 @@ export class TeamsService {
 		});
 	}
 
-}
+	/**
+	 * Determine whether user can modify resource or just view it
+	 */
+	canManageResource(user: TeamMember, resource: Resource) {
+		if (resource.owner.type === 'user') {
+			return true;
+		}
+		return user.canManageTeamResources(new Team(resource.owner._id));
+	}
 
+	getCurrentUserAsTeamMember() {
+		return new TeamMember().setFromTeamMemberModel(null, this.authService.getCurrentUser().userModel);
+	}
+
+}

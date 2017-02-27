@@ -3,13 +3,12 @@ import { Response } from '@angular/http';
 
 import * as _ from 'lodash';
 
-import { AuthenticationService } from '../admin/authentication/authentication.service';
 import { Owner } from './owner.class';
 import { PagingOptions } from '../shared/pager.component';
 import { Resource } from './resource.class';
 import { Tag } from '../teams/tags/tags.class';
 import { TagsService } from '../teams/tags/tags.service';
-import { Team, TeamMember } from '../teams/teams.class';
+import { Team } from '../teams/teams.class';
 import { TeamsService } from '../teams/teams.service';
 
 @Component({
@@ -19,6 +18,8 @@ import { TeamsService } from '../teams/teams.service';
 export class ManageResourceMetadataComponent {
 
 	@Input() resource: Resource;
+
+	@Input() readOnly = false;
 
 	@Input() mode: string;
 
@@ -35,7 +36,6 @@ export class ManageResourceMetadataComponent {
 	filteredTagOptions: Tag[] = [];
 
 	constructor(
-		public authService: AuthenticationService,
 		public tagsService: TagsService,
 		public teamsService: TeamsService
 	) {
@@ -43,7 +43,7 @@ export class ManageResourceMetadataComponent {
 
 	ngOnInit() {
 		// Get current user info in order to access permissions
-		let user = new TeamMember().setFromTeamMemberModel(null, this.authService.getCurrentUser().userModel);
+		let user = this.teamsService.getCurrentUserAsTeamMember();
 
 		// Get owner options based on current user permissions
 		this.teamsService.getTeamsCanManageResources(user)
@@ -89,7 +89,10 @@ export class ManageResourceMetadataComponent {
 				(response: Response) => {
 					this.alertError.emit({err: response.json().message});
 				});
+	}
 
+	haveDescription() {
+		return this.resource.description != null && !_.isEmpty(this.resource.description.trim());
 	}
 
 	private updateTags(event: any) {

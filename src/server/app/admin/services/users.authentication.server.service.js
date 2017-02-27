@@ -10,6 +10,8 @@ let _ = require('lodash'),
 	config = deps.config,
 	dbs = deps.dbs,
 	util = deps.utilService,
+	emailService = deps.emailService,
+	logger = deps.logger,
 
 	User = dbs.admin.model('User');
 
@@ -42,6 +44,46 @@ module.exports.initializeNewUser = function(user) {
 
 	// Resolve the user (this might seem like overkill, but planning for the future)
 	return q(user);
+};
+
+// Send email alert about new account request
+module.exports.signupEmail = function(user, req) {
+	let defer = q.defer();
+
+	req.app.render('../../admin/templates/user-signup-alert-email', {
+		name: user.name,
+		username: user.username,
+		appName: config.app.title,
+		url: `${config.app.baseUrl}/admin/users`
+	}, (error, html) => {
+		if (error) {
+			logger.error({err: error, req: req}, 'Failure rendering template.');
+			defer.reject(error);
+		}
+		else {
+			let to = config.newUserEmail.email;
+
+			let mailOptions = {
+				to: to,
+				from: config.mailer.from,
+				subject: 'New Account Request',
+				html: html
+			};
+
+			emailService.sendMail(mailOptions)
+				.then((result) => {
+					logger.debug(`Sent new user(${user.username}) email to: ${to}`);
+					defer.resolve(user);
+				}, (error) => {
+					// Log the error but this shouldn't block
+					// the user from signing up
+					logger.error({err: error, req: req}, 'Failure sending email.');
+					defer.resolve(user);
+				});
+		}
+	});
+
+	return defer.promise;
 };
 
 
