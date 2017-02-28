@@ -137,7 +137,7 @@
 		"gulp-karma": "0.0.5",
 		"gulp-livereload": "3.8",
 		"gulp-load-plugins": "1.5",
-		"gulp-mocha": "4.0",
+		"gulp-mocha": "3.0",
 		"gulp-nodemon": "2.2",
 		"gulp-rename": "1.2",
 		"gulp-sass": "3.1",
