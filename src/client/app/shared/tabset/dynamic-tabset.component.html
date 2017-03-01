@@ -1,0 +1,8 @@
+<tabset>
+	<tab *ngFor="let tab of tabs" (click)="selectTab(tab)">
+		<template tabHeading>
+			<span>{{tab.tabTitle}}</span>
+		</template>
+	</tab>
+</tabset>
+<ng-content></ng-content>
