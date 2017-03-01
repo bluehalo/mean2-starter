@@ -57,24 +57,6 @@ module.exports = function() {
 		return q.all(searches.map((search) => populateTagInfo(search)));
 	}
 
-	function doSearch(query, sortParams, page, limit) {
-		let offset = page * limit;
-
-		return q.all([
-			Resource.find(query).count(),
-			Resource.find(query).sort(sortParams).skip(offset).limit(limit)
-		])
-			.then((results) => {
-				return q({
-					totalSize: results[0],
-					pageNumber: page,
-					pageSize: limit,
-					totalPages: Math.ceil(results[0]/limit),
-					elements: results[1]
-				});
-			});
-	}
-
 	function searchResources(query, queryParams, user) {
 		let page = util.getPage(queryParams);
 		let limit = util.getLimit(queryParams, 1000);
@@ -109,11 +91,11 @@ module.exports = function() {
 							'owner._id': user._id
 						}];
 
-						return doSearch(query, sortParams, page, limit);
+						return Resource.countSearch(query, sortParams, page, limit);
 					});
 		}
 		else {
-			searchPromise = doSearch(query, sortParams, page, limit);
+			searchPromise = Resource.countSearch(query, sortParams, page, limit);
 		}
 
 		return searchPromise

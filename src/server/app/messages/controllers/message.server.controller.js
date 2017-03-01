@@ -222,32 +222,14 @@ exports.searchTest = function(req, res) {
 
 	// Create the variables to the search call
 	let limit = size;
-	let offset = page*size;
 	let sortParams;
 	if (null != sort) {
 		sortParams = {};
 		sortParams[sort] = dir === 'ASC' ? 1 : -1;
 	}
 
-	let doSearch = function(query) {
-		let getSearchCount = Message.find(query).count();
-		let getSearchInfo = Message.find(query).sort(sortParams).skip(offset).limit(limit);
-
-		return q.all([getSearchCount, getSearchInfo])
-			.then(function(results) {
-				return q({
-					totalSize: results[0],
-					pageNumber: page,
-					pageSize: size,
-					totalPages: Math.ceil(results[0]/size),
-					elements: results[1]
-				});
-			});
-	};
-
-
 	// If we aren't an admin, we need to constrain the results
-	let searchPromise = doSearch(query);
+	let searchPromise = Message.countSearch(query, sortParams, page, limit);
 
 	// Now execute the search promise
 	searchPromise.then(function(results) {

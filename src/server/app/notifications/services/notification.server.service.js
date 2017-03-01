@@ -7,30 +7,6 @@ let path = require('path'),
 	dbs = deps.dbs,
 	Notification = dbs.admin.model('Notification');
 
-function doSearch(query, sortParams, page, limit) {
-	let countPromise = Notification.find(query).count();
-	let searchPromise = Notification.find(query);
-
-	if (sortParams) {
-		searchPromise = searchPromise.sort(sortParams);
-	}
-
-	if (limit) {
-		searchPromise = searchPromise.skip(page * limit).limit(limit);
-	}
-
-	return q.all([ countPromise, searchPromise ])
-		.then((results) => {
-			return q({
-				totalSize: results[0],
-				pageNumber: page,
-				pageSize: limit,
-				totalPages: Math.ceil(results[0] / limit),
-				elements: results[1]
-			});
-		});
-}
-
 module.exports.searchAll = function(query) {
 	return Notification.find(query).exec();
 };
@@ -63,5 +39,5 @@ module.exports.search = function(query, queryParams, user) {
 		sortParams[sort] = dir === 'ASC' ? 1 : -1;
 	}
 
-	return doSearch(query, sortParams, page, limit);
+	return Notification.countSearch(query, sortParams, page, limit);
 };

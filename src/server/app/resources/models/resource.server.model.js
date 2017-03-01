@@ -8,7 +8,8 @@ let _ = require('lodash'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	util = deps.utilService,
-	GetterSchema = deps.schemaService.GetterSchema;
+	schemaService = deps.schemaService,
+	GetterSchema = schemaService.GetterSchema;
 
 /**
  * Owner Schema
@@ -81,6 +82,11 @@ let ResourceSchema = new mongoose.Schema({
 	}
 }, module.exports.resourceOptions);
 
+/*****************
+ * Plugins
+ *****************/
+
+ResourceSchema.plugin(schemaService.countSearchable);
 
 /*****************
  * Index declarations
