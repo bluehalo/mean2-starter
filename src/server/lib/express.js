@@ -192,9 +192,6 @@ function initModulesClientRoutes(app) {
 	// Expose the bundled production app files (with caching)
 	app.use('/', express.static(path.resolve('./public'), { maxAge: 31536000000 }));
 
-	// Expose the libraries (dev or prod based on assets.js configuration)
-	//app.use('/lib', express.static(path.resolve('./public/lib'), { maxAge: 31536000000 }));
-
 	// Expose the source application resources that aren't compiled/bundled
 	// These are not cached for the time being since they are served from the subdirs directly and there is no
 	// way to easily cache bust them
@@ -218,10 +215,15 @@ function initModulesServerPolicies(app) {
  * Configure the modules server routes
  */
 function initModulesServerRoutes(app) {
+	// Init the global route prefix
+	let router = express.Router();
+
 	// Globbing routing files
 	config.files.server.routes.forEach(function (routePath) {
-		require(path.resolve(routePath))(app);
+		router.use('/ws', require(path.posix.resolve(routePath)));
 	});
+
+	app.use(router);
 }
 
 /**
