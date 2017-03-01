@@ -207,7 +207,8 @@ module.exports = {
 	devPorts: {
 		karma: 9876,
 		debug: 5858,
-		webpack: 9000
+		webpack: 9000,
+		proxy: 8000
 	},
 
 	// Uncomment below if using Kafka messaging

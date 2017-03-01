@@ -218,9 +218,9 @@ function initModulesServerRoutes(app) {
 	// Init the global route prefix
 	let router = express.Router();
 
-	// Globbing routing files
+	// Globbing routing files to be behind a common path
 	config.files.server.routes.forEach(function (routePath) {
-		router.use('/ws', require(path.posix.resolve(routePath)));
+		router.use(require(path.posix.resolve(routePath)));
 	});
 
 	app.use(router);
@@ -260,25 +260,6 @@ function initErrorRoutes(app) {
 	});
 }
 
-function initWebpack(app) {
-	if(config.mode === 'development') {
-
-		let webpackDevMiddleware = require('webpack-dev-middleware');
-		let webpackConfig = require(path.resolve('./config/build/webpack.conf.js'))('develop');
-		let webpack = require('webpack')(webpackConfig);
-
-		// Configure Express to use the webpack dev middleware
-		app.use(webpackDevMiddleware(webpack, {
-			publicPath: webpackConfig.output.publicPath,
-			stats: { colors: true, chunks: false },
-			watchOptions: {
-				aggregateTimeout: 300,
-				poll: 1000
-			}
-		}));
-	}
-}
-
 /**
  * Configure Socket.io
  */
@@ -307,9 +288,6 @@ module.exports.init = function (db) {
 
 	// Initialize Express view engine
 	initViewEngine(app);
-
-	// Initialize Webpack
-	initWebpack(app);
 
 	// Initialize modules static client routes
 	initModulesClientRoutes(app);

@@ -12,10 +12,11 @@ let
 	runSequence = require('run-sequence'),
 	argv = require('yargs').argv,
 	webpack = require('webpack'),
+	webpackDevServer = require('webpack-dev-server'),
 
 	pkg = require('./package.json'),
 	plugins = gulpLoadPlugins(),
-	assets = require(path.resolve('./config/assets.js'));
+	assets = require(path.posix.resolve('./config/assets.js'));
 
 
 // Patch chalk to use colors
@@ -72,7 +73,33 @@ gulp.task('watch-server', () => {
 });
 
 
-gulp.task('watch-client', () => {
+gulp.task('webpack-dev-server', (done) => {
+
+	// Start a webpack-dev-server
+	let webpackConfig = require(path.posix.resolve('./config/build/webpack.conf.js'))('develop');
+	let compiler = webpack(webpackConfig);
+	let config = require('./src/server/config');
+
+	new webpackDevServer(compiler, {
+		stats: {
+			colors: true,
+			chunks: false
+		},
+		watchOptions: {
+			aggregateTimeout: 1000,
+			poll: 1000
+		}
+	}).listen(config.devPorts.webpack, 'localhost', (err) => {
+		if(err) throw new plugins.util.PluginError('webpack', err);
+
+		// Server listening
+		plugins.util.log('[webpack]', `http://localhost:${config.devPorts.webpack}/webpack-dev-server/index.html`);
+	});
+
+});
+
+
+gulp.task('watch-client', ['webpack-dev-server'], () => {
 	var config = require('./src/server/config');
 
 	// Start livereload
@@ -120,9 +147,22 @@ gulp.task('build-server', ['lint-server']);
  * Client Build Tasks
  * --------------------------
  */
+gulp.task('lint-client-code', () => {
+
+	return gulp.src(assets.client.app.src.ts)
+		// Lint the Typescript
+		.pipe(plugins.tslint({
+			formatter: 'prose'
+		}))
+		.pipe(plugins.tslint.report({
+			summarizeFailureOutput: true,
+			emitError: true
+		}));
+
+});
 
 gulp.task('build-client', (done) => {
-	runSequence('clean-client', ['build-client-code', 'build-client-style'], done);
+	runSequence('clean-client', [ 'build-client-code', 'build-client-style' ], done);
 });
 
 gulp.task('clean-client', () => {
@@ -130,7 +170,7 @@ gulp.task('clean-client', () => {
 });
 
 gulp.task('build-client-code', ['lint-client-code'], (done) => {
-	let webpackConfig = require(path.resolve('./config/build/webpack.conf.js'));
+	let webpackConfig = require(path.posix.resolve('./config/build/webpack.conf.js'));
 
 	webpack(webpackConfig('build'), (err, stats) => {
 
@@ -150,19 +190,7 @@ gulp.task('build-client-code', ['lint-client-code'], (done) => {
 	});
 });
 
-gulp.task('lint-client-code', () => {
 
-	return gulp.src(assets.client.app.src.ts)
-		// Lint the Typescript
-		.pipe(plugins.tslint({
-			formatter: 'prose'
-		}))
-		.pipe(plugins.tslint.report({
-			summarizeFailureOutput: true,
-			emitError: true
-		}));
-
-});
 
 gulp.task('build-client-style', [ 'clean-client-style' ], () => {
 
@@ -177,7 +205,7 @@ gulp.task('build-client-style', [ 'clean-client-style' ], () => {
 		// Lint the Sass
 		.pipe(plugins.sassLint({
 			formatter: 'stylish',
-			rules: require(path.resolve('./config/build/sasslint.conf.js'))
+			rules: require(path.posix.resolve('./config/build/sasslint.conf.js'))
 		}))
 		.pipe(plugins.sassLint.format())
 		.pipe(plugins.sassLint.failOnError())
