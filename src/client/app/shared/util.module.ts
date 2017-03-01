@@ -21,8 +21,6 @@ import { InLineEdit } from './in-line-edit.component';
 import { Pager } from './pager.component';
 import { AreaPipe } from './area.pipe';
 import { KeysPipe } from './keys.pipe';
-import { DynamicTabset } from './tabset/dynamic-tabset.component';
-import { DynamicTab } from './tabset/dynamic-tab.component';
 import { AsyDropdownComponent } from './dropdown/asy-dropdown.component';
 import { AsyDropdownItemComponent } from './dropdown/asy-dropdown-item.component';
 import { AsyDropdownService } from './dropdown/asy-dropdown.service';
@@ -39,8 +37,6 @@ import { ClientConfiguration } from '../config/configurator';
 		ClientConfiguration.config.components.urlHandler.useClass
 	],
 	exports: [
-		DynamicTabset,
-		DynamicTab,
 		AsyDropdownComponent,
 		AsyDropdownItemComponent,
 
@@ -65,8 +61,6 @@ import { ClientConfiguration } from '../config/configurator';
 		AddRemoveTypeaheadList,
 		AgoDatePipe,
 		AreaPipe,
-		DynamicTabset,
-		DynamicTab,
 		AsyDropdownComponent,
 		AsyDropdownItemComponent,
 		AsyDropdownItemWrapperComponent,
