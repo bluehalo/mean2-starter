@@ -1,7 +1,6 @@
 'use strict';
 
 let path = require('path'),
-	q = require('q'),
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	util = deps.utilService,
 	dbs = deps.dbs,

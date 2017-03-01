@@ -1,7 +1,6 @@
 'use strict';
 
 let mongoose = require('mongoose'),
-	q = require('q'),
 
 	ValidationError = mongoose.Error.ValidationError,
 	path = require('path'),
