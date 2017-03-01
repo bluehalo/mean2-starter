@@ -111,6 +111,7 @@
 		"mocha": "3.2",
 		"mochawesome": "2.0",
 		"should": "11.2",
+		"proxyquire": "1.7",
 
 		"karma": "1.5",
 		"karma-coverage": "1.1",
