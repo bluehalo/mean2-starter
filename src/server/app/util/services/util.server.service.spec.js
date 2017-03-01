@@ -155,6 +155,11 @@ describe('Utils:', () => {
 			expected: 1,
 			name: 'should return 1 for negative values'
 		}, {
+			inputQueryParams: { size: 0 },
+			inputMaxSize: null,
+			expected: 1,
+			name: 'should return 1 for zero values'
+		}, {
 			inputQueryParams: { size: 5 },
 			inputMaxSize: null,
 			expected: 5,
