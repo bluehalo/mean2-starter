@@ -28,7 +28,7 @@ const generateSort = (sorting) => {
 
 		// Extract the sort instructions with defaults for DESC sort on each property
 		_.forEach(sorting, (d) => {
-			if(!_.isEmpty(d.property)) {
+			if(!_.isEmpty(d) && !_.isEmpty(d.property)) {
 				sortObj[d.property] = (d.direction === 'ASC')? 1 : -1;
 			}
 		});

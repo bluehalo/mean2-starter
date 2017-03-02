@@ -86,6 +86,25 @@ describe('Schema Service', () => {
 				});
 		});
 
+		it('should accept and use sort parameters', () => {
+			return TestObject.pagingSearch({
+				sorting: [
+					{ property: 'content', direction: 'DESC' },
+					{ direction: 'ASC' }, // should handle, but skip a sorting input without a property
+					null // should handle, but skip an empty sorting parameter
+				]
+			}).then((results) => {
+					should.exist(results);
+					should(results.totalSize).eql(3);
+					should(results.pageNumber).eql(0);
+					should(results.elements).be.a.Array();
+					should(results.elements).have.length(3);
+					should(results.elements[0].content).eql(specs[2].content);
+					should(results.elements[1].content).eql(specs[1].content);
+					should(results.elements[2].content).eql(specs[0].content);
+				});
+		});
+
 	});
 
 	describe('GetterSchema', () => {
