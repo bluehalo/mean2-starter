@@ -81,7 +81,7 @@ gulp.task('webpack-dev-server', (done) => {
 	let config = require('./src/server/config');
 
 	new webpackDevServer(compiler, {
-		publicPath: '/dev/',
+		publicPath: `${config.app.url.protocol}://${config.app.url.host}:${config.devPorts.webpack}/dev/`,
 		stats: {
 			colors: true,
 			chunks: false

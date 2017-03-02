@@ -37,6 +37,11 @@ function initLocalVariables(app) {
 
 	// Development
 	app.locals.developmentMode = config.mode === 'development';
+	if(app.locals.developmentMode) {
+		app.locals.webpackDevServer = `${config.app.baseUrlWithoutPort}:${config.devPorts.webpack}`;
+	}
+
+	// Live Reload
 	app.locals.liveReload = config.liveReload;
 	if (config.liveReload) {
 		app.locals.liveReloadScript = `${config.app.baseUrlWithoutPort}:${config.liveReload.port}/livereload.js`;

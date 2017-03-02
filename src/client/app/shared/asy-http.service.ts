@@ -19,9 +19,6 @@ export class HttpOptions {
 		public completeFn: Function = (): any => null,
 		public errFn: Function = AsyHttp.defaultErrFn,
 		public type: string = 'get') {
-
-		// Prepend all requests with the base route prefix
-		this.url = (null != url && url.startsWith('/')) ? `ws${url}` : `ws/${url}`;
 	}
 
 	public setParamsFromObject(obj: any) {
