@@ -100,7 +100,7 @@ gulp.task('webpack-dev-server', (done) => {
 });
 
 
-gulp.task('watch-client', ['webpack-dev-server'], () => {
+gulp.task('watch-client', () => {
 	var config = require('./src/server/config');
 
 	// Start livereload
@@ -360,7 +360,7 @@ gulp.task('test-server-ci', [ 'env:test', 'coverage-init' ], (done) => {
 gulp.task('dev', (done) => {
 	runSequence(
 		[ 'build-server', 'build-client-style', 'lint-client-code' ],
-		[ 'watch-server', 'watch-client' ],
+		[ 'watch-server', 'watch-client', 'webpack-dev-server' ],
 		done);
 });
 
