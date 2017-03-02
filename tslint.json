@@ -1,0 +1,24 @@
+{
+	"extends": "tslint:recommended",
+	"rules": {
+		"indent": [ true, "tabs" ],
+		"trailing-comma": false,
+		"quotemark": [ true, "single" ],
+		"triple-equals": [ true, "allow-null-check" ],
+		"variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
+		"no-empty": false,
+		"object-literal-sort-keys": false,
+		"max-line-length": false,
+		"no-consecutive-blank-lines": false,
+		"member-ordering": [ true, { "order": "fields-first" } ],
+
+		"ordered-imports": false,
+		"member-access": false,
+		"object-literal-shorthand": false,
+		"max-classes-per-file": false,
+		"one-line": [ true, "check-open-brace", "check-whitespace" ],
+		"object-literal-key-quotes": false,
+		"array-type": false
+
+	}
+}

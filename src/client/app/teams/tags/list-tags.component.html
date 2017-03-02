@@ -118,15 +118,15 @@
 							<div class="pull-right" >
 								<a class="no-href btn-icon"
 								   tooltip="Edit"
-								   tooltipAppendToBody="true"
-								   tooltipPlacement="top"
+								   placement="top"
+								   container="body"
 								   [routerLink]="['/tag/edit', tag._id, { mode: 'edit' }]">
 									<i class="fa fa-gear" [ngClass]="iconClass"></i>
 								</a>
 								<a class="no-href btn-icon"
 								   tooltip="Delete"
-								   tooltipAppendToBody="true"
-								   tooltipPlacement="top"
+								   placement="top"
+								   container="body"
 								   (click)="removeTag(tag)">
 									<i class="fa fa-trash-o"></i>
 								</a>
