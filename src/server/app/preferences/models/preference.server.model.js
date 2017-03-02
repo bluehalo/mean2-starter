@@ -34,7 +34,7 @@ let PreferenceSchema = new mongoose.Schema({
  * Plugins
  *****************/
 
-PreferenceSchema.plugin(schemaService.countSearchable);
+PreferenceSchema.plugin(schemaService.pageable);
 
 /*****************
  * Index declarations

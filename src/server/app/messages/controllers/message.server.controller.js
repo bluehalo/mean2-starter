@@ -228,7 +228,12 @@ exports.searchTest = function(req, res) {
 	}
 
 	// If we aren't an admin, we need to constrain the results
-	let searchPromise = Message.countSearch(query, sortParams, page, limit);
+	let searchPromise = Message.pagingSearch({
+		query: query,
+		sorting: sortParams,
+		page: page,
+		limit: limit
+	});
 
 	// Now execute the search promise
 	searchPromise.then(function(results) {

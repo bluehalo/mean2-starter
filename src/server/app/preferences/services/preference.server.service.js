@@ -26,5 +26,10 @@ module.exports.search = function(query, queryParams) {
 		sortParams[sort] = dir === 'ASC' ? 1 : -1;
 	}
 
-	return Preference.countSearch(query, sortParams, page, limit);
+	return Preference.pagingSearch({
+		query: query,
+		sorting: sortParams,
+		page: page,
+		limit: limit
+	});
 };

@@ -54,7 +54,7 @@ var MessageSchema = new GetterSchema({
  * Plugins
  *****************/
 
-MessageSchema.plugin(schemaService.countSearchable);
+MessageSchema.plugin(schemaService.pageable);
 
 /**
  * Index declarations

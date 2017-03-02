@@ -39,5 +39,11 @@ module.exports.search = function(query, queryParams, user) {
 		sortParams[sort] = dir === 'ASC' ? 1 : -1;
 	}
 
-	return Notification.countSearch(query, sortParams, page, limit);
+	return Notification.pagingSearch({
+		query: query,
+		sorting: sortParams,
+		page: page,
+		limit: limit
+	});
+
 };

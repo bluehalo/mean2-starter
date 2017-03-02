@@ -31,7 +31,7 @@ let NotificationSchema = new mongoose.Schema({
  * Plugins
  *****************/
 
-NotificationSchema.plugin(schemaService.countSearchable);
+NotificationSchema.plugin(schemaService.pageable);
 
 /*****************
  * Index declarations

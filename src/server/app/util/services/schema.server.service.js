@@ -1,6 +1,7 @@
 'use strict';
 
-var mongoose = require('mongoose'),
+const _ = require('lodash'),
+	mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
 /**
@@ -17,19 +18,69 @@ const GetterSchema = function (add) {
 };
 
 /**
+ * Translates the input sort array to an object with the properties specified.
+ * Defaults to descending sort on each property
+ */
+const generateSort = (sorting) => {
+
+	if(_.isArray(sorting)) {
+		var sortObj = {};
+
+		// Extract the sort instructions with defaults for DESC sort on each property
+		_.forEach(sorting, (d) => {
+			if(!_.isEmpty(d.property)) {
+				sortObj[d.property] = (d.direction === 'ASC')? 1 : -1;
+			}
+		});
+
+		return sortObj;
+	}
+
+	/*
+	 * Otherwise, if it is not an array, assume that the value passed-in is
+	 * a sorting object that the caller expected to be sent directly to the query
+	 */
+	return sorting;
+
+};
+
+/**
  * Adds a static method 'countSearch' to the schema that performs concurrent
  * count and search queries, returning the results in the project's standard
  * pagination format
  */
-const countSearchable = (schema) => {
+const pageable = (schema) => {
 
-	schema.statics.countSearch = function(query, sortParams, page, limit) {
-		let countPromise = this.find(query).count();
-		let searchPromise = this.find(query);
+	/**
+	 * Called in the scope of the Mongoose Schema that is invoked
+	 * in order to reference it by "this"
+	 */
+	schema.statics.pagingSearch = function(searchConfig) {
 
-		if (sortParams) {
-			searchPromise = searchPromise.sort(sortParams);
+		const query = _.get(searchConfig, 'query', {}),
+			projection = _.get(searchConfig, 'projection', {}),
+			options = _.get(searchConfig, 'options', {}),
+			searchTerms = _.get(searchConfig, 'searchTerms', null),
+			sortParams = _.get(searchConfig, 'sorting', {}),
+			page = _.get(searchConfig, 'page', 0),
+			limit = _.get(searchConfig, 'limit', null);
+
+		const sort = generateSort(sortParams);
+
+		/*
+		 * If the searchTerms is provided, then build the
+		 * text search and sort by its score
+		 */
+		if (!_.isEmpty(searchTerms)) {
+			query.$text = { $search: searchTerms };
+			projection.score = { $meta: 'textScore' };
+
+			// Sort by textScore last if there is a searchTerms
+			sort.score = { $meta: 'textScore' };
 		}
+
+		let countPromise = this.count(query),
+			searchPromise = this.find(query, projection, options).sort(sort);
 
 		if (limit) {
 			searchPromise = searchPromise.skip(page * limit).limit(limit);
@@ -50,6 +101,6 @@ const countSearchable = (schema) => {
 };
 
 module.exports = {
-	countSearchable: countSearchable,
+	pageable: pageable,
 	GetterSchema: GetterSchema
 };

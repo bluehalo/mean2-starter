@@ -86,7 +86,7 @@ let ResourceSchema = new mongoose.Schema({
  * Plugins
  *****************/
 
-ResourceSchema.plugin(schemaService.countSearchable);
+ResourceSchema.plugin(schemaService.pageable);
 
 /*****************
  * Index declarations
