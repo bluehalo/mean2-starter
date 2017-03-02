@@ -89,6 +89,6 @@ export class NotificationService {
 			notification.setFromModel(payload.value);
 			this.notificationReceived.emit(notification);
 		}
-	};
+	}
 
 }

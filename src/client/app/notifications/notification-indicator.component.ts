@@ -22,7 +22,6 @@ export class NotificationIndicatorComponent implements OnInit {
 	ngOnInit() {
 		this.configService.getConfig()
 			.subscribe( (config: any) =>  {
-				console.log(config);
 				this.notificationsEnabled = config.dispatcher && (!config.dispatcher.hasOwnProperty('enabled') || config.dispatcher.enabled);
 				if (this.notificationsEnabled) {
 					// Initialize state service subscriptions
