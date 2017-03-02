@@ -1,14 +1,20 @@
 language: node_js
 node_js:
   - "6.9"
-services:
- - mongodb
 before_script:
   - npm install -g gulp
 script:
   - gulp build
   - gulp test-ci
 sudo: false
+addons:
+  apt:
+    sources:
+      - mongodb-upstart
+      - mongodb-3.0-precise
+    packages:
+      - mongodb-org-server
+      - mongodb-org-shell
 after_success:
   - npm install -g codeclimate-test-reporter lcov-result-merger template-loader-lcov-fix
   - lcov-result-merger reports/coverage/**/*/lcov.info reports/coverage/lcov-combined.info

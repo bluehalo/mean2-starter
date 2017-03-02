@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { Ng2BootstrapModule } from 'ng2-bootstrap';
-import { TooltipModule } from 'ng2-bootstrap/ng2-bootstrap';
+import { TooltipModule } from 'ng2-bootstrap';
 
 import { ListTagsComponent } from './list-tags.component';
 import { ManageTagComponent } from './manage-tag.component';

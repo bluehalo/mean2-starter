@@ -5,8 +5,8 @@
        (click)="edit(value)"
        [hidden]="editing"
        tooltip="Click to edit"
-       tooltipPlacement="right"
-       tooltipAppendToBody="true">{{ value }}</a>
+       placement="right"
+       container="body">{{ value }}</a>
 
     <!-- Inline edit form -->
     <form  #inlineEditForm="ngForm" class="inlineEditForm form-inline" (ngSubmit)="onSubmit(value)" [hidden]="!editing">

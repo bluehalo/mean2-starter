@@ -71,10 +71,14 @@ module.exports.handleErrorResponse = function(res, errorResult) {
 
 	// If it's a server error, get the client message
 	if(errorResult.status >= 500 && errorResult.status < 600) {
+		// Log the error since it's a server error
+		logger.error(errorResult);
+
+		// Generate the client-facing error
 		errorResult = {
 			status: errorResult.status,
 			type: 'server-error',
-			message: module.exports.getClientErrorMessage(errorResult.message)
+			message: module.exports.getClientErrorMessage(errorResult)
 		};
 	}
 
