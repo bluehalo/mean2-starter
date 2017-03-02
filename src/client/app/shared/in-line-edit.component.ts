@@ -36,7 +36,7 @@ export class InLineEdit implements ControlValueAccessor, OnInit {
 
 	get value(): any {
 		return this._value;
-	};
+	}
 
 	set value(v: any) {
 		if (v !== this._value) {

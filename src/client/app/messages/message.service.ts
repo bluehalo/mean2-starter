@@ -111,12 +111,12 @@ export class MessageService {
 		});
 	}
 
-	private payloadRouterFn: Function = (payload: any) => {
+	private payloadRouterFn = (payload: any) => {
 		if (this.subscribed > 0) {
 			let message = new Message();
 			message.setFromModel(payload.wrappedPayload.p.message);
 			this.messageReceived.emit(message);
 		}
-	};
+	}
 
 }

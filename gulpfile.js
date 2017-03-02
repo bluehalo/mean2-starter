@@ -152,13 +152,11 @@ gulp.task('build-client-code', ['lint-client-code'], (done) => {
 
 gulp.task('lint-client-code', () => {
 
-	// Grab the tslint config
-	var config = require(path.resolve('./config/build/tslint.conf.js'));
-	config.formatter = 'prose';
-
 	return gulp.src(assets.client.app.src.ts)
 		// Lint the Typescript
-		.pipe(plugins.tslint(config))
+		.pipe(plugins.tslint({
+			formatter: 'prose'
+		}))
 		.pipe(plugins.tslint.report({
 			summarizeFailureOutput: true,
 			emitError: true
