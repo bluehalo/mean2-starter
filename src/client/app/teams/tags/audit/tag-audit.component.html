@@ -1,5 +1,5 @@
 <span *ngIf="auditObject">
-	<span tooltip="Description: {{auditObject.description}}" tooltipPlacement="bottom" [tooltipEnable]="null != auditObject.description" *ngIf="auditObject.name">
+	<span tooltip="Description: {{auditObject.description}}" placement="bottom" [tooltipEnable]="null != auditObject.description" *ngIf="auditObject.name">
 		<i class="fa fa-folder"></i> {{auditObject?.name}}
 	</span>
 </span>
