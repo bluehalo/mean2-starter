@@ -59,7 +59,7 @@ export class BigNumberPipe implements PipeTransform {
 	private getScale(n: number): any {
 		let scale: any = null;
 
-		this.scales.some(function(element, index, array) {
+		this.scales.some((element, index, array) => {
 			// Go through the scales, biggest first, searching for the first one that divides the number
 			scale = element;
 			return (n / scale.multiplier >= 1);

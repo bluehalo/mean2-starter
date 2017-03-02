@@ -8,36 +8,41 @@ let _ = require('lodash'),
 	config = require(path.resolve('./src/server/config.js')),
 	logger = require(path.resolve('./src/server/lib/bunyan.js')).logger;
 
+
 // Set the mongoose debugging option based on the configuration, defaulting to false
-var mongooseDebug = (config.mongooseLogging) || false;
-logger.info('Mongoose: Setting debug to %s', mongooseDebug);
+let mongooseDebug = (config.mongooseLogging) || false;
+logger.info(`Mongoose: Setting debug to ${mongooseDebug}`);
 mongoose.set('debug', mongooseDebug);
+
 
 // Override the global mongoose to use q for promises
 mongoose.Promise = require('q').Promise;
 
+
 // Load the mongoose models
-module.exports.loadModels = function() {
+let loadModels = () => {
 	// Globbing model files
 	config.files.server.models.forEach(function(modelPath) {
-		logger.debug('Mongoose: Loading %s', modelPath);
+		logger.debug(`Mongoose: Loading ${modelPath}`);
 		require(path.resolve(modelPath));
 	});
 };
+module.exports.loadModels = loadModels;
 
 
-// This is the set of dbs
-module.exports.dbs = {};
+// This is the set of db connections
+let dbs = {};
+module.exports.dbs = dbs;
+
 
 // Initialize Mongoose, returns a promise
-module.exports.connect = function() {
-	var that = this;
+module.exports.connect = () => {
+	let dbSpecs = [];
+	let defaultDbSpec;
 
-	var dbSpecs = [];
-	var defaultDbSpec;
 
 	// Organize the dbs we need to connect
-	for(var dbSpec in config.db) {
+	for(let dbSpec in config.db) {
 		if(dbSpec === 'admin') {
 			defaultDbSpec = { name: dbSpec, connectionString: config.db[dbSpec] };
 		}
@@ -46,45 +51,25 @@ module.exports.connect = function() {
 		}
 	}
 
-	// Connect to the default db to kick off the process
-	var defaultDbDefer = q.defer();
-	var defaultDb = mongoose.connect(defaultDbSpec.connectionString, defaultDbDefer.makeNodeResolver());
 
-	// Once we're connected to the default db, try the others
-	return defaultDbDefer.promise.then(function(result) {
-		logger.info('Mongoose: Connected to \'%s\' default db', defaultDbSpec.name);
+	// Connect to the default db to kick off the process
+	return mongoose.connect(defaultDbSpec.connectionString).then((result) => {
+		logger.info(`Mongoose: Connected to "${defaultDbSpec.name}" default db`);
 
 		// store it in the db list
-		that.dbs[defaultDbSpec.name] = defaultDb;
+		dbs[defaultDbSpec.name] = mongoose;
 
 		// Connect to the rest of the dbs
-		var promises = dbSpecs.map(function(spec) {
+		dbSpecs.forEach((spec) => {
 			// Create the secondary connection
-			var specDeferral = q.defer();
-			var connection = mongoose.createConnection(spec.connectionString, specDeferral.makeNodeResolver());
-
-			return specDeferral.promise.then(function(result) {
-				logger.info('Mongoose: Connected to \'%s\' db', spec.name);
-				that.dbs[spec.name] = connection;
-				return connection;
-			}, function(err) {
-				logger.fatal('Mongoose: Could not connect to \'%s\' db', spec.name);
-				return q.reject(err);
-			});
+			dbs[spec.name] = mongoose.createConnection(spec.connectionString);
 		});
 
-		return q.all(promises).then(function() {
-			try {
-				// Since all the db connections worked, we will load the mongoose models
-				that.loadModels();
+		// Since all the db connections worked, we will load the mongoose models
+		loadModels();
 
-				// Resolve the dbs since everything succeeded
-				return that.dbs;
-			} catch (err) {
-				// There was an error loading the models, so return in failure
-				return q.reject(err);
-			}
-		});
+		// Resolve the dbs since everything succeeded
+		return dbs;
 
 	}, function(err) {
 		logger.fatal('Mongoose: Could not connect to admin db');
@@ -98,17 +83,11 @@ module.exports.connect = function() {
 module.exports.disconnect = function() {
 
 	// Create defers for mongoose connections
-	var promises = _.values(this.dbs).map(function(d) {
-		var dbDeferral = q.defer();
-
+	let promises = _.values(this.dbs).map((d) => {
 		if (d.disconnect) {
-			d.disconnect(dbDeferral.makeNodeResolver());
+			return d.disconnect();
 		}
-		else {
-			dbDeferral.resolve();
-		}
-
-		return dbDeferral.promise;
+		return q();
 	});
 
 	// Create a join for the defers

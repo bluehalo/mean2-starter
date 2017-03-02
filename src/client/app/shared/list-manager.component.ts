@@ -34,7 +34,7 @@ export class ListManager {
 	set itemsRaw(newValue: string) {
 		if (newValue) {
 			let split = new RegExp(this.delimiter, 'g');
-			this._items = _.map(newValue.match(split), function(val: string) {
+			this._items = _.map(newValue.match(split), (val: string) => {
 				if (
 					(val.charAt(0) === '"' || val.charAt(0) === '\'' || val.charAt(0) === '“') &&
 					(val.charAt(val.length - 1) === '"' || val.charAt(val.length - 1) === '\'' || val.charAt(val.length - 1) === '”')) {
@@ -61,7 +61,7 @@ export class ListManager {
 	generateRawItems() {
 		let newItemsRaw = '';
 		if (this._items) {
-			newItemsRaw = this._items.map(function(item) {
+			newItemsRaw = this._items.map((item) => {
 				if (item.indexOf(' ') > -1) {
 					item = '"' + item + '"';
 				}

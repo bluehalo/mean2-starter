@@ -52,7 +52,7 @@ export function initializerFactory () {
 		HttpModule,
 
 		AppRoutingModule,
-		Ng2BootstrapModule,
+		Ng2BootstrapModule.forRoot(),
 		ModalModule.forRoot(),
 		BootstrapModalModule,
 		ToasterModule,
