@@ -12,10 +12,11 @@ let
 	runSequence = require('run-sequence'),
 	argv = require('yargs').argv,
 	webpack = require('webpack'),
+	webpackDevServer = require('webpack-dev-server'),
 
 	pkg = require('./package.json'),
 	plugins = gulpLoadPlugins(),
-	assets = require(path.resolve('./config/assets.js'));
+	assets = require(path.posix.resolve('./config/assets.js'));
 
 
 // Patch chalk to use colors
@@ -39,7 +40,7 @@ colors.enabled = true;
  */
 function nodemon(nodemonConfig) {
 	let config = require('./src/server/config');
-	let nodeArgs = ['--inspect=' + config.devPorts.debug];
+	let nodeArgs = [ `--inspect=${config.devPorts.debug}` ];
 	if (plugins.util.env.debugBrk) {
 		nodeArgs.push('--debug-brk');
 	}
@@ -72,8 +73,35 @@ gulp.task('watch-server', () => {
 });
 
 
+gulp.task('webpack-dev-server', (done) => {
+
+	// Start a webpack-dev-server
+	let webpackConfig = require(path.posix.resolve('./config/build/webpack.conf.js'))('develop');
+	let compiler = webpack(webpackConfig);
+	let config = require(path.posix.resolve('./src/server/config'));
+
+	new webpackDevServer(compiler, {
+		publicPath: `${config.app.url.protocol}://${config.app.url.host}:${config.devPorts.webpack}/dev/`,
+		stats: {
+			colors: true,
+			chunks: false
+		},
+		watchOptions: {
+			aggregateTimeout: 1000,
+			poll: 1000
+		}
+	}).listen(config.devPorts.webpack, 'localhost', (err) => {
+		if(err) throw new plugins.util.PluginError('webpack', err);
+
+		// Server listening
+		plugins.util.log('[webpack]', `http://localhost:${config.devPorts.webpack}/webpack-dev-server/index.html`);
+	});
+
+});
+
+
 gulp.task('watch-client', () => {
-	var config = require('./src/server/config');
+	var config = require(path.posix.resolve('./src/server/config'));
 
 	// Start livereload
 	plugins.livereload.listen(config.liveReload.port);
@@ -83,10 +111,10 @@ gulp.task('watch-client', () => {
 	 */
 
 	// On changes to compiled stuff, recompile
-	gulp.watch(assets.client.app.src.sass, ['build-client-style']);
+	gulp.watch(assets.client.app.src.sass, [ 'build-client-style' ]);
 
 	// In dev mode, we just want to re-lint ts code
-	gulp.watch(assets.client.app.src.ts, ['lint-client-code'])
+	gulp.watch(assets.client.app.src.ts, [ 'lint-client-code' ])
 		.on('change', (d) => { setTimeout(() => { plugins.livereload.changed(d); }, 1000); });
 
 	// When generated css changes, let livereload handle the changes
@@ -120,17 +148,30 @@ gulp.task('build-server', ['lint-server']);
  * Client Build Tasks
  * --------------------------
  */
+gulp.task('lint-client-code', () => {
+
+	return gulp.src(assets.client.app.src.ts)
+		// Lint the Typescript
+		.pipe(plugins.tslint({
+			formatter: 'prose'
+		}))
+		.pipe(plugins.tslint.report({
+			summarizeFailureOutput: true,
+			emitError: true
+		}));
+
+});
 
 gulp.task('build-client', (done) => {
-	runSequence('clean-client', ['build-client-code', 'build-client-style'], done);
+	runSequence('clean-client', [ 'build-client-code', 'build-client-style' ], done);
 });
 
 gulp.task('clean-client', () => {
 	return del([ 'public/**/*' ]);
 });
 
-gulp.task('build-client-code', ['lint-client-code'], (done) => {
-	let webpackConfig = require(path.resolve('./config/build/webpack.conf.js'));
+gulp.task('build-client-code', [ 'lint-client-code' ], (done) => {
+	let webpackConfig = require(path.posix.resolve('./config/build/webpack.conf.js'));
 
 	webpack(webpackConfig('build'), (err, stats) => {
 
@@ -150,19 +191,7 @@ gulp.task('build-client-code', ['lint-client-code'], (done) => {
 	});
 });
 
-gulp.task('lint-client-code', () => {
 
-	return gulp.src(assets.client.app.src.ts)
-		// Lint the Typescript
-		.pipe(plugins.tslint({
-			formatter: 'prose'
-		}))
-		.pipe(plugins.tslint.report({
-			summarizeFailureOutput: true,
-			emitError: true
-		}));
-
-});
 
 gulp.task('build-client-style', [ 'clean-client-style' ], () => {
 
@@ -177,7 +206,7 @@ gulp.task('build-client-style', [ 'clean-client-style' ], () => {
 		// Lint the Sass
 		.pipe(plugins.sassLint({
 			formatter: 'stylish',
-			rules: require(path.resolve('./config/build/sasslint.conf.js'))
+			rules: require(path.posix.resolve('./config/build/sasslint.conf.js'))
 		}))
 		.pipe(plugins.sassLint.format())
 		.pipe(plugins.sassLint.failOnError())
@@ -204,7 +233,8 @@ gulp.task('build-client-style', [ 'clean-client-style' ], () => {
 gulp.task('clean-client-style', () => {
 	return del([
 		'public/application*.css',
-		'public/dev/application.css', 'public/dev/application.css.map'
+		'public/dev/application.css',
+		'public/dev/application.css.map'
 	]);
 });
 
@@ -220,7 +250,7 @@ gulp.task('env:test', () => {
 	process.env.NODE_ENV = 'test';
 });
 
-gulp.task('test-server', ['env:test'], () => {
+gulp.task('test-server', [ 'env:test' ], () => {
 	// Gather some args for custom testing
 	let args = [];
 
@@ -247,7 +277,7 @@ gulp.task('test-server', ['env:test'], () => {
 function runKarmaTest(additionalEnvironmentVariables, callback) {
 	const clientEnv = _.merge({}, process.env, additionalEnvironmentVariables);
 	const spawn = require('child_process').spawn;
-	const karma = spawn('node', ['./config/build/test-client.js'], {
+	const karma = spawn('node', [ './config/build/test-client.js' ], {
 		env: clientEnv
 	});
 
@@ -257,11 +287,11 @@ function runKarmaTest(additionalEnvironmentVariables, callback) {
 	karma.on('close', callback);
 }
 
-gulp.task('test-client', ['env:test'], () => {
+gulp.task('test-client', [ 'env:test' ], () => {
 	runKarmaTest({}, _.noop);
 });
 
-gulp.task('test-client-ci', ['env:test'], (done) => {
+gulp.task('test-client-ci', [ 'env:test' ], (done) => {
 	runKarmaTest({
 		KARMA_CODE_COVERAGE_ENABLED: '1',
 		KARMA_CI_MODE: '1'
@@ -286,7 +316,7 @@ gulp.task('test-server-ci', [ 'env:test', 'coverage-init' ], (done) => {
 	// Run mocha tests with coverage and without nodemon
 
 	// Open mongoose connections
-	let mongoose = require('./src/server/lib/mongoose.js');
+	let mongoose = require(path.posix.resolve('./src/server/lib/mongoose.js'));
 
 	let error = null;
 	mongoose.connect().then(() => {
@@ -331,7 +361,7 @@ gulp.task('test-server-ci', [ 'env:test', 'coverage-init' ], (done) => {
 gulp.task('dev', (done) => {
 	runSequence(
 		[ 'build-server', 'build-client-style', 'lint-client-code' ],
-		[ 'watch-server', 'watch-client' ],
+		[ 'watch-server', 'watch-client', 'webpack-dev-server' ],
 		done);
 });
 
