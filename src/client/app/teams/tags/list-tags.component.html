@@ -20,121 +20,91 @@
 		</div>
 	</div>
 
-	<div style="padding-top:5px;" class="row">
-		<div class="col-md-12">
+	<pageable-table [items]="tags"
+		[pagingOptions]="pagingOptions"
+		[sortOptions]="sortOptions"
+		(onPageChange)="goToPage($event)"
+		(onSortChange)="setSort($event)">
 
-			<!--Sorting/Paging Controls -->
-			<div [hidden]="tags.length === 0">
-				<div class="controls" style="float:left;">
-					<span>Sort By:</span>
-					<a type="button" [ngClass]="{selected: pagingOptions.sortField===sortOptions.name.sortField}" class="no-href btn-link" (click)="setSort(sortOptions.name)">Name</a> /
-					<a type="button" [ngClass]="{selected: pagingOptions.sortField===sortOptions.created.sortField}" class="no-href btn-link" (click)="setSort(sortOptions.created)">Created</a> /
-					<a type="button" [ngClass]="{selected: pagingOptions.sortField===sortOptions.updated.sortField}" class="no-href btn-link" (click)="setSort(sortOptions.updated)">Updated</a>
+		<template asy-template="table-header">
+			<th>Name</th>
+			<th>Description</th>
+			<th>Created</th>
+			<th>Updated</th>
+			<th>Resources</th>
+			<th *ngIf="!readOnly">&nbsp;</th>
+		</template>
+
+		<template asy-template="table-row" let-tag>
+			<!-- Tag Name -->
+			<td>
+				<div style="width:200px;"
+						class="hide-overflow"
+						[attr.title]="tag.name">
+					{{tag.name}}
 				</div>
-				<div class="controls pull-right">
-					<asy-pager
-							[pageNumber]="pagingOptions.pageNumber"
-							[pageSize]="pagingOptions.pageSize"
-							[totalSize]="pagingOptions.totalSize"
-							[maxPageSize]="50"
-							[currentSize]="tags.length"
-							(onChange)="goToPage($event)">
-					</asy-pager>
+			</td>
+
+			<td>
+				<div style="width:200px;"
+						class="hide-overflow"
+						[attr.title]="tag.description">
+					{{tag.description}}
 				</div>
-			</div>
+			</td>
 
-		</div>
-	</div>
+			<td >
+				<div>{{tag.created | agoDate:false}}</div>
+			</td>
 
-	<div class="row" [hidden]="loading">
-		<div class="col-md-6 col-md-offset-3 center" [hidden]="tags.length > 0">
+			<td >
+				<div>{{tag.updated | agoDate:false}}</div>
+			</td>
+
+			<td>
+				<div *ngIf="tag?.resources?.length === 0">
+					No resources
+				</div>
+				<div *ngIf="tag?.resources?.length > 0">
+					<span class="label label-gray hide-overflow"
+							style="max-width:400px;"
+							*ngFor="let resource of tag.resources">
+						{{resource.title}}
+					</span>
+					<span class="label label-gray hide-overflow"
+							*ngIf="tag?.numResources > maxResourcesShownInline">
+						...and {{tag?.numResources-maxResourcesShownInline}} more
+					</span>
+				</div>
+			</td>
+
+			<td *ngIf="!readOnly">
+				<div class="pull-right" >
+					<a class="no-href btn-icon"
+						tooltip="Edit"
+						placement="top"
+						container="body"
+						[routerLink]="['/tag/edit', tag._id, { mode: 'edit' }]">
+						<i class="fa fa-gear" [ngClass]="iconClass"></i>
+					</a>
+					<a class="no-href btn-icon"
+						tooltip="Delete"
+						placement="top"
+						container="body"
+						(click)="removeTag(tag)">
+						<i class="fa fa-trash-o"></i>
+					</a>
+				</div>
+			</td>
+		</template>
+
+		<template asy-template="empty-table">
 			<h3>
 				No Tags?<br/>
 				<small>
 					Either there were no tags that matched your search or there are no tags in this team.<br/>
 				</small>
 			</h3>
-		</div>
-
-		<div class="col-md-12">
-			<table class="asymmetrik table table-condensed table-hover table-striped" [hidden]="tags.length === 0">
-				<thead>
-					<tr>
-						<th>Name</th>
-						<th>Description</th>
-						<th>Created</th>
-						<th>Updated</th>
-						<th>Resources</th>
-						<th *ngIf="!readOnly">&nbsp;</th>
-					</tr>
-				</thead>
-
-				<tbody>
-					<tr class="list-row" *ngFor="let tag of tags">
-
-						<!-- Tag Name -->
-						<td>
-							<div style="width:200px;"
-								 class="hide-overflow"
-								 [attr.title]="tag.name">
-								{{tag.name}}
-							</div>
-						</td>
-
-						<td>
-							<div style="width:200px;"
-								 class="hide-overflow"
-								 [attr.title]="tag.description">
-								{{tag.description}}
-							</div>
-						</td>
-
-						<td >
-							<div>{{tag.created | agoDate:false}}</div>
-						</td>
-
-						<td >
-							<div>{{tag.updated | agoDate:false}}</div>
-						</td>
-
-						<td>
-							<div *ngIf="tag?.resources?.length === 0">
-								No resources
-							</div>
-							<div *ngIf="tag?.resources?.length > 0">
-								<span class="label label-gray hide-overflow"
-									  style="max-width:400px;"
-									  *ngFor="let resource of tag.resources">
-									{{resource.title}}
-								</span>
-								<span class="label label-gray hide-overflow"
-									  *ngIf="tag?.numResources > maxResourcesShownInline">
-									...and {{tag?.numResources-maxResourcesShownInline}} more
-								</span>
-							</div>
-						</td>
-
-						<td *ngIf="!readOnly">
-							<div class="pull-right" >
-								<a class="no-href btn-icon"
-								   tooltip="Edit"
-								   placement="top"
-								   container="body"
-								   [routerLink]="['/tag/edit', tag._id, { mode: 'edit' }]">
-									<i class="fa fa-gear" [ngClass]="iconClass"></i>
-								</a>
-								<a class="no-href btn-icon"
-								   tooltip="Delete"
-								   placement="top"
-								   container="body"
-								   (click)="removeTag(tag)">
-									<i class="fa fa-trash-o"></i>
-								</a>
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
+		</template>
+	</pageable-table>
 </section>

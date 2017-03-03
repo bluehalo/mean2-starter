@@ -8,6 +8,7 @@ import { CacheEntriesService, CacheEntry } from './cache-entries.service';
 import { AlertService } from '../shared/alert.service';
 import { SortDirection, SortDisplayOption } from '../shared/result-utils.class';
 import { PagingOptions } from '../shared/pager.component';
+import { TableSortOptions } from '../shared/pageable-table/pageable-table.component';
 import { ViewCacheEntryModal, ViewCacheEntryModalContext } from './view-cache-entry.component';
 
 @Component({
@@ -22,7 +23,7 @@ export class AdminCacheEntriesComponent {
 	private entryToView: CacheEntry;
 	private viewCacheEntryVisible: boolean;
 
-	private sortOpts = {
+	private sortOpts: TableSortOptions = {
 		key: new SortDisplayOption('Key', 'key', SortDirection.asc),
 		timestamp: new SortDisplayOption('Timestamp', 'ts', SortDirection.desc)
 	};

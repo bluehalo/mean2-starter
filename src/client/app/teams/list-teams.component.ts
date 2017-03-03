@@ -9,6 +9,7 @@ import { Team, TeamMember } from './teams.class';
 import { TeamsService } from './teams.service';
 import { SortDirection, SortDisplayOption } from '../shared/result-utils.class';
 import { PagingOptions } from '../shared/pager.component';
+import { TableSortOptions } from '../shared/pageable-table/pageable-table.component';
 import { AuthenticationService } from '../admin/authentication/authentication.service';
 import { AlertService } from '../shared/alert.service';
 
@@ -24,7 +25,7 @@ export class ListTeamsComponent {
 
 	private search: string = '';
 
-	private sortOptions: any = {};
+	private sortOptions: TableSortOptions = {};
 
 	private pagingOptions: PagingOptions;
 

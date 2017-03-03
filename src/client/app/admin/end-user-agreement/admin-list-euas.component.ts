@@ -11,6 +11,7 @@ import { EuaService } from './eua.service';
 import { AdminService } from '../admin.service';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { PagingOptions } from '../../shared/pager.component';
+import { TableSortOptions } from '../../shared/pageable-table/pageable-table.component';
 import { SortDisplayOption, SortDirection } from '../../shared/result-utils.class';
 import { AlertService } from '../../shared/alert.service';
 
@@ -35,7 +36,7 @@ export class AdminListEuasComponent implements OnInit {
 		updated: true
 	};
 
-	private sortOpts = {
+	private sortOpts: TableSortOptions = {
 		title: new SortDisplayOption('Name', 'name', SortDirection.asc),
 		created: new SortDisplayOption('Created', 'created', SortDirection.desc),
 		updated: new SortDisplayOption('Updated', 'updated', SortDirection.desc),

@@ -8,6 +8,7 @@ import { MessageService } from '../message.service';
 import * as _ from 'lodash';
 import { Response } from '@angular/http';
 import { PagingOptions } from '../../shared/pager.component';
+import { TableSortOptions } from '../../shared/pageable-table/pageable-table.component';
 import { SortDirection, SortDisplayOption } from '../../shared/result-utils.class';
 import { AuthenticationService } from '../../admin/authentication/authentication.service';
 import { AlertService } from '../../shared/alert.service';
@@ -43,10 +44,10 @@ export class ListMessagesComponent {
 	private defaultColumns = JSON.parse(JSON.stringify(this.columns));
 	private columnMode = 'default';
 
-	private sortOpts = {
+	private sortOpts: TableSortOptions = {
+		created: new SortDisplayOption('Created', 'created', SortDirection.desc),
 		title: new SortDisplayOption('Title', 'title', SortDirection.asc),
 		type: new SortDisplayOption('Type', 'Type', SortDirection.asc),
-		created: new SortDisplayOption('Created', 'created', SortDirection.desc),
 		updated: new SortDisplayOption('Updated', 'updated', SortDirection.desc)
 	};
 

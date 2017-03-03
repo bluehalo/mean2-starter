@@ -27,28 +27,45 @@
 		</div>
 	</div>
 
-	<div style="padding-top:5px;" class="row">
-		<div class="col-md-12">
+	<pageable-table [items]="teams"
+		[pagingOptions]="pagingOptions"
+		(onPageChange)="goToPage($event)">
 
-			<!-- Sorting/Paging Controls -->
-			<div [hidden]="pagingOptions.totalSize === 0">
-				<div class="controls pull-right">
-					<asy-pager
-							[pageNumber]="pagingOptions.pageNumber"
-							[pageSize]="pagingOptions.pageSize"
-							[totalSize]="pagingOptions.totalSize"
-							[maxPageSize]=50
-							[currentSize]="teams.length"
-							(onChange)="goToPage($event)">
-					</asy-pager>
+		<template asy-template="table-header">
+			<th>Team Name</th>
+			<th>Description</th>
+			<th>Created</th>
+			<th>&nbsp;</th>
+		</template>
+
+		<template asy-template="table-row" let-team>
+			<td>
+				<div class="hideOverflow" style="max-width:200px;">
+					<a [routerLink]="['/team', team._id]"><strong>{{team.name}}</strong></a>
 				</div>
-				<br style="clear:both;"/>
-			</div>
-		</div>
-	</div>
+			</td>
+			<td>
+				<div class="hideOverflow" style="max-width:400px;">{{team.description}}</div>
+			</td>
+			<td>
+				{{team.created | agoDate:false}}
+			</td>
+			<td>
+				<div class="pull-right" *ngIf="user.canManageTeam(team)">
+					<div class="btn-group pull-right dropdown" dropdown>
+						<button type="button" class="btn btn-default btn-sm dropdown-toggle" dropdownToggle>
+							<i style="padding-right:5px;" class="fa fa-gear"></i><span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" role="menu">
+							<li><a (click)="updateTeam(team)"><i class="fa fa-fw fa-edit"></i> Edit</a></li>
+							<li><a (click)="deleteTeam(team)"><i class="fa fa-fw fa-trash"></i> Delete</a></li>
+						</ul>
+					</div>
+				</div>
+			</td>
+		</template>
 
-	<div class="row">
-		<div class="col-md-6 col-md-offset-3 text-center" [hidden]="teams.length > 0">
+		<template asy-template="empty-table">
 			<h4>
 				No Teams?<br/>
 				<small>
@@ -56,51 +73,8 @@
 					Read our <a [routerLink]="['/help/teams']">getting started page</a> for more details.
 				</small>
 			</h4>
-		</div>
+		</template>
 
-		<div class="col-md-12">
-			<!-- Actual results -->
-			<table class="asymmetrik table table-condensed table-hover table-striped" [hidden]="teams.length === 0">
-				<thead>
-					<tr>
-						<th>Team Name</th>
-						<th>Description</th>
-						<th>Created</th>
-						<th>&nbsp;</th>
-					</tr>
-				</thead>
-
-				<tbody>
-					<tr *ngFor="let team of teams">
-						<td>
-							<div class="hideOverflow" style="max-width:200px;">
-								<a [routerLink]="['/team', team._id]"><strong>{{team.name}}</strong></a>
-							</div>
-						</td>
-						<td>
-							<div class="hideOverflow" style="max-width:400px;">{{team.description}}</div>
-						</td>
-						<td>
-							{{team.created | agoDate:false}}
-						</td>
-						<td>
-							<div class="pull-right" *ngIf="user.canManageTeam(team)">
-								<div class="btn-group pull-right dropdown" dropdown>
-									<button type="button" class="btn btn-default btn-sm dropdown-toggle" dropdownToggle>
-										<i style="padding-right:5px;" class="fa fa-gear"></i><span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu" role="menu">
-										<li><a (click)="updateTeam(team)"><i class="fa fa-fw fa-edit"></i> Edit</a></li>
-										<li><a (click)="deleteTeam(team)"><i class="fa fa-fw fa-trash"></i> Delete</a></li>
-									</ul>
-								</div>
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-
-	</div>
+	</pageable-table>
 
 </section>
