@@ -10,6 +10,7 @@ import {
 	AuditViewDetailModal
 } from './audit-view-change.component';
 import { PagingOptions } from '../shared/pager.component';
+import { TableSortOptions } from '../shared/pageable-table/pageable-table.component';
 import { SortDisplayOption, SortDirection } from '../shared/result-utils.class';
 import { UserService } from '../admin/users.service';
 import { AuthenticationService } from '../admin/authentication/authentication.service';
@@ -43,7 +44,7 @@ export class AuditComponent {
 
 	private userPagingOpts: PagingOptions;
 
-	private sortOpts = {
+	private sortOpts: TableSortOptions = {
 		created: new SortDisplayOption('Created', 'created', SortDirection.desc),
 		actor: new SortDisplayOption('Actor', 'audit.actor.name', SortDirection.asc),
 		type: new SortDisplayOption('Type', 'audit.auditType', SortDirection.desc)

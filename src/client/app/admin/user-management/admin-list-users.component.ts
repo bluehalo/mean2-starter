@@ -12,6 +12,7 @@ import { AdminService } from '../admin.service';
 import { Role } from './role.class';
 import { ExportUsersModalContext, ExportUsersModal } from './export-users.component';
 import { PagingOptions } from '../../shared/pager.component';
+import { TableSortOptions } from '../../shared/pageable-table/pageable-table.component' ;
 import { SortDisplayOption, SortDirection } from '../../shared/result-utils.class';
 import { AlertService } from '../../shared/alert.service';
 import { ExportConfigService } from '../../shared/export-config.service';
@@ -70,7 +71,7 @@ export class AdminListUsersComponent {
 
 	columnMode: string = 'default';
 
-	sortOpts: any = {
+	sortOpts: TableSortOptions = {
 		name: new SortDisplayOption('Name', 'name', SortDirection.asc),
 		username: new SortDisplayOption('Username', 'username', SortDirection.asc),
 		created: new SortDisplayOption('Created', 'created', SortDirection.desc),
