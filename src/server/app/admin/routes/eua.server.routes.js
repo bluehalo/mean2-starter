@@ -1,35 +1,39 @@
 'use strict';
 
+
 let
+	express = require('express'),
 	path = require('path'),
-	users = require(path.resolve('./src/server/app/admin/controllers/users.server.controller.js'));
+
+	users = require(path.posix.resolve('./src/server/app/admin/controllers/users.server.controller.js'));
 
 
-module.exports = function(app) {
+/**
+ * End User Agreement Routes
+ */
 
-	/**
-	 * End User Agreement Routes
-	 */
+let router = express.Router();
 
-	app.route('/euas')
-		.post(users.hasAdminAccess, users.searchEuas);
+router.route('/euas')
+	.post(users.hasAdminAccess, users.searchEuas);
 
-	app.route('/eua/accept')
-		.post(users.has(users.requiresLogin), users.acceptEua);
+router.route('/eua/accept')
+	.post(users.has(users.requiresLogin), users.acceptEua);
 
-	app.route('/eua/:euaId/publish')
-		.post(users.hasAdminAccess, users.publishEua);
+router.route('/eua/:euaId/publish')
+	.post(users.hasAdminAccess, users.publishEua);
 
-	app.route('/eua/:euaId')
-		.get(   users.hasAdminAccess, users.getEuaById)
-		.post(  users.hasAdminAccess, users.updateEua)
-		.delete(users.hasAdminAccess, users.deleteEua);
+router.route('/eua/:euaId')
+	.get(   users.hasAdminAccess, users.getEuaById)
+	.post(  users.hasAdminAccess, users.updateEua)
+	.delete(users.hasAdminAccess, users.deleteEua);
 
-	app.route('/eua')
-		.get( users.has(users.requiresLogin), users.getCurrentEua)
-		.post(users.hasAdminAccess, users.createEua);
+router.route('/eua')
+	.get( users.has(users.requiresLogin), users.getCurrentEua)
+	.post(users.hasAdminAccess, users.createEua);
 
-	// Finish by binding the user middleware
-	app.param('euaId', users.euaById);
+// Finish by binding the user middleware
+router.param('euaId', users.euaById);
 
-};
+
+module.exports = router;
