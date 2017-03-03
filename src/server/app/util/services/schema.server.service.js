@@ -45,9 +45,19 @@ const generateSort = (sorting) => {
 };
 
 /**
- * Adds a static method 'countSearch' to the schema that performs concurrent
+ * Adds a static method 'pagingSearch' to the schema that performs concurrent
  * count and search queries, returning the results in the project's standard
- * pagination format
+ * pagination format.
+ *
+ * Options are:
+ * - query (default: {})
+ * - projection (default: {})
+ * - options (default: {})
+ * - searchTerms (optional)
+ * - sorting (default: {})
+ * - page (default: 0)
+ * - limit (optional)
+ * - maxScan (optional)
  */
 const pageable = (schema) => {
 
@@ -63,7 +73,8 @@ const pageable = (schema) => {
 			searchTerms = _.get(searchConfig, 'searchTerms', null),
 			sortParams = _.get(searchConfig, 'sorting', {}),
 			page = _.get(searchConfig, 'page', 0),
-			limit = _.get(searchConfig, 'limit', null);
+			limit = _.get(searchConfig, 'limit', null),
+			maxScan = _.get(searchConfig, 'maxScan', null);
 
 		const sort = generateSort(sortParams);
 
@@ -84,6 +95,10 @@ const pageable = (schema) => {
 
 		if (limit) {
 			searchPromise = searchPromise.skip(page * limit).limit(limit);
+		}
+
+		if (maxScan) {
+			searchPromise = searchPromise.maxscan(maxScan);
 		}
 
 		return Promise.all([ countPromise, searchPromise ])

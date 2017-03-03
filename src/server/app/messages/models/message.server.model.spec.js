@@ -55,7 +55,7 @@ describe('Message Model', () => {
 		});
 	});
 
-	it('should use countSearchable plugin to return paged list', () => {
+	it('should use pageable plugin to return paged list', () => {
 		return Message.pagingSearch({
 			query: {},
 			sorting: [],

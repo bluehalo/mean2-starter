@@ -91,11 +91,11 @@ module.exports = function() {
 							'owner._id': user._id
 						}];
 
-						return Resource.countSearch(query, sortParams, page, limit);
+						return Resource.pagingSearch(query, sortParams, page, limit);
 					});
 		}
 		else {
-			searchPromise = Resource.countSearch(query, sortParams, page, limit);
+			searchPromise = Resource.pagingSearch(query, sortParams, page, limit);
 		}
 
 		return searchPromise
