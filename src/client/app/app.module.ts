@@ -33,7 +33,7 @@ import { ConfigService } from './core/config.service';
 import { ClientConfiguration } from './config/configurator';
 import { TeamsService } from './teams/teams.service';
 import { UserStateService } from './admin/authentication/user-state.service';
-
+import { NotificationsModule } from './notifications/notifications.module';
 
 export function initializerFactory () {
 	return () => () => new Promise<any>( (resolve) => {
@@ -62,6 +62,7 @@ export function initializerFactory () {
 		AuditModule,
 		DemoModule,
 		HelpModule,
+		NotificationsModule,
 		ResourcesModule,
 		TeamsModule,
 		UtilModule,
