@@ -1,12 +1,13 @@
 'use strict';
 
-let path = require('path'),
+let express = require('express'),
+	path = require('path'),
 	notifications = require(path.resolve('./src/server/app/notifications/controllers/notification.server.controller.js')),
 	users = require(path.resolve('./src/server/app/admin/controllers/users.server.controller.js'));
 
-module.exports = function(app) {
+let router = express.Router();
 
-	app.route('/notifications')
-		.post(users.hasAccess, notifications.search);
+router.route('/notifications')
+	.post(users.hasAccess, notifications.search);
 
-};
+module.exports = router;
