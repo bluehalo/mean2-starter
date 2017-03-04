@@ -291,6 +291,7 @@ a {
 }
 
 // Variations
+// sass-lint:disable force-pseudo-nesting
 .callout-danger, .callout-hover-danger:hover {
 	border-left-color: $color-danger-med;
 
@@ -322,6 +323,7 @@ a {
 		color: $color-almost-black;
 	}
 }
+// sass-lint:enable force-pseudo-nesting
 
 //=====================================
 //	Lists
