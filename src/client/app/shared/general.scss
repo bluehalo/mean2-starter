@@ -292,7 +292,8 @@ a {
 
 // Variations
 // sass-lint:disable force-pseudo-nesting
-.callout-danger, .callout-hover-danger:hover {
+.callout-danger,
+.callout-hover-danger:hover {
 	border-left-color: $color-danger-med;
 
 	h4 {
@@ -300,7 +301,8 @@ a {
 	}
 }
 
-.callout-warning, .callout-hover-warning:hover {
+.callout-warning,
+.callout-hover-warning:hover {
 	border-left-color: $color-warning-med;
 
 	h4 {
@@ -308,7 +310,8 @@ a {
 	}
 }
 
-.callout-info, .callout-hover-info:hover {
+.callout-info,
+.callout-hover-info:hover {
 	border-left-color: $color-info-med;
 
 	h4 {
@@ -316,11 +319,12 @@ a {
 	}
 }
 
-.callout-default, .callout-hover-default:hover {
+.callout-default,
+.callout-hover-default:hover {
 	border-left-color: $color-default-med;
 
 	h4 {
-		color: $color-almost-black;
+		color: $color-default-dark;
 	}
 }
 // sass-lint:enable force-pseudo-nesting
