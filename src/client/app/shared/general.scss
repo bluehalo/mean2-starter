@@ -291,7 +291,7 @@ a {
 }
 
 // Variations
-.callout-danger {
+.callout-danger, .callout-hover-danger:hover {
 	border-left-color: $color-danger-med;
 
 	h4 {
@@ -299,7 +299,7 @@ a {
 	}
 }
 
-.callout-warning {
+.callout-warning, .callout-hover-warning:hover {
 	border-left-color: $color-warning-med;
 
 	h4 {
@@ -307,7 +307,7 @@ a {
 	}
 }
 
-.callout-info {
+.callout-info, .callout-hover-info:hover {
 	border-left-color: $color-info-med;
 
 	h4 {
@@ -315,11 +315,11 @@ a {
 	}
 }
 
-.callout-default {
+.callout-default, .callout-hover-default:hover {
 	border-left-color: $color-default-med;
 
 	h4 {
-		color: $color-default-dark;
+		color: $color-almost-black;
 	}
 }
 
