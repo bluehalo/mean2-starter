@@ -268,8 +268,6 @@ module.exports = function() {
 		let page = util.getPage(queryParams);
 		let limit = util.getLimit(queryParams, 1000);
 
-		let offset = page * limit;
-
 		// Default to sorting by ID
 		let sortArr = [{property: '_id', direction: 'DESC'}];
 		if (null != queryParams.sort && null != queryParams.dir) {
@@ -304,27 +302,13 @@ module.exports = function() {
 					}
 				}
 
-				return Team.search(query, search, limit, offset, sortArr);
-			})
-			.then(function(result) {
-				if (null == result) {
-					return q({
-						totalSize: 0,
-						pageNumber: 0,
-						pageSize: limit,
-						totalPages: 0,
-						elements: []
-					});
-				}
-				else {
-					return q({
-						totalSize: result.count,
-						pageNumber: page,
-						pageSize: limit,
-						totalPages: Math.ceil(result.count / limit),
-						elements: result.results
-					});
-				}
+				return Team.pagingSearch({
+					query: query,
+					searchTerms: search,
+					limit: limit,
+					page: page,
+					sorting: sortArr
+				});
 			});
 	}
 

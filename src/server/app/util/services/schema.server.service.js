@@ -104,6 +104,7 @@ const pageable = (schema) => {
 		return Promise.all([ countPromise, searchPromise ])
 			.then((results) => {
 				return {
+					hasMore: results[0] > results[1].length,
 					totalSize: results[0],
 					pageNumber: page,
 					pageSize: limit,

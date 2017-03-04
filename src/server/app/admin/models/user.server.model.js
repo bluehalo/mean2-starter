@@ -10,6 +10,7 @@ let _ = require('lodash'),
 	config = deps.config,
 	util = deps.utilService,
 	query = deps.queryService,
+	schemaService = deps.schemaService,
 	userAuthorizationService = require(path.resolve('./src/server/app/admin/services/users.authorization.server.service.js')),
 	GetterSchema = deps.schemaService.GetterSchema;
 
@@ -143,6 +144,12 @@ let UserSchema = new GetterSchema({
 		get: util.dateParse
 	}
 });
+
+/*****************
+ * Plugins
+ *****************/
+
+UserSchema.plugin(schemaService.pageable);
 UserSchema.plugin(uniqueValidator);
 
 /**
