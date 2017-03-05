@@ -10,7 +10,7 @@ export class NoAccessComponent {
 	user: User;
 
 	constructor(
-		private auth: AuthenticationService
+		public auth: AuthenticationService
 	) {
 	}
 

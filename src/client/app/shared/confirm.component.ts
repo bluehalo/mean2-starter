@@ -15,7 +15,7 @@ export class ConfirmModal {
 
 	@Output() onClose: EventEmitter<any> = new EventEmitter();
 
-	private showModal: boolean = false;
+	showModal: boolean = false;
 
 	constructor() {}
 

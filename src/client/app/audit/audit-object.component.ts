@@ -46,10 +46,10 @@ export class AuditObjectComponent {
 	@Input() auditObject: any = {};
 	@Input() auditType: string = '';
 
-	private componentRef: ComponentRef<any>;
+	componentRef: ComponentRef<any>;
 
 	constructor(
-		private componentFactoryResolver: ComponentFactoryResolver
+		public componentFactoryResolver: ComponentFactoryResolver
 	) {}
 
 	ngOnInit() {

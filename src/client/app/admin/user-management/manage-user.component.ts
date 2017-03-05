@@ -9,22 +9,22 @@ import { User } from '../user.class';
 
 export abstract class ManageUserComponent {
 
-	protected config: any;
-	protected error: string = null;
-	protected proxyPki: boolean;
-	protected metadataLocked: boolean;
-	protected okDisabled: boolean;
+	config: any;
+	error: string = null;
+	proxyPki: boolean;
+	metadataLocked: boolean;
+	okDisabled: boolean;
 
 	// Variables that will be set by implementing classes
-	protected title: string;
-	protected subtitle: string;
-	protected okButtonText: string;
-	protected navigateOnSuccess: string;
-	protected user: User;
+	title: string;
+	subtitle: string;
+	okButtonText: string;
+	navigateOnSuccess: string;
+	user: User;
 
 	constructor(
-		private router: Router,
-		private configService: ConfigService,
+		public router: Router,
+		public configService: ConfigService,
 		public alertService: AlertService
 	) {
 	}
@@ -47,7 +47,7 @@ export abstract class ManageUserComponent {
 
 	abstract handleBypassAccessCheck(): any;
 
-	private validatePassword(): boolean {
+	validatePassword(): boolean {
 		if (this.user.userModel.password === this.user.userModel.verifyPassword) {
 			return true;
 		}
@@ -55,12 +55,12 @@ export abstract class ManageUserComponent {
 		return false;
 	}
 
-	private bypassAccessCheck() {
+	bypassAccessCheck() {
 		this.metadataLocked = null != (this.user) && !this.user.userModel.bypassAccessCheck;
 		this.handleBypassAccessCheck();
 	}
 
-	private submit() {
+	submit() {
 		if (this.validatePassword()) {
 			this.submitUser(this.user)
 				.subscribe(

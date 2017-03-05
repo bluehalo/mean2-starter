@@ -14,9 +14,9 @@ export class SafeImageComponent {
 
 	@Input() showDefault: boolean = true;
 
-	private defaultPicSrc: string;
+	defaultPicSrc: string;
 
-	constructor(private configService: ConfigService) {
+	constructor(public configService: ConfigService) {
 	}
 
 	ngOnInit() {
@@ -30,7 +30,7 @@ export class SafeImageComponent {
 		}
 	}
 
-	private useDefaultUrl(event: any) {
+	useDefaultUrl(event: any) {
 		if (this.showDefault) {
 			this.imgSource = this.defaultPicSrc;
 		} else {

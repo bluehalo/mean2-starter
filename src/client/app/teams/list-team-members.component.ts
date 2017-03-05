@@ -24,34 +24,34 @@ export class ListTeamMembersComponent {
 
 	@Input() readOnly: boolean = true;
 
-	private team: Team;
+	team: Team;
 
-	private teamMembers: TeamMember[] = [];
+	teamMembers: TeamMember[] = [];
 
-	private teamId: string;
+	teamId: string;
 
-	private teamRoleOptions: any[] = TeamRole.ROLES;
+	teamRoleOptions: any[] = TeamRole.ROLES;
 
-	private user: User;
+	user: User;
 
-	private queryUserSearchTerm: string = '';
+	queryUserSearchTerm: string = '';
 
-	private queryUserObj: User;
+	queryUserObj: User;
 
-	private sortOptions: TableSortOptions = {};
+	sortOptions: TableSortOptions = {};
 
-	private pagingOptions: PagingOptions;
+	pagingOptions: PagingOptions;
 
-	private searchUsersRef: Observable<any>;
+	searchUsersRef: Observable<any>;
 
 	constructor(
-		private router: Router,
-		private route: ActivatedRoute,
-		private modal: Modal,
-		private teamsService: TeamsService,
-		private userService: UserService,
-		private alertService: AlertService,
-		private authService: AuthenticationService
+		public router: Router,
+		public route: ActivatedRoute,
+		public modal: Modal,
+		public teamsService: TeamsService,
+		public userService: UserService,
+		public alertService: AlertService,
+		public authService: AuthenticationService
 	) {
 	}
 
@@ -101,25 +101,25 @@ export class ListTeamMembersComponent {
 		});
 	}
 
-	private typeaheadOnSelect(e: any) {
+	typeaheadOnSelect(e: any) {
 		this.queryUserObj = new TeamMember().setFromTeamMemberModel(this.team, e.item);
 		this.addMember(this.queryUserObj);
 		this.queryUserSearchTerm = '';
 	}
 
-	private goToPage(event: any) {
+	goToPage(event: any) {
 		this.pagingOptions.update(event.pageNumber, event.pageSize);
 		this.getTeamMembers();
 	}
 
-	private setSort(sortOpt: SortDisplayOption) {
+	setSort(sortOpt: SortDisplayOption) {
 		this.pagingOptions.sortField = sortOpt.sortField;
 		this.pagingOptions.sortDir = sortOpt.sortDir;
 
 		this.getTeamMembers();
 	};
 
-	private getTeamMembers() {
+	getTeamMembers() {
 		this.teamsService.searchMembers(this.teamId, this.team, null, null, this.pagingOptions, false)
 			.subscribe((result: any) => {
 				if (null != result && null != result.elements && result.elements.length > 0) {
@@ -132,11 +132,11 @@ export class ListTeamMembersComponent {
 			});
 	}
 
-	private doUpdateRole(member: TeamMember, role: string): Observable<Response> {
+	doUpdateRole(member: TeamMember, role: string): Observable<Response> {
 		return this.teamsService.updateMemberRole(this.teamId, member.userModel._id, role);
 	}
 
-	private updateRole(member: TeamMember, role: string) {
+	updateRole(member: TeamMember, role: string) {
 		// No update required
 		if (member.role === role) {
 			return;
@@ -191,7 +191,7 @@ export class ListTeamMembersComponent {
 		}
 	}
 
-	private addMember(member: User, role?: string) {
+	addMember(member: User, role?: string) {
 		if (null == this.teamId || null == member) {
 			this.alertService.addAlert('Failed to add member. Missing member or teamId.');
 			return;
@@ -211,7 +211,7 @@ export class ListTeamMembersComponent {
 				});
 	}
 
-	private removeMember(member: TeamMember) {
+	removeMember(member: TeamMember) {
 		this.modal.confirm()
 			.size('lg')
 			.showClose(true)

@@ -18,20 +18,20 @@ import { AlertService } from '../../shared/alert.service';
 })
 export class ListMessagesComponent {
 
-	private messages: Message[] = [];
+	messages: Message[] = [];
 
-	private pagingOpts: PagingOptions;
+	pagingOpts: PagingOptions;
 
-	private search: string = '';
+	search: string = '';
 
-	private filters: any = {};
+	filters: any = {};
 
-	private sort: any;
+	sort: any;
 
-	private messageToDelete: Message;
+	messageToDelete: Message;
 
 	// Columns to show/hide in user table
-	private columns = {
+	columns = {
 		'title': {show: true, title: 'Title'},
 		'tearline': {show: true, title: 'Tearline'},
 		'type': {show: true, title: 'Type'},
@@ -40,18 +40,18 @@ export class ListMessagesComponent {
 		'_id': {show: false, title: 'ID'}
 	};
 
-	private columnKeys = _.keys(this.columns);
-	private defaultColumns = JSON.parse(JSON.stringify(this.columns));
-	private columnMode = 'default';
+	columnKeys = _.keys(this.columns);
+	defaultColumns = JSON.parse(JSON.stringify(this.columns));
+	columnMode = 'default';
 
-	private sortOpts: TableSortOptions = {
+	sortOpts: TableSortOptions = {
 		created: new SortDisplayOption('Created', 'created', SortDirection.desc),
 		title: new SortDisplayOption('Title', 'title', SortDirection.asc),
 		type: new SortDisplayOption('Type', 'Type', SortDirection.asc),
 		updated: new SortDisplayOption('Updated', 'updated', SortDirection.desc)
 	};
 
-	private results: any = {
+	results: any = {
 		pageNumber: 0, // The current page number
 		pageSize: 0,   // The number of elements in the current page
 		totalPages: 0, // The total number of pages
@@ -60,11 +60,11 @@ export class ListMessagesComponent {
 	};
 
 	constructor(
-		private messageService: MessageService,
-		private auth: AuthenticationService,
-		private alertService: AlertService,
-		private modal: Modal,
-		private route: ActivatedRoute) {
+		public messageService: MessageService,
+		public auth: AuthenticationService,
+		public alertService: AlertService,
+		public modal: Modal,
+		public route: ActivatedRoute) {
 	}
 
 	ngOnInit() {
@@ -100,11 +100,11 @@ export class ListMessagesComponent {
 		this.sort = this.messageService.sort.map;
 	}
 
-	private getQuery() {
+	getQuery() {
 		return {};
 	}
 
-	private applySearch(event?: any) {
+	applySearch(event?: any) {
 		this.results.resolved = false;
 
 		this.messageService.cache.messages = {search: this.search, paging: this.pagingOpts};
@@ -124,18 +124,18 @@ export class ListMessagesComponent {
 			});
 	}
 
-	private goToPage(event: any) {
+	goToPage(event: any) {
 		this.pagingOpts.update(event.pageNumber, event.pageSize);
 		this.applySearch();
 	}
 
-	private setSort(sortOpt: SortDisplayOption) {
+	setSort(sortOpt: SortDisplayOption) {
 		this.pagingOpts.sortField = sortOpt.sortField;
 		this.pagingOpts.sortDir = sortOpt.sortDir;
 		this.applySearch();
 	};
 
-	private confirmDeleteMessage(message: Message) {
+	confirmDeleteMessage(message: Message) {
 		this.messageToDelete = message;
 
 		let dialogPromise: Promise<DialogRef<any>>;
@@ -169,7 +169,7 @@ export class ListMessagesComponent {
 		);
 	};
 
-	private checkColumnConfiguration() {
+	checkColumnConfiguration() {
 		// Check first to see if all columns are turned on
 		this.columnMode = 'all';
 		this.columnKeys.some((name) => {
@@ -190,7 +190,7 @@ export class ListMessagesComponent {
 		});
 	}
 
-	private quickColumnSelect(selection: string) {
+	quickColumnSelect(selection: string) {
 		if (selection === 'all') {
 			this.columnKeys.forEach((name) => this.columns[name].show = true);
 

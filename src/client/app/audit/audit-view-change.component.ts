@@ -13,10 +13,10 @@ export class AuditViewDetailModalContext extends BSModalContext {
 }
 
 @Component({
-	templateUrl: './audit-view-details.component.html'
+	templateUrl: './audit-view-change.component.html'
 })
 export class AuditViewDetailModal implements ModalComponent<AuditViewDetailModalContext> {
-	protected context: AuditViewDetailModalContext;
+	context: AuditViewDetailModalContext;
 
 	constructor (
 		public dialog: DialogRef<AuditViewDetailModalContext>
@@ -37,24 +37,12 @@ export class AuditViewDetailModal implements ModalComponent<AuditViewDetailModal
 		return false;
 	}
 
-	private done() {
+	done() {
 		this.dialog.close();
-	}
-}
-
-@Component({
-	templateUrl: './audit-view-change.component.html'
-})
-export class AuditViewChangeModal extends AuditViewDetailModal {
-
-	constructor (
-		public dialog: DialogRef<AuditViewDetailModalContext>
-	) {
-		super(dialog);
 	}
 
 	// Derived from http://stackoverflow.com/a/1359808 and http://stackoverflow.com/a/23124958
-	private sortObjectKeys(obj: any): any {
+	sortObjectKeys(obj: any): any {
 		if (!_.isObject(obj) || _.isNull(obj)) {
 			return obj;
 		}
@@ -73,4 +61,17 @@ export class AuditViewChangeModal extends AuditViewDetailModal {
 
 		return sorted;
 	}
+}
+
+@Component({
+	templateUrl: './audit-view-change.component.html'
+})
+export class AuditViewChangeModal extends AuditViewDetailModal {
+
+	constructor (
+		public dialog: DialogRef<AuditViewDetailModalContext>
+	) {
+		super(dialog);
+	}
+
 }

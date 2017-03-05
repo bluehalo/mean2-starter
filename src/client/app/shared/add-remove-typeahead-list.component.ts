@@ -18,24 +18,24 @@ export class AddRemoveTypeaheadList {
 
 	@Output() itemsChanged = new EventEmitter();
 
-	private selectedItem: any;
+	selectedItem: any;
 
 	constructor() {}
 
-	protected addItem() {
+	addItem() {
 		this.items.push(this.selectedItem);
 		this.selectedItem = null;
 
 		this.itemsChanged.emit({items: this.items});
 	}
 
-	private deleteItem(index: number) {
+	deleteItem(index: number) {
 		this.items.splice(index, 1);
 
 		this.itemsChanged.emit({items: this.items});
 	}
 
-	private typeaheadOnSelect(e: any) {
+	typeaheadOnSelect(e: any) {
 		if (null != e) {
 			this.selectedItem = e.item;
 			this.addItem();

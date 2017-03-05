@@ -20,7 +20,7 @@ export class AsyDropdownItemWrapperComponent {
 	componentRef: ComponentRef<any>;
 
 	constructor(
-		private componentFactoryResolver: ComponentFactoryResolver
+		public componentFactoryResolver: ComponentFactoryResolver
 	) {}
 
 	ngOnInit() {

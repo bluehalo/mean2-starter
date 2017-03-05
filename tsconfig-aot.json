@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "es5",
-		"module": "commonjs",
+		"module": "es2015",
 
 		"moduleResolution": "node",
 
@@ -11,6 +11,13 @@
 		"experimentalDecorators": true,
 
 		"lib": [ "es2015", "dom" ],
+
+//		"rootDir": "./src/client",
+		"outDir": "./aot",
+		"typeRoots": [ "./node_modules/@types" ],
+		"types": [
+			"node"
+		],
 
 		"noImplicitAny": true,
 		"suppressImplicitAnyIndexErrors": true,
@@ -24,7 +31,14 @@
 	},
 
 	"exclude": [
-		"node_modules"
-	]
+		"node_modules",
+		"dist",
+		"**/*.d.ts",
+		"**/*.spec.ts",
+		"**/*.ngfactory.ts"
+	],
+
+	"angularCompilerOptions": {
+	}
 }
 

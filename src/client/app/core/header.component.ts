@@ -16,15 +16,15 @@ import { TeamsService } from '../teams/teams.service';
 })
 export class HeaderComponent extends CoreComponent {
 
-	private currentRoute: string = '';
+	currentRoute: string = '';
 
-	private teams: Team[] = [];
+	teams: Team[] = [];
 
 	constructor(
-		protected router: Router,
-		protected authService: AuthenticationService,
-		protected configService: ConfigService,
-		protected teamsService: TeamsService,
+		public router: Router,
+		public authService: AuthenticationService,
+		public configService: ConfigService,
+		public teamsService: TeamsService,
 	) {
 		super(authService, configService);
 	}

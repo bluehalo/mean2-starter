@@ -24,7 +24,7 @@
 				<div *ngIf="!user.canManageTeam(team)" class="team-header">{{ team.name }}</div>
 				<div *ngIf="user.canManageTeam(team)" class="team-description"><asy-in-line-edit [name]="description" [(ngModel)]="team.description" (onSave)="saveEditable($event)">{{ team.description }}</asy-in-line-edit></div>
 				<div *ngIf="!user.canManageTeam(team)" class="team-description">{{ team.description }}</div>
-				<div style="font-size: 14px;">Team created {{ team.created | agoDate:true }} ago</div>
+				<div style="font-size: 14px;">Team created {{ getDate(team.created) | agoDate:true }} ago</div>
 			</div>
 
 		</div>

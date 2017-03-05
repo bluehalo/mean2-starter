@@ -13,19 +13,19 @@ import { HelpService } from './help.service';
 
 export class HelpComponent {
 
-	private helpTopics: HelpTopic[] = [];
+	helpTopics: HelpTopic[] = [];
 
-	private config: any = {};
+	config: any = {};
 
-	private user: User;
+	user: User;
 
-	private pki: boolean;
+	pki: boolean;
 
 	constructor(
-		private router: Router,
-		private auth: AuthenticationService,
-		private configService: ConfigService,
-		private helpService: HelpService) {}
+		public router: Router,
+		public auth: AuthenticationService,
+		public configService: ConfigService,
+		public helpService: HelpService) {}
 
 	ngOnInit() {
 		this.user = this.auth.getCurrentUser();

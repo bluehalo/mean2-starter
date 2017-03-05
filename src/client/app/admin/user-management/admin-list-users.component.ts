@@ -222,7 +222,7 @@ export class AdminListUsersComponent {
 		return query;
 	}
 
-	applySearch(event: any) {
+	applySearch(event?: any) {
 		this.pagingOpts.setPageNumber(0);
 		this.loadUsers();
 	}

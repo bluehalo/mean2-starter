@@ -9,6 +9,7 @@ let
 	gulp = require('gulp'),
 	gulpLoadPlugins = require('gulp-load-plugins'),
 	path = require('path'),
+	ngc = require('gulp-ngc'),
 	runSequence = require('run-sequence'),
 	argv = require('yargs').argv,
 	webpack = require('webpack'),
@@ -58,6 +59,15 @@ function nodemon(nodemonConfig) {
 
 	return stream;
 }
+
+// Clean all
+gulp.task('clean', () => {
+	return del(['src/**/*.ngfactory.ts', 'src/**/*.ngstyle.ts', 'src/**/*.ngsummary.json', 'build', 'dist', 'aot']);
+});
+
+gulp.task('ngc', () => {
+	return ngc('tsconfig-aot.json');
+});
 
 gulp.task('watch-server', () => {
 	return nodemon({

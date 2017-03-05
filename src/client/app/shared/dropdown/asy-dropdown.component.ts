@@ -22,7 +22,7 @@ export class AsyDropdownComponent {
 	valueToDisplay: string;
 
 	constructor(
-		private asyDropdownService: AsyDropdownService
+		public asyDropdownService: AsyDropdownService
 	) {}
 
 	ngOnInit() {

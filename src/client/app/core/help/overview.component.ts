@@ -6,7 +6,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
 export class OverviewHelpComponent {
 	@Output() backEvent = new EventEmitter();
 
-	protected back() {
+	back() {
 		this.backEvent.emit({});
 	}
 

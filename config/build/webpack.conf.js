@@ -50,10 +50,10 @@ module.exports = (mode) => {
 	 *   'application' - Application code
 	 */
 	wpConfig.entry = (test)? {
-		application: path.posix.resolve('./src/client/main.ts')
+		application: path.posix.resolve('./aot/src/client/main.aot.js')
 	} : {
-		application: path.posix.resolve('./src/client/main.ts'),
-		vendor: path.posix.resolve('./src/client/vendor.ts')
+		application: path.posix.resolve('./aot/src/client/main.aot.js'),
+		vendor: path.posix.resolve('./aot/src/client/vendor.js')
 	};
 
 

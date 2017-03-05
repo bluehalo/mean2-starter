@@ -24,13 +24,13 @@ export class InLineEdit implements ControlValueAccessor, OnInit {
 	public onChange: any = Function.prototype;
 	public onTouched: any = Function.prototype;
 
-	private _value: string = '';
+	_value: string = '';
 
-	private preValue: string = '';
+	preValue: string = '';
 
-	private editing: boolean = false;
+	editing: boolean = false;
 
-	constructor(element: ElementRef, private renderer: Renderer) {}
+	constructor(element: ElementRef, public renderer: Renderer) {}
 
 	ngOnInit() {}
 
@@ -56,12 +56,12 @@ export class InLineEdit implements ControlValueAccessor, OnInit {
 	// Required forControlValueAccessor interface
 	public registerOnTouched(fn: () => {}): void { this.onTouched = fn; }
 
-	private edit(value: any) {
+	edit(value: any) {
 		this.preValue = value;
 		this.editing = true;
 	}
 
-	private onSubmit(value: any) {
+	onSubmit(value: any) {
 		let submitVal = value;
 		if (!_.isEmpty(this.name)) {
 			submitVal = {};
@@ -72,7 +72,7 @@ export class InLineEdit implements ControlValueAccessor, OnInit {
 		this.editing = false;
 	}
 
-	private cancel(value: any) {
+	cancel(value: any) {
 		this._value = this.preValue;
 		this.editing = false;
 	}

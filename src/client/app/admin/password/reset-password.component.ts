@@ -11,24 +11,24 @@ import { ConfigService } from '../../core/config.service';
 })
 export class ResetPasswordComponent {
 
-	private token: string;
+	token: string;
 
-	private invalid: boolean = true;
+	invalid: boolean = true;
 
-	private error: string;
+	error: string;
 
-	private success: string;
+	success: string;
 
-	private newPassword: string;
+	newPassword: string;
 
-	private verifyPassword: string;
+	verifyPassword: string;
 
 	constructor(
-		private router: Router,
-		private route: ActivatedRoute,
-		private authService: AuthenticationService,
-		private userStateService: UserStateService,
-		private configService: ConfigService
+		public router: Router,
+		public route: ActivatedRoute,
+		public authService: AuthenticationService,
+		public userStateService: UserStateService,
+		public configService: ConfigService
 	) {}
 
 	ngOnInit() {
@@ -52,7 +52,7 @@ export class ResetPasswordComponent {
 			});
 	}
 
-	private validateToken() {
+	validateToken() {
 		if (null != this.token) {
 			this.authService.validateToken(this.token)
 				.subscribe(
@@ -65,7 +65,7 @@ export class ResetPasswordComponent {
 		}
 	}
 
-	private resetPassword() {
+	resetPassword() {
 		this.success = null;
 		this.error = null;
 

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { User } from './user.class';
 import { AsyHttp, HttpOptions } from '../shared/asy-http.service';
@@ -10,11 +11,11 @@ export class UserService {
 		private asyHttp: AsyHttp
 	) {}
 
-	public update (user: User) {
+	public update (user: User): Observable<Response> {
 		return this.asyHttp.post(new HttpOptions('user/me', () => {}, user.userModel));
 	};
 
-	public match (query: any, search: string, paging: PagingOptions) {
+	public match (query: any, search: string, paging: PagingOptions): Observable<Response> {
 		return this.asyHttp.post(new HttpOptions('users/match?' + this.asyHttp.urlEncode(paging.toObj()), () => {}, { s: search, q: query }));
 	}
 }

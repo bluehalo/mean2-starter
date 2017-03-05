@@ -9,14 +9,14 @@ import { AlertService } from '../../shared/alert.service';
 })
 
 export class UserEuaComponent {
-	private agree: boolean = false;
+	agree: boolean = false;
 
-	private eua: any;
+	eua: any;
 
 	constructor(
-		private authService: AuthenticationService,
-		private alertService: AlertService,
-		private userStateService: UserStateService) {}
+		public authService: AuthenticationService,
+		public alertService: AlertService,
+		public userStateService: UserStateService) {}
 
 	ngOnInit() {
 		this.alertService.clearAllAlerts();
@@ -26,7 +26,7 @@ export class UserEuaComponent {
 
 	}
 
-	private accept() {
+	accept() {
 		this.authService.acceptEua()
 			.subscribe(() => {
 				this.userStateService.goToRedirectRoute();

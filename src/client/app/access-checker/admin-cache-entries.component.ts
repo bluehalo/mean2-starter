@@ -17,21 +17,21 @@ import { ViewCacheEntryModal, ViewCacheEntryModalContext } from './view-cache-en
 })
 export class AdminCacheEntriesComponent {
 
-	private cacheEntries: any[] = [];
-	private search = '';
-	private pagingOpts: PagingOptions;
-	private entryToView: CacheEntry;
-	private viewCacheEntryVisible: boolean;
+	cacheEntries: any[] = [];
+	search = '';
+	pagingOpts: PagingOptions;
+	entryToView: CacheEntry;
+	viewCacheEntryVisible: boolean;
 
-	private sortOpts: TableSortOptions = {
+	sortOpts: TableSortOptions = {
 		key: new SortDisplayOption('Key', 'key', SortDirection.asc),
 		timestamp: new SortDisplayOption('Timestamp', 'ts', SortDirection.desc)
 	};
 
 	constructor(
-		private cacheEntriesService: CacheEntriesService,
-		private alertService: AlertService,
-		private modal: Modal
+		public cacheEntriesService: CacheEntriesService,
+		public alertService: AlertService,
+		public modal: Modal
 	) {}
 
 	ngOnInit() {
@@ -44,23 +44,23 @@ export class AdminCacheEntriesComponent {
 		this.loadCacheEntries();
 	}
 
-	private applySearch() {
+	applySearch() {
 		this.pagingOpts.setPageNumber(0);
 		this.loadCacheEntries();
 	}
 
-	private goToPage(event: any) {
+	goToPage(event: any) {
 		this.pagingOpts.update(event.pageNumber, event.pageSize);
 		this.loadCacheEntries();
 	}
 
-	private setSort(sortOpt: SortDisplayOption) {
+	setSort(sortOpt: SortDisplayOption) {
 		this.pagingOpts.sortField = sortOpt.sortField;
 		this.pagingOpts.sortDir = sortOpt.sortDir;
 		this.loadCacheEntries();
 	};
 
-	private loadCacheEntries() {
+	loadCacheEntries() {
 		this.cacheEntriesService.match({}, this.search, this.pagingOpts).subscribe(
 			(result: any) => {
 				if (result && Array.isArray(result.elements)) {
@@ -80,7 +80,7 @@ export class AdminCacheEntriesComponent {
 			});
 	}
 
-	private confirmDeleteEntry(cacheEntry: any) {
+	confirmDeleteEntry(cacheEntry: any) {
 		let entryToDelete = cacheEntry.entry;
 
 		this.modal.confirm()
@@ -110,11 +110,11 @@ export class AdminCacheEntriesComponent {
 			);
 	};
 
-	private viewCacheEntry(cacheEntry: any) {
+	viewCacheEntry(cacheEntry: any) {
 		this.modal.open(ViewCacheEntryModal, overlayConfigFactory({cacheEntry: cacheEntry}, ViewCacheEntryModalContext));
 	}
 
-	private refreshCacheEntry(cacheEntry: any) {
+	refreshCacheEntry(cacheEntry: any) {
 		// temporary flag to show that the entry is refreshing
 		cacheEntry.isRefreshing = true;
 

@@ -16,13 +16,13 @@
 		<div class="row">
 			<div class="col-md-12">
 				<label>Key</label>
-				<div>{{context.cacheEntry.entry.key}}</div>
+				<div>{{context.cacheEntry.key}}</div>
 
 				<label>Last Updated</label>
-				<div>{{context.cacheEntry.entry.ts | date:'yyyy-MM-dd HH:mm:ssZ'}} ({{context.cacheEntry.entry.ts | agoDate:false}})</div>
+				<div>{{getDate(context.cacheEntry.ts) | date:'yyyy-MM-dd HH:mm:ssZ'}} ({{getDate(context.cacheEntry.ts) | agoDate:false}})</div>
 
 				<label>Value</label>
-				<pre>{{context.cacheEntry.entry.value | json}}</pre>
+				<pre>{{context.cacheEntry.value | json}}</pre>
 			</div>
 		</div>
 	</section>

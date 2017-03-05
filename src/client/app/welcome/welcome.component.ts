@@ -10,15 +10,15 @@ import { MessageService } from '../messages/message.service';
 	templateUrl: './welcome.component.html'
 })
 export class WelcomeComponent {
-	private config: any;
-	private externalLinksEnabled: boolean;
-	private messages: Message[];
+	config: any;
+	externalLinksEnabled: boolean;
+	messages: Message[];
 
 	constructor(
-		private auth: AuthenticationService,
-		private configService: ConfigService,
-		private alertService: AlertService,
-		private messageService: MessageService) {
+		public auth: AuthenticationService,
+		public configService: ConfigService,
+		public alertService: AlertService,
+		public messageService: MessageService) {
 	}
 
 	ngOnInit() {

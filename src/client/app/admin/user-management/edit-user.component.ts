@@ -18,17 +18,17 @@ import { CacheEntriesService } from '../../access-checker/cache-entries.service'
 })
 export class UpdateUserComponent extends ManageUserComponent {
 
-	private mode: string = 'edit';
-	private refreshing: boolean = false;
+	mode: string = 'edit';
+	refreshing: boolean = false;
 
 	constructor(
 		router: Router,
 		configService: ConfigService,
 		alertService: AlertService,
-		private adminService: AdminService,
-		private authService: AuthenticationService,
-		private route: ActivatedRoute,
-		private cacheEntriesService: CacheEntriesService
+		public adminService: AdminService,
+		public authService: AuthenticationService,
+		public route: ActivatedRoute,
+		public cacheEntriesService: CacheEntriesService
 	) {
 		super(router, configService, alertService);
 	}
@@ -57,7 +57,7 @@ export class UpdateUserComponent extends ManageUserComponent {
 	/**
 	 * Refresh the user's cache entry
 	 */
-	private refreshCredentials() {
+	refreshCredentials() {
 		this.refreshing = true;
 		this.cacheEntriesService.refreshCurrentUser().subscribe(
 			() => {
@@ -75,7 +75,7 @@ export class UpdateUserComponent extends ManageUserComponent {
 		);
 	};
 
-	private initializeUser() {
+	initializeUser() {
 		this.user = _.cloneDeep(this.authService.getCurrentUser());
 		this.user.userModel.providerData = { dn: (null != this.user.userModel.providerData) ? this.user.userModel.providerData.dn : undefined };
 	}

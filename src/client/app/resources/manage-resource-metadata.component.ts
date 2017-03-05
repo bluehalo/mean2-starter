@@ -95,7 +95,7 @@ export class ManageResourceMetadataComponent {
 		return this.resource.description != null && !_.isEmpty(this.resource.description.trim());
 	}
 
-	private updateTags(event: any) {
+	updateTags(event: any) {
 		if (event.hasOwnProperty('items')) {
 			this.resource.tags = event.items;
 			this.processTags();

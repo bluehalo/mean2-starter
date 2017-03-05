@@ -10,10 +10,10 @@ import * as _ from 'lodash';
 
 export class InvalidResourceComponent {
 
-	private type: string = 'Resource';
+	type: string = 'Resource';
 
 	constructor(
-		private route: ActivatedRoute
+		public route: ActivatedRoute
 	) {}
 
 	ngOnInit() {

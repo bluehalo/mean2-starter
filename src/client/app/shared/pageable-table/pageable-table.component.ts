@@ -16,7 +16,7 @@ export type TableSortOptions = {
 
 export class PageableTable {
 
-	@Input() items: Iterable<any>;
+	@Input() items: Array<any>;
 	@Input() pagingOptions: PagingOptions = new PagingOptions();
 	@Input() sortOptions: TableSortOptions;
 	@Input() refreshable: boolean = false;

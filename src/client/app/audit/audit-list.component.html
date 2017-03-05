@@ -48,7 +48,7 @@
 				<div class="input-group input-group-sm">
 					<span class="input-group-addon">Start: </span>
 					<input style="width:255px;" type="text" name="gteDate" class="form-control input-sm"
-								 ngModel="{{queryStartDate | date:'shortDate'}}"
+								 ngModel="{{formatDate(queryStartDate)}}"
 								 (click)="showGteDatepicker = !showGteDatepicker"/>
 					<span class="calendar-picker"><i class="fa fa-calendar"></i></span>
 				</div>
@@ -67,7 +67,7 @@
 					<span class="input-group-addon">Stop: </span>
 					<input type="text" name="lteDate" class="form-control input-sm"
 								 style="width: 255px;"
-								 ngModel="{{queryEndDate | date:'shortDate'}}"
+								 ngModel="{{formatDate(queryEndDate)}}"
 								 (click)="showLteDatepicker = !showLteDatepicker"/>
 
 					<span class="calendar-picker"><i class="fa fa-calendar"></i></span>
@@ -125,7 +125,7 @@
 			</td>
 			<td >
 				<div class="hide-overflow" style="max-width:200px;">
-					{{entry?.created | date:"yyyy-MM-dd HH:mm:ss 'Z'":'UTC' }}
+					{{entry?.created | date:"yyyy-MM-dd HH:mm:ss 'Z'"}}
 				</div>
 			</td>
 			<td >

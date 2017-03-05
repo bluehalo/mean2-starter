@@ -14,12 +14,12 @@ import { AuthenticationService } from '../admin/authentication/authentication.se
 })
 
 export class FooterComponent extends CoreComponent {
-	private currentRoute: string = '';
+	currentRoute: string = '';
 
 	constructor(
-		protected auth: AuthenticationService,
-		protected configService: ConfigService,
-		protected router: Router
+		public auth: AuthenticationService,
+		public configService: ConfigService,
+		public router: Router
 	) {
 		super(auth, configService);
 	}

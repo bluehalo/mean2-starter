@@ -6,11 +6,11 @@ import { ConfigService } from '../core/config.service';
 	templateUrl: './external-links.component.html'
 })
 export class ExternalLinksComponent {
-	private config: any;
-	private externalLinksEnabled: boolean;
-	private links: any;
+	config: any;
+	externalLinksEnabled: boolean;
+	links: any;
 
-	constructor(private configService: ConfigService) {
+	constructor(public configService: ConfigService) {
 	}
 
 	ngOnInit() {
@@ -23,7 +23,7 @@ export class ExternalLinksComponent {
 			});
 	}
 
-	private handleLinkClick(evt: any) {
+	handleLinkClick(evt: any) {
 		evt.stopPropagation();
 	}
 

@@ -16,15 +16,15 @@ export class AddRemoveList {
 
 	@Output() itemsChanged = new EventEmitter();
 
-	private item: string = '';
+	item: string = '';
 
 	constructor() {}
 
-	private isAddDisabled(): boolean {
+	isAddDisabled(): boolean {
 		return (!this.item || this.item === '' || this.items.indexOf(this.item) >= 0);
 	}
 
-	private addItem() {
+	addItem() {
 		if (!this.isAddDisabled()) {
 			this.items.push(this.item);
 			this.item = '';
@@ -33,7 +33,7 @@ export class AddRemoveList {
 		}
 	}
 
-	private deleteItem(index: number) {
+	deleteItem(index: number) {
 		this.items.splice(index, 1);
 
 		this.itemsChanged.emit({items: this.items});

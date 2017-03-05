@@ -16,21 +16,21 @@ import { AuthenticationService } from '../admin/authentication/authentication.se
 })
 export class TeamSummaryComponent {
 
-	private user: TeamMember;
+	user: TeamMember;
 
-	private team: Team;
+	team: Team;
 
-	private teamId: string;
+	teamId: string;
 
-	private defaultDescription: string = 'No Description.';
+	defaultDescription: string = 'No Description.';
 
 	constructor(
-		private router: Router,
-		private route: ActivatedRoute,
-		private modal: Modal,
-		private teamsService: TeamsService,
-		private alertService: AlertService,
-		private authService: AuthenticationService
+		public router: Router,
+		public route: ActivatedRoute,
+		public modal: Modal,
+		public teamsService: TeamsService,
+		public alertService: AlertService,
+		public authService: AuthenticationService
 	) {
 	}
 
@@ -64,7 +64,7 @@ export class TeamSummaryComponent {
 		});
 	}
 
-	private saveEditable(val: any) {
+	saveEditable(val: any) {
 		if (val.hasOwnProperty('name')) {
 			this.team.name = val.name;
 		}
@@ -91,11 +91,15 @@ export class TeamSummaryComponent {
 				});
 	}
 
-	private update() {
+	update() {
 		this.router.navigate(['/team/edit', this.teamId]);
 	}
 
-	private remove() {
+	getDate(ts: number): Date {
+		return new Date(ts);
+	}
+
+	remove() {
 		this.modal.confirm()
 			.size('lg')
 			.showClose(true)

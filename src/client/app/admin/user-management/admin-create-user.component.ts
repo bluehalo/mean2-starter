@@ -14,15 +14,15 @@ import { AlertService } from '../../shared/alert.service';
 })
 export class AdminCreateUserComponent extends ManageUserComponent {
 
-	private mode = 'admin-create';
+	mode = 'admin-create';
 
-	private possibleRoles = Role.ROLES;
+	possibleRoles = Role.ROLES;
 
 	constructor(
 		router: Router,
 		configService: ConfigService,
 		alertService: AlertService,
-		private adminService: AdminService
+		public adminService: AdminService
 	) {
 		super(router, configService, alertService);
 	}

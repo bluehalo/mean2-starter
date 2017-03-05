@@ -8,14 +8,14 @@ import { ConfigService } from '../../core/config.service';
 	templateUrl: './signin.component.html'
 })
 export class SigninComponent {
-	private user: User;
-	private error: string;
-	private config: any;
+	user: User;
+	error: string;
+	config: any;
 
 	constructor(
-		private authService: AuthenticationService,
-		private userStateService: UserStateService,
-		private configService: ConfigService
+		public authService: AuthenticationService,
+		public userStateService: UserStateService,
+		public configService: ConfigService
 	) {}
 
 	ngOnInit() {

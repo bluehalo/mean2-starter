@@ -61,13 +61,16 @@
 	"devDependencies": {
 		"@angular/common": "2.4",
 		"@angular/compiler": "2.4",
+		"@angular/compiler-cli": "2.4",
 		"@angular/core": "2.4",
 		"@angular/forms": "2.4",
 		"@angular/http": "2.4",
 		"@angular/platform-browser": "2.4",
 		"@angular/platform-browser-dynamic": "2.4",
+		"@angular/platform-server": "2.4",
 		"@angular/upgrade": "2.4",
 		"@angular/router": "3.4",
+
 
 		"core-js": "2.4",
 		"classlist.js": "1.1",
@@ -76,7 +79,7 @@
 		"rxjs": "5.2",
 		"zone.js": "0.7",
 
-		"angular2-modal": "2.0",
+		"angular2-modal": "2.0.3",
 		"angular2-toaster": "2.0",
 		"bootstrap": "3",
 		"font-awesome": "4.7",
@@ -85,7 +88,6 @@
 		"socket.io-client": "1.7",
 		"@types/socket.io-client": "1.4",
 
-		"@types/core-js": "0.9",
 		"@types/node": "6.0",
 		"@types/lodash": "4.14",
 
@@ -138,6 +140,7 @@
 		"gulp-livereload": "3.8",
 		"gulp-load-plugins": "1.5",
 		"gulp-mocha": "3.0",
+		"gulp-ngc": "0.2",
 		"gulp-nodemon": "2.2",
 		"gulp-rename": "1.2",
 		"gulp-sass": "3.1",

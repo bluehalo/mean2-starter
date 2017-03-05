@@ -19,23 +19,23 @@ import { AlertService } from '../shared/alert.service';
 })
 export class ListTeamsComponent {
 
-	private user: TeamMember;
+	user: TeamMember;
 
-	private teams: Team[] = [];
+	teams: Team[] = [];
 
-	private search: string = '';
+	search: string = '';
 
-	private sortOptions: TableSortOptions = {};
+	sortOptions: TableSortOptions = {};
 
-	private pagingOptions: PagingOptions;
+	pagingOptions: PagingOptions;
 
 	constructor(
-		private router: Router,
-		private route: ActivatedRoute,
-		private modal: Modal,
-		private teamsService: TeamsService,
-		private authService: AuthenticationService,
-		private alertService: AlertService
+		public router: Router,
+		public route: ActivatedRoute,
+		public modal: Modal,
+		public teamsService: TeamsService,
+		public authService: AuthenticationService,
+		public alertService: AlertService
 	) {
 	}
 
@@ -44,7 +44,7 @@ export class ListTeamsComponent {
 		this.initializeTeams();
 	}
 
-	private initializeTeams() {
+	initializeTeams() {
 		this.alertService.clearAllAlerts();
 
 		this.sortOptions.name = new SortDisplayOption('Team Name', 'name', SortDirection.asc);
@@ -63,7 +63,7 @@ export class ListTeamsComponent {
 	/**
 	 * Initialize query, search, and paging options, possibly from cached user settings
 	 */
-	private initializeUserFilters() {
+	initializeUserFilters() {
 		let cachedFilter: any = this.teamsService.cache.listTeams;
 
 		this.search = cachedFilter.search ? cachedFilter.search : '';
@@ -76,17 +76,17 @@ export class ListTeamsComponent {
 		}
 	}
 
-	private goToPage(event: any) {
+	goToPage(event: any) {
 		this.pagingOptions.update(event.pageNumber, event.pageSize);
 		this.loadTeams();
 	}
 
-	private applySearch() {
+	applySearch() {
 		this.pagingOptions.setPageNumber(0);
 		this.loadTeams();
 	}
 
-	private loadTeams() {
+	loadTeams() {
 		let query: any = {};
 		let options: any = {};
 
@@ -103,11 +103,11 @@ export class ListTeamsComponent {
 			});
 	}
 
-	private updateTeam(team: Team) {
+	updateTeam(team: Team) {
 		this.router.navigate(['/team/edit', team._id]);
 	}
 
-	private deleteTeam(team: Team) {
+	deleteTeam(team: Team) {
 		this.modal.confirm()
 			.size('lg')
 			.showClose(true)

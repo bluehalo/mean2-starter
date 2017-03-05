@@ -17,6 +17,7 @@ import { AuthenticationService } from '../admin/authentication/authentication.se
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { AuditOption } from './audit.classes';
+import { DatePipe } from '@angular/common';
 
 @Component({
 	selector: 'audit',
@@ -25,50 +26,50 @@ import { AuditOption } from './audit.classes';
 export class AuditComponent {
 
 	// List of audit entries
-	private auditEntries: any[] = [];
+	auditEntries: any[] = [];
 
-	private auditEntriesLoaded: boolean = false;
+	auditEntriesLoaded: boolean = false;
 
-	private actionOptions: AuditOption[] = [];
+	actionOptions: AuditOption[] = [];
 
-	private auditTypeOptions: AuditOption[] = [];
+	auditTypeOptions: AuditOption[] = [];
 
-	private queryUserSearchTerm: string = '';
+	queryUserSearchTerm: string = '';
 
-	private queryUserObj: any;
+	queryUserObj: any;
 
 	// Search phrase
-	private search: string = '';
+	search: string = '';
 
-	private pagingOpts: PagingOptions;
+	pagingOpts: PagingOptions;
 
-	private userPagingOpts: PagingOptions;
+	userPagingOpts: PagingOptions;
 
-	private sortOpts: TableSortOptions = {
+	sortOpts: TableSortOptions = {
 		created: new SortDisplayOption('Created', 'created', SortDirection.desc),
 		actor: new SortDisplayOption('Actor', 'audit.actor.name', SortDirection.asc),
 		type: new SortDisplayOption('Type', 'audit.auditType', SortDirection.desc)
 	};
 
-	private dateRangeOptions: any[];
+	dateRangeOptions: any[];
 
-	private dateRangeFilter: any;
+	dateRangeFilter: any;
 
 	// Date picker
-	private showGteDatepicker: boolean = false;
-	private showLteDatepicker: boolean = false;
+	showGteDatepicker: boolean = false;
+	showLteDatepicker: boolean = false;
 
-	private queryStartDate: Date = moment.utc().subtract(1, 'days').toDate();
+	queryStartDate: Date = moment.utc().subtract(1, 'days').toDate();
 
-	private queryEndDate: Date = moment.utc().toDate();
+	queryEndDate: Date = moment.utc().toDate();
 
-	private searchUsersRef: Observable<any>;
+	searchUsersRef: Observable<any>;
 
 	constructor(
-		private auditService: AuditService,
-		private userService: UserService,
+		public auditService: AuditService,
+		public userService: UserService,
 		public auth: AuthenticationService,
-		private modal: Modal
+		public modal: Modal
 	) {}
 
 	ngOnInit() {
@@ -116,12 +117,12 @@ export class AuditComponent {
 		this.loadAuditEntries();
 	}
 
-	private goToPage(event: any) {
+	goToPage(event: any) {
 		this.pagingOpts.update(event.pageNumber, event.pageSize);
 		this.loadAuditEntries();
 	}
 
-	private setSort(name: string) {
+	setSort(name: string) {
 		if (name === this.pagingOpts.sortField) {
 			// Same column, reverse direction
 			this.pagingOpts.sortDir = (this.pagingOpts.sortDir === SortDirection.asc) ? SortDirection.desc : SortDirection.asc;
@@ -134,18 +135,18 @@ export class AuditComponent {
 		this.loadAuditEntries();
 	}
 
-	private updateDateRange() {
+	updateDateRange() {
 		this.showGteDatepicker = false;
 		this.showLteDatepicker = false;
 		this.loadAuditEntries();
 	}
 
-	private typeaheadOnSelect(e: any) {
+	typeaheadOnSelect(e: any) {
 		this.queryUserObj = e;
 		this.refresh();
 	}
 
-	private viewMore(auditEntry: any, type: string) {
+	viewMore(auditEntry: any, type: string) {
 		switch (type) {
 			case 'viewDetails':
 				this.modal.open(AuditViewDetailModal, overlayConfigFactory({auditEntry: auditEntry}, AuditViewDetailModalContext));
@@ -158,7 +159,7 @@ export class AuditComponent {
 		}
 	}
 
-	private refresh() {
+	refresh() {
 		this.pagingOpts.reset();
 
 		// If actor search bar is empty, clear the actor object, otherwise retain it
@@ -169,7 +170,7 @@ export class AuditComponent {
 		this.loadAuditEntries();
 	}
 
-	private getTimeFilterQueryObject(): any {
+	getTimeFilterQueryObject(): any {
 		let timeQuery: any = null;
 
 		if (this.dateRangeFilter.selected === 'choose') {
@@ -192,7 +193,7 @@ export class AuditComponent {
 		return timeQuery;
 	}
 
-	private buildSearchQuery(): any {
+	buildSearchQuery(): any {
 		let query: any = {};
 
 		if (null != this.queryUserObj && null != this.queryUserObj.item._id) {
@@ -223,7 +224,7 @@ export class AuditComponent {
 		return query;
 	}
 
-	private loadAuditEntries() {
+	loadAuditEntries() {
 		let query = this.buildSearchQuery();
 
 		this.auditService.search(query, '', this.pagingOpts)
@@ -242,5 +243,9 @@ export class AuditComponent {
 					this.auditEntriesLoaded = false;
 				}
 			});
+	}
+
+	formatDate(date: Date) {
+		return new DatePipe('en-US').transform(date, 'shortDate');
 	}
 }

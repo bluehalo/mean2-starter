@@ -3,18 +3,18 @@ import { User } from '../admin/user.class';
 import { AuthenticationService } from '../admin/authentication/authentication.service';
 
 export class CoreComponent {
-	protected config: any;
+	config: any;
 
-	protected banner: any;
-	protected copyright: string;
-	protected pki: boolean;
-	protected collapsed: boolean = true;
+	banner: any;
+	copyright: any;
+	pki: boolean;
+	collapsed: boolean = true;
 
-	protected user: User;
+	user: User;
 
 	constructor(
-		protected auth: AuthenticationService,
-		protected configService: ConfigService
+		public auth: AuthenticationService,
+		public configService: ConfigService
 	) {}
 
 	ngOnInit() {

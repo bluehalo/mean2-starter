@@ -12,21 +12,21 @@ import { User } from '../user.class';
 })
 export class ForgotPasswordComponent {
 
-	private user: User;
+	user: User;
 
-	private error: string;
+	error: string;
 
-	private success: string;
+	success: string;
 
-	private pending: string;
+	pending: string;
 
-	private username: string;
+	username: string;
 
 	constructor(
-		private router: Router,
-		private authService: AuthenticationService,
-		private userStateService: UserStateService,
-		private configService: ConfigService
+		public router: Router,
+		public authService: AuthenticationService,
+		public userStateService: UserStateService,
+		public configService: ConfigService
 	) {}
 
 	ngOnInit() {
@@ -44,7 +44,7 @@ export class ForgotPasswordComponent {
 			});
 	}
 
-	private requestPasswordReset() {
+	requestPasswordReset() {
 		this.success = null;
 		this.error = null;
 

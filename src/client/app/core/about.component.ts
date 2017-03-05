@@ -10,13 +10,13 @@ import { ConfigService } from '../core/config.service';
 })
 export class AboutComponent {
 
-	private version: string = '';
+	version: string = '';
 
-	private adminEmail: string = '';
+	adminEmail: string = '';
 
-	private instanceName: string = '';
+	instanceName: string = '';
 
-	constructor(private configService: ConfigService) {
+	constructor(public configService: ConfigService) {
 	}
 
 	ngOnInit() {
@@ -28,7 +28,7 @@ export class AboutComponent {
 			});
 	}
 
-	private getMailToString() {
+	getMailToString() {
 		return `mailto:${this.adminEmail}?Subject=${this.instanceName}%20Support`;
 	}
 }

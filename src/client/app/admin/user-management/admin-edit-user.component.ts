@@ -14,20 +14,20 @@ import { AlertService } from '../../shared/alert.service';
 })
 export class AdminUpdateUserComponent extends ManageUserComponent {
 
-	private mode = 'admin-edit';
+	mode = 'admin-edit';
 
-	private possibleRoles = Role.ROLES;
+	possibleRoles = Role.ROLES;
 
-	private id: string;
+	id: string;
 
-	private sub: any;
+	sub: any;
 
 	constructor(
 		router: Router,
 		configService: ConfigService,
 		alertService: AlertService,
-		private adminService: AdminService,
-		private route: ActivatedRoute
+		public adminService: AdminService,
+		public route: ActivatedRoute
 	) {
 		super(router, configService, alertService);
 	}

@@ -17,23 +17,23 @@ import { TagsService } from './tags.service';
 })
 export class ManageTagComponent {
 
-	private team: Team;
+	team: Team;
 
-	private owner: Owner;
+	owner: Owner;
 
-	private mode: string;
+	mode: string;
 
-	private modeDisplay: string;
+	modeDisplay: string;
 
-	private tag: Tag;
+	tag: Tag;
 
-	private error: string = null;
+	error: string = null;
 
 	constructor(
-		private router: Router,
-		private route: ActivatedRoute,
-		private teamsService: TeamsService,
-		private tagsService: TagsService
+		public router: Router,
+		public route: ActivatedRoute,
+		public teamsService: TeamsService,
+		public tagsService: TagsService
 	) {
 	}
 
@@ -72,7 +72,7 @@ export class ManageTagComponent {
 	}
 
 
-	private save() {
+	save() {
 		let result: Observable<Response> = this.mode === 'create' ? this.create() : this.update();
 		result.subscribe(
 			() => {
@@ -85,11 +85,11 @@ export class ManageTagComponent {
 			});
 	}
 
-	private create(): Observable<Response> {
+	create(): Observable<Response> {
 		return this.tagsService.createTag(this.tag);
 	}
 
-	private update(): Observable<Response> {
+	update(): Observable<Response> {
 		return this.tagsService.updateTag(this.tag);
 	}
 
