@@ -149,7 +149,6 @@ module.exports = function() {
 									}
 								]
 							};
-
 							return Resource.find(query).exec();
 						})
 					.then(
