@@ -74,6 +74,10 @@ module.exports = function() {
 			sortParams[sort] = dir === 'ASC' ? 1 : -1;
 		}
 
+		const searchConfig = {
+			query: query, sorting: sortParams, page: page, limit: limit
+		};
+
 		let searchPromise;
 		// If user is not an admin, constrain the results to the user's teams
 		if (null == user.roles || !user.roles.admin) {
@@ -86,16 +90,16 @@ module.exports = function() {
 							}
 						});
 
-						query.$or = [{'owner.type': 'team', 'owner._id': {$in: teamIds}}, {
+						searchConfig.query.$or = [{'owner.type': 'team', 'owner._id': {$in: teamIds}}, {
 							'owner.type': 'user',
 							'owner._id': user._id
 						}];
 
-						return Resource.pagingSearch(query, sortParams, page, limit);
+						return Resource.pagingSearch(searchConfig);
 					});
 		}
 		else {
-			searchPromise = Resource.pagingSearch(query, sortParams, page, limit);
+			searchPromise = Resource.pagingSearch(searchConfig);
 		}
 
 		return searchPromise
