@@ -18,6 +18,8 @@
 	},
 
 	"dependencies": {
+		"@ngx-translate/core": "^6.0.0",
+		"@ngx-translate/http-loader": "0.0.3",
 		"async": "2.1",
 		"body-parser": "1.16",
 		"bunyan": "1.8",
