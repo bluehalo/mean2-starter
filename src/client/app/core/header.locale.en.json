@@ -1,0 +1,11 @@
+{
+	"HEADER": {
+		"AUDIT_ACTIVITY": "Audit Activity",
+		"MY_ACCOUNT": "My Account",
+		"MY_TEAMS": "My Teams",
+		"REQUEST_ACCOUNT": "Request Account",
+		"SIGN_IN": "Sign In",
+		"SIGN_OUT": "Sign out",
+		"TOGGLE_NAVBAR": "Toggle Navbar"
+	}
+}
