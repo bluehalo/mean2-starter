@@ -1,10 +1,11 @@
 'use strict';
 
 let
-	path = require('path').posix,
+	path = require('path'),
 	webpack = require('webpack'),
 
-	assets = require(path.resolve('./config/assets.js'));
+	config = require(path.posix.resolve('./src/server/config.js')),
+	assets = require(path.posix.resolve('./config/assets.js'));
 
 module.exports = (mode) => {
 
@@ -49,10 +50,10 @@ module.exports = (mode) => {
 	 *   'application' - Application code
 	 */
 	wpConfig.entry = (test)? {
-		application: path.resolve('./src/client/main.ts')
+		application: path.posix.resolve('./src/client/main.ts')
 	} : {
-		application: path.resolve('./src/client/main.ts'),
-		vendor: path.resolve('./src/client/vendor.ts')
+		application: path.posix.resolve('./src/client/main.ts'),
+		vendor: path.posix.resolve('./src/client/vendor.ts')
 	};
 
 
@@ -64,15 +65,15 @@ module.exports = (mode) => {
 
 	// If build mode set up for static loading of resources with cache busting
 	if(build) {
-		wpConfig.output.path = path.resolve('./public');
+		wpConfig.output.path = path.posix.resolve('./public');
 		wpConfig.output.publicPath = '/';
 		wpConfig.output.filename = '[name].[chunkhash].js';
 		wpConfig.output.chunkFilename = '[id].[chunkhash].chunk.js';
 	}
 	// If develop mode, set up for dev middleware
 	else if(develop) {
-		wpConfig.output.path = path.resolve('./public');
-		wpConfig.output.publicPath = '/dev/';
+		wpConfig.output.path = path.posix.resolve('./public');
+		wpConfig.output.publicPath= `${config.app.url.protocol}://${config.app.url.host}:${config.devPorts.webpack}/dev/`;
 		wpConfig.output.filename = '[name].js';
 		wpConfig.output.chunkFilename = '[name].js';
 	}
@@ -104,7 +105,7 @@ module.exports = (mode) => {
 				test: /\.ts$/,
 				loader: 'ts-loader',
 				options: {
-					configFileName: path.resolve('/tsconfig.json')
+					configFileName: path.posix.resolve('/tsconfig.json')
 				}
 			},
 

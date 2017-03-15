@@ -37,6 +37,11 @@ function initLocalVariables(app) {
 
 	// Development
 	app.locals.developmentMode = config.mode === 'development';
+	if(app.locals.developmentMode) {
+		app.locals.webpackDevServer = `${config.app.baseUrlWithoutPort}:${config.devPorts.webpack}`;
+	}
+
+	// Live Reload
 	app.locals.liveReload = config.liveReload;
 	if (config.liveReload) {
 		app.locals.liveReloadScript = `${config.app.baseUrlWithoutPort}:${config.liveReload.port}/livereload.js`;
@@ -192,9 +197,6 @@ function initModulesClientRoutes(app) {
 	// Expose the bundled production app files (with caching)
 	app.use('/', express.static(path.resolve('./public'), { maxAge: 31536000000 }));
 
-	// Expose the libraries (dev or prod based on assets.js configuration)
-	//app.use('/lib', express.static(path.resolve('./public/lib'), { maxAge: 31536000000 }));
-
 	// Expose the source application resources that aren't compiled/bundled
 	// These are not cached for the time being since they are served from the subdirs directly and there is no
 	// way to easily cache bust them
@@ -218,10 +220,15 @@ function initModulesServerPolicies(app) {
  * Configure the modules server routes
  */
 function initModulesServerRoutes(app) {
-	// Globbing routing files
+	// Init the global route prefix
+	let router = express.Router();
+
+	// Globbing routing files to be behind a common path
 	config.files.server.routes.forEach(function (routePath) {
-		require(path.resolve(routePath))(app);
+		router.use(require(path.posix.resolve(routePath)));
 	});
+
+	app.use(router);
 }
 
 /**
@@ -258,25 +265,6 @@ function initErrorRoutes(app) {
 	});
 }
 
-function initWebpack(app) {
-	if(config.mode === 'development') {
-
-		let webpackDevMiddleware = require('webpack-dev-middleware');
-		let webpackConfig = require(path.resolve('./config/build/webpack.conf.js'))('develop');
-		let webpack = require('webpack')(webpackConfig);
-
-		// Configure Express to use the webpack dev middleware
-		app.use(webpackDevMiddleware(webpack, {
-			publicPath: webpackConfig.output.publicPath,
-			stats: { colors: true, chunks: false },
-			watchOptions: {
-				aggregateTimeout: 300,
-				poll: 1000
-			}
-		}));
-	}
-}
-
 /**
  * Configure Socket.io
  */
@@ -305,9 +293,6 @@ module.exports.init = function (db) {
 
 	// Initialize Express view engine
 	initViewEngine(app);
-
-	// Initialize Webpack
-	initWebpack(app);
 
 	// Initialize modules static client routes
 	initModulesClientRoutes(app);

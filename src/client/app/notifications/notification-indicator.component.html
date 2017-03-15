@@ -1,0 +1,12 @@
+	<!-- TODO: When forking the starter and enabling notifications, you must provide an implementation of a notification viewer and configure the route -->
+	<a *ngIf="notificationsEnabled" [routerLink]="['/']" class="dropdown-toggle btn-icon" (click)="indicatorClicked()">
+			<span class="fa-stack fa">
+				<i class="fa fa-bell-o fa-stack-2x"></i>
+			</span>
+		<span *ngIf="newAlerts && unreadCount < 50" class="badge notification-badge">
+			{{ unreadCount }}
+		</span>
+		<span *ngIf="newAlerts && unreadCount >= 50" class="badge notification-badge">
+			<i class="fa fa-circle"></i>
+		</span>
+	</a>

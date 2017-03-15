@@ -1,32 +1,34 @@
 'use strict';
 
-var
-	path = require('path').posix,
+let
+	express = require('express'),
+	path = require('path'),
 
-	deps = require(path.resolve('./src/server/dependencies.js')),
-	logger = deps.logger,
+	logger = require(path.posix.resolve('./src/server/lib/bunyan.js')).logger,
 
-	users = require(path.resolve('./src/server/app/admin/controllers/users.server.controller.js')),
-	accessChecker = require(path.resolve('./src/server/app/access-checker/controllers/access-checker.server.controller.js'));
+	users = require(path.posix.resolve('./src/server/app/admin/controllers/users.server.controller.js')),
+	accessChecker = require(path.posix.resolve('./src/server/app/access-checker/controllers/access-checker.server.controller.js'));
 
-module.exports = function(app) {
-	/**
-	 * Routes that only apply to the 'proxy-pki' passport strategy
-	 */
-	logger.info('Configuring proxy-pki user authentication routes.');
 
-	app.route('/access-checker/entry/:key')
-		.post(users.hasAdminAccess, accessChecker.refreshEntry)
-		.delete(users.hasAdminAccess, accessChecker.deleteEntry);
+/**
+ * Routes that only apply to the 'proxy-pki' passport strategy
+ */
+logger.info('Configuring proxy-pki user authentication routes.');
 
-	app.route('/access-checker/entries/search')
-		.post(users.hasAdminAccess, accessChecker.searchEntries);
+let router = express.Router();
 
-	app.route('/access-checker/entries/match')
-		.post(users.hasAdminAccess, accessChecker.matchEntries);
+router.route('/access-checker/entry/:key')
+	.post(users.hasAdminAccess, accessChecker.refreshEntry)
+	.delete(users.hasAdminAccess, accessChecker.deleteEntry);
 
-	// Refresh current user
-	app.route('/access-checker/user')
-		.post(users.has(users.requiresLogin), accessChecker.refreshCurrentUser);
+router.route('/access-checker/entries/search')
+	.post(users.hasAdminAccess, accessChecker.searchEntries);
 
-};
+router.route('/access-checker/entries/match')
+	.post(users.hasAdminAccess, accessChecker.matchEntries);
+
+// Refresh current user
+router.route('/access-checker/user')
+	.post(users.has(users.requiresLogin), accessChecker.refreshCurrentUser);
+
+module.exports = router;

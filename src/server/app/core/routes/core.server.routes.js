@@ -1,9 +1,15 @@
 'use strict';
 
-var path = require('path').posix,
-	core = require(path.resolve('./src/server/app/core/controllers/core.server.controller.js'));
+let
+	express = require('express'),
+	path = require('path'),
 
-module.exports = function(app) {
-	// Root routing
-	app.route('/').get(core.index);
-};
+	core = require(path.posix.resolve('./src/server/app/core/controllers/core.server.controller.js'));
+
+
+let router = express.Router();
+
+// Root routing
+router.route('/').get(core.index);
+
+module.exports = router;

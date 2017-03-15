@@ -1,16 +1,19 @@
 'use strict';
 
-let path = require('path').posix,
+let
+	express = require('express'),
+	path = require('path'),
 
-	users = require(path.resolve('./src/server/app/admin/controllers/users.server.controller.js')),
-	auditController = require(path.resolve('./src/server/app/audit/controllers/audit.server.controller.js'));
+	users = require(path.posix.resolve('./src/server/app/admin/controllers/users.server.controller.js')),
+	auditController = require(path.posix.resolve('./src/server/app/audit/controllers/audit.server.controller.js'));
 
-module.exports = function(app) {
 
-	app.route('/audit')
-		.post(users.hasAuditorAccess, auditController.search);
+let router = express.Router();
 
-	app.route('/audit/distinctValues')
-		.get(users.hasAuditorAccess, auditController.getDistinctValues);
+router.route('/audit')
+	.post(users.hasAuditorAccess, auditController.search);
 
-};
+router.route('/audit/distinctValues')
+	.get(users.hasAuditorAccess, auditController.getDistinctValues);
+
+module.exports = router;

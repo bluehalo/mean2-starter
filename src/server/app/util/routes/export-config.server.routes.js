@@ -1,14 +1,18 @@
 'use strict';
 
-var
-	path = require('path').posix,
 
-	users = require(path.resolve('./src/server/app/admin/controllers/users.server.controller.js')),
-	exportConfig = require(path.resolve('./src/server/app/util/controllers/export-config.server.controller.js'));
+let
+	express = require('express'),
+	path = require('path'),
+
+	users = require(path.posix.resolve('./src/server/app/admin/controllers/users.server.controller.js')),
+	exportConfig = require(path.posix.resolve('./src/server/app/util/controllers/export-config.server.controller.js'));
 
 
-module.exports = function(app) {
-	// Admin post CSV config parameters
-	app.route('/requestExport')
-		.post(users.hasAccess, exportConfig.requestExport);
-};
+let router = express.Router();
+
+// Admin post CSV config parameters
+router.route('/requestExport')
+	.post(users.hasAccess, exportConfig.requestExport);
+
+module.exports = router;
