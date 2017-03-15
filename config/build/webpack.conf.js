@@ -171,6 +171,11 @@ module.exports = (mode) => {
 		wpConfig.plugins.push(new webpack.BannerPlugin(
 			{ banner: assets.bannerString, raw: true, entryOnly: false }
 		));
+
+		// Pass NODE_ENV through webpack so bundled modules can see it
+		wpConfig.plugins.push(new webpack.DefinePlugin({
+			'NODE_ENV': '"production"'
+		}));
 	}
 
 	wpConfig.plugins.push(
