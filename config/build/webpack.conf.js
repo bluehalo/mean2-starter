@@ -22,7 +22,9 @@ module.exports = (mode) => {
 	const develop = (mode === 'develop');
 	const test = mode.startsWith('test');
 	const coverage = mode.includes(':coverage');
-	const aot = true;
+
+	// For testing, use this to override aot mode
+	const aot = build;
 
 
 	// The main webpack config object to return
@@ -53,12 +55,8 @@ module.exports = (mode) => {
 	 *   'application' - Application code
 	 */
 	if (test) {
-		wpConfig.entry = { application: path.posix.resolve('./src/client/main.ts') };
-	}
-	else if (aot) {
 		wpConfig.entry = {
-			application: path.posix.resolve('./src/client/main-aot.ts'),
-			vendor: path.posix.resolve('./src/client/vendor.ts')
+			application: path.posix.resolve('./src/client/main.ts')
 		};
 	}
 	else {
@@ -111,10 +109,6 @@ module.exports = (mode) => {
 
 		// Configured loaders
 		loaders: [
-			{
-				test: /\.ts$/,
-				loader: 'angular2-template-loader'
-			},
 
 			// CSS loader
 			{ test: /\.css$/, loaders: [ 'style-loader?insertAt=top', 'css-loader' ] },
@@ -134,29 +128,47 @@ module.exports = (mode) => {
 
 			// HTML file loader (for angular2 templates)
 			{ test: /\.html$/, loader: 'html-loader' }
+
 		]
 
 	};
 
 	if (develop) {
+
+		// In develop mode, we want to add source maps from all asymmetrik components
 		wpConfig.module.loaders.push({
 			test: /node_modules\/@asymmetrik.*\.js$/,
 			loader: 'source-map-loader',
 			enforce: 'pre'
 		});
+
 	}
 
 	if (aot) {
-		wpConfig.module.loaders.unshift({ test: /\.ts$/, loader: '@ngtools/webpack' });
+
+		// If we're in AOT mode, we want to build with the webpack loader
+		wpConfig.module.loaders.unshift(
+			{ test: /\.ts$/, loader: '@ngtools/webpack' }
+		);
+
 	}
 	else {
-		wpConfig.module.loaders.unshift({
-			test: /\.ts$/,
-			loader: 'ts-loader',
-			options: {
-				configFileName: path.posix.resolve('./tsconfig.json')
+
+		// Otherwise, we build with the regular ts-loader and template loader
+		wpConfig.module.loaders.unshift(
+			{
+				test: /\.ts$/,
+				loader: 'ts-loader',
+				options: {
+					configFileName: path.posix.resolve('./tsconfig.json')
+				}
+			},
+			{
+				test: /\.ts$/,
+				loader: 'angular2-template-loader'
 			}
-		});
+		);
+
 	}
 
 
@@ -190,31 +202,42 @@ module.exports = (mode) => {
 
 	}
 
+	// Always add these plugins
 	wpConfig.plugins.push(
+
+		// Stats writer generates a file with webpack stats that can be analyzed at https://chrisbateman.github.io/webpack-visualizer/
 		new StatsWriterPlugin({
 			chunkModules: true,
-			filename: 'webpack-stats.json',
+			filename: '../reports/webpack-stats.json',
 			fields: null
 		}),
+
+		// Specify all global packages
 		new webpack.ProvidePlugin({
-			d3: 'd3'
+			// d3: 'd3'
 		}),
+
+		// Context replacement for ng2
 		new webpack.ContextReplacementPlugin(
 			/angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/
 		)
 	);
 
 	if (aot) {
+
+		// If we're in AOT mode, we need to configure the webpack AOT plugin
 		wpConfig.plugins.push(
 			new ngToolsWebpack.AotPlugin({
 				tsConfigPath: './tsconfig-aot.json',
 				entryModule: path.posix.resolve('./src/client/app/app.module#AppModule')
 			})
 		);
+
 	}
 
-	// Chunk common code if we're not running in test mode
 	if (!test) {
+
+		// Chunk common code if we're not running in test mode
 		wpConfig.plugins.push(
 			new webpack.optimize.CommonsChunkPlugin({
 				name: [ 'application', 'vendor' ],
@@ -222,9 +245,12 @@ module.exports = (mode) => {
 				filename: (build) ? '[name].[chunkhash].js' : '[name].js'
 			})
 		);
+
 	}
 
 	if (coverage) {
+
+		// Coverage if we're running with coverage enabled
 		wpConfig.module.loaders.push({
 			test: /\.(js|ts)$/,
 			loader: 'sourcemap-istanbul-instrumenter-loader?force-sourcemap=true',
@@ -234,6 +260,7 @@ module.exports = (mode) => {
 				/node_modules/
 			]
 		});
+
 	}
 
 	return wpConfig;
