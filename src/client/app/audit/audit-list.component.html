@@ -55,9 +55,9 @@
 				<div class="row col-md-12">
 					<div style="position: absolute; z-index: 999;">
 						<datepicker [hidden]="!showGteDatepicker"
-												[(ngModel)]="queryStartDate"
-												(ngModelChange)="updateDateRange()"
-												[yearRange]="1">
+									[(ngModel)]="queryStartDate"
+									(ngModelChange)="updateDateRange()"
+									[yearRange]="1">
 						</datepicker>
 					</div>
 				</div>
@@ -75,9 +75,9 @@
 				<div class="row col-md-12">
 					<div style="position: absolute; z-index: 999;">
 						<datepicker [hidden]="!showLteDatepicker"
-												[(ngModel)]="queryEndDate"
-												(ngModelChange)="updateDateRange()"
-												[yearRange]="1">
+									[(ngModel)]="queryEndDate"
+									(ngModelChange)="updateDateRange()"
+									[yearRange]="1">
 						</datepicker>
 					</div>
 				</div>
@@ -125,7 +125,7 @@
 			</td>
 			<td >
 				<div class="hide-overflow" style="max-width:200px;">
-					{{entry?.created | date:"yyyy-MM-dd HH:mm:ss 'Z'":'UTC' }}
+					{{entry?.created | date:"yyyy-MM-dd HH:mm:ss 'Z'" }}
 				</div>
 			</td>
 			<td >

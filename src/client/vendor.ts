@@ -38,7 +38,8 @@ import '@angular/core';
 import '@angular/forms';
 import '@angular/http';
 import '@angular/platform-browser';
-import '@angular/platform-browser-dynamic';
+// We don't want to pull platform-browser-dynamic into our aot bundle
+// import '@angular/platform-browser-dynamic';
 import '@angular/router';
 
 

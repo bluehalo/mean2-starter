@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "es5",
-		"module": "commonjs",
+		"module": "es2015",
 
 		"moduleResolution": "node",
 
@@ -20,11 +20,10 @@
 		"noUnusedLocals": false,
 
 		"sourceMap": true
-
 	},
 
-	"files": [
-		"./src/client/main.ts"
-	]
+	"angularCompilerOptions": {
+		"genDir": "./aot"
+	}
 }
 

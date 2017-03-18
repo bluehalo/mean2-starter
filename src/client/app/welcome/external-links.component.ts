@@ -6,9 +6,11 @@ import { ConfigService } from '../core/config.service';
 	templateUrl: './external-links.component.html'
 })
 export class ExternalLinksComponent {
+
+	links: any;
+
 	private config: any;
 	private externalLinksEnabled: boolean;
-	private links: any;
 
 	constructor(private configService: ConfigService) {
 	}
@@ -23,7 +25,7 @@ export class ExternalLinksComponent {
 			});
 	}
 
-	private handleLinkClick(evt: any) {
+	handleLinkClick(evt: any) {
 		evt.stopPropagation();
 	}
 

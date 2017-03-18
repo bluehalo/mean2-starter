@@ -3,22 +3,22 @@ import { User } from '../admin/user.class';
 import { AuthenticationService } from '../admin/authentication/authentication.service';
 
 export class CoreComponent {
+
+	user: User;
+	banner: any;
+	copyright: any;
+	pki: boolean;
+	collapsed: boolean = true;
+
 	protected config: any;
 
-	protected banner: any;
-	protected copyright: string;
-	protected pki: boolean;
-	protected collapsed: boolean = true;
-
-	protected user: User;
-
 	constructor(
-		protected auth: AuthenticationService,
+		protected authService: AuthenticationService,
 		protected configService: ConfigService
 	) {}
 
 	ngOnInit() {
-		this.user = this.auth.getCurrentUser();
+		this.user = this.authService.getCurrentUser();
 
 		this.configService.getConfig()
 			.subscribe( (config: any) =>  {

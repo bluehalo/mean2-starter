@@ -11,17 +11,12 @@ import { ConfigService } from '../../core/config.service';
 })
 export class ResetPasswordComponent {
 
-	private token: string;
-
-	private invalid: boolean = true;
-
-	private error: string;
-
-	private success: string;
-
-	private newPassword: string;
-
-	private verifyPassword: string;
+	token: string;
+	invalid: boolean = true;
+	error: string;
+	success: string;
+	newPassword: string;
+	verifyPassword: string;
 
 	constructor(
 		private router: Router,
@@ -52,20 +47,20 @@ export class ResetPasswordComponent {
 			});
 	}
 
-	private validateToken() {
+	validateToken() {
 		if (null != this.token) {
 			this.authService.validateToken(this.token)
 				.subscribe(
-					(result: any) => {
+					(_result: any) => {
 						this.invalid = false;
 					},
-					(err: any) => {
+					(_err: any) => {
 						this.invalid = true;
 					});
 		}
 	}
 
-	private resetPassword() {
+	resetPassword() {
 		this.success = null;
 		this.error = null;
 
@@ -78,7 +73,7 @@ export class ResetPasswordComponent {
 
 		this.authService.resetPassword(this.token, this.newPassword)
 			.subscribe(
-				(result: any) => {
+				(_result: any) => {
 					this.newPassword = null;
 					this.verifyPassword = null;
 

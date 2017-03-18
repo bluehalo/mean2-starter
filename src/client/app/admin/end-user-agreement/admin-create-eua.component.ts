@@ -19,8 +19,8 @@ export class AdminCreateEuaComponent extends ManageEuaComponent {
 		router: Router,
 		auth: AuthenticationService,
 		alertService: AlertService,
-		private euaService: EuaService,
-		protected modal: Modal
+		modal: Modal,
+		protected euaService: EuaService
 
 	) {
 		super(router, auth, alertService, modal);

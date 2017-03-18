@@ -1,8 +1,10 @@
 'use strict';
 
-let
+const
+	ngToolsWebpack = require('@ngtools/webpack'),
 	path = require('path'),
 	webpack = require('webpack'),
+	StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin,
 
 	config = require(path.posix.resolve('./src/server/config.js')),
 	assets = require(path.posix.resolve('./config/assets.js'));
@@ -20,6 +22,7 @@ module.exports = (mode) => {
 	const develop = (mode === 'develop');
 	const test = mode.startsWith('test');
 	const coverage = mode.includes(':coverage');
+	const aot = true;
 
 
 	// The main webpack config object to return
@@ -29,11 +32,11 @@ module.exports = (mode) => {
 	/**
 	 * Source map configuration
 	 */
-	if(build) {
+	if (build) {
 		// Disable sourcemaps for prod build since they don't work anyways
 		wpConfig.devtool = false;
 	}
-	else if(test) {
+	else if (test) {
 		// Inline sourcemaps required for coverage to work
 		wpConfig.devtool = 'inline-source-map';
 	}
@@ -49,12 +52,21 @@ module.exports = (mode) => {
 	 *   'vendor' - All third-party dependencies of the application
 	 *   'application' - Application code
 	 */
-	wpConfig.entry = (test)? {
-		application: path.posix.resolve('./src/client/main.ts')
-	} : {
-		application: path.posix.resolve('./src/client/main.ts'),
-		vendor: path.posix.resolve('./src/client/vendor.ts')
-	};
+	if (test) {
+		wpConfig.entry = { application: path.posix.resolve('./src/client/main.ts') };
+	}
+	else if (aot) {
+		wpConfig.entry = {
+			application: path.posix.resolve('./src/client/main-aot.ts'),
+			vendor: path.posix.resolve('./src/client/vendor.ts')
+		};
+	}
+	else {
+		wpConfig.entry = {
+			application: path.posix.resolve('./src/client/main.ts'),
+			vendor: path.posix.resolve('./src/client/vendor.ts')
+		};
+	}
 
 
 	/**
@@ -64,14 +76,14 @@ module.exports = (mode) => {
 	wpConfig.output = {};
 
 	// If build mode set up for static loading of resources with cache busting
-	if(build) {
+	if (build) {
 		wpConfig.output.path = path.posix.resolve('./public');
 		wpConfig.output.publicPath = '/';
 		wpConfig.output.filename = '[name].[chunkhash].js';
 		wpConfig.output.chunkFilename = '[id].[chunkhash].chunk.js';
 	}
 	// If develop mode, set up for dev middleware
-	else if(develop) {
+	else if (develop) {
 		wpConfig.output.path = path.posix.resolve('./public');
 		wpConfig.output.publicPath= `${config.app.url.protocol}://${config.app.url.host}:${config.devPorts.webpack}/dev/`;
 		wpConfig.output.filename = '[name].js';
@@ -99,16 +111,6 @@ module.exports = (mode) => {
 
 		// Configured loaders
 		loaders: [
-
-			// Typescript loader
-			{
-				test: /\.ts$/,
-				loader: 'ts-loader',
-				options: {
-					configFileName: path.posix.resolve('./tsconfig.json')
-				}
-			},
-
 			{
 				test: /\.ts$/,
 				loader: 'angular2-template-loader'
@@ -144,6 +146,19 @@ module.exports = (mode) => {
 		});
 	}
 
+	if (aot) {
+		wpConfig.module.loaders.unshift({ test: /\.ts$/, loader: '@ngtools/webpack' });
+	}
+	else {
+		wpConfig.module.loaders.unshift({
+			test: /\.ts$/,
+			loader: 'ts-loader',
+			options: {
+				configFileName: path.posix.resolve('./tsconfig.json')
+			}
+		});
+	}
+
 
 	/**
 	 * Webpack plugins
@@ -151,6 +166,7 @@ module.exports = (mode) => {
 	wpConfig.plugins = [];
 
 	if(build) {
+
 		// Minify if we're in build mode
 		wpConfig.plugins.push(
 			new webpack.optimize.UglifyJsPlugin({
@@ -171,9 +187,15 @@ module.exports = (mode) => {
 		wpConfig.plugins.push(new webpack.BannerPlugin(
 			{ banner: assets.bannerString, raw: true, entryOnly: false }
 		));
+
 	}
 
 	wpConfig.plugins.push(
+		new StatsWriterPlugin({
+			chunkModules: true,
+			filename: 'webpack-stats.json',
+			fields: null
+		}),
 		new webpack.ProvidePlugin({
 			d3: 'd3'
 		}),
@@ -182,17 +204,27 @@ module.exports = (mode) => {
 		)
 	);
 
+	if (aot) {
+		wpConfig.plugins.push(
+			new ngToolsWebpack.AotPlugin({
+				tsConfigPath: './tsconfig-aot.json',
+				entryModule: path.posix.resolve('./src/client/app/app.module#AppModule')
+			})
+		);
+	}
+
 	// Chunk common code if we're not running in test mode
-	if(!test) {
+	if (!test) {
 		wpConfig.plugins.push(
 			new webpack.optimize.CommonsChunkPlugin({
 				name: [ 'application', 'vendor' ],
+				minChunks: Infinity,
 				filename: (build) ? '[name].[chunkhash].js' : '[name].js'
 			})
 		);
 	}
 
-	if(coverage) {
+	if (coverage) {
 		wpConfig.module.loaders.push({
 			test: /\.(js|ts)$/,
 			loader: 'sourcemap-istanbul-instrumenter-loader?force-sourcemap=true',
