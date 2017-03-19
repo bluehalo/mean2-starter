@@ -8,7 +8,6 @@ import { UserSignupComponent } from './admin/user-management/user-signup.compone
 import { UpdateUserComponent } from './admin/user-management/edit-user.component';
 import { InvalidResourceComponent } from './core/invalid-resource.component';
 import { InvalidCertificateComponent } from './admin/authentication/invalid-certificate.component';
-import { AuditComponent } from './audit/audit.component';
 import { UserEuaComponent } from './admin/end-user-agreement/user-eua.component';
 import { NoAccessComponent } from './admin/authentication/no-access.component';
 import { LoggedInComponent } from './core/logged-in.component';
@@ -77,11 +76,7 @@ import { InactiveComponent } from './admin/authentication/inactive.component';
 				},
 				{
 					path: 'audit',
-					canActivate: [AuthGuard],
-					component: AuditComponent,
-					data: {
-						roles: ['auditor']
-					}
+					loadChildren: './audit/audit.module#AuditModule'
 				},
 				{
 					path: 'user-eua',

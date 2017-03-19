@@ -4,18 +4,18 @@ import { Response } from '@angular/http';
 import { overlayConfigFactory } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 
-import { CacheEntriesService, CacheEntry } from './cache-entries.service';
-import { AlertService } from '../shared/alert.service';
-import { SortDirection, SortDisplayOption } from '../shared/result-utils.class';
-import { PagingOptions } from '../shared/pager.component';
-import { TableSortOptions } from '../shared/pageable-table/pageable-table.component';
+import { CacheEntriesService, CacheEntry } from '../cache-entries.service';
+import { AlertService } from '../../shared/alert.service';
+import { SortDirection, SortDisplayOption } from '../../shared/result-utils.class';
+import { PagingOptions } from '../../shared/pager.component';
+import { TableSortOptions } from '../../shared/pageable-table/pageable-table.component';
 import { ViewCacheEntryModal, ViewCacheEntryModalContext } from './view-cache-entry.component';
 
 @Component({
 	selector: 'cache-entries',
-	templateUrl: './admin-cache-entries.component.html'
+	templateUrl: 'list-cache-entries.component.html'
 })
-export class AdminCacheEntriesComponent {
+export class ListCacheEntriesComponent {
 
 	cacheEntries: any[] = [];
 	search = '';

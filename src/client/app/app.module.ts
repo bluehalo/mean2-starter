@@ -13,7 +13,6 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AccessCheckerModule } from './access-checker/access-checker.module';
 import { AdminModule } from './admin/admin.module';
-import { AuditModule } from './audit/audit.module';
 import { DemoModule } from './demo/demo.module';
 import { HelpModule } from './help/help.module';
 import { ResourcesModule } from './resources/resources.module';
@@ -59,7 +58,6 @@ export function initializerFactory () {
 
 		AccessCheckerModule,
 		AdminModule,
-		AuditModule,
 		DemoModule,
 		HelpModule,
 		NotificationsModule,
