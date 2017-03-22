@@ -51,6 +51,7 @@ exports.requestExport = function(req, res) {
 };
 
 exports.exportCSV = function(req, res, filename, columns, data) {
+
 	if (null !== data) {
 		// Set up streaming res
 		res.set('Content-Type', 'text/csv;charset=utf-8');
