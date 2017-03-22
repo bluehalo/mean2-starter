@@ -51,11 +51,10 @@ exports.requestExport = function(req, res) {
 };
 
 exports.exportCSV = function(req, res, filename, columns, data) {
-
 	if (null !== data) {
 		// Set up streaming res
 		res.set('Content-Type', 'text/csv;charset=utf-8');
-		res.set('Content-Disposition', 'attachment;filename=' + filename);
+		res.set('Content-Disposition', `attachment;filename="${filename}"`);
 		res.set('Transfer-Encoding', 'chunked');
 
 		// Put into stream the data object
@@ -97,7 +96,7 @@ exports.exportPlaintext = function(req, res, filename, text) {
 	if (null !== text) {
 		// Set up streaming res
 		res.set('Content-Type', 'text/plain;charset=utf-8');
-		res.set('Content-Disposition', 'attachment;filename=' + filename);
+		res.set('Content-Disposition', `attachment;filename="${filename}"`);
 		res.set('Transfer-Encoding', 'chunked');
 
 		// Put into stream the data object
