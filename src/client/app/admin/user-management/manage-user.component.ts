@@ -23,8 +23,8 @@ export abstract class ManageUserComponent {
 	user: User;
 
 	constructor(
-		private router: Router,
-		private configService: ConfigService,
+		public router: Router,
+		public configService: ConfigService,
 		public alertService: AlertService
 	) {
 	}

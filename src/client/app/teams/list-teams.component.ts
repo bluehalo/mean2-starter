@@ -20,19 +20,23 @@ import { AlertService } from '../shared/alert.service';
 export class ListTeamsComponent {
 
 	user: TeamMember;
+
 	teams: Team[] = [];
+
 	search: string = '';
+
 	sortOptions: TableSortOptions = {
 		name: new SortDisplayOption('Team Name', 'name', SortDirection.asc)
 	};
+
 	pagingOptions: PagingOptions;
 
 	constructor(
-		private router: Router,
-		private route: ActivatedRoute,
-		private modal: Modal,
-		private teamsService: TeamsService,
-		private authService: AuthenticationService,
+		public router: Router,
+		public route: ActivatedRoute,
+		public modal: Modal,
+		public teamsService: TeamsService,
+		public authService: AuthenticationService,
 		public alertService: AlertService
 	) {
 	}
@@ -72,6 +76,7 @@ export class ListTeamsComponent {
 						this.teamsService.delete(team._id)
 							.subscribe(
 								() => {
+									this.alertService.addAlert(`Successfully deleted ${team.name}`, 'success');
 									this.authService.reloadCurrentUser().subscribe(() => {
 										this.router.navigate(['/teams', {clearCachedFilter: true}]);
 									});

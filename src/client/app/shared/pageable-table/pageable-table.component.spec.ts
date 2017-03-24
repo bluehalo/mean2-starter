@@ -143,7 +143,7 @@ describe('PageableTable', () => {
 		fixture.detectChanges();
 
 		items.forEach((value, index) => {
-			expect(rootHTMLElement.innerText).toContain(index);
+			expect(rootHTMLElement.innerText).toContain(String(index));
 		});
 	});
 

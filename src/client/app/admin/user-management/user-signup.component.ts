@@ -16,10 +16,10 @@ export class UserSignupComponent extends ManageUserComponent {
 	mode = 'signup';
 
 	constructor(
-		router: Router,
-		configService: ConfigService,
-		alertService: AlertService,
-		private authService: AuthenticationService
+		public router: Router,
+		public configService: ConfigService,
+		public alertService: AlertService,
+		public authService: AuthenticationService
 	) {
 		super(router, configService, alertService);
 	}
@@ -28,7 +28,7 @@ export class UserSignupComponent extends ManageUserComponent {
 		this.title = 'New Account Request';
 		this.subtitle = 'Provide the required information to request an account';
 		this.okButtonText = 'Submit';
-		this.navigateOnSuccess = '';
+		this.navigateOnSuccess = '/signed-up';
 		this.user = new User();
 	}
 
