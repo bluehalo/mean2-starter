@@ -1,6 +1,6 @@
 <div class="modal-header">
 	<h3>
-		<span>Changes to {{context.auditEntry?.audit?.auditType}} by {{context.auditEntry?.audit?.actor?.username}} on {{context.auditEntry?.created | date:"yyyy-MM-dd HH:mm:ss 'Z'":'UTC' }}</span>
+		<span>Changes to {{context.auditEntry?.audit?.auditType}} by {{context.auditEntry?.audit?.actor?.username}} on {{context.auditEntry?.created | date:"yyyy-MM-dd HH:mm:ssZ" }}</span>
 		<span class="pull-right">
 			<a class="btn-icon no-href"
 			   (click)="done()"

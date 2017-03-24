@@ -1,9 +1,8 @@
 import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { Http, Headers, URLSearchParams, Response } from '@angular/http';
 
-import 'rxjs/Rx';
 import { Observable } from 'rxjs';
 import * as _ from 'lodash';
 
@@ -34,12 +33,9 @@ export class AsyHttp {
 		private userStateService: UserStateService,
 		private _http: Http,
 		private router: Router,
-		private location: Location,
-		private route: ActivatedRoute) {}
+		private location: Location) {}
 
-	static defaultErrFn(err: any) {
-
-	}
+	static defaultErrFn(_err: any) { }
 
 	get(opts: HttpOptions) {
 		let headers = new Headers({
@@ -143,7 +139,7 @@ export class AsyHttp {
 		return urlSearchParams.toString();
 	}
 
-	protected handleErrorResponse(err: any, caught: Observable<any>): Observable<any> {
+	protected handleErrorResponse(err: any, _caught: Observable<any>): Observable<any> {
 		let errData = JSON.parse(err._body);
 		switch (err.status) {
 			case 401:

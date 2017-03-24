@@ -13,12 +13,10 @@ import { HelpService } from './help.service';
 
 export class HelpComponent {
 
-	private helpTopics: HelpTopic[] = [];
+	helpTopics: HelpTopic[] = [];
 
 	private config: any = {};
-
 	private user: User;
-
 	private pki: boolean;
 
 	constructor(

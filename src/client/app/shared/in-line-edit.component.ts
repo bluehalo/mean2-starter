@@ -1,5 +1,6 @@
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Component, forwardRef, Input, Output, OnInit, EventEmitter, ElementRef, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+
 import * as _ from 'lodash';
 
 const INLINE_EDIT_CONTROL_VALUE_ACCESSOR: any = {
@@ -18,19 +19,17 @@ export class InLineEdit implements ControlValueAccessor, OnInit {
 	@ViewChild('inlineEditControl', {read: ViewContainerRef}) inlineEditControl: any;
 
 	@Input() name: string = '';
-
 	@Output() onSave = new EventEmitter();
 
-	public onChange: any = Function.prototype;
-	public onTouched: any = Function.prototype;
+	onChange: any = Function.prototype;
+	onTouched: any = Function.prototype;
+
+	editing: boolean = false;
 
 	private _value: string = '';
-
 	private preValue: string = '';
 
-	private editing: boolean = false;
-
-	constructor(element: ElementRef, private renderer: Renderer) {}
+	constructor() {}
 
 	ngOnInit() {}
 
@@ -51,19 +50,19 @@ export class InLineEdit implements ControlValueAccessor, OnInit {
 	}
 
 	// Required forControlValueAccessor interface
-	public registerOnChange(fn: () => {}): void { this.onChange = fn; }
+	registerOnChange(fn: () => {}): void { this.onChange = fn; }
 
 	// Required forControlValueAccessor interface
-	public registerOnTouched(fn: () => {}): void { this.onTouched = fn; }
+	registerOnTouched(fn: () => {}): void { this.onTouched = fn; }
 
-	private edit(value: any) {
+	edit(value: any) {
 		this.preValue = value;
 		this.editing = true;
 	}
 
-	private onSubmit(value: any) {
+	onSubmit(value: any) {
 		let submitVal = value;
-		if (!_.isEmpty(this.name)) {
+		if (_.isString(this.name) && this.name.trim().length > 0) {
 			submitVal = {};
 			submitVal[this.name] = value;
 		}
@@ -72,7 +71,7 @@ export class InLineEdit implements ControlValueAccessor, OnInit {
 		this.editing = false;
 	}
 
-	private cancel(value: any) {
+	cancel(value: any) {
 		this._value = this.preValue;
 		this.editing = false;
 	}

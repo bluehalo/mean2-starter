@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Response } from '@angular/http';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 import * as _ from 'lodash';
 
@@ -18,8 +18,8 @@ import { CacheEntriesService } from '../../access-checker/cache-entries.service'
 })
 export class UpdateUserComponent extends ManageUserComponent {
 
-	private mode: string = 'edit';
-	private refreshing: boolean = false;
+	mode: string = 'edit';
+	refreshing: boolean = false;
 
 	constructor(
 		router: Router,
@@ -27,7 +27,6 @@ export class UpdateUserComponent extends ManageUserComponent {
 		alertService: AlertService,
 		private adminService: AdminService,
 		private authService: AuthenticationService,
-		private route: ActivatedRoute,
 		private cacheEntriesService: CacheEntriesService
 	) {
 		super(router, configService, alertService);
@@ -57,7 +56,7 @@ export class UpdateUserComponent extends ManageUserComponent {
 	/**
 	 * Refresh the user's cache entry
 	 */
-	private refreshCredentials() {
+	refreshCredentials() {
 		this.refreshing = true;
 		this.cacheEntriesService.refreshCurrentUser().subscribe(
 			() => {

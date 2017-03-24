@@ -73,7 +73,7 @@ export class MessageHandlerService {
 
 	private showToaster(message: Message) {
 		let popupBody: any;
-		if (!_.isUndefined(message.tearline) && !_.isEmpty(message.tearline)) {
+		if (_.isString(message.tearline) && message.tearline.trim().length > 0) {
 			popupBody = `${message.tearline} <br/>`;
 		}
 		else {

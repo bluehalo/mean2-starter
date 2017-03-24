@@ -20,14 +20,14 @@ import { AlertService } from '../../shared/alert.service';
 	templateUrl: './admin-list-euas.component.html'
 })
 export class AdminListEuasComponent implements OnInit {
-	private agree: boolean = false;
-	private pagingOpts: PagingOptions;
-	private euaToDelete: EndUserAgreement;
-	private euas: EndUserAgreement[] = [];
-	private search: string = '';
+	agree: boolean = false;
+	pagingOpts: PagingOptions;
+	euaToDelete: EndUserAgreement;
+	euas: EndUserAgreement[] = [];
+	search: string = '';
 
 	// Columns to show/hide in user table
-	private columns = {
+	columns = {
 		_id: false,
 		created: true,
 		published: true,
@@ -36,7 +36,7 @@ export class AdminListEuasComponent implements OnInit {
 		updated: true
 	};
 
-	private sortOpts: TableSortOptions = {
+	sortOpts: TableSortOptions = {
 		title: new SortDisplayOption('Name', 'name', SortDirection.asc),
 		created: new SortDisplayOption('Created', 'created', SortDirection.desc),
 		updated: new SortDisplayOption('Updated', 'updated', SortDirection.desc),
@@ -45,11 +45,10 @@ export class AdminListEuasComponent implements OnInit {
 	};
 
 	constructor(
-		// private router: Router,
-		private adminService: AdminService,
-		private auth: AuthenticationService,
-		private alertService: AlertService,
-		private euaService: EuaService,
+		public adminService: AdminService,
+		public auth: AuthenticationService,
+		public alertService: AlertService,
+		public euaService: EuaService,
 		private route: ActivatedRoute,
 		private modal: Modal
 	) {}
@@ -79,53 +78,28 @@ export class AdminListEuasComponent implements OnInit {
 			this.pagingOpts = cachedFilter.paging;
 		} else {
 			this.pagingOpts = new PagingOptions();
-			this.pagingOpts.sortField = this.sortOpts.title.sortField;
-			this.pagingOpts.sortDir = this.sortOpts.title.sortDir;
+			this.pagingOpts.sortField = this.sortOpts['title'].sortField;
+			this.pagingOpts.sortDir = this.sortOpts['title'].sortDir;
 		}
 	}
 
-	private loadEuas() {
-		let options: any = {};
-		this.euaService.cache.listEuas = {search: this.search, paging: this.pagingOpts};
-		this.euaService.search(this.getQuery(), this.search, this.pagingOpts, options)
-			.subscribe((result: any) => {
-				if (result && Array.isArray(result.elements)) {
-					this.euas = result.elements.map((element: any) => new EndUserAgreement().setFromEuaModel(element));
-					this.pagingOpts.set(result.pageNumber, result.pageSize, result.totalPages, result.totalSize);
-				} else {
-					this.pagingOpts.reset();
-					this.euas = [];
-				}
-		});
-	}
-
-	private getQuery(): any {
-		let query: any;
-		let elements: any[] = [];
-
-		if (elements.length > 0) {
-			query = { $or: elements };
-		}
-		return query;
-	}
-
-	private applySearch(event: any) {
+	applySearch() {
 		this.pagingOpts.setPageNumber(0);
 		this.loadEuas();
 	}
 
-	private goToPage(event: any) {
+	goToPage(event: any) {
 		this.pagingOpts.update(event.pageNumber, event.pageSize);
 		this.loadEuas();
 	}
 
-	private setSort(sortOpt: SortDisplayOption) {
+	setSort(sortOpt: SortDisplayOption) {
 		this.pagingOpts.sortField = sortOpt.sortField;
 		this.pagingOpts.sortDir = sortOpt.sortDir;
 		this.loadEuas();
 	}
 
-	private confirmDeleteEua(eua: EndUserAgreement) {
+	confirmDeleteEua(eua: EndUserAgreement) {
 		this.euaToDelete = eua;
 
 		let dialogPromise: Promise<DialogRef<any>>;
@@ -161,7 +135,7 @@ export class AdminListEuasComponent implements OnInit {
 		);
 	}
 
-	private publishEua(eua: EndUserAgreement) {
+	publishEua(eua: EndUserAgreement) {
 		this.euaService.publish(eua.euaModel._id).subscribe(
 			() => {
 				this.alertService.addAlert(`Published ${eua.euaModel.title}`, 'success');
@@ -173,4 +147,30 @@ export class AdminListEuasComponent implements OnInit {
 			});
 		this.loadEuas();
 	}
+
+	private loadEuas() {
+		let options: any = {};
+		this.euaService.cache.listEuas = {search: this.search, paging: this.pagingOpts};
+		this.euaService.search(this.getQuery(), this.search, this.pagingOpts, options)
+			.subscribe((result: any) => {
+				if (result && Array.isArray(result.elements)) {
+					this.euas = result.elements.map((element: any) => new EndUserAgreement().setFromEuaModel(element));
+					this.pagingOpts.set(result.pageNumber, result.pageSize, result.totalPages, result.totalSize);
+				} else {
+					this.pagingOpts.reset();
+					this.euas = [];
+				}
+			});
+	}
+
+	private getQuery(): any {
+		let query: any;
+		let elements: any[] = [];
+
+		if (elements.length > 0) {
+			query = { $or: elements };
+		}
+		return query;
+	}
+
 }

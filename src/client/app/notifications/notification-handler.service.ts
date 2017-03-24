@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import * as _ from 'lodash';
 import { AuthenticationService } from '../admin/authentication/authentication.service';
 import { UserStateService } from '../admin/authentication/user-state.service';
-import { Notification } from './notification.class';
 import { NotificationService } from './notification.service';
 import { NotificationStateService } from './notification-state-service';
 

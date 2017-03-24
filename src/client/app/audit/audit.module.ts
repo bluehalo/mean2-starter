@@ -10,7 +10,7 @@ import { AuditService } from './audit.service';
 import { AuditComponent } from './audit.component';
 import {
 	AuditObjectComponent, UrlAudit,
-	auditObjects
+	DefaultAudit, ExportAudit
 } from './audit-object.component';
 import { UtilModule } from '../shared/util.module';
 import { UserService } from '../admin/users.service';
@@ -26,7 +26,8 @@ import { UserService } from '../admin/users.service';
 		AuditViewChangeModal,
 		AuditViewDetailModal,
 
-		...auditObjects
+		DefaultAudit,
+		ExportAudit
 	],
 	exports: [],
 	declarations: [
@@ -37,7 +38,8 @@ import { UserService } from '../admin/users.service';
 		UrlAudit,
 		AuditObjectComponent,
 
-		...auditObjects
+		DefaultAudit,
+		ExportAudit
 	],
 	providers: [
 		AuditService,

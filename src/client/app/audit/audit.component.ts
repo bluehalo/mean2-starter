@@ -1,22 +1,21 @@
-import { Observable } from 'rxjs/Observable';
 import { Component } from '@angular/core';
-import { AuditService } from './audit.service';
+
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 import { overlayConfigFactory } from 'angular2-modal';
-import 'rxjs/Rx';
-import {
-	AuditViewDetailModalContext,
-	AuditViewChangeModal,
-	AuditViewDetailModal
-} from './audit-view-change.component';
+import { Observable } from 'rxjs/Observable';
+
+import * as _ from 'lodash';
+import * as moment from 'moment';
+
+
+import { AuditService } from './audit.service';
+import { AuditViewDetailModalContext, AuditViewChangeModal, AuditViewDetailModal } from './audit-view-change.component';
 import { PagingOptions } from '../shared/pager.component';
 import { TableSortOptions } from '../shared/pageable-table/pageable-table.component';
 import { SortDisplayOption, SortDirection } from '../shared/result-utils.class';
 import { UserService } from '../admin/users.service';
-import { AuthenticationService } from '../admin/authentication/authentication.service';
-import * as _ from 'lodash';
-import * as moment from 'moment';
 import { AuditOption } from './audit.classes';
+
 
 @Component({
 	selector: 'audit',
@@ -25,49 +24,40 @@ import { AuditOption } from './audit.classes';
 export class AuditComponent {
 
 	// List of audit entries
-	private auditEntries: any[] = [];
+	auditEntries: any[] = [];
+	auditEntriesLoaded: boolean = false;
 
-	private auditEntriesLoaded: boolean = false;
+	actionOptions: AuditOption[] = [];
+	auditTypeOptions: AuditOption[] = [];
 
-	private actionOptions: AuditOption[] = [];
-
-	private auditTypeOptions: AuditOption[] = [];
-
-	private queryUserSearchTerm: string = '';
-
-	private queryUserObj: any;
+	queryUserSearchTerm: string = '';
+	queryUserObj: any;
 
 	// Search phrase
-	private search: string = '';
+	search: string = '';
+	pagingOpts: PagingOptions;
+	userPagingOpts: PagingOptions;
 
-	private pagingOpts: PagingOptions;
-
-	private userPagingOpts: PagingOptions;
-
-	private sortOpts: TableSortOptions = {
+	sortOpts: TableSortOptions = {
 		created: new SortDisplayOption('Created', 'created', SortDirection.desc),
 		actor: new SortDisplayOption('Actor', 'audit.actor.name', SortDirection.asc),
 		type: new SortDisplayOption('Type', 'audit.auditType', SortDirection.desc)
 	};
 
-	private dateRangeOptions: any[];
-
-	private dateRangeFilter: any;
+	dateRangeOptions: any[];
+	dateRangeFilter: any;
 
 	// Date picker
-	private showGteDatepicker: boolean = false;
-	private showLteDatepicker: boolean = false;
+	showGteDatepicker: boolean = false;
+	showLteDatepicker: boolean = false;
 
-	private queryStartDate: Date = moment.utc().subtract(1, 'days').toDate();
-
-	private queryEndDate: Date = moment.utc().toDate();
-
-	private searchUsersRef: Observable<any>;
+	queryStartDate: Date = moment.utc().subtract(1, 'days').toDate();
+	queryEndDate: Date = moment.utc().toDate();
+	searchUsersRef: Observable<any>;
 
 	constructor(
 		private auditService: AuditService,
 		private userService: UserService,
-		public auth: AuthenticationService,
 		private modal: Modal
 	) {}
 
@@ -81,8 +71,8 @@ export class AuditComponent {
 		];
 
 		this.pagingOpts = new PagingOptions();
-		this.pagingOpts.sortField = this.sortOpts.created.sortField;
-		this.pagingOpts.sortDir = this.sortOpts.created.sortDir;
+		this.pagingOpts.sortField = this.sortOpts['created'].sortField;
+		this.pagingOpts.sortDir = this.sortOpts['created'].sortDir;
 
 		this.userPagingOpts = new PagingOptions(0, 20);
 		this.userPagingOpts.sortField = 'username';
@@ -116,12 +106,12 @@ export class AuditComponent {
 		this.loadAuditEntries();
 	}
 
-	private goToPage(event: any) {
+	goToPage(event: any) {
 		this.pagingOpts.update(event.pageNumber, event.pageSize);
 		this.loadAuditEntries();
 	}
 
-	private setSort(name: string) {
+	setSort(name: string) {
 		if (name === this.pagingOpts.sortField) {
 			// Same column, reverse direction
 			this.pagingOpts.sortDir = (this.pagingOpts.sortDir === SortDirection.asc) ? SortDirection.desc : SortDirection.asc;
@@ -134,18 +124,18 @@ export class AuditComponent {
 		this.loadAuditEntries();
 	}
 
-	private updateDateRange() {
+	updateDateRange() {
 		this.showGteDatepicker = false;
 		this.showLteDatepicker = false;
 		this.loadAuditEntries();
 	}
 
-	private typeaheadOnSelect(e: any) {
+	typeaheadOnSelect(e: any) {
 		this.queryUserObj = e;
 		this.refresh();
 	}
 
-	private viewMore(auditEntry: any, type: string) {
+	viewMore(auditEntry: any, type: string) {
 		switch (type) {
 			case 'viewDetails':
 				this.modal.open(AuditViewDetailModal, overlayConfigFactory({auditEntry: auditEntry}, AuditViewDetailModalContext));
@@ -158,7 +148,7 @@ export class AuditComponent {
 		}
 	}
 
-	private refresh() {
+	refresh() {
 		this.pagingOpts.reset();
 
 		// If actor search bar is empty, clear the actor object, otherwise retain it
@@ -173,12 +163,12 @@ export class AuditComponent {
 		let timeQuery: any = null;
 
 		if (this.dateRangeFilter.selected === 'choose') {
-			if (!_.isNull(this.queryStartDate)) {
-				timeQuery = (_.isNull(timeQuery)) ? {} : timeQuery;
+			if (null != this.queryStartDate) {
+				timeQuery = (null == timeQuery) ? {} : timeQuery;
 				timeQuery.$gte = moment.utc(this.queryStartDate).startOf('day');
 			}
-			if (!_.isNull(this.queryEndDate)) {
-				timeQuery = (_.isNull(timeQuery)) ? {} : timeQuery;
+			if (null != this.queryEndDate) {
+				timeQuery = (null == timeQuery) ? {} : timeQuery;
 				timeQuery.$lt = moment.utc(this.queryEndDate).endOf('day');
 			}
 		}

@@ -11,8 +11,8 @@ import * as _ from 'lodash';
 })
 export class MessagesComponent {
 
-	private messages: Message[];
-	private motd: Message;
+	messages: Message[];
+	motd: Message;
 
 	constructor(
 		private messageService: MessageService
@@ -30,7 +30,7 @@ export class MessagesComponent {
 		this.search();
 	}
 
-	private search() {
+	search() {
 		this.messageService.search({}, '', new PagingOptions(0, 10000))
 			.subscribe( (result: any) => {
 				if (result.totalSize === 0) {
@@ -49,7 +49,7 @@ export class MessagesComponent {
 			});
 	}
 
-	private getTypeAlertClass(message: Message) {
+	getTypeAlertClass(message: Message) {
 		switch (MessageType[message.type].toLowerCase()) {
 			case 'motd':
 				return 'motd';
@@ -64,7 +64,7 @@ export class MessagesComponent {
 		}
 	}
 
-	private getTypeIcon(message: Message) {
+	getTypeIcon(message: Message) {
 		switch (MessageType[message.type].toLowerCase()) {
 			case 'motd':
 				return 'fa-info-circle';

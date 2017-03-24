@@ -139,8 +139,8 @@ export class AdminListUsersComponent {
 			this.pagingOpts = cachedFilter.paging;
 		} else {
 			this.pagingOpts = new PagingOptions();
-			this.pagingOpts.sortField = this.sortOpts.name.sortField;
-			this.pagingOpts.sortDir = this.sortOpts.name.sortDir;
+			this.pagingOpts.sortField = this.sortOpts['name'].sortField;
+			this.pagingOpts.sortDir = this.sortOpts['name'].sortDir;
 		}
 
 		if (cachedFilter.team) {
@@ -179,7 +179,7 @@ export class AdminListUsersComponent {
 					this.pagingOpts.reset();
 				}
 			},
-			(err: any): any => null );
+			(_err: any): any => null );
 	}
 
 	getQuery(): any {
@@ -222,7 +222,7 @@ export class AdminListUsersComponent {
 		return query;
 	}
 
-	applySearch(event: any) {
+	applySearch() {
 		this.pagingOpts.setPageNumber(0);
 		this.loadUsers();
 	}
@@ -300,8 +300,8 @@ export class AdminListUsersComponent {
 			q: this.getQuery(),
 			s: this.search,
 			cols: viewColumns,
-			sort: this.sortOpts.name.sortField,
-			dir: this.sortOpts.name.sortDir})
+			sort: this.sortOpts['name'].sortField,
+			dir: this.sortOpts['name'].sortDir})
 			.subscribe((response: any) => {
 				window.open(`/admin/users/csv/${response._id}`);
 			});

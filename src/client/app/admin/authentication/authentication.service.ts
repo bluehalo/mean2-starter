@@ -6,7 +6,6 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { User } from '../user.class';
 import { UserStateService } from './user-state.service';
 import { AsyHttp, HttpOptions } from '../../shared/asy-http.service';
-import { ObservableUtils } from '../../shared/observable-utils.class';
 
 @Injectable()
 export class AuthenticationService {
@@ -56,7 +55,6 @@ export class AuthenticationService {
 	}
 
 	public reloadCurrentUser(): Observable<any> {
-		let wasAuthenticated = this.getCurrentUser().isAuthenticated();
 		return this.asyHttp.get(new HttpOptions(
 			'user/me',
 			(user: any) => this.getCurrentUser().setFromUserModel(user),
@@ -105,8 +103,8 @@ export class AuthenticationService {
 	 * verifying that the two passwords are the same.
 	 */
 	public validatePassword(p1: string, p2: string): any {
-		p1 = (_.isString(p1) && !_.isEmpty(p1)) ? p1 : undefined;
-		p2 = (_.isString(p2) && !_.isEmpty(p2)) ? p2 : undefined;
+		p1 = (_.isString(p1) && p1.trim().length > 0) ? p1 : undefined;
+		p2 = (_.isString(p2) && p2.trim().length > 0) ? p2 : undefined;
 
 		if (p1 !== p2) {
 			return { valid: false, message: 'Passwords do not match' };
