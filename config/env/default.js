@@ -44,7 +44,7 @@ module.exports = {
 //
 //		accessChecker: {
 //			provider: {
-//				file: 'app/access-checker/tests/server/providers/example-provider.server.service.js',
+//				file: 'src/server/app/access-checker/providers/example-provider.server.service.js',
 //				config: {
 //					'/c=us/st=maryland/o=asymmetrik ltd./ou=client/cn=asymmetrikclient': {
 //						name: 'Ryan Blace',
