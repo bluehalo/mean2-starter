@@ -10,7 +10,7 @@ import * as _ from 'lodash';
 
 export class InvalidResourceComponent {
 
-	private type: string = 'Resource';
+	type: string = 'Resource';
 
 	constructor(
 		private route: ActivatedRoute
@@ -19,10 +19,10 @@ export class InvalidResourceComponent {
 	ngOnInit() {
 		this.route.params.subscribe(
 			(params: Params) => {
-				let type = params[`type`];
+				let type = params['type'];
 
 				if (!_.isEmpty(type)) {
-					this.type = _.capitalize(params[`type`]);
+					this.type = _.capitalize(params['type']);
 				}
 			});
 	}

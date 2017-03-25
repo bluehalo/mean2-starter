@@ -12,15 +12,11 @@ import { User } from '../user.class';
 })
 export class ForgotPasswordComponent {
 
-	private user: User;
-
-	private error: string;
-
-	private success: string;
-
-	private pending: string;
-
-	private username: string;
+	user: User;
+	error: string;
+	success: string;
+	pending: string;
+	username: string;
 
 	constructor(
 		private router: Router,
@@ -30,6 +26,7 @@ export class ForgotPasswordComponent {
 	) {}
 
 	ngOnInit() {
+
 		// If user is signed in then redirect back home
 		if (this.userStateService.isAuthenticated()) {
 			this.router.navigate(['/']);
@@ -42,9 +39,11 @@ export class ForgotPasswordComponent {
 					this.router.navigate(['/']);
 				}
 			});
+
 	}
 
-	private requestPasswordReset() {
+	requestPasswordReset() {
+
 		this.success = null;
 		this.error = null;
 
@@ -65,5 +64,6 @@ export class ForgotPasswordComponent {
 						this.pending = null;
 					});
 		}
+
 	}
 }

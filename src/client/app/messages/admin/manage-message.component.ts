@@ -8,28 +8,29 @@ import { AlertService } from '../../shared/alert.service';
 
 export abstract class ManageMessageComponent {
 
-	protected config: any;
-	protected error: string = null;
-	protected okDisabled: boolean;
+	message: Message;
+	error: string = null;
+	okDisabled: boolean;
 
 	// Variables that will be set by implementing classes
-	protected title: string;
-	protected subtitle: string;
-	protected okButtonText: string;
-	protected navigateOnSuccess: string;
-	protected message: Message;
+	title: string;
+	subtitle: string;
+	okButtonText: string;
 
-	protected typeOptions: any[] = [
+	typeOptions: any[] = [
 		{ value: 'MOTD', display: 'MOTD' },
 		{ value: 'INFO', display: 'INFO' },
 		{ value: 'WARN', display: 'WARN' },
 		{ value: 'ERROR', display: 'ERROR' }
 	];
 
+	protected config: any;
+	protected navigateOnSuccess: string;
+
 	constructor(
 		protected router: Router,
 		protected configService: ConfigService,
-		protected alertService: AlertService
+		public alertService: AlertService
 	) {}
 
 	ngOnInit() {
@@ -45,7 +46,7 @@ export abstract class ManageMessageComponent {
 
 	abstract submitMessage(message: Message): Observable<Response>;
 
-	private submit() {
+	submit() {
 		this.submitMessage(this.message)
 			.subscribe(
 				() => this.router.navigate([this.navigateOnSuccess]),

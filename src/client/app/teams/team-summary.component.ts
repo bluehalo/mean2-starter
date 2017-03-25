@@ -16,20 +16,17 @@ import { AuthenticationService } from '../admin/authentication/authentication.se
 })
 export class TeamSummaryComponent {
 
-	private user: TeamMember;
-
-	private team: Team;
-
-	private teamId: string;
-
-	private defaultDescription: string = 'No Description.';
+	user: TeamMember;
+	team: Team;
+	teamId: string;
+	defaultDescription: string = 'No Description.';
 
 	constructor(
 		private router: Router,
 		private route: ActivatedRoute,
 		private modal: Modal,
 		private teamsService: TeamsService,
-		private alertService: AlertService,
+		public alertService: AlertService,
 		private authService: AuthenticationService
 	) {
 	}
@@ -49,7 +46,7 @@ export class TeamSummaryComponent {
 						(result: any) => {
 							if (null != result) {
 								this.team = new Team(result._id, result.name, result.description, result.created, result.requiresExternalTeams);
-								if (_.isEmpty(this.team.description)) {
+								if (_.isString(this.team.description) && this.team.description.trim().length > 0) {
 									this.team.description = this.defaultDescription;
 								}
 							}
@@ -57,14 +54,14 @@ export class TeamSummaryComponent {
 								this.router.navigate(['resource/invalid', {type: 'team'}]);
 							}
 						},
-						(err: any) => {
+						() => {
 							this.router.navigate(['resource/invalid', {type: 'team'}]);
 						});
 			}
 		});
 	}
 
-	private saveEditable(val: any) {
+	saveEditable(val: any) {
 		if (val.hasOwnProperty('name')) {
 			this.team.name = val.name;
 		}
@@ -79,7 +76,7 @@ export class TeamSummaryComponent {
 					if (null != result) {
 						this.team = new Team(result._id, result.name, result.description, result.created, result.requiresExternalTeams);
 
-						if (_.isEmpty(this.team.description)) {
+						if (_.isString(this.team.description) && this.team.description.trim().length > 0) {
 							this.team.description = this.defaultDescription;
 						}
 					}
@@ -91,11 +88,11 @@ export class TeamSummaryComponent {
 				});
 	}
 
-	private update() {
+	update() {
 		this.router.navigate(['/team/edit', this.teamId]);
 	}
 
-	private remove() {
+	remove() {
 		this.modal.confirm()
 			.size('lg')
 			.showClose(true)
