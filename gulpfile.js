@@ -83,8 +83,9 @@ gulp.task('webpack-dev-server', (done) => {
 	new webpackDevServer(compiler, {
 		publicPath: `${config.app.url.protocol}://${config.app.url.host}:${config.devPorts.webpack}/dev/`,
 		stats: {
-			colors: true,
-			chunks: false
+			chunks: false,
+			children: false,
+			colors: true
 		},
 		watchOptions: {
 			aggregateTimeout: 1000,
@@ -180,7 +181,10 @@ gulp.task('build-client-code', [ 'lint-client-code' ], (done) => {
 
 		// log the stats from webpack
 		plugins.util.log('[webpack]', stats.toString({
-			colors: true, chunks: false
+			assets: true,
+			children: false,
+			chunks: false,
+			colors: true
 		}));
 
 		let buildErrors;

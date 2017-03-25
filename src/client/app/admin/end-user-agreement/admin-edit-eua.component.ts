@@ -16,12 +16,12 @@ import { AlertService } from '../../shared/alert.service';
 export class AdminUpdateEuaComponent extends ManageEuaComponent {
 
 	constructor(
-		protected router: Router,
-		protected auth: AuthenticationService,
-		protected alertService: AlertService,
+		router: Router,
+		auth: AuthenticationService,
+		alertService: AlertService,
+		modal: Modal,
 		protected euaService: EuaService,
-		protected route: ActivatedRoute,
-		protected modal: Modal
+		protected route: ActivatedRoute
 	) {
 		super(router, auth, alertService, modal);
 	}

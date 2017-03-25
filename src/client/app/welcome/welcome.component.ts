@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 
-import { Message } from '../messages/message.class';
-import { AuthenticationService } from '../admin/authentication/authentication.service';
 import { ConfigService } from '../core/config.service';
 import { AlertService } from '../shared/alert.service';
 import { MessageService } from '../messages/message.service';
@@ -10,12 +8,10 @@ import { MessageService } from '../messages/message.service';
 	templateUrl: './welcome.component.html'
 })
 export class WelcomeComponent {
+	externalLinksEnabled: boolean;
 	private config: any;
-	private externalLinksEnabled: boolean;
-	private messages: Message[];
 
 	constructor(
-		private auth: AuthenticationService,
 		private configService: ConfigService,
 		private alertService: AlertService,
 		private messageService: MessageService) {
@@ -29,9 +25,6 @@ export class WelcomeComponent {
 			});
 
 		this.alertService.clearAllAlerts();
-
-		this.messages = [];
-
 		this.messageService.markAllRead();
 	}
 }

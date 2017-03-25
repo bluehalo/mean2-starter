@@ -1,5 +1,5 @@
 import { AuditObjectTypes } from '../../../audit/audit.classes';
-import { auditObjects, DefaultAudit } from '../../../audit/audit-object.component';
+import { DefaultAudit } from '../../../audit/audit-object.component';
 import { Component } from '@angular/core';
 
 @Component({

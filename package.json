@@ -61,12 +61,13 @@
 	"devDependencies": {
 		"@angular/common": "2.4",
 		"@angular/compiler": "2.4",
+		"@angular/compiler-cli": "2.4",
 		"@angular/core": "2.4",
 		"@angular/forms": "2.4",
 		"@angular/http": "2.4",
 		"@angular/platform-browser": "2.4",
 		"@angular/platform-browser-dynamic": "2.4",
-		"@angular/upgrade": "2.4",
+		"@angular/platform-server": "2.4",
 		"@angular/router": "3.4",
 
 		"core-js": "2.4",
@@ -85,11 +86,13 @@
 		"socket.io-client": "1.7",
 		"@types/socket.io-client": "1.4",
 
-		"@types/core-js": "0.9",
 		"@types/node": "6.0",
 		"@types/lodash": "4.14",
 
 		"webpack": "2.2",
+		"webpack-dev-server": "2.4",
+		"webpack-stats-plugin": "0.1",
+		"@ngtools/webpack": "1.2",
 		"angular2-template-loader": "0.6",
 		"css-loader": "0.26",
 		"file-loader": "0.10",
@@ -99,7 +102,6 @@
 		"style-loader": "0.13",
 		"ts-loader": "2.0",
 		"url-loader": "0.5",
-		"webpack-dev-server": "2.4",
 		"source-map-loader": "0.1",
 
 		"typescript": "2.2",

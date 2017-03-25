@@ -6,7 +6,7 @@ import { BSModalContext } from 'angular2-modal/plugins/bootstrap/index';
 import { CacheEntry } from './cache-entries.service';
 
 export class ViewCacheEntryModalContext extends BSModalContext {
-	public cacheEntry: CacheEntry;
+	cacheEntry: CacheEntry;
 
 	constructor() {
 		super();
@@ -18,7 +18,7 @@ export class ViewCacheEntryModalContext extends BSModalContext {
 	templateUrl: './view-cache-entry.component.html'
 })
 export class ViewCacheEntryModal implements ModalComponent<ViewCacheEntryModalContext> {
-	private context: ViewCacheEntryModalContext;
+	context: ViewCacheEntryModalContext;
 
 	constructor(
 		public dialog: DialogRef<ViewCacheEntryModalContext>
@@ -39,7 +39,7 @@ export class ViewCacheEntryModal implements ModalComponent<ViewCacheEntryModalCo
 		return false;
 	}
 
-	private done() {
+	done() {
 		this.dialog.close();
 	}
 }

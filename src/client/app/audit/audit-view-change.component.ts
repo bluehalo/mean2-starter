@@ -1,10 +1,11 @@
-import * as _ from 'lodash';
 import { Component } from '@angular/core';
+
+import * as _ from 'lodash';
 import { DialogRef, ModalComponent } from 'angular2-modal';
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap/index';
 
 export class AuditViewDetailModalContext extends BSModalContext {
-	public auditEntry: any;
+	auditEntry: any;
 
 	constructor () {
 		super();
@@ -16,7 +17,7 @@ export class AuditViewDetailModalContext extends BSModalContext {
 	templateUrl: './audit-view-details.component.html'
 })
 export class AuditViewDetailModal implements ModalComponent<AuditViewDetailModalContext> {
-	protected context: AuditViewDetailModalContext;
+	context: AuditViewDetailModalContext;
 
 	constructor (
 		public dialog: DialogRef<AuditViewDetailModalContext>
@@ -37,7 +38,7 @@ export class AuditViewDetailModal implements ModalComponent<AuditViewDetailModal
 		return false;
 	}
 
-	private done() {
+	done() {
 		this.dialog.close();
 	}
 }
@@ -48,14 +49,14 @@ export class AuditViewDetailModal implements ModalComponent<AuditViewDetailModal
 export class AuditViewChangeModal extends AuditViewDetailModal {
 
 	constructor (
-		public dialog: DialogRef<AuditViewDetailModalContext>
+		dialog: DialogRef<AuditViewDetailModalContext>
 	) {
 		super(dialog);
 	}
 
 	// Derived from http://stackoverflow.com/a/1359808 and http://stackoverflow.com/a/23124958
-	private sortObjectKeys(obj: any): any {
-		if (!_.isObject(obj) || _.isNull(obj)) {
+	sortObjectKeys(obj: any): any {
+		if (null == obj || !_.isObject(obj)) {
 			return obj;
 		}
 
