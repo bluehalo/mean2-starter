@@ -7,11 +7,15 @@ import { AsyHttp, HttpOptions } from '../shared/asy-http.service';
 import { PagingOptions } from '../shared/pager.component';
 
 export class CacheEntry {
+	date: Date;
+
 	constructor(
 		public key: string,
 		public value: any,
 		public ts: number
-	) {}
+	) {
+		this.date = new Date(ts);
+	}
 }
 
 @Injectable()

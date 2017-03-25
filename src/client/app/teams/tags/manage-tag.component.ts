@@ -17,17 +17,12 @@ import { TagsService } from './tags.service';
 })
 export class ManageTagComponent {
 
-	private team: Team;
-
-	private owner: Owner;
-
-	private mode: string;
-
-	private modeDisplay: string;
-
-	private tag: Tag;
-
-	private error: string = null;
+	team: Team;
+	owner: Owner;
+	mode: string;
+	modeDisplay: string;
+	tag: Tag;
+	error: string = null;
 
 	constructor(
 		private router: Router,
@@ -72,7 +67,7 @@ export class ManageTagComponent {
 	}
 
 
-	private save() {
+	save() {
 		let result: Observable<Response> = this.mode === 'create' ? this.create() : this.update();
 		result.subscribe(
 			() => {

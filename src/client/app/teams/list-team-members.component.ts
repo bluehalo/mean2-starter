@@ -24,25 +24,19 @@ export class ListTeamMembersComponent {
 
 	@Input() readOnly: boolean = true;
 
-	private team: Team;
-
-	private teamMembers: TeamMember[] = [];
-
-	private teamId: string;
-
-	private teamRoleOptions: any[] = TeamRole.ROLES;
-
-	private user: User;
-
-	private queryUserSearchTerm: string = '';
-
-	private queryUserObj: User;
-
-	private sortOptions: TableSortOptions = {};
-
-	private pagingOptions: PagingOptions;
-
-	private searchUsersRef: Observable<any>;
+	team: Team;
+	teamMembers: TeamMember[] = [];
+	teamId: string;
+	teamRoleOptions: any[] = TeamRole.ROLES;
+	user: User;
+	queryUserSearchTerm: string = '';
+	queryUserObj: User;
+	sortOptions: TableSortOptions = {
+		name: new SortDisplayOption('Name', 'name', SortDirection.asc),
+		username: new SortDisplayOption('Username', 'username', SortDirection.asc)
+	};
+	pagingOptions: PagingOptions;
+	searchUsersRef: Observable<any>;
 
 	constructor(
 		private router: Router,
@@ -62,12 +56,9 @@ export class ListTeamMembersComponent {
 
 		this.team = new Team();
 
-		this.sortOptions.name = new SortDisplayOption('Name', 'name', SortDirection.asc);
-		this.sortOptions.username = new SortDisplayOption('Username', 'username', SortDirection.asc);
-
 		this.pagingOptions = new PagingOptions();
-		this.pagingOptions.sortField = this.sortOptions.name.sortField;
-		this.pagingOptions.sortDir = this.sortOptions.name.sortDir;
+		this.pagingOptions.sortField = this.sortOptions['name'].sortField;
+		this.pagingOptions.sortDir = this.sortOptions['name'].sortDir;
 
 		this.route.params.subscribe((params: Params) => {
 			this.teamId = params[`id`];
@@ -101,42 +92,25 @@ export class ListTeamMembersComponent {
 		});
 	}
 
-	private typeaheadOnSelect(e: any) {
+	typeaheadOnSelect(e: any) {
 		this.queryUserObj = new TeamMember().setFromTeamMemberModel(this.team, e.item);
 		this.addMember(this.queryUserObj);
 		this.queryUserSearchTerm = '';
 	}
 
-	private goToPage(event: any) {
+	goToPage(event: any) {
 		this.pagingOptions.update(event.pageNumber, event.pageSize);
 		this.getTeamMembers();
 	}
 
-	private setSort(sortOpt: SortDisplayOption) {
+	setSort(sortOpt: SortDisplayOption) {
 		this.pagingOptions.sortField = sortOpt.sortField;
 		this.pagingOptions.sortDir = sortOpt.sortDir;
 
 		this.getTeamMembers();
 	};
 
-	private getTeamMembers() {
-		this.teamsService.searchMembers(this.teamId, this.team, null, null, this.pagingOptions, false)
-			.subscribe((result: any) => {
-				if (null != result && null != result.elements && result.elements.length > 0) {
-					this.teamMembers = result.elements;
-					this.pagingOptions.set(result.pageNumber, result.pageSize, result.totalPages, result.totalSize);
-				} else {
-					this.teamMembers = [];
-					this.pagingOptions.reset();
-				}
-			});
-	}
-
-	private doUpdateRole(member: TeamMember, role: string): Observable<Response> {
-		return this.teamsService.updateMemberRole(this.teamId, member.userModel._id, role);
-	}
-
-	private updateRole(member: TeamMember, role: string) {
+	updateRole(member: TeamMember, role: string) {
 		// No update required
 		if (member.role === role) {
 			return;
@@ -191,27 +165,7 @@ export class ListTeamMembersComponent {
 		}
 	}
 
-	private addMember(member: User, role?: string) {
-		if (null == this.teamId || null == member) {
-			this.alertService.addAlert('Failed to add member. Missing member or teamId.');
-			return;
-		}
-
-		this.teamsService.addMember(this.teamId, member.userModel._id, role)
-			.subscribe(
-				() => {
-					this.authService.reloadCurrentUser().subscribe(() => {
-						this.getTeamMembers();
-					});
-				},
-				(response: Response) => {
-					if (response.status >= 400 && response.status < 500) {
-						this.alertService.addAlert(response.json().message);
-					}
-				});
-	}
-
-	private removeMember(member: TeamMember) {
+	removeMember(member: TeamMember) {
 		this.modal.confirm()
 			.size('lg')
 			.showClose(true)
@@ -240,4 +194,42 @@ export class ListTeamMembersComponent {
 				)
 			);
 	}
+
+	private addMember(member: User, role?: string) {
+		if (null == this.teamId || null == member) {
+			this.alertService.addAlert('Failed to add member. Missing member or teamId.');
+			return;
+		}
+
+		this.teamsService.addMember(this.teamId, member.userModel._id, role)
+			.subscribe(
+				() => {
+					this.authService.reloadCurrentUser().subscribe(() => {
+						this.getTeamMembers();
+					});
+				},
+				(response: Response) => {
+					if (response.status >= 400 && response.status < 500) {
+						this.alertService.addAlert(response.json().message);
+					}
+				});
+	}
+
+	private getTeamMembers() {
+		this.teamsService.searchMembers(this.teamId, this.team, null, null, this.pagingOptions, false)
+			.subscribe((result: any) => {
+				if (null != result && null != result.elements && result.elements.length > 0) {
+					this.teamMembers = result.elements;
+					this.pagingOptions.set(result.pageNumber, result.pageSize, result.totalPages, result.totalSize);
+				} else {
+					this.teamMembers = [];
+					this.pagingOptions.reset();
+				}
+			});
+	}
+
+	private doUpdateRole(member: TeamMember, role: string): Observable<Response> {
+		return this.teamsService.updateMemberRole(this.teamId, member.userModel._id, role);
+	}
+
 }
