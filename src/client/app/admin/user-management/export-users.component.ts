@@ -20,11 +20,12 @@ export class ExportUsersModalContext extends BSModalContext {
 })
 export class ExportUsersModal implements ModalComponent<ExportUsersModalContext> {
 
-	private selectedField = 'username';
-	private delimiter = '; ';
-	private value = '';
-	private query = '{}';
-	private queryValid = true;
+	selectedField = 'username';
+	delimiter = '; ';
+	value = '';
+	query = '{}';
+	queryValid = true;
+
 	private valuesArray: string[] = [];
 	private context: ExportUsersModalContext;
 
@@ -48,11 +49,11 @@ export class ExportUsersModal implements ModalComponent<ExportUsersModalContext>
 		this.retrieveUsers();
 	}
 
-	private done() {
+	done() {
 		this.dialog.close();
 	}
 
-	private retrieveUsers() {
+	retrieveUsers() {
 		if (null != this.selectedField && this.queryValid) {
 			this.adminService.getAll(JSON.parse(this.query), this.selectedField)
 				.subscribe((users: string[]) => {
@@ -66,14 +67,14 @@ export class ExportUsersModal implements ModalComponent<ExportUsersModalContext>
 		}
 	}
 
-	private updateQuery() {
+	updateQuery() {
 		this.queryValid = ExportUsersModal.isJsonString(this.query);
 		if (this.queryValid) {
 			this.retrieveUsers();
 		}
 	}
 
-	private updateValue() {
+	updateValue() {
 		this.value = this.valuesArray.join(this.delimiter || ';');
 	}
 

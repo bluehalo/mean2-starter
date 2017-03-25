@@ -9,10 +9,10 @@ export type PageChange = {
 
 export class PagingOptions {
 	constructor(
-		private pageNumber: number = 0,
-		private pageSize: number = 50,
-		private totalPages: number = 0,
-		private totalSize: number = 0,
+		public pageNumber: number = 0,
+		public pageSize: number = 50,
+		public totalPages: number = 0,
+		public totalSize: number = 0,
 		public sortField?: string,
 		public sortDir?: SortDirection
 	) {}

@@ -17,8 +17,8 @@ export class FooterComponent extends CoreComponent {
 	private currentRoute: string = '';
 
 	constructor(
-		protected auth: AuthenticationService,
-		protected configService: ConfigService,
+		auth: AuthenticationService,
+		configService: ConfigService,
 		protected router: Router
 	) {
 		super(auth, configService);

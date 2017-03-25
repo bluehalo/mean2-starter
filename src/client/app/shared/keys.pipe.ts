@@ -6,8 +6,8 @@ import * as _ from 'lodash';
 export class KeysPipe implements PipeTransform {
 	transform(obj: any): any {
 		let values: any[] = [];
-		_.forOwn(obj, (val, key) => {
-			values.push({key: key, value: val});
+		_.forOwn(obj, (val: any, key: any) => {
+			values.push({ key: key, value: val });
 		});
 		return values;
 	}

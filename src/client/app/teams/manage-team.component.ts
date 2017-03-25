@@ -18,21 +18,16 @@ import { ConfigService } from '../core/config.service';
 })
 export class ManageTeamComponent {
 
-	private team: Team;
+	team: Team;
+	mode: string;
+	modeDisplay: string;
+	subtitle: string;
+	okButtonText: string;
+
+	showExternalTeams: boolean = false;
+	error: string = null;
 
 	private teamId: string;
-
-	private mode: string;
-
-	private modeDisplay: string;
-
-	private showExternalTeams: boolean = false;
-
-	private error: string = null;
-
-	private subtitle: string;
-
-	private okButtonText: string;
 
 	constructor(
 		private router: Router,
@@ -40,7 +35,7 @@ export class ManageTeamComponent {
 		private location: Location,
 		private configService: ConfigService,
 		private teamsService: TeamsService,
-		private alertService: AlertService,
+		public alertService: AlertService,
 		private authService: AuthenticationService
 	) {
 	}
@@ -79,13 +74,17 @@ export class ManageTeamComponent {
 		});
 	}
 
-	private updateExternalTeams(event: any) {
+	back() {
+		this.location.back();
+	}
+
+	updateExternalTeams(event: any) {
 		if (event.hasOwnProperty('items')) {
 			this.team.requiresExternalTeams = event.items;
 		}
 	}
 
-	private save() {
+	save() {
 		let result: Observable<Response> = this.mode === 'create' ? this.create() : this.update();
 		result.subscribe(
 			() => {
@@ -108,7 +107,4 @@ export class ManageTeamComponent {
 		return this.teamsService.update(this.team);
 	}
 
-	private back() {
-		this.location.back();
-	}
 }

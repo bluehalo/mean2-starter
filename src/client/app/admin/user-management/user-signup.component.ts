@@ -13,7 +13,7 @@ import { User } from '../user.class';
 })
 export class UserSignupComponent extends ManageUserComponent {
 
-	private mode = 'signup';
+	mode = 'signup';
 
 	constructor(
 		router: Router,

@@ -11,13 +11,13 @@ import { AlertService } from '../../shared/alert.service';
 })
 export class CreateMessageComponent extends ManageMessageComponent {
 
-	private mode = 'admin-create';
+	mode = 'admin-create';
 
 	constructor(
-		protected router: Router,
-		protected configService: ConfigService,
-		protected messageService: MessageService,
-		protected alertService: AlertService) {
+		router: Router,
+		configService: ConfigService,
+		alertService: AlertService,
+		private messageService: MessageService) {
 		super(router, configService, alertService);
 	}
 
