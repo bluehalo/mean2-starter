@@ -214,7 +214,7 @@ module.exports = (mode) => {
 
 		// Specify all global packages
 		new webpack.ProvidePlugin({
-			// d3: 'd3'
+			d3: 'd3'
 		}),
 
 		// Context replacement for ng2
