@@ -76,9 +76,9 @@ export class ListTeamsComponent {
 						this.teamsService.delete(team._id)
 							.subscribe(
 								() => {
-									this.alertService.addAlert(`Successfully deleted ${team.name}`, 'success');
 									this.authService.reloadCurrentUser().subscribe(() => {
-										this.router.navigate(['/teams', {clearCachedFilter: true}]);
+										this.alertService.addAlert(`Successfully deleted ${team.name}`, 'success');
+										this.loadTeams();
 									});
 								},
 								(response: Response) => {
