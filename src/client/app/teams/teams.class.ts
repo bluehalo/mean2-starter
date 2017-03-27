@@ -83,7 +83,7 @@ export class Team {
 		public created?: number,
 		public requiresExternalTeams?: string[]
 	) {
-		this.requiresExternalTeams = (_.isUndefined(requiresExternalTeams)) ? [] : requiresExternalTeams;
+		this.requiresExternalTeams = (null == requiresExternalTeams) ? [] : requiresExternalTeams;
 	}
 }
 

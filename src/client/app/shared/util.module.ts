@@ -28,7 +28,10 @@ import { AsyDropdownComponent } from './dropdown/asy-dropdown.component';
 import { AsyDropdownItemComponent } from './dropdown/asy-dropdown-item.component';
 import { AsyDropdownService } from './dropdown/asy-dropdown.service';
 import { AsyDropdownItemWrapperComponent } from './dropdown/asy-dropdown-item-wrapper.component';
-import { ClientConfiguration } from '../config/configurator';
+
+import { UrlClickHandler } from './urlHandler/url-click-handler.component';
+import { ListManager } from './list-manager.component';
+
 
 @NgModule({
 	imports: [
@@ -37,7 +40,7 @@ import { ClientConfiguration } from '../config/configurator';
 		Ng2BootstrapModule
 	],
 	entryComponents: [
-		ClientConfiguration.config.components.urlHandler.useClass
+		UrlClickHandler
 	],
 	exports: [
 		AsyDropdownComponent,
@@ -77,13 +80,14 @@ import { ClientConfiguration } from '../config/configurator';
 		ConfirmModal,
 		ConstrainedQuery,
 		InLineEdit,
+		ListManager,
 		SafeImageComponent,
 		Pager,
 		PageableTable,
 		AsyTemplate,
 		AsyTransclude,
 		KeysPipe,
-		ClientConfiguration.config.components.urlHandler.useClass
+		UrlClickHandler
 	],
 	providers: [
 		AlertService,

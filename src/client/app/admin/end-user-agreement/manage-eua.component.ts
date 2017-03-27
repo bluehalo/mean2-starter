@@ -9,13 +9,13 @@ import { AlertService } from '../../shared/alert.service';
 export abstract class ManageEuaComponent {
 	public error: any;
 
-	protected mode: string;
-	protected id: string;
-	protected eua: EndUserAgreement;
-	protected preview: boolean;
-	protected title: string;
-	protected subtitle: string;
-	protected submitText: string;
+	mode: string;
+	id: string;
+	eua: EndUserAgreement;
+	preview: boolean;
+	title: string;
+	subtitle: string;
+	submitText: string;
 
 	constructor(
 		protected router: Router,
@@ -26,9 +26,9 @@ export abstract class ManageEuaComponent {
 		this.eua = new EndUserAgreement();
 	}
 
-	protected abstract submitEua(): any;
+	abstract submitEua(): any;
 
-	protected previewEua() {
+	previewEua() {
 		return this.modal.alert()
 			.size('lg')
 			.showClose(true)

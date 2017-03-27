@@ -92,7 +92,7 @@ export class ManageResourceMetadataComponent {
 	}
 
 	haveDescription() {
-		return this.resource.description != null && !_.isEmpty(this.resource.description.trim());
+		return _.isString(this.resource.description) && this.resource.description.trim().length > 0;
 	}
 
 	private updateTags(event: any) {

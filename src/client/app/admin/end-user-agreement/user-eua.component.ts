@@ -9,9 +9,9 @@ import { AlertService } from '../../shared/alert.service';
 })
 
 export class UserEuaComponent {
-	private agree: boolean = false;
 
-	private eua: any;
+	agree: boolean = false;
+	eua: any;
 
 	constructor(
 		private authService: AuthenticationService,
@@ -26,7 +26,7 @@ export class UserEuaComponent {
 
 	}
 
-	private accept() {
+	accept() {
 		this.authService.acceptEua()
 			.subscribe(() => {
 				this.userStateService.goToRedirectRoute();

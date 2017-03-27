@@ -25,7 +25,7 @@ export class SafeImageComponent {
 				this.defaultPicSrc = config.defaultImage;
 			});
 
-		if (_.isEmpty(this.imgSource)) {
+		if (_.isString(this.imgSource) && this.imgSource.trim().length > 0) {
 			this.imgSource = this.defaultPicSrc;
 		}
 	}
