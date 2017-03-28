@@ -202,9 +202,6 @@ gulp.task('styleguide', function () {
 			loadcss: true,
 			preprocess: function(context, template, Handlebars){
 					context.title = 'Style Guide';
-
-					var partialRegistrationPromises = [];
-					var partialMapping = {};
 					return plugins.livingcss.utils.readFileGlobs(assets.client.app.partials, function(data, file) {
 						// make the name of the partial the name of the file
 						var partialName = path.basename(file, path.extname(file));
