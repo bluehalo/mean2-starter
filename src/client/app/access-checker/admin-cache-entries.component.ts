@@ -38,8 +38,8 @@ export class AdminCacheEntriesComponent {
 		this.alertService.clearAllAlerts();
 
 		this.pagingOpts = new PagingOptions();
-		this.pagingOpts.sortField = this.sortOpts['key'].sortField;
-		this.pagingOpts.sortDir = this.sortOpts['key'].sortDir;
+		this.pagingOpts.sortField = this.sortOpts.key.sortField;
+		this.pagingOpts.sortDir = this.sortOpts.key.sortDir;
 
 		this.loadCacheEntries();
 	}

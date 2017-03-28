@@ -113,8 +113,8 @@ export class ListTeamsComponent {
 			this.pagingOptions = cachedFilter.paging;
 		} else {
 			this.pagingOptions = new PagingOptions();
-			this.pagingOptions.sortField = this.sortOptions['name'].sortField;
-			this.pagingOptions.sortDir = this.sortOptions['name'].sortDir;
+			this.pagingOptions.sortField = this.sortOptions.name.sortField;
+			this.pagingOptions.sortDir = this.sortOptions.name.sortDir;
 		}
 	}
 
