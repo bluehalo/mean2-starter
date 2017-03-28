@@ -197,7 +197,7 @@ gulp.task('build-client-code', [ 'lint-client-code' ], (done) => {
 
 //Style Guide generator
 gulp.task('styleguide', function () {
-	return gulp.src(['src/client/**/*.ts', 'src/client/main.ts'])
+	return gulp.src(['src/client/**/*.scss', 'src/client/**/*.ts', 'src/client/main.ts'])
 		.pipe(plugins.livingcss('./public', {
 			loadcss: true,
 			preprocess: function(context, template, Handlebars){
