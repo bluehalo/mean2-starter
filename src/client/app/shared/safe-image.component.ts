@@ -15,10 +15,10 @@ export class SafeImageComponent {
 
 	@Input() showDefault: boolean = true;
 
-	defaultPicSrc: string;
+	private defaultPicSrc: string;
 
 	constructor(
-		public configService: ConfigService) {
+		private configService: ConfigService) {
 	}
 
 	ngOnInit() {
