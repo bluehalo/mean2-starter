@@ -61,7 +61,8 @@ module.exports = {
 			},
 
 			views: [ 'src/client/**/*.html' ],
-			content: [ 'src/client/**/*.@(png|jpg|bmp|gif|svg|tiff)' ]
+			content: [ 'src/client/**/*.@(png|jpg|bmp|gif|svg|tiff)' ],
+			partials: 'src/client/app/handlebars/partials/*.hbs'
 		}
 
 	}

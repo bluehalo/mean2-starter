@@ -195,7 +195,26 @@ gulp.task('build-client-code', [ 'lint-client-code' ], (done) => {
 	});
 });
 
+//Style Guide generator
+gulp.task('styleguide', function () {
+	return gulp.src(['src/client/main.ts'])
+		.pipe(plugins.livingcss('./public', {
+			loadcss: true,
+			preprocess: function(context, template, Handlebars){
+					context.title = 'Style Guide';
 
+					var partialRegistrationPromises = [];
+					var partialMapping = {};
+					return plugins.livingcss.utils.readFileGlobs(assets.client.app.partials, function(data, file) {
+						// make the name of the partial the name of the file
+						var partialName = path.basename(file, path.extname(file));
+						Handlebars.registerPartial(partialName, data);
+					});
+			},
+			template: './src/client/app/handlebars/template.hbs'
+		}))
+		.pipe(gulp.dest('./public'));
+});
 
 gulp.task('build-client-style', [ 'clean-client-style' ], () => {
 
