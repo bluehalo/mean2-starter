@@ -66,13 +66,12 @@
 					No resources
 				</div>
 				<div *ngIf="tag?.resources?.length > 0">
-					<span class="label label-gray hide-overflow"
-							style="max-width:400px;"
-							*ngFor="let resource of tag.resources">
+					<span class="resource-name label label-gray hide-overflow"
+						  *ngFor="let resource of tag.resources">
 						{{resource.title}}
 					</span>
-					<span class="label label-gray hide-overflow"
-							*ngIf="tag?.numResources > maxResourcesShownInline">
+					<span class="resource-name controls hide-overflow"
+						  *ngIf="tag?.numResources > maxResourcesShownInline">
 						...and {{tag?.numResources-maxResourcesShownInline}} more
 					</span>
 				</div>
