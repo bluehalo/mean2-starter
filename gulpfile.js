@@ -197,7 +197,7 @@ gulp.task('build-client-code', [ 'lint-client-code' ], (done) => {
 
 //Style Guide generator
 gulp.task('styleguide', function () {
-	return gulp.src(['src/client/**/*.scss', 'src/client/**/*.ts', 'src/client/main.ts'])
+	return gulp.src(['src/client/**/*.scss', 'src/client/**/*.ts', 'config/styleguide/*.js'])
 		.pipe(plugins.livingcss('./public', {
 			loadcss: true,
 			preprocess: function(context, template, Handlebars){
@@ -208,7 +208,7 @@ gulp.task('styleguide', function () {
 						Handlebars.registerPartial(partialName, data);
 					});
 			},
-			template: './src/client/app/handlebars/template.hbs'
+			template: './config/styleguide/handlebars/template.hbs'
 		}))
 		.pipe(gulp.dest('./public'));
 });
