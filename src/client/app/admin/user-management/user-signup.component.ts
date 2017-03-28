@@ -16,10 +16,10 @@ export class UserSignupComponent extends ManageUserComponent {
 	mode = 'signup';
 
 	constructor(
-		public router: Router,
-		public configService: ConfigService,
-		public alertService: AlertService,
-		public authService: AuthenticationService
+		router: Router,
+		configService: ConfigService,
+		alertService: AlertService,
+		private authService: AuthenticationService
 	) {
 		super(router, configService, alertService);
 	}

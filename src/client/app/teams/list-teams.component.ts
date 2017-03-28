@@ -32,11 +32,11 @@ export class ListTeamsComponent {
 	pagingOptions: PagingOptions;
 
 	constructor(
-		public router: Router,
-		public route: ActivatedRoute,
-		public modal: Modal,
-		public teamsService: TeamsService,
-		public authService: AuthenticationService,
+		private router: Router,
+		private route: ActivatedRoute,
+		private modal: Modal,
+		private teamsService: TeamsService,
+		private authService: AuthenticationService,
 		public alertService: AlertService
 	) {
 	}

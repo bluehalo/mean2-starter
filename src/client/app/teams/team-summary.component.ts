@@ -26,12 +26,12 @@ export class TeamSummaryComponent {
 	defaultDescription: string = 'No Description.';
 
 	constructor(
-		public router: Router,
-		public route: ActivatedRoute,
-		public modal: Modal,
-		public teamsService: TeamsService,
+		private router: Router,
+		private route: ActivatedRoute,
+		private modal: Modal,
+		private teamsService: TeamsService,
 		public alertService: AlertService,
-		public authService: AuthenticationService
+		private authService: AuthenticationService
 	) {
 	}
 
