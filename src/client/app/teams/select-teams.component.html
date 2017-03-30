@@ -3,10 +3,10 @@
 	<div [ngClass]="{'col-md-12': !showTags, 'col-md-6': showTags}">
 		<div style="padding-left:0;" class="col-md-12 pull-left btn-group" dropdown>
 			<button style="text-align: left;" type="button" class="form-control input-sm dropdown-toggle hide-overflow" dropdownToggle>
-				{{ selectedTeam.name }}
+				<span class="pull-left">{{ selectedTeam.name }}</span>
 				<span class="pull-right">
-						<span class="caret"></span>
-					</span>
+					<span class="caret"></span>
+				</span>
 			</button>
 			<ul class="dropdown-menu" role="menu">
 				<li (click)="applyTeamFilter(allTeamOption)">
@@ -23,10 +23,10 @@
 	<div *ngIf="showTags" class="col-md-6">
 		<div style="padding-left:0;" class="col-md-12 pull-left btn-group" dropdown>
 			<button style="text-align: left;" type="button" class="form-control input-sm dropdown-toggle hide-overflow" dropdownToggle>
-				{{ selectedTag.name }}
+				<span class="pull-left">{{ selectedTag.name }}</span>
 				<span class="pull-right">
-						<span class="caret"></span>
-					</span>
+					<span class="caret"></span>
+				</span>
 			</button>
 			<ul class="dropdown-menu" role="menu">
 				<li (click)="applyTagFilter(allTagOption)">
