@@ -30,7 +30,7 @@ export class SafeImageComponent {
 		}
 	}
 
-	private useDefaultUrl(event: any) {
+	useDefaultUrl(event: any) {
 		if (this.showDefault) {
 			this.imgSource = this.defaultPicSrc;
 		} else {
