@@ -24,7 +24,7 @@ module.exports = (mode) => {
 	const coverage = mode.includes(':coverage');
 
 	// For testing, use this to override aot mode
-	const aot = build;
+	const aot = true;
 
 
 	// The main webpack config object to return
@@ -215,23 +215,39 @@ module.exports = (mode) => {
 		// Specify all global packages
 		new webpack.ProvidePlugin({
 			d3: 'd3'
-		}),
+		})
 
-		// Context replacement for ng4
-		new webpack.ContextReplacementPlugin(
-			/angular(\\|\/)core(\\|\/)@angular/,
-			path.posix.resolve('./src/client')
-		)
 	);
 
 	if (aot) {
 
 		// If we're in AOT mode, we need to configure the webpack AOT plugin
 		wpConfig.plugins.push(
+
+			// Context replacement for ng4 in AOT mode
+			new webpack.ContextReplacementPlugin(
+				/angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
+				// /angular(\\|\/)core(\\|\/)@angular/,
+				path.posix.resolve('./src/client')
+			),
+
+			// AOT plugin that handles all the compilation in AOT mode
 			new ngToolsWebpack.AotPlugin({
 				tsConfigPath: './tsconfig-aot.json',
 				entryModule: path.posix.resolve('./src/client/app/app.module#AppModule')
 			})
+		);
+
+	}
+	else {
+
+		// Context replacement for ng4 not in AOT mode
+		wpConfig.plugins.push(
+			// Context replacement for ng4
+			new webpack.ContextReplacementPlugin(
+				/angular(\\|\/)core(\\|\/)@angular/,
+				path.posix.resolve('./src/client')
+			)
 		);
 
 	}
