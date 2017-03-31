@@ -3,9 +3,6 @@ import { Router } from '@angular/router';
 
 import { User } from '../user.class';
 
-/**
- *
- */
 @Injectable()
 export class UserStateService {
 

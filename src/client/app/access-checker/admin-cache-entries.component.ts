@@ -4,11 +4,10 @@ import { Response } from '@angular/http';
 import { overlayConfigFactory } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 
-import { CacheEntriesService, CacheEntry } from './cache-entries.service';
-import { AlertService } from 'app/shared/alert.service';
 import { SortDirection, SortDisplayOption } from 'app/shared/result-utils.class';
-import { PagingOptions } from 'app/shared/pager.component';
-import { TableSortOptions } from 'app/shared/pageable-table/pageable-table.component';
+import { AlertService, PagingOptions, TableSortOptions } from 'app/shared';
+
+import { CacheEntriesService, CacheEntry } from './cache-entries.service';
 import { ViewCacheEntryModal, ViewCacheEntryModalContext } from './view-cache-entry.component';
 
 @Component({

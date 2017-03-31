@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
+
+import { DefaultAudit } from 'app/audit';
+
 import { AuditObjectTypes } from 'app/audit/audit.classes';
-import {  DefaultAudit } from 'app/audit/audit-object.component';
+
 @Component({
 	selector: 'user-authentication',
 	templateUrl: './user-authentication-audit.component.html'

@@ -1,12 +1,13 @@
 import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 
-import { ManageUserComponent } from './manage-user.component';
-import { AdminService } from '../admin.service';
+import { ConfigService } from 'app/core';
+import { AlertService } from 'app/shared';
+
 import { User } from '../user.class';
+import { AdminService } from '../admin.service';
 import { Role } from '../user-management/role.class';
-import { ConfigService } from 'app/core/config.service';
-import { AlertService } from 'app/shared/alert.service';
+import { ManageUserComponent } from './manage-user.component';
 
 @Component({
 	selector: 'admin-create-user',

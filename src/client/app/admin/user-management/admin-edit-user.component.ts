@@ -1,12 +1,13 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component } from '@angular/core';
 
+import { ConfigService } from 'app/core';
+import { AlertService } from 'app/shared';
+
 import { User } from '../user.class';
 import { AdminService } from '../admin.service';
 import { ManageUserComponent } from './manage-user.component';
 import { Role } from '../user-management/role.class';
-import { ConfigService } from 'app/core/config.service';
-import { AlertService } from 'app/shared/alert.service';
 
 @Component({
 	selector: 'admin-edit-user',

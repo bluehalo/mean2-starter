@@ -4,17 +4,18 @@ import { NgModule } from '@angular/core';
 
 import { Ng2BootstrapModule } from 'ng2-bootstrap';
 
-import { EuaService } from './end-user-agreement/eua.service';
+import { AlertService, UtilModule } from 'app/shared';
+import { AdminMessagesModule } from 'app/messages';
+
+import { EuaService } from './end-user-agreement/';
+import { AuthenticationModule } from './authentication';
+import { AdminUserModule } from './user-management';
+import { AdminEuaModule } from './end-user-agreement';
+import { PasswordModule } from './password';
+
 import { AdminService } from './admin.service';
 import { AdminComponent } from './admin.component';
-import { AuthenticationModule } from './authentication/authentication.module';
 import { AdminRoutingModule } from './admin-routing.module';
-import { AdminUserModule } from './user-management/admin-user.module';
-import { AdminEuaModule } from './end-user-agreement/admin-eua.module';
-import { UtilModule } from 'app/shared/util.module';
-import { AlertService } from 'app/shared/alert.service';
-import { AdminMessagesModule } from 'app/messages/admin/admin-messages.module';
-import { PasswordModule } from './password/password.module';
 
 @NgModule({
 	imports: [

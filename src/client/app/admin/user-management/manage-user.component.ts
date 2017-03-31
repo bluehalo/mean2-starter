@@ -3,8 +3,8 @@ import { Response } from '@angular/http';
 
 import { Observable } from 'rxjs';
 
-import { ConfigService } from 'app/core/config.service';
-import { AlertService } from 'app/shared/alert.service';
+import { ConfigService } from 'app/core';
+import { AlertService } from 'app/shared';
 import { User } from '../user.class';
 
 export abstract class ManageUserComponent {

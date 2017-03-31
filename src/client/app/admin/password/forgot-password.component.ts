@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { Response } from '@angular/http';
 import { Router } from '@angular/router';
 
-import { AuthenticationService } from '../authentication/authentication.service';
-import { UserStateService } from '../authentication/user-state.service';
-import { ConfigService } from 'app/core/config.service';
+import { AuthenticationService, UserStateService } from '../authentication';
+import { ConfigService } from 'app/core';
+
 import { User } from '../user.class';
 
 @Component({

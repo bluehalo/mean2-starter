@@ -4,8 +4,10 @@ import * as _ from 'lodash';
 import { Observable, BehaviorSubject } from 'rxjs';
 
 import { User } from '../user.class';
+
+import { AsyHttp, HttpOptions } from 'app/shared';
+
 import { UserStateService } from './user-state.service';
-import { AsyHttp, HttpOptions } from 'app/shared/asy-http.service';
 
 @Injectable()
 export class AuthenticationService {

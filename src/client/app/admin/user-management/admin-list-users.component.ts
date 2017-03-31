@@ -7,19 +7,24 @@ import { Observable } from 'rxjs';
 import { overlayConfigFactory } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 
+import { SortDisplayOption, SortDirection } from 'app/shared/result-utils.class';
+import { Team } from 'app/teams/teams.class';
+import { ConfigService } from 'app/core';
+import {
+	AlertService,
+	ExportConfigService,
+	PagingOptions,
+	TableSortOptions,
+} from 'app/shared';
+import {
+	SelectTeamsComponent,
+	TeamsService,
+} from 'app/teams';
+
 import { User } from '../user.class';
 import { AdminService } from '../admin.service';
 import { Role } from './role.class';
 import { ExportUsersModalContext, ExportUsersModal } from './export-users.component';
-import { PagingOptions } from 'app/shared/pager.component';
-import { TableSortOptions } from 'app/shared/pageable-table/pageable-table.component' ;
-import { SortDisplayOption, SortDirection } from 'app/shared/result-utils.class';
-import { AlertService } from 'app/shared/alert.service';
-import { ExportConfigService } from 'app/shared/export-config.service';
-import { ConfigService } from 'app/core/config.service';
-import { Team } from 'app/teams/teams.class';
-import { SelectTeamsComponent } from 'app/teams/select-teams.component';
-import { TeamsService } from 'app/teams/teams.service';
 
 @Component({
 	templateUrl: './admin-list-users.component.html'

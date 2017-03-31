@@ -4,10 +4,11 @@ import { Router } from '@angular/router';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 
 import { EndUserAgreement } from './eua.class';
-import { EuaService } from './eua.service';
-import { AuthenticationService } from '../authentication/authentication.service';
+import { AlertService } from 'app/shared';
+import { AuthenticationService } from '../authentication';
+
 import { ManageEuaComponent } from './manage-eua.component';
-import { AlertService } from 'app/shared/alert.service';
+import { EuaService } from './eua.service';
 
 @Component({
 	selector: 'admin-create-eua',

@@ -2,12 +2,13 @@ import { Router } from '@angular/router';
 
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 
+import { AlertService } from 'app/shared';
+import { AuthenticationService } from '../authentication';
+
 import { EndUserAgreement } from './eua.class';
-import { AuthenticationService } from '../authentication/authentication.service';
-import { AlertService } from 'app/shared/alert.service';
 
 export abstract class ManageEuaComponent {
-	public error: any;
+public error: any;
 
 	mode: string;
 	id: string;

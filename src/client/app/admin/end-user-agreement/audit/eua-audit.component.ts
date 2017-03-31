@@ -1,6 +1,7 @@
-import { AuditObjectTypes } from 'app/audit/audit.classes';
-import { DefaultAudit } from 'app/audit/audit-object.component';
 import { Component } from '@angular/core';
+
+import { AuditObjectTypes } from 'app/audit/audit.classes';
+import { DefaultAudit } from 'app/audit';
 
 @Component({
 	selector: 'eua-audit',
@@ -11,4 +12,5 @@ import { Component } from '@angular/core';
 			`
 })
 export class EuaAudit extends DefaultAudit {}
+
 AuditObjectTypes.registerType('eua', EuaAudit);

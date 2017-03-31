@@ -5,15 +5,17 @@ import { RouterModule } from '@angular/router';
 
 import { Ng2BootstrapModule } from 'ng2-bootstrap';
 
+import { UtilModule, AlertService } from 'app/shared';
+
 import { AdminService } from '../admin.service';
 import { UserService } from '../users.service';
-import { UtilModule } from 'app/shared/util.module';
-import { AlertService } from 'app/shared/alert.service';
+
 import { NoAccessComponent } from './no-access.component';
 import { InvalidCertificateComponent } from './invalid-certificate.component';
 import { InactiveComponent } from './inactive.component';
 import { SigninComponent } from './signin.component';
 import { UnauthorizedComponent } from './unauthorized.component';
+
 import { UserAuthenticationAudit } from './audit/user-authentication-audit.component';
 
 @NgModule({

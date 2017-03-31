@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { AuthenticationService } from './authentication.service';
-import { User } from '../user.class';
-import { UserStateService } from './user-state.service';
+
 import { ConfigService } from 'app/core/config.service';
+import { User } from '../user.class';
+
+import { AuthenticationService } from './authentication.service';
+import { UserStateService } from './user-state.service';
 
 @Component({
 	templateUrl: './signin.component.html'

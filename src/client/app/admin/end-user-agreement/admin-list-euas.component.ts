@@ -6,14 +6,13 @@ import * as _ from 'lodash';
 import { DialogRef } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 
+import { SortDisplayOption, SortDirection } from 'app/shared/result-utils.class';
+import { AlertService, PagingOptions, TableSortOptions } from 'app/shared';
+import { AuthenticationService } from '../authentication';
+import { AdminService } from '../admin.service';
+
 import { EndUserAgreement } from './eua.class';
 import { EuaService } from './eua.service';
-import { AdminService } from '../admin.service';
-import { AuthenticationService } from '../authentication/authentication.service';
-import { PagingOptions } from 'app/shared/pager.component';
-import { TableSortOptions } from 'app/shared/pageable-table/pageable-table.component';
-import { SortDisplayOption, SortDirection } from 'app/shared/result-utils.class';
-import { AlertService } from 'app/shared/alert.service';
 
 @Component({
 	selector: 'admin-list-euas',

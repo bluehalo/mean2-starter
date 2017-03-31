@@ -1,10 +1,11 @@
 import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 
+import { ConfigService } from 'app/core';
+import { AlertService } from 'app/shared';
+
+import { AuthenticationService } from '../authentication';
 import { ManageUserComponent } from './manage-user.component';
-import { ConfigService } from 'app/core/config.service';
-import { AlertService } from 'app/shared/alert.service';
-import { AuthenticationService } from '../authentication/authentication.service';
 import { User } from '../user.class';
 
 @Component({

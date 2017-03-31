@@ -3,10 +3,10 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 
+import { AsyHttp, HttpOptions, PagingOptions } from 'app/shared';
+import { TeamsService } from 'app/teams';
+
 import { User } from './user.class';
-import { AsyHttp, HttpOptions } from 'app/shared/asy-http.service';
-import { PagingOptions } from 'app/shared/pager.component';
-import { TeamsService } from 'app/teams/teams.service';
 
 @Injectable()
 /**
