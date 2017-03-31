@@ -7,13 +7,12 @@ import { Observable } from 'rxjs/Observable';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
+import { UserService } from 'app/admin/users.service';
+import { PagingOptions, TableSortOptions } from 'app/shared';
+import { SortDisplayOption, SortDirection } from '../shared/result-utils.class';
 
 import { AuditService } from './audit.service';
 import { AuditViewDetailModalContext, AuditViewChangeModal, AuditViewDetailModal } from './audit-view-change.component';
-import { PagingOptions } from '../shared/pager.component';
-import { TableSortOptions } from '../shared/pageable-table/pageable-table.component';
-import { SortDisplayOption, SortDirection } from '../shared/result-utils.class';
-import { UserService } from '../admin/users.service';
 import { AuditOption } from './audit.classes';
 
 

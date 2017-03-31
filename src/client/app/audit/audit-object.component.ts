@@ -2,6 +2,7 @@ import {
 	Component, Input, ViewChild, ViewContainerRef, ComponentRef, ComponentFactoryResolver,
 	ComponentFactory
 } from '@angular/core';
+
 import { AuditObjectTypes } from './audit.classes';
 
 export let auditObjects: any[] = [];

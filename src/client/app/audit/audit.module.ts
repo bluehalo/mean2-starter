@@ -5,6 +5,8 @@ import { NgModule } from '@angular/core';
 import { Ng2BootstrapModule } from 'ng2-bootstrap';
 import { BootstrapModalModule, Modal } from 'angular2-modal/plugins/bootstrap';
 
+import { UtilModule } from 'app/shared';
+
 import { AuditViewChangeModal, AuditViewDetailModal } from './audit-view-change.component';
 import { AuditService } from './audit.service';
 import { AuditComponent } from './audit.component';
@@ -12,7 +14,8 @@ import {
 	AuditObjectComponent, UrlAudit,
 	DefaultAudit, ExportAudit
 } from './audit-object.component';
-import { UtilModule } from 'app/shared/util.module';
+
+//@todo Why does importing this through app/admin cause an undefined exception
 import { UserService } from 'app/admin/users.service';
 
 @NgModule({
