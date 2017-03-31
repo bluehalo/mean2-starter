@@ -19,12 +19,12 @@
 		"noUnusedParameters": false,
 		"noUnusedLocals": false,
 
-		"sourceMap": true
+		"sourceMap": true,
 
-	},
-
-	"files": [
-		"./src/client/main.ts"
-	]
+		"baseUrl": "src/client",
+		"paths": {
+			"app/*": [ "app/*" ]
+		}
+	}
 }
 

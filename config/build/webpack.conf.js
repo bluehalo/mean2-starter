@@ -6,6 +6,7 @@ const
 	webpack = require('webpack'),
 	StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin,
 
+	clientPath = path.posix.resolve('./src/client/'),
 	config = require(path.posix.resolve('./src/server/config.js')),
 	assets = require(path.posix.resolve('./config/assets.js'));
 
@@ -56,13 +57,13 @@ module.exports = (mode) => {
 	 */
 	if (test) {
 		wpConfig.entry = {
-			application: path.posix.resolve('./src/client/main.ts')
+			application: path.posix.resolve(clientPath+'/main.ts')
 		};
 	}
 	else {
 		wpConfig.entry = {
-			application: path.posix.resolve('./src/client/main.ts'),
-			vendor: path.posix.resolve('./src/client/vendor.ts')
+			application: path.posix.resolve(clientPath+'/main.ts'),
+			vendor: path.posix.resolve(clientPath+'/vendor.ts')
 		};
 	}
 
@@ -93,6 +94,9 @@ module.exports = (mode) => {
 	 * List of extensions that webpack should try to resolve
 	 */
 	wpConfig.resolve = {
+		alias: {
+			app: path.posix.resolve(clientPath+'/app')
+		},
 		extensions: [
 			'.ts', '.js','.json',
 			'.woff', '.woff2', '.ttf', '.eot', '.svg',
@@ -229,7 +233,7 @@ module.exports = (mode) => {
 		wpConfig.plugins.push(
 			new ngToolsWebpack.AotPlugin({
 				tsConfigPath: './tsconfig-aot.json',
-				entryModule: path.posix.resolve('./src/client/app/app.module#AppModule')
+				entryModule: path.posix.resolve(clientPath+'/app/app.module#AppModule')
 			})
 		);
 
