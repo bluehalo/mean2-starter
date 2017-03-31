@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
+
 import { NotificationHandlerService } from './notification-handler.service';
 import { UtilModule } from 'app/shared/util.module';
 import { NotificationService } from './notification.service';

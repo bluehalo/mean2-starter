@@ -1,39 +1,60 @@
+/**
+ * CORE
+ */
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+/**
+ * EXTENSIONS
+ */
 import { ModalModule } from 'angular2-modal';
 import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
 import { Ng2BootstrapModule } from 'ng2-bootstrap';
 import { ToasterModule } from 'angular2-toaster';
 
+/**
+ * ENTRY
+ */
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { AccessCheckerModule } from './access-checker/access-checker.module';
-import { AdminModule } from './admin/admin.module';
-import { AuditModule } from './audit/audit.module';
+/**
+ * Modules
+ */
+import { AccessCheckerModule } from './access-checker';
+import { AdminModule } from './admin';
+import { AuditModule } from './audit';
+import { HelpModule } from './help';
+import { ResourcesModule } from './resources';
+import { TeamsModule } from './teams';
+import { WelcomeModule } from './welcome';
+
 import { DemoModule } from './demo/demo.module';
-import { HelpModule } from './help/help.module';
-import { ResourcesModule } from './resources/resources.module';
-import { TeamsModule } from './teams/teams.module';
 import { UtilModule } from './shared/util.module';
-import { WelcomeModule } from './welcome/welcome.module';
 
-import { HeaderComponent } from './core/header.component';
-import { FooterComponent } from './core/footer.component';
-import { LoggedInComponent } from './core/logged-in.component';
-import { InvalidResourceComponent } from './core/invalid-resource.component';
+/**
+ * Components
+ */
+import {
+	HeaderComponent,
+	FooterComponent,
+	LoggedInComponent,
+	InvalidResourceComponent
+} from './core';
 
-import { AuthenticationService } from './admin/authentication/authentication.service';
-import { AuthGuard } from './core/auth-guard.service';
+/**
+ * Services
+ */
 import { BaseService } from './config/test/test-stub-service.service';
-import { ConfigService } from './core/config.service';
-import { ClientConfiguration } from './config/configurator';
-import { TeamsService } from './teams/teams.service';
-import { UserStateService } from './admin/authentication/user-state.service';
-import { NotificationsModule } from './notifications/notifications.module';
+
+import { AuthenticationService, UserStateService } from './admin';
+import { AuthGuard, ConfigService } from './core';
+import { ClientConfiguration } from './config';
+import { TeamsService } from './teams';
+import { NotificationsModule } from './notifications';
+
 
 export function initializerFactory () {
 	return () => () => new Promise<any>( (resolve) => {

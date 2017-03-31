@@ -1,6 +1,7 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Ng2BootstrapModule } from 'ng2-bootstrap';
+
 import { WelcomeComponent } from './welcome.component';
 import { ExternalLinksComponent } from './external-links.component';
 import { UtilModule } from 'app/shared/util.module';
