@@ -30,9 +30,9 @@ import { HelpModule } from './help';
 import { ResourcesModule } from './resources';
 import { TeamsModule } from './teams';
 import { WelcomeModule } from './welcome';
+import { UtilModule } from './shared';
 
 import { DemoModule } from './demo/demo.module';
-import { UtilModule } from './shared/util.module';
 
 /**
  * Components
