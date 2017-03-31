@@ -7,7 +7,7 @@ import { Ng2BootstrapModule } from 'ng2-bootstrap';
 import { ViewCacheEntryModal } from './view-cache-entry.component';
 import { CacheEntriesService } from './cache-entries.service';
 import { AdminCacheEntriesComponent } from './admin-cache-entries.component';
-import { UtilModule } from '../shared/util.module';
+import { UtilModule } from 'app/shared/util.module';
 
 @NgModule({
 	imports: [

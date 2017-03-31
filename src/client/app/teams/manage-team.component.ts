@@ -8,9 +8,9 @@ import { Observable } from 'rxjs/Observable';
 
 import { Team } from './teams.class';
 import { TeamsService } from './teams.service';
-import { AlertService } from '../shared/alert.service';
-import { AuthenticationService } from '../admin/authentication/authentication.service';
-import { ConfigService } from '../core/config.service';
+import { AlertService } from 'app/shared/alert.service';
+import { AuthenticationService } from 'app/admin/authentication/authentication.service';
+import { ConfigService } from 'app/core/config.service';
 
 @Component({
 	selector: 'manage-team',

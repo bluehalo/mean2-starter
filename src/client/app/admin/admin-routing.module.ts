@@ -9,7 +9,7 @@ import { AdminListEuasComponent } from './end-user-agreement/admin-list-euas.com
 import { AdminCreateEuaComponent } from './end-user-agreement/admin-create-eua.component';
 import { AdminUpdateEuaComponent } from './end-user-agreement/admin-edit-eua.component';
 import { AdminCacheEntriesComponent } from '../access-checker/admin-cache-entries.component';
-import { AuthGuard } from '../core/auth-guard.service';
+import { AuthGuard } from 'app/core/auth-guard.service';
 
 @NgModule({
 	imports: [

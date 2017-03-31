@@ -4,7 +4,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/share';
 import 'rxjs/add/operator/startWith';
 
-import { ClientConfiguration } from '../config/configurator';
+import { ClientConfiguration } from 'app/config/configurator';
 
 @Injectable()
 export class ConfigService {

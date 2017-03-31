@@ -13,11 +13,11 @@ import { ExportUsersModal } from './export-users.component';
 import { UpdateUserComponent } from './edit-user.component';
 import { UserSignupComponent } from './user-signup.component';
 import { UserService } from '../users.service';
-import { UtilModule } from '../../shared/util.module';
-import { AlertService } from '../../shared/alert.service';
-import { CacheEntriesService } from '../../access-checker/cache-entries.service';
+import { UtilModule } from 'app/shared/util.module';
+import { AlertService } from 'app/shared/alert.service';
+import { CacheEntriesService } from 'app/access-checker/cache-entries.service';
 import { UserAudit } from './audit/user-audit.component';
-import { TeamsModule } from '../../teams/teams.module';
+import { TeamsModule } from 'app/teams/teams.module';
 
 @NgModule({
 	imports: [

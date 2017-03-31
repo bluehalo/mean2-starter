@@ -3,8 +3,8 @@ import { Response } from '@angular/http';
 
 import { Observable } from 'rxjs';
 
-import { AsyHttp, HttpOptions } from '../../shared/asy-http.service';
-import { PagingOptions } from '../../shared/pager.component';
+import { AsyHttp, HttpOptions } from 'app/shared/asy-http.service';
+import { PagingOptions } from 'app/shared/pager.component';
 import { EndUserAgreement } from './eua.class';
 
 @Injectable()

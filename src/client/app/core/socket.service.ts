@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
-import { AuthenticationService } from '../admin/authentication/authentication.service';
-import { UserStateService } from '../admin/authentication/user-state.service';
+import { AuthenticationService } from 'app/admin/authentication/authentication.service';
+import { UserStateService } from 'app/admin/authentication/user-state.service';
 
 /**
  * Handles sockets for the application

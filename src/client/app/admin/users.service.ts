@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 
 import { User } from './user.class';
-import { AsyHttp, HttpOptions } from '../shared/asy-http.service';
-import { PagingOptions } from '../shared/pager.component';
+import { AsyHttp, HttpOptions } from 'app/shared/asy-http.service';
+import { PagingOptions } from 'app/shared/pager.component';
 
 @Injectable()
 export class UserService {

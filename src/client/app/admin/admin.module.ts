@@ -11,9 +11,9 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminUserModule } from './user-management/admin-user.module';
 import { AdminEuaModule } from './end-user-agreement/admin-eua.module';
-import { UtilModule } from '../shared/util.module';
-import { AlertService } from '../shared/alert.service';
-import { AdminMessagesModule } from '../messages/admin/admin-messages.module';
+import { UtilModule } from 'app/shared/util.module';
+import { AlertService } from 'app/shared/alert.service';
+import { AdminMessagesModule } from 'app/messages/admin/admin-messages.module';
 import { PasswordModule } from './password/password.module';
 
 @NgModule({

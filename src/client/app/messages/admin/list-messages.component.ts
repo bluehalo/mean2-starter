@@ -7,10 +7,10 @@ import { MessageService } from '../message.service';
 
 import * as _ from 'lodash';
 import { Response } from '@angular/http';
-import { PagingOptions } from '../../shared/pager.component';
-import { TableSortOptions } from '../../shared/pageable-table/pageable-table.component';
-import { SortDirection, SortDisplayOption } from '../../shared/result-utils.class';
-import { AlertService } from '../../shared/alert.service';
+import { PagingOptions } from 'app/shared/pager.component';
+import { TableSortOptions } from 'app/shared/pageable-table/pageable-table.component';
+import { SortDirection, SortDisplayOption } from 'app/shared/result-utils.class';
+import { AlertService } from 'app/shared/alert.service';
 
 @Component({
 	templateUrl: './list-messages.component.html'

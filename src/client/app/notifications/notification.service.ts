@@ -1,10 +1,10 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { AsyHttp, HttpOptions } from '../shared/asy-http.service';
-import { SocketService } from '../core/socket.service';
-import { UserStateService } from '../admin/authentication/user-state.service';
+import { AsyHttp, HttpOptions } from 'app/shared/asy-http.service';
+import { SocketService } from 'app/core/socket.service';
+import { UserStateService } from 'app/admin/authentication/user-state.service';
 import { Notification } from './notification.class';
-import { UserService } from '../admin/users.service';
-import { PagingOptions } from '../shared/pager.component';
+import { UserService } from 'app/admin/users.service';
+import { PagingOptions } from 'app/shared/pager.component';
 
 @Injectable()
 export class NotificationService {

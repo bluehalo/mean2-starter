@@ -11,15 +11,15 @@ import { User } from '../user.class';
 import { AdminService } from '../admin.service';
 import { Role } from './role.class';
 import { ExportUsersModalContext, ExportUsersModal } from './export-users.component';
-import { PagingOptions } from '../../shared/pager.component';
-import { TableSortOptions } from '../../shared/pageable-table/pageable-table.component' ;
-import { SortDisplayOption, SortDirection } from '../../shared/result-utils.class';
-import { AlertService } from '../../shared/alert.service';
-import { ExportConfigService } from '../../shared/export-config.service';
-import { ConfigService } from '../../core/config.service';
-import { Team } from '../../teams/teams.class';
-import { SelectTeamsComponent } from '../../teams/select-teams.component';
-import { TeamsService } from '../../teams/teams.service';
+import { PagingOptions } from 'app/shared/pager.component';
+import { TableSortOptions } from 'app/shared/pageable-table/pageable-table.component' ;
+import { SortDisplayOption, SortDirection } from 'app/shared/result-utils.class';
+import { AlertService } from 'app/shared/alert.service';
+import { ExportConfigService } from 'app/shared/export-config.service';
+import { ConfigService } from 'app/core/config.service';
+import { Team } from 'app/teams/teams.class';
+import { SelectTeamsComponent } from 'app/teams/select-teams.component';
+import { TeamsService } from 'app/teams/teams.service';
 
 @Component({
 	templateUrl: './admin-list-users.component.html'

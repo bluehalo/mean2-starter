@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { HelpTopic } from './help.class';
-import { ConfigService } from '../core/config.service';
-import { User } from '../admin/user.class';
-import { AuthenticationService } from '../admin/authentication/authentication.service';
+import { ConfigService } from 'app/core/config.service';
+import { User } from 'app/admin/user.class';
+import { AuthenticationService } from 'app/admin/authentication/authentication.service';
 import { HelpService } from './help.service';
 
 @Component({

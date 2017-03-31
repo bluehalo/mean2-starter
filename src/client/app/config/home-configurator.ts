@@ -1,5 +1,5 @@
 import { ClientConfiguration } from './configurator';
-import { UrlClickHandler } from '../shared/urlHandler/url-click-handler.component';
+import { UrlClickHandler } from 'app/shared/urlHandler/url-click-handler.component';
 
 
 ClientConfiguration.applyConfig({

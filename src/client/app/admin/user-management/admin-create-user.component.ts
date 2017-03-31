@@ -5,8 +5,8 @@ import { ManageUserComponent } from './manage-user.component';
 import { AdminService } from '../admin.service';
 import { User } from '../user.class';
 import { Role } from '../user-management/role.class';
-import { ConfigService } from '../../core/config.service';
-import { AlertService } from '../../shared/alert.service';
+import { ConfigService } from 'app/core/config.service';
+import { AlertService } from 'app/shared/alert.service';
 
 @Component({
 	selector: 'admin-create-user',

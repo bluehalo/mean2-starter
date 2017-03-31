@@ -1,6 +1,6 @@
 import { ConfigService } from './config.service';
-import { User } from '../admin/user.class';
-import { AuthenticationService } from '../admin/authentication/authentication.service';
+import { User } from 'app/admin/user.class';
+import { AuthenticationService } from 'app/admin/authentication/authentication.service';
 
 export class CoreComponent {
 

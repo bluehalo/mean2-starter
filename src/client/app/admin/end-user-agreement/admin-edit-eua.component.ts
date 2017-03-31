@@ -7,7 +7,7 @@ import { EndUserAgreement } from './eua.class';
 import { EuaService } from './eua.service';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { ManageEuaComponent } from './manage-eua.component';
-import { AlertService } from '../../shared/alert.service';
+import { AlertService } from 'app/shared/alert.service';
 
 @Component({
 	selector: 'admin-update-eua',

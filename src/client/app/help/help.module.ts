@@ -7,11 +7,11 @@ import { Ng2BootstrapModule } from 'ng2-bootstrap';
 
 import { HelpComponent } from './help.component';
 import { HelpRoutingModule } from './help-routing.module';
-import { UtilModule } from '../shared/util.module';
-import { CoreHelpModule } from '../core/help/core-help.module';
-import { CoreHelpRoutingModule } from '../core/help/core-help-routing.module';
-import { TeamsHelpModule } from '../teams/help/teams-help.module';
-import { TeamsHelpRoutingModule } from '../teams/help/teams-help-routing.module';
+import { UtilModule } from 'app/shared/util.module';
+import { CoreHelpModule } from 'app/core/help/core-help.module';
+import { CoreHelpRoutingModule } from 'app/core/help/core-help-routing.module';
+import { TeamsHelpModule } from 'app/teams/help/teams-help.module';
+import { TeamsHelpRoutingModule } from 'app/teams/help/teams-help-routing.module';
 import { HelpService } from './help.service';
 
 @NgModule({

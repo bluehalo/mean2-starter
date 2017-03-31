@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
-import { ConfigService } from '../core/config.service';
-import { AlertService } from '../shared/alert.service';
-import { MessageService } from '../messages/message.service';
+import { ConfigService } from 'app/core/config.service';
+import { AlertService } from 'app/shared/alert.service';
+import { MessageService } from 'app/messages/message.service';
 
 @Component({
 	templateUrl: './welcome.component.html'

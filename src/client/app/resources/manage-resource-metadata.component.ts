@@ -4,12 +4,12 @@ import { Response } from '@angular/http';
 import * as _ from 'lodash';
 
 import { Owner } from './owner.class';
-import { PagingOptions } from '../shared/pager.component';
+import { PagingOptions } from 'app/shared/pager.component';
 import { Resource } from './resource.class';
-import { Tag } from '../teams/tags/tags.class';
-import { TagsService } from '../teams/tags/tags.service';
-import { Team } from '../teams/teams.class';
-import { TeamsService } from '../teams/teams.service';
+import { Tag } from 'app/teams/tags/tags.class';
+import { TagsService } from 'app/teams/tags/tags.service';
+import { Team } from 'app/teams/teams.class';
+import { TeamsService } from 'app/teams/teams.service';
 
 @Component({
 	selector: 'manage-resource-metadata',

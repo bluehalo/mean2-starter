@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 
 import { AuthenticationService } from '../authentication/authentication.service';
 import { UserStateService } from '../authentication/user-state.service';
-import { ConfigService } from '../../core/config.service';
+import { ConfigService } from 'app/core/config.service';
 import { User } from '../user.class';
 
 @Component({

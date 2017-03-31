@@ -3,12 +3,12 @@ import { Component, Output, EventEmitter, Input } from '@angular/core';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 
-import { ObservableUtils } from '../shared/observable-utils.class';
+import { ObservableUtils } from 'app/shared/observable-utils.class';
 import { TagsService } from './tags/tags.service';
 import { TeamsService } from './teams.service';
 import { TeamMember, Team } from './teams.class';
 import { Tag } from './tags/tags.class';
-import { PagingOptions } from '../shared/pager.component';
+import { PagingOptions } from 'app/shared/pager.component';
 
 @Component({
 	selector: 'select-teams',

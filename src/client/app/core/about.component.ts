@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ConfigService } from '../core/config.service';
+import { ConfigService } from './config.service';
 
 /**
  * Component that contains information about the application

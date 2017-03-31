@@ -11,8 +11,8 @@ import { AdminListEuasComponent } from './admin-list-euas.component';
 import { AdminCreateEuaComponent } from './admin-create-eua.component';
 import { AdminUpdateEuaComponent } from './admin-edit-eua.component';
 import { UserEuaComponent } from './user-eua.component';
-import { UtilModule } from '../../shared/util.module';
-import { AlertService } from '../../shared/alert.service';
+import { UtilModule } from 'app/shared/util.module';
+import { AlertService } from 'app/shared/alert.service';
 import { EuaAudit } from './audit/eua-audit.component';
 
 @NgModule({

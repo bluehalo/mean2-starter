@@ -8,9 +8,9 @@ import { ManageUserComponent } from './manage-user.component';
 import { AdminService } from '../admin.service';
 import { User } from '../user.class';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { ConfigService } from '../../core/config.service';
-import { AlertService } from '../../shared/alert.service';
-import { CacheEntriesService } from '../../access-checker/cache-entries.service';
+import { ConfigService } from 'app/core/config.service';
+import { AlertService } from 'app/shared/alert.service';
+import { CacheEntriesService } from 'app/access-checker/cache-entries.service';
 
 @Component({
 	selector: 'edit-user',

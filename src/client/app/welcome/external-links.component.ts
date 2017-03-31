@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ConfigService } from '../core/config.service';
+import { ConfigService } from 'app/core/config.service';
 
 @Component({
 	selector: 'external-links',

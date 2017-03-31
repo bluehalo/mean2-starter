@@ -1,4 +1,4 @@
-import { Resource } from '../resources/resource.class';
+import { Resource } from 'app/resources/resource.class';
 
 export class Notification {
 	public _id: string;

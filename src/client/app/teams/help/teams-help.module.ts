@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { HelpService } from '../../help/help.service';
-import { HelpTopic } from '../../help/help.class';
+import { HelpService } from 'app/help/help.service';
+import { HelpTopic } from 'app/help/help.class';
 import { TeamsHelpComponent } from './teams-help.component';
 
 @NgModule({

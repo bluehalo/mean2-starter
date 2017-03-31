@@ -12,8 +12,8 @@ import {
 	AuditObjectComponent, UrlAudit,
 	DefaultAudit, ExportAudit
 } from './audit-object.component';
-import { UtilModule } from '../shared/util.module';
-import { UserService } from '../admin/users.service';
+import { UtilModule } from 'app/shared/util.module';
+import { UserService } from 'app/admin/users.service';
 
 @NgModule({
 	imports: [
