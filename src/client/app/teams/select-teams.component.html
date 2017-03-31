@@ -2,8 +2,8 @@
 	<!--Teams-->
 	<div [ngClass]="{'col-md-12': !showTags, 'col-md-6': showTags}">
 		<div style="padding-left:0;" class="col-md-12 pull-left btn-group" dropdown>
-			<button style="text-align: left;" type="button" class="form-control input-sm dropdown-toggle hide-overflow" dropdownToggle>
-				<span class="pull-left">{{ selectedTeam.name }}</span>
+			<button style="text-align: left;" type="button" class="form-control input-sm dropdown-toggle" dropdownToggle>
+				<span class="pull-left hide-overflow" style="width: calc(100% - 10px);">{{ selectedTeam.name }}</span>
 				<span class="pull-right">
 					<span class="caret"></span>
 				</span>
@@ -22,8 +22,8 @@
 	<!--Tags-->
 	<div *ngIf="showTags" class="col-md-6">
 		<div style="padding-left:0;" class="col-md-12 pull-left btn-group" dropdown>
-			<button style="text-align: left;" type="button" class="form-control input-sm dropdown-toggle hide-overflow" dropdownToggle>
-				<span class="pull-left">{{ selectedTag.name }}</span>
+			<button style="text-align: left;" type="button" class="form-control input-sm dropdown-toggle" dropdownToggle>
+				<span class="pull-left hide-overflow" style="width: calc(100% - 10px);">{{ selectedTag.name }}</span>
 				<span class="pull-right">
 					<span class="caret"></span>
 				</span>
