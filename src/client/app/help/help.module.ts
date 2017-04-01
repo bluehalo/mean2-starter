@@ -5,13 +5,12 @@ import { CommonModule } from '@angular/common';
 
 import { Ng2BootstrapModule } from 'ng2-bootstrap';
 
+import { UtilModule } from 'app/shared';
+import { CoreHelpModule, CoreHelpRoutingModule } from 'app/core';
+import { TeamsHelpModule, TeamsHelpRoutingModule } from 'app/teams';
+
 import { HelpComponent } from './help.component';
 import { HelpRoutingModule } from './help-routing.module';
-import { UtilModule } from 'app/shared/util.module';
-import { CoreHelpModule } from 'app/core/help/core-help.module';
-import { CoreHelpRoutingModule } from 'app/core/help/core-help-routing.module';
-import { TeamsHelpModule } from 'app/teams/help/teams-help.module';
-import { TeamsHelpRoutingModule } from 'app/teams/help/teams-help-routing.module';
 import { HelpService } from './help.service';
 
 @NgModule({
