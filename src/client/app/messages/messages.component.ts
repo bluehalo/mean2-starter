@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 
+import * as _ from 'lodash';
+
+import { PagingOptions } from 'app/shared';
+
 import { Message, MessageType } from './message.class';
 import { MessageService } from './message.service';
-import { PagingOptions } from 'app/shared/pager.component';
-import * as _ from 'lodash';
 
 @Component({
 	selector: 'messages',

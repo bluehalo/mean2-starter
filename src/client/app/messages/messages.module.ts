@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { SocketService } from 'app/core';
+import { UtilModule } from 'app/shared';
+
 import { MessageHandlerService } from './message-handler.service';
 import { MessageService } from './message.service';
-import { SocketService } from 'app/core/socket.service';
 import { MessagesComponent } from './messages.component';
-import { UtilModule } from 'app/shared/util.module';
 import { MessageAudit } from './audit/message-audit.component';
 
 @NgModule({

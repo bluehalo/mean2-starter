@@ -1,8 +1,9 @@
 import { NgModule }     from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { AdminComponent } from 'app/admin/admin.component';
-import { AuthGuard } from 'app/core/auth-guard.service';
+import { AuthGuard } from 'app/core';
+import { AdminComponent } from 'app/admin';
+
 import { ListMessagesComponent } from './list-messages.component';
 import { CreateMessageComponent } from './create-message.component';
 import { UpdateMessageComponent } from './edit-message.component';
