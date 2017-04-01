@@ -4,8 +4,9 @@ import { NgModule } from '@angular/core';
 
 import { Ng2BootstrapModule } from 'ng2-bootstrap';
 
+import { UtilModule } from 'app/shared';
+
 import { ManageResourceMetadataComponent } from './manage-resource-metadata.component';
-import { UtilModule } from 'app/shared/util.module';
 
 @NgModule({
 	imports: [

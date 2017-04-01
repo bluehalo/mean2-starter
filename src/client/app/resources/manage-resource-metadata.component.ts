@@ -3,13 +3,14 @@ import { Response } from '@angular/http';
 
 import * as _ from 'lodash';
 
-import { Owner } from './owner.class';
-import { PagingOptions } from 'app/shared/pager.component';
-import { Resource } from './resource.class';
+import { PagingOptions } from 'app/shared';
+
+import { TagsService, TeamsService } from 'app/teams';
+
 import { Tag } from 'app/teams/tags/tags.class';
-import { TagsService } from 'app/teams/tags/tags.service';
 import { Team } from 'app/teams/teams.class';
-import { TeamsService } from 'app/teams/teams.service';
+import { Owner } from './owner.class';
+import { Resource } from './resource.class';
 
 @Component({
 	selector: 'manage-resource-metadata',
