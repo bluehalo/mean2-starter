@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+
+import { ConfigService } from 'app/core';
+
 import { NotificationStateService } from './notification-state-service';
-import { ConfigService } from 'app/core/config.service';
 
 @Component({
 	templateUrl: 'notification-indicator.component.html',
