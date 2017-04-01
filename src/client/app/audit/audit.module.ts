@@ -15,7 +15,7 @@ import {
 	DefaultAudit, ExportAudit
 } from './audit-object.component';
 
-//@todo Why does importing this through app/admin cause an undefined exception
+// @todo Why does importing this through app/admin cause an undefined exception?
 import { UserService } from 'app/admin/users.service';
 
 @NgModule({
