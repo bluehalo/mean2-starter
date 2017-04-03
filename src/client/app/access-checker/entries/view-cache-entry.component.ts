@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { DialogRef, ModalComponent } from 'angular2-modal';
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap/index';
 
-import { CacheEntry } from './cache-entries.service';
+import { CacheEntry } from '../cache-entries.service';
 
 export class ViewCacheEntryModalContext extends BSModalContext {
 	cacheEntry: CacheEntry;
@@ -15,7 +15,7 @@ export class ViewCacheEntryModalContext extends BSModalContext {
 }
 
 @Component({
-	templateUrl: './view-cache-entry.component.html'
+	templateUrl: 'view-cache-entry.component.html'
 })
 export class ViewCacheEntryModal implements ModalComponent<ViewCacheEntryModalContext> {
 	context: ViewCacheEntryModalContext;

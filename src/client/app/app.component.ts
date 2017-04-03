@@ -8,7 +8,6 @@ import { SocketService } from './core/socket.service';
 	selector: 'app-component',
 	templateUrl: './app.component.html'
 })
-
 export class AppComponent {
 
 	banner: any;

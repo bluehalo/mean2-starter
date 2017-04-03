@@ -8,7 +8,6 @@ import { AdminComponent } from './admin.component';
 import { AdminListEuasComponent } from './end-user-agreement/admin-list-euas.component';
 import { AdminCreateEuaComponent } from './end-user-agreement/admin-create-eua.component';
 import { AdminUpdateEuaComponent } from './end-user-agreement/admin-edit-eua.component';
-import { AdminCacheEntriesComponent } from '../access-checker/admin-cache-entries.component';
 import { AuthGuard } from '../core/auth-guard.service';
 
 @NgModule({
@@ -50,7 +49,7 @@ import { AuthGuard } from '../core/auth-guard.service';
 					 */
 					{
 						path: 'cacheEntries',
-						component: AdminCacheEntriesComponent
+						loadChildren: '../access-checker/access-checker.module#AccessCheckerModule'
 					},
 
 					/**

@@ -4,9 +4,10 @@ import { FormsModule } from '@angular/forms';
 
 import { Ng2BootstrapModule } from 'ng2-bootstrap';
 
-import { ViewCacheEntryModal } from './view-cache-entry.component';
+import { AccessCheckerRoutingModule } from './access-checker-routing.module';
+import { ViewCacheEntryModal } from './entries/view-cache-entry.component';
 import { CacheEntriesService } from './cache-entries.service';
-import { AdminCacheEntriesComponent } from './admin-cache-entries.component';
+import { ListCacheEntriesComponent } from './entries/list-cache-entries.component';
 import { UtilModule } from '../shared/util.module';
 
 @NgModule({
@@ -14,17 +15,18 @@ import { UtilModule } from '../shared/util.module';
 		CommonModule,
 		FormsModule,
 		UtilModule,
-		Ng2BootstrapModule
+		Ng2BootstrapModule,
+		AccessCheckerRoutingModule
 	],
 	entryComponents: [
 		ViewCacheEntryModal
 	],
 	declarations: [
-		AdminCacheEntriesComponent,
+		ListCacheEntriesComponent,
 		ViewCacheEntryModal
 	],
 	exports: [
-		AdminCacheEntriesComponent
+		ListCacheEntriesComponent
 	],
 	providers: [
 		CacheEntriesService

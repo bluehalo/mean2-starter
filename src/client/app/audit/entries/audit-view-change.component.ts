@@ -14,7 +14,7 @@ export class AuditViewDetailModalContext extends BSModalContext {
 }
 
 @Component({
-	templateUrl: './audit-view-details.component.html'
+	templateUrl: 'audit-view-details.component.html'
 })
 export class AuditViewDetailModal implements ModalComponent<AuditViewDetailModalContext> {
 	context: AuditViewDetailModalContext;
@@ -44,7 +44,7 @@ export class AuditViewDetailModal implements ModalComponent<AuditViewDetailModal
 }
 
 @Component({
-	templateUrl: './audit-view-change.component.html'
+	templateUrl: 'audit-view-change.component.html'
 })
 export class AuditViewChangeModal extends AuditViewDetailModal {
 

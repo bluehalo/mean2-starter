@@ -23,8 +23,12 @@
 
 	},
 
-	"files": [
-		"./src/client/main.ts"
+	"includes": [
+		"./src/client/**/*.ts"
+	],
+
+	"exclude": [
+		"node_modules"
 	]
 }
 

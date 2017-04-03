@@ -17,9 +17,8 @@
 
 		"allowUnreachableCode": false,
 		"noUnusedParameters": false,
-		"noUnusedLocals": false,
+		"noUnusedLocals": false
 
-		"sourceMap": true
 	}
 }
 
