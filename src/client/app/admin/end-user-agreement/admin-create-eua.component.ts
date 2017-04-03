@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 
 import { EndUserAgreement } from './eua.class';
-import { AlertService } from 'app/shared';
 import { AuthenticationService } from '../authentication';
+import { AlertService } from 'app/shared';
 
 import { ManageEuaComponent } from './manage-eua.component';
 import { EuaService } from './eua.service';

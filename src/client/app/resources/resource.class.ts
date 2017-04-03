@@ -1,5 +1,6 @@
 
-import { Tag } from 'app/teams/tags/tags.class';
+import { Tag } from 'app/teams';
+
 import { Owner } from './owner.class';
 
 export abstract class Resource {

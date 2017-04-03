@@ -8,8 +8,10 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 
 import { UserService } from 'app/admin/users.service';
-import { PagingOptions, TableSortOptions } from 'app/shared';
-import { SortDisplayOption, SortDirection } from '../shared/result-utils.class';
+import {
+	PagingOptions, TableSortOptions,
+	SortDisplayOption, SortDirection
+} from 'app/shared';
 
 import { AuditService } from './audit.service';
 import { AuditViewDetailModalContext, AuditViewChangeModal, AuditViewDetailModal } from './audit-view-change.component';

@@ -3,10 +3,10 @@ import { Component } from '@angular/core';
 
 import { ConfigService } from 'app/core';
 import { AlertService } from 'app/shared';
+import { Role } from '../user-management';
 
 import { User } from '../user.class';
 import { AdminService } from '../admin.service';
-import { Role } from '../user-management/role.class';
 import { ManageUserComponent } from './manage-user.component';
 
 @Component({

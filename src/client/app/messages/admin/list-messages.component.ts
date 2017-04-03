@@ -6,8 +6,11 @@ import { ActivatedRoute, Params } from '@angular/router';
 import * as _ from 'lodash';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 
-import { AlertService, PagingOptions, TableSortOptions} from 'app/shared';
-import { SortDirection, SortDisplayOption } from 'app/shared/result-utils.class';
+import {
+	AlertService, PagingOptions,
+	SortDirection, SortDisplayOption,
+	TableSortOptions
+} from 'app/shared';
 
 import { Message } from '../message.class';
 import { MessageService } from '../message.service';

@@ -5,10 +5,8 @@ import * as _ from 'lodash';
 
 import { PagingOptions } from 'app/shared';
 
-import { TagsService, TeamsService } from 'app/teams';
+import { TagsService, TeamsService, Tag, Team } from 'app/teams';
 
-import { Tag } from 'app/teams/tags/tags.class';
-import { Team } from 'app/teams/teams.class';
 import { Owner } from './owner.class';
 import { Resource } from './resource.class';
 

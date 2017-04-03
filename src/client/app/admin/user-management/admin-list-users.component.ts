@@ -7,16 +7,17 @@ import { Observable } from 'rxjs';
 import { overlayConfigFactory } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 
-import { SortDisplayOption, SortDirection } from 'app/shared/result-utils.class';
-import { Team } from 'app/teams/teams.class';
 import { ConfigService } from 'app/core';
 import {
 	AlertService,
 	ExportConfigService,
 	PagingOptions,
+	SortDisplayOption,
+	SortDirection,
 	TableSortOptions,
 } from 'app/shared';
 import {
+	Team,
 	SelectTeamsComponent,
 	TeamsService,
 } from 'app/teams';

@@ -7,7 +7,7 @@ import { Ng2BootstrapModule } from 'ng2-bootstrap';
 import { AlertService, UtilModule } from 'app/shared';
 import { AdminMessagesModule } from 'app/messages';
 
-import { EuaService } from './end-user-agreement/';
+import { EuaService } from './end-user-agreement';
 import { AuthenticationModule } from './authentication';
 import { AdminUserModule } from './user-management';
 import { AdminEuaModule } from './end-user-agreement';

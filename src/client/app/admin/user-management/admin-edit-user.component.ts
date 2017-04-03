@@ -3,11 +3,11 @@ import { Component } from '@angular/core';
 
 import { ConfigService } from 'app/core';
 import { AlertService } from 'app/shared';
+import { Role } from '../user-management';
 
 import { User } from '../user.class';
 import { AdminService } from '../admin.service';
 import { ManageUserComponent } from './manage-user.component';
-import { Role } from '../user-management/role.class';
 
 @Component({
 	selector: 'admin-edit-user',
