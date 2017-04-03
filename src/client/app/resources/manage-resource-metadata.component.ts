@@ -28,6 +28,8 @@ export class ManageResourceMetadataComponent {
 
 	@Output() alertError = new EventEmitter();
 
+	@Output() resourceChange = new EventEmitter();
+
 	ownerOptions: Owner[] = [];
 
 	tagOptions: Tag[] = [];
@@ -53,6 +55,7 @@ export class ManageResourceMetadataComponent {
 					// Default to the first team in the list
 					if (this.mode === 'create') {
 						this.resource.owner = this.ownerOptions[0];
+						this.resourceChange.emit(this.resource);
 					}
 
 					this.getTagOptions();
@@ -94,10 +97,20 @@ export class ManageResourceMetadataComponent {
 		return _.isString(this.resource.description) && this.resource.description.trim().length > 0;
 	}
 
-	private updateTags(event: any) {
+	updateTags(event: any) {
 		if (event.hasOwnProperty('items')) {
 			this.resource.tags = event.items;
 			this.processTags();
+			this.resourceChange.emit(this.resource);
+		}
+	}
+
+	updateField(field: string, value: any) {
+		this.resource[field] = value;
+		this.resourceChange.emit(this.resource);
+
+		if (field === 'owner') {
+			this.getTagOptions();
 		}
 	}
 }
