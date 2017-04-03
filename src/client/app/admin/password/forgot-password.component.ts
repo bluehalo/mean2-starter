@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService, UserStateService } from '../authentication';
 import { ConfigService } from 'app/core';
 
-import { User } from '../user.class';
+import { User } from '../user';
 
 @Component({
 	templateUrl: './forgot-password.component.html'

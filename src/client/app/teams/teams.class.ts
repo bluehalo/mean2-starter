@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 
-import { User } from 'app/admin/user.class';
+import { User } from 'app/admin/user';
 
 export class TeamMember extends User {
 

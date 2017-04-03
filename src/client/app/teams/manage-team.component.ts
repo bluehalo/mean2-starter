@@ -1,5 +1,5 @@
-import { Location } from '@angular/common';
 import { Component } from '@angular/core';
+import { Location } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Response } from '@angular/http';
 

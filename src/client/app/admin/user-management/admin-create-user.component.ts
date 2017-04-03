@@ -5,7 +5,7 @@ import { ConfigService } from 'app/core';
 import { AlertService } from 'app/shared';
 import { Role } from '../user-management';
 
-import { User } from '../user.class';
+import { User } from '../user';
 import { AdminService } from '../admin.service';
 import { ManageUserComponent } from './manage-user.component';
 

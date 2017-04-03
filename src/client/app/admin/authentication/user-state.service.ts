@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { User } from '../user.class';
+import { User } from '../user';
 
 @Injectable()
 export class UserStateService {
 
-	public user: User = new User();
+	public user: User;
 	public authRedirectUrl: string; // Can maintain state of a url to redirect to after login
 
-	constructor(private router: Router) {}
+	constructor(private router: Router) {
+		this.user = new User();
+	}
 
 	/**
 	 * Redirect the user to the last attempted route

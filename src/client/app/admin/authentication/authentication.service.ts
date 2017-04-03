@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { Observable, BehaviorSubject } from 'rxjs';
 
-import { User } from '../user.class';
+import { User } from '../user';
 
 import { AsyHttp, HttpOptions } from 'app/shared';
 

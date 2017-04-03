@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 import { ConfigService } from 'app/core';
 import { AlertService } from 'app/shared';
-import { User } from '../user.class';
+import { User } from '../user';
 
 export abstract class ManageUserComponent {
 

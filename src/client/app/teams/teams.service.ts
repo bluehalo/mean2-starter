@@ -10,9 +10,9 @@ import {
 	PagingOptions
 } from 'app/shared';
 import { Resource } from 'app/resources';
+import { User } from 'app/admin';
 
 import { Team, TeamMember } from './teams.class';
-import { User } from 'app/admin/user.class';
 
 import { AuthenticationService } from 'app/admin/authentication/authentication.service';
 

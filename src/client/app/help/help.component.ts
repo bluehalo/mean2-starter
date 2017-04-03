@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { ConfigService } from 'app/core';
-import { User } from 'app/admin/user.class';
+import { User } from '../admin/user';
 import { AuthenticationService } from 'app/admin/authentication';
 
 import { HelpTopic } from './help.class';

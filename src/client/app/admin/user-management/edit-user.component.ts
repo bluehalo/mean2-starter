@@ -8,10 +8,10 @@ import { ConfigService } from 'app/core';
 import { AlertService } from 'app/shared';
 import { CacheEntriesService } from 'app/access-checker';
 
+import { User } from '../user';
 import { AuthenticationService } from '../authentication';
 import { ManageUserComponent } from './manage-user.component';
 import { AdminService } from '../admin.service';
-import { User } from '../user.class';
 
 @Component({
 	selector: 'edit-user',

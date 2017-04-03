@@ -11,11 +11,11 @@ import {
 	SortDirection, SortDisplayOption,
 	AlertService
 } from 'app/shared';
+import { User } from 'app/admin/user';
 
 import { Team, TeamMember, TeamRole } from './teams.class';
 import { TeamsService } from './teams.service';
 
-import { User } from 'app/admin/user.class';
 import { UserService } from 'app/admin/users.service';
 import { AuthenticationService } from 'app/admin/authentication/authentication.service';
 

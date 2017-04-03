@@ -6,7 +6,7 @@ import { AlertService } from 'app/shared';
 
 import { AuthenticationService } from '../authentication';
 import { ManageUserComponent } from './manage-user.component';
-import { User } from '../user.class';
+import { User } from '../user';
 
 @Component({
 	selector: 'user-signup',

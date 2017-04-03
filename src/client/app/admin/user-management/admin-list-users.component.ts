@@ -22,7 +22,7 @@ import {
 	TeamsService,
 } from 'app/teams';
 
-import { User } from '../user.class';
+import { User } from '../user';
 import { AdminService } from '../admin.service';
 import { Role } from './role.class';
 import { ExportUsersModalContext, ExportUsersModal } from './export-users.component';

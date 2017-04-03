@@ -5,8 +5,8 @@ import { Observable } from 'rxjs';
 
 import { AsyHttp, HttpOptions, PagingOptions } from 'app/shared';
 import { TeamsService } from 'app/teams';
+import { User } from './user';
 
-import { User } from './user.class';
 
 @Injectable()
 /**
