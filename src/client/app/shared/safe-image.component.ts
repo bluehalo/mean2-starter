@@ -1,6 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { ConfigService } from 'app/core/config.service';
+
 import * as _ from 'lodash';
+
+
+import { ConfigService } from 'app/core/config.service';
 
 @Component({
 	selector: 'asy-safe-image',

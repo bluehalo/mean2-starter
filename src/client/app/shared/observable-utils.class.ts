@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs';
+
 import { ObservableResult } from './observable-result.class';
 
 export class ObservableUtils {

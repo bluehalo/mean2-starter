@@ -1,4 +1,5 @@
 import { Component, Input, Output, SimpleChange, EventEmitter } from '@angular/core';
+
 import { SortDirection } from './result-utils.class';
 
 export type PageChange = {

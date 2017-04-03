@@ -1,5 +1,11 @@
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Component, forwardRef, Input, Output, OnInit, EventEmitter, ElementRef, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import {
+	Component, forwardRef,
+	Input, Output, OnInit,
+	EventEmitter, ElementRef,
+	Renderer, ViewChild,
+	ViewContainerRef
+} from '@angular/core';
 
 import * as _ from 'lodash';
 
