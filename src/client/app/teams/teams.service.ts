@@ -4,13 +4,16 @@ import { Response } from '@angular/http';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 
-import { AsyHttp, HttpOptions } from 'app/shared/asy-http.service';
-import { PagingOptions } from 'app/shared/pager.component';
+import {
+	AsyHttp, HttpOptions,
+	ObservableUtils, ObservableResult,
+	PagingOptions
+} from 'app/shared';
+import { Resource } from 'app/resources';
+
 import { Team, TeamMember } from './teams.class';
 import { User } from 'app/admin/user.class';
-import { ObservableUtils } from 'app/shared/observable-utils.class';
-import { ObservableResult } from 'app/shared/observable-result.class';
-import { Resource } from 'app/resources/resource.class';
+
 import { AuthenticationService } from 'app/admin/authentication/authentication.service';
 
 @Injectable()

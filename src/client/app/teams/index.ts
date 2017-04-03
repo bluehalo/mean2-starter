@@ -4,6 +4,8 @@ export * from './manage-team.component';
 export * from './select-teams.component';
 export * from './team-summary.component';
 
+export * from './teams.class';
+
 export * from './teams.service';
 
 export * from './teams.module';

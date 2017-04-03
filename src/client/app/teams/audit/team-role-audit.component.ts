@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 
-import { AuditObjectTypes } from 'app/audit/audit.classes';
-import { DefaultAudit } from 'app/audit/audit-object.component';
+import { AuditObjectTypes, DefaultAudit } from 'app/audit';
 
 @Component({
 	selector: 'team-role-audit',

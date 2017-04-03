@@ -6,4 +6,6 @@ export * from './edit-user.component';
 export * from './user-signup.component';
 export * from './audit/user-audit.component';
 
+export * from './role.class';
+
 export * from './admin-user.module';

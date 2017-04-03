@@ -8,6 +8,11 @@ export * from './pager.component';
 export * from './safe-image.component';
 export * from './confirm.component';
 
+export * from './result-utils.class';
+export * from './observable-utils.class';
+export * from './observable-result.class';
+export * from './alert.class';
+
 export * from './alert.service';
 export * from './asy-http.service';
 export * from './export-config.service';

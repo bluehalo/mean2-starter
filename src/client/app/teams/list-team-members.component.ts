@@ -6,14 +6,17 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 
+import {
+	PagingOptions, TableSortOptions,
+	SortDirection, SortDisplayOption,
+	AlertService
+} from 'app/shared';
+
 import { Team, TeamMember, TeamRole } from './teams.class';
 import { TeamsService } from './teams.service';
+
 import { User } from 'app/admin/user.class';
 import { UserService } from 'app/admin/users.service';
-import { PagingOptions } from 'app/shared/pager.component';
-import { TableSortOptions } from 'app/shared/pageable-table/pageable-table.component';
-import { SortDirection, SortDisplayOption } from 'app/shared/result-utils.class';
-import { AlertService } from 'app/shared/alert.service';
 import { AuthenticationService } from 'app/admin/authentication/authentication.service';
 
 @Component({

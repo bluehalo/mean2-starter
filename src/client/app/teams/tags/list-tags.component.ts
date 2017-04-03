@@ -4,11 +4,13 @@ import { ActivatedRoute, Params } from '@angular/router';
 
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 
-import { User } from 'app/admin/user.class';
-import { PagingOptions } from 'app/shared/pager.component';
-import { TableSortOptions } from 'app/shared/pageable-table/pageable-table.component';
-import { SortDirection, SortDisplayOption } from 'app/shared/result-utils.class';
-import { AlertService } from 'app/shared/alert.service';
+import { User } from 'app/admin';
+import {
+	PagingOptions, TableSortOptions,
+	SortDirection, SortDisplayOption,
+	AlertService
+} from 'app/shared';
+
 import { AuthenticationService } from 'app/admin/authentication/authentication.service';
 import { TagsService } from './tags.service';
 
