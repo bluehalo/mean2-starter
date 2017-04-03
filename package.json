@@ -1,12 +1,12 @@
 {
-	"name": "mean2",
+	"name": "mean2-starter",
 	"description": "MEAN starter with MongoDB, Express, Angular 2, and Node.",
 	"version": "0.1.0-SNAPSHOT",
 
 	"private": false,
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Asymmetrik/mean2.git"
+		"url": "https://github.com/Asymmetrik/mean2-starter.git"
 	},
 
 	"engines": {
@@ -14,8 +14,7 @@
 		"npm": "3.10.9"
 	},
 
-	"scripts": {
-	},
+	"scripts": {},
 
 	"dependencies": {
 		"async": "2.1",
