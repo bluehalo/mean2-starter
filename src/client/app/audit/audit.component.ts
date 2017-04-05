@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
-import { UserService } from 'app/admin/users.service';
+import { UserService } from 'app/admin/user';
 import {
 	PagingOptions, TableSortOptions,
 	SortDisplayOption, SortDirection
@@ -20,7 +20,7 @@ import { AuditOption } from './audit.classes';
 
 @Component({
 	selector: 'audit',
-	templateUrl: './audit-list.component.html'
+	templateUrl: './audit-list.component.html',
 })
 export class AuditComponent {
 

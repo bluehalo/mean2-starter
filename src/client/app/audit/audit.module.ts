@@ -6,17 +6,16 @@ import { Ng2BootstrapModule } from 'ng2-bootstrap';
 import { BootstrapModalModule, Modal } from 'angular2-modal/plugins/bootstrap';
 
 import { UtilModule } from 'app/shared';
+import { UserService } from 'app/admin/user';
 
 import { AuditViewChangeModal, AuditViewDetailModal } from './audit-view-change.component';
 import { AuditService } from './audit.service';
 import { AuditComponent } from './audit.component';
 import {
-	AuditObjectComponent, UrlAudit,
-	DefaultAudit, ExportAudit
+AuditObjectComponent, UrlAudit,
+DefaultAudit, ExportAudit
 } from './audit-object.component';
 
-// @todo Why does importing this through app/admin cause an undefined exception?
-import { UserService } from 'app/admin/users.service';
 
 @NgModule({
 	imports: [

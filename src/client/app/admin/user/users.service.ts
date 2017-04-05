@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { AsyHttp, HttpOptions, PagingOptions } from 'app/shared';
 
-import { User } from './user';
+import { User } from './user.class';
 
 @Injectable()
 export class UserService {

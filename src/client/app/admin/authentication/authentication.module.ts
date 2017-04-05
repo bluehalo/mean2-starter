@@ -8,7 +8,7 @@ import { Ng2BootstrapModule } from 'ng2-bootstrap';
 import { UtilModule, AlertService } from 'app/shared';
 
 import { AdminService } from '../admin.service';
-import { UserService } from '../users.service';
+import { UserService } from '../user';
 
 import { NoAccessComponent } from './no-access.component';
 import { InvalidCertificateComponent } from './invalid-certificate.component';

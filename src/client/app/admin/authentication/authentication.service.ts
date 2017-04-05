@@ -3,10 +3,9 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { Observable, BehaviorSubject } from 'rxjs';
 
-import { User } from '../user';
-
 import { AsyHttp, HttpOptions } from 'app/shared';
 
+import { User } from '../user';
 import { UserStateService } from './user-state.service';
 
 @Injectable()
@@ -52,7 +51,7 @@ export class AuthenticationService {
 	};
 
 	// Get the user who is currently logged in (or null if no one is logged in)
-	public getCurrentUser(): User {
+	public getCurrentUser() {
 		return this.userStateService.user;
 	}
 

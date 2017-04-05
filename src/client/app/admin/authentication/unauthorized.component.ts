@@ -3,8 +3,12 @@ import { Component } from '@angular/core';
 import { User } from '../user';
 
 @Component({
-	templateUrl: './unauthorized.component.html'
+	templateUrl: './unauthorized.component.html',
+	providers: [ User ]
 })
 export class UnauthorizedComponent {
-	user: User;
+	constructor(
+		private user: User
+	) {
+	}
 }

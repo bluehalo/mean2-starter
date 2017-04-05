@@ -3,8 +3,8 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { HttpOptions, AsyHttp, PagingOptions } from 'app/shared';
 import { SocketService } from 'app/core';
 
-import { UserStateService } from 'app/admin/authentication/user-state.service';
-import { UserService } from 'app/admin/users.service';
+import { UserStateService } from 'app/admin/authentication';
+import { UserService } from 'app/admin/user';
 
 import { Message } from './message.class';
 

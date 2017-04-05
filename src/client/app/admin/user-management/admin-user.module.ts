@@ -9,6 +9,7 @@ import { AlertService, UtilModule } from 'app/shared';
 import { CacheEntriesService } from 'app/access-checker';
 import { TeamsModule } from 'app/teams';
 
+import { UserService } from '../user';
 import { UserAudit } from './audit/user-audit.component';
 import { AdminService } from '../admin.service';
 import { AdminCreateUserComponent } from './admin-create-user.component';
@@ -17,10 +18,9 @@ import { AdminListUsersComponent } from './admin-list-users.component';
 import { ExportUsersModal } from './export-users.component';
 import { UpdateUserComponent } from './edit-user.component';
 import { UserSignupComponent } from './user-signup.component';
-import { UserService } from '../users.service';
 
 @NgModule({
-	imports: [
+imports: [
 		CommonModule,
 		FormsModule,
 		Ng2BootstrapModule,

@@ -8,11 +8,11 @@ import { ConfigService } from 'app/core';
 import { User } from '../user';
 
 @Component({
-	templateUrl: './forgot-password.component.html'
+	templateUrl: './forgot-password.component.html',
+	providers: [ User ]
 })
 export class ForgotPasswordComponent {
 
-	user: User;
 	error: string;
 	success: string;
 	pending: string;
@@ -22,7 +22,8 @@ export class ForgotPasswordComponent {
 		private router: Router,
 		private authService: AuthenticationService,
 		private userStateService: UserStateService,
-		private configService: ConfigService
+		private configService: ConfigService,
+		private user: User
 	) {}
 
 	ngOnInit() {

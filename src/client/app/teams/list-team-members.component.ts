@@ -16,8 +16,8 @@ import { User } from 'app/admin/user';
 import { Team, TeamMember, TeamRole } from './teams.class';
 import { TeamsService } from './teams.service';
 
-import { UserService } from 'app/admin/users.service';
-import { AuthenticationService } from 'app/admin/authentication/authentication.service';
+import { UserService } from 'app/admin/user';
+import { AuthenticationService } from 'app/admin/authentication';
 
 @Component({
 	selector: 'list-team-members',
