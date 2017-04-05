@@ -9,6 +9,7 @@ import { Team, TeamMember } from './teams.class';
 import { TeamsService } from './teams.service';
 import { AlertService } from '../shared/alert.service';
 import { AuthenticationService } from '../admin/authentication/authentication.service';
+import { StringUtils } from '../shared/string-utils.service';
 
 @Component({
 	selector: 'team-summary',
@@ -17,8 +18,11 @@ import { AuthenticationService } from '../admin/authentication/authentication.se
 export class TeamSummaryComponent {
 
 	user: TeamMember;
+
 	team: Team;
+
 	teamId: string;
+
 	defaultDescription: string = 'No Description.';
 
 	constructor(
@@ -46,7 +50,7 @@ export class TeamSummaryComponent {
 						(result: any) => {
 							if (null != result) {
 								this.team = new Team(result._id, result.name, result.description, result.created, result.requiresExternalTeams);
-								if (_.isString(this.team.description) && this.team.description.trim().length > 0) {
+								if (StringUtils.isInvalid(this.team.description)) {
 									this.team.description = this.defaultDescription;
 								}
 							}
@@ -76,7 +80,7 @@ export class TeamSummaryComponent {
 					if (null != result) {
 						this.team = new Team(result._id, result.name, result.description, result.created, result.requiresExternalTeams);
 
-						if (_.isString(this.team.description) && this.team.description.trim().length > 0) {
+						if (StringUtils.isInvalid(this.team.description)) {
 							this.team.description = this.defaultDescription;
 						}
 					}

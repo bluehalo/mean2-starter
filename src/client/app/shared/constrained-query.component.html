@@ -11,7 +11,7 @@
 		<ul class="items inline">
 			<li *ngFor="let value of _selectedQueries">
 				<div class="item">
-					<div class="item-label hideOverflow">{{ value }}</div>
+					<div class="item-label hide-overflow">{{ value }}</div>
 					<div class="item-delete" [hidden]="readOnly"><a (click)="removeFromQuery(value)" class="no-href danger btn-icon btn-xs"><i class="fa fa-trash-o"></i></a></div>
 					<br style="clear:both;"/>
 				</div>
