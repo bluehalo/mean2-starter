@@ -3,14 +3,14 @@
 	<!-- Title -->
 	<div class="form-group row col-md-12" *ngIf="!hideTitle">
 		<label for="title">Title<span class="text-danger"><strong> *</strong></span></label>
-		<input *ngIf="!readOnly" type="text" class="form-control input-sm" id="title" name="title" [(ngModel)]="resource.title" required />
+		<input *ngIf="!readOnly" type="text" class="form-control input-sm" id="title" name="title" [ngModel]="resource.title" (ngModelChange)="updateField('title', $event)" required />
 		<div *ngIf="readOnly">{{ resource.title }}</div>
 	</div>
 
 	<!-- Owner -->
 	<div class="form-group row col-md-12">
 		<label for="owner">Owner<span class="text-danger"><strong> *</strong></span></label>
-		<select *ngIf="mode === 'create' && !readOnly" class="form-control input-sm" id="owner" name="owner" [(ngModel)]="resource.owner" (ngModelChange)="getTagOptions()">
+		<select *ngIf="mode === 'create' && !readOnly" class="form-control input-sm" id="owner" name="owner" [ngModel]="resource.owner" (ngModelChange)="updateField('owner', $event)">
 			<option *ngFor="let owner of ownerOptions" [ngValue]="owner">{{ owner.name }}</option>
 		</select>
 		<div *ngIf="mode !== 'create' || readOnly">
@@ -34,7 +34,7 @@
 	<!-- Description -->
 	<div class="form-group row col-md-12" *ngIf="!hideDescription && !readOnly">
 		<label for="description">Description</label>
-		<textarea rows="3" class="form-control input-sm" id="description" name="description" [(ngModel)]="resource.description"></textarea>
+		<textarea rows="3" class="form-control input-sm" id="description" name="description" [ngModel]="resource.description" (ngModelChange)="updateField('description', $event)"></textarea>
 	</div>
 
 	<div class="form-group row col-md-12" *ngIf="!hideDescription && readOnly && haveDescription()">
