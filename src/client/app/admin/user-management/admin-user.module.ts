@@ -18,6 +18,7 @@ import { AlertService } from '../../shared/alert.service';
 import { CacheEntriesService } from '../../access-checker/cache-entries.service';
 import { UserAudit } from './audit/user-audit.component';
 import { TeamsModule } from '../../teams/teams.module';
+import { UserSignedUpComponent } from './user-signed-up.component';
 
 @NgModule({
 	imports: [
@@ -42,7 +43,8 @@ import { TeamsModule } from '../../teams/teams.module';
 		ExportUsersModal,
 		UpdateUserComponent,
 		UserAudit,
-		UserSignupComponent
+		UserSignupComponent,
+		UserSignedUpComponent
 	],
 	providers:  [
 		AlertService,
