@@ -86,8 +86,8 @@ export class ListMessagesComponent {
 		}
 		else {
 			this.pagingOpts = new PagingOptions();
-			this.pagingOpts.sortField = this.sortOpts['created'].sortField;
-			this.pagingOpts.sortDir = this.sortOpts['created'].sortDir;
+			this.pagingOpts.sortField = this.sortOpts.created.sortField;
+			this.pagingOpts.sortDir = this.sortOpts.created.sortDir;
 		}
 
 		this.sort = this.messageService.sort.map;

@@ -71,8 +71,8 @@ export class AuditComponent {
 		];
 
 		this.pagingOpts = new PagingOptions();
-		this.pagingOpts.sortField = this.sortOpts['created'].sortField;
-		this.pagingOpts.sortDir = this.sortOpts['created'].sortDir;
+		this.pagingOpts.sortField = this.sortOpts.created.sortField;
+		this.pagingOpts.sortDir = this.sortOpts.created.sortDir;
 
 		this.userPagingOpts = new PagingOptions(0, 20);
 		this.userPagingOpts.sortField = 'username';

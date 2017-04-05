@@ -57,8 +57,8 @@ export class ListTeamMembersComponent {
 		this.team = new Team();
 
 		this.pagingOptions = new PagingOptions();
-		this.pagingOptions.sortField = this.sortOptions['name'].sortField;
-		this.pagingOptions.sortDir = this.sortOptions['name'].sortDir;
+		this.pagingOptions.sortField = this.sortOptions.name.sortField;
+		this.pagingOptions.sortDir = this.sortOptions.name.sortDir;
 
 		this.route.params.subscribe((params: Params) => {
 			this.teamId = params[`id`];

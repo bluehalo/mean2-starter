@@ -78,8 +78,8 @@ export class AdminListEuasComponent implements OnInit {
 			this.pagingOpts = cachedFilter.paging;
 		} else {
 			this.pagingOpts = new PagingOptions();
-			this.pagingOpts.sortField = this.sortOpts['title'].sortField;
-			this.pagingOpts.sortDir = this.sortOpts['title'].sortDir;
+			this.pagingOpts.sortField = this.sortOpts.title.sortField;
+			this.pagingOpts.sortDir = this.sortOpts.title.sortDir;
 		}
 	}
 

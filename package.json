@@ -150,6 +150,7 @@
 		"gulp-watch": "4.3",
 		"run-sequence": "1.2",
 		"node-sass": "4.5",
+		"gulp-livingcss": "2.0.5",
 		"yargs": "6.6"
 
 	}
