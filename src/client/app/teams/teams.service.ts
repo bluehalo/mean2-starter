@@ -10,7 +10,7 @@ import {
 	PagingOptions
 } from 'app/shared';
 import { Resource } from 'app/resources';
-import { User } from 'app/admin';
+import { User } from 'app/admin/user';
 
 import { Team, TeamMember } from './teams.class';
 

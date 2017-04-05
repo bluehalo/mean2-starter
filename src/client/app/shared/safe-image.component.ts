@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { ConfigService } from 'app/core';
+import { ConfigService } from 'app/core/config.service';
 
 import { StringUtils } from './string-utils.service';
 

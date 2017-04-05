@@ -1,9 +1,9 @@
-import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
+import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { Http, Headers, URLSearchParams, Response } from '@angular/http';
 
-import { Observable, Subscriber } from 'rxjs';
+import { Observable } from 'rxjs';
 import * as _ from 'lodash';
 
 export class HttpOptions {
@@ -35,8 +35,8 @@ export class AsyHttp {
 	constructor(
 		private _http: Http,
 		private router: Router,
-		private location: Location) {
-
+		private location: Location
+	) {
 		this._errors = Observable.create((observer: any) => {
 			this.publishError = (...a: any[]) => observer.next(...a);
 
@@ -160,9 +160,7 @@ export class AsyHttp {
 		let errData = JSON.parse(err._body);
 		try {
 			this.publishError(err);
-		} catch (e) {
-			console.log(e);
-		}
+		} catch (e) { /** Log out publish error */ }
 
 		switch (err.status) {
 			case 401:

@@ -2,13 +2,8 @@ import { Injectable } from '@angular/core';
 
 import 'rxjs/Rx';
 
-import { Alert } from './alert.class';
+import { Alert, Alerts } from './alert.class';
 import { Response } from '@angular/http';
-
-class Alerts {
-	list: Alert[] = [];
-	map: Map<number, Alert> = new Map<number, Alert>();
-}
 
 @Injectable()
 export class AlertService {

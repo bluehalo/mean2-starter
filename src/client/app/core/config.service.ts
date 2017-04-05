@@ -17,3 +17,4 @@ export class ConfigService {
 		return Observable.of((<any> window).config);
 	}
 }
+
