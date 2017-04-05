@@ -13,6 +13,7 @@ import { UserEuaComponent } from './admin/end-user-agreement/user-eua.component'
 import { NoAccessComponent } from './admin/authentication/no-access.component';
 import { LoggedInComponent } from './core/logged-in.component';
 import { InactiveComponent } from './admin/authentication/inactive.component';
+import { UserSignedUpComponent } from './admin/user-management/user-signed-up.component';
 
 @NgModule({
 	imports: [
@@ -46,6 +47,15 @@ import { InactiveComponent } from './admin/authentication/inactive.component';
 				{
 					path: 'signup',
 					component: UserSignupComponent,
+					canActivate: [AuthGuard],
+					data: {
+						requiresAuthentication: false,
+						roles: []
+					}
+				},
+				{
+					path: 'signed-up',
+					component: UserSignedUpComponent,
 					canActivate: [AuthGuard],
 					data: {
 						requiresAuthentication: false,
