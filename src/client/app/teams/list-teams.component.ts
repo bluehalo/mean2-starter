@@ -23,11 +23,15 @@ import { AuthenticationService } from 'app/admin/authentication/authentication.s
 export class ListTeamsComponent {
 
 	user: TeamMember;
+
 	teams: Team[] = [];
+
 	search: string = '';
+
 	sortOptions: TableSortOptions = {
 		name: new SortDisplayOption('Team Name', 'name', SortDirection.asc)
 	};
+
 	pagingOptions: PagingOptions;
 
 	constructor(
@@ -76,7 +80,8 @@ export class ListTeamsComponent {
 							.subscribe(
 								() => {
 									this.authService.reloadCurrentUser().subscribe(() => {
-										this.router.navigate(['/teams', {clearCachedFilter: true}]);
+										this.alertService.addAlert(`Successfully deleted ${team.name}`, 'success');
+										this.loadTeams();
 									});
 								},
 								(response: Response) => {

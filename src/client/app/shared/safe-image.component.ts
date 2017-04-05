@@ -1,9 +1,8 @@
 import { Component, Input } from '@angular/core';
 
-import * as _ from 'lodash';
+import { ConfigService } from 'app/core';
 
-
-import { ConfigService } from 'app/core/config.service';
+import { StringUtils } from './string-utils.service';
 
 @Component({
 	selector: 'asy-safe-image',
@@ -19,7 +18,8 @@ export class SafeImageComponent {
 
 	private defaultPicSrc: string;
 
-	constructor(private configService: ConfigService) {
+	constructor(
+		private configService: ConfigService) {
 	}
 
 	ngOnInit() {
@@ -28,12 +28,12 @@ export class SafeImageComponent {
 				this.defaultPicSrc = config.defaultImage;
 			});
 
-		if (_.isString(this.imgSource) && this.imgSource.trim().length > 0) {
+		if (StringUtils.isInvalid(this.imgSource)) {
 			this.imgSource = this.defaultPicSrc;
 		}
 	}
 
-	private useDefaultUrl(event: any) {
+	useDefaultUrl(event: any) {
 		if (this.showDefault) {
 			this.imgSource = this.defaultPicSrc;
 		} else {

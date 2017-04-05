@@ -2,10 +2,9 @@ import { Component } from '@angular/core';
 import { Response } from '@angular/http';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import * as _ from 'lodash';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 
-import { AlertService } from 'app/shared';
+import { AlertService, StringUtils } from 'app/shared';
 
 import { Team, TeamMember } from './teams.class';
 import { TeamsService } from './teams.service';
@@ -18,8 +17,11 @@ import { AuthenticationService } from 'app/admin/authentication/authentication.s
 export class TeamSummaryComponent {
 
 	user: TeamMember;
+
 	team: Team;
+
 	teamId: string;
+
 	defaultDescription: string = 'No Description.';
 
 	constructor(
@@ -47,7 +49,7 @@ export class TeamSummaryComponent {
 						(result: any) => {
 							if (null != result) {
 								this.team = new Team(result._id, result.name, result.description, result.created, result.requiresExternalTeams);
-								if (_.isString(this.team.description) && this.team.description.trim().length > 0) {
+								if (StringUtils.isInvalid(this.team.description)) {
 									this.team.description = this.defaultDescription;
 								}
 							}
@@ -77,7 +79,7 @@ export class TeamSummaryComponent {
 					if (null != result) {
 						this.team = new Team(result._id, result.name, result.description, result.created, result.requiresExternalTeams);
 
-						if (_.isString(this.team.description) && this.team.description.trim().length > 0) {
+						if (StringUtils.isInvalid(this.team.description)) {
 							this.team.description = this.defaultDescription;
 						}
 					}

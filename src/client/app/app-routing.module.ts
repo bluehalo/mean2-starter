@@ -12,7 +12,8 @@ import {
 	InvalidCertificateComponent,
 	UserEuaComponent,
 	NoAccessComponent,
-	InactiveComponent
+	InactiveComponent,
+	UserSignedUpComponent
 } from './admin';
 
 @NgModule({
@@ -47,6 +48,15 @@ import {
 				{
 					path: 'signup',
 					component: UserSignupComponent,
+					canActivate: [AuthGuard],
+					data: {
+						requiresAuthentication: false,
+						roles: []
+					}
+				},
+				{
+					path: 'signed-up',
+					component: UserSignedUpComponent,
 					canActivate: [AuthGuard],
 					data: {
 						requiresAuthentication: false,

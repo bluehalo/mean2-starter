@@ -18,6 +18,7 @@ import { AdminListUsersComponent } from './admin-list-users.component';
 import { ExportUsersModal } from './export-users.component';
 import { UpdateUserComponent } from './edit-user.component';
 import { UserSignupComponent } from './user-signup.component';
+import { UserSignedUpComponent } from './user-signed-up.component';
 
 @NgModule({
 imports: [
@@ -42,7 +43,8 @@ imports: [
 		ExportUsersModal,
 		UpdateUserComponent,
 		UserAudit,
-		UserSignupComponent
+		UserSignupComponent,
+		UserSignedUpComponent
 	],
 	providers:  [
 		AlertService,

@@ -1,5 +1,7 @@
 import { Component, Input, Output, SimpleChange, EventEmitter } from '@angular/core';
 
+import * as _ from 'lodash';
+
 import { SortDirection } from './result-utils.class';
 
 export type PageChange = {
@@ -96,15 +98,22 @@ export class Pager {
 		}
 	}
 
+	isValid() {
+		return _.isNumber(this.pageSize) && _.isNumber(this.pageNumber) && _.isNumber(this.currentSize) && _.isNumber(this.totalSize);
+	}
+
 	format() {
-		this.startFormatted = ((this.pageSize * this.pageNumber) + 1).toLocaleString();
+		if (this.isValid()) {
+			this.startFormatted = ((this.pageSize * this.pageNumber) + 1).toLocaleString();
 
-		let end = (this.pageSize * this.pageNumber) + Math.max(this.pageSize, this.currentSize);
-		end = (end > this.totalSize) ? this.totalSize : end;
-		this.endFormatted = end.toLocaleString();
+			let end = (this.pageSize * this.pageNumber) + Math.max(this.pageSize, this.currentSize);
+			end = (end > this.totalSize) ? this.totalSize : end;
+			this.endFormatted = end.toLocaleString();
 
-		if (this.totalSize !== 0) {
-			this.totalFormatted = this.totalSize.toLocaleString();
+			if (this.totalSize !== 0) {
+				this.totalFormatted = this.totalSize.toLocaleString();
+			}
+
 		}
 	}
 
