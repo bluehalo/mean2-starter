@@ -51,3 +51,4 @@ import 'lodash';
 import 'moment';
 import 'rxjs';
 import 'zone.js';
+import '@ngx-translate/core';

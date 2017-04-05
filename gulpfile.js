@@ -114,6 +114,10 @@ gulp.task('watch-client', () => {
 	// On changes to compiled stuff, recompile
 	gulp.watch(assets.client.app.src.sass, [ 'build-client-style' ]);
 
+	// On changes to localization files, recompile
+	let combinedLocaleFiles = _.values(assets.client.app.locales);
+	gulp.watch(combinedLocaleFiles, [ 'build-client-locales' ]);
+
 	// In dev mode, we just want to re-lint ts code
 	gulp.watch(assets.client.app.src.ts, [ 'lint-client-code' ])
 		.on('change', (d) => { setTimeout(() => { plugins.livereload.changed(d); }, 1000); });
@@ -164,11 +168,26 @@ gulp.task('lint-client-code', () => {
 });
 
 gulp.task('build-client', (done) => {
-	runSequence('clean-client', [ 'build-client-code', 'build-client-style' ], done);
+	runSequence('clean-client', [ 'build-client-code', 'build-client-style', 'build-client-locales' ], done);
 });
 
 gulp.task('clean-client', () => {
 	return del([ 'public/**/*' ]);
+});
+
+gulp.task('build-client-locales', function() {
+	let config = require(path.posix.resolve('./src/server/config'));
+	let languages = config.app.languages || ['en'];
+
+	_.each(languages, function(lang) {
+		let sources = assets.client.app.locales[lang];
+
+		gulp.src(sources)
+			.pipe(plugins.mergeJson({
+				fileName: `locale-${lang}.json`
+			}))
+			.pipe(gulp.dest('public/dev'));
+	});
 });
 
 gulp.task('build-client-code', [ 'lint-client-code' ], (done) => {
@@ -194,8 +213,6 @@ gulp.task('build-client-code', [ 'lint-client-code' ], (done) => {
 		done(buildErrors);
 	});
 });
-
-
 
 gulp.task('build-client-style', [ 'clean-client-style' ], () => {
 
@@ -364,7 +381,7 @@ gulp.task('test-server-ci', [ 'env:test', 'coverage-init' ], (done) => {
  */
 gulp.task('dev', (done) => {
 	runSequence(
-		[ 'build-server', 'build-client-style', 'lint-client-code' ],
+		[ 'build-server', 'build-client-style', 'build-client-locales', 'lint-client-code' ],
 		[ 'watch-server', 'watch-client', 'webpack-dev-server' ],
 		done);
 });

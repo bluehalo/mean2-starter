@@ -61,7 +61,10 @@ module.exports = {
 			},
 
 			views: [ 'src/client/**/*.html' ],
-			content: [ 'src/client/**/*.@(png|jpg|bmp|gif|svg|tiff)' ]
+			content: [ 'src/client/**/*.@(png|jpg|bmp|gif|svg|tiff)' ],
+			locales: {
+				en: [ 'src/client/**/*.locale.en.json' ]
+			}
 		}
 
 	}

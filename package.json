@@ -17,6 +17,8 @@
 	"scripts": {},
 
 	"dependencies": {
+		"@ngx-translate/core": "^6.0.0",
+		"@ngx-translate/http-loader": "0.0.3",
 		"async": "2.1",
 		"body-parser": "1.16",
 		"bunyan": "1.8",
@@ -54,7 +56,6 @@
 		"socket.io": "1.7",
 		"through2": "2.0",
 		"validator": "7.0",
-
 		"kafka-node": "1.5"
 	},
 	"devDependencies": {
@@ -138,6 +139,7 @@
 		"gulp-karma": "0.0.5",
 		"gulp-livereload": "3.8",
 		"gulp-load-plugins": "1.5",
+		"gulp-merge-json": "1.0.0",
 		"gulp-mocha": "3.0",
 		"gulp-nodemon": "2.2",
 		"gulp-rename": "1.2",
