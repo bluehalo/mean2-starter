@@ -34,8 +34,9 @@ export class StringUtils {
 	 * @returns {string}
 	 */
 	public static toTitleCase(s: string) {
-		if (null == s)
+		if (null == s) {
 			return null;
+		}
 
 		return s.replace(/\w\S*/g, (txt) => {
 			return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
