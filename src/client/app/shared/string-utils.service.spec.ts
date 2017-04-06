@@ -30,4 +30,34 @@ describe('StringUtils', () => {
 		});
 	});
 
+	describe('toTitleCase', () => {
+		it('returns null if input undefined', () => {
+			expect(StringUtils.toTitleCase(undefined)).toBe(null);
+		});
+
+		it('returns null if input null', () => {
+			expect(StringUtils.toTitleCase(null)).toBe(null);
+		});
+
+		it('returns empty string if input is empty', () => {
+			expect(StringUtils.toTitleCase('')).toBe('');
+		});
+
+		it('returns Capitalized single word if lower case', () => {
+			expect(StringUtils.toTitleCase('test')).toBe('Test');
+		});
+
+		it('returns Capitalized single word if upper case', () => {
+			expect(StringUtils.toTitleCase('TEST')).toBe('Test');
+		});
+
+		it('returns Capitalized 2 words', () => {
+			expect(StringUtils.toTitleCase('test string')).toBe('Test String');
+		});
+
+		it('returns Capitalized on hyphenated word', () => {
+			expect(StringUtils.toTitleCase('test-string')).toBe('Test-string');
+		});
+	});
+
 });

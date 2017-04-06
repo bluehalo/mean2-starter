@@ -27,4 +27,19 @@ export class StringUtils {
 		return result.charAt(0).toUpperCase() + result.slice(1);
 	}
 
+	/**
+	 * Returns the string with every first letter of each word is upper case and the rest are lower case
+	 *
+	 * @param s
+	 * @returns {string}
+	 */
+	public static toTitleCase(s: string) {
+		if (null == s)
+			return null;
+
+		return s.replace(/\w\S*/g, (txt) => {
+			return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+		});
+	}
+
 }
