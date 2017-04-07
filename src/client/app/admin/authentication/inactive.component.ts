@@ -5,13 +5,13 @@ import { User } from '../user';
 import { AuthenticationService } from './authentication.service';
 
 @Component({
-	templateUrl: './inactive.component.html',
-	providers: [ User ]
+	templateUrl: './inactive.component.html'
 })
 export class InactiveComponent {
+	user: User;
+
 	constructor(
-		private auth: AuthenticationService,
-		private user: User
+		private auth: AuthenticationService
 	) {
 	}
 
