@@ -6,7 +6,6 @@ const
 	webpack = require('webpack'),
 	StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin,
 
-	clientPath = path.posix.resolve('./src/client/'),
 	config = require(path.posix.resolve('./src/server/config.js')),
 	assets = require(path.posix.resolve('./config/assets.js'));
 
@@ -27,6 +26,8 @@ module.exports = (mode) => {
 	// For testing, use this to override aot mode
 	const aot = build;
 
+	//Client path
+	const clientPath = path.posix.resolve('./src/client/');
 
 	// The main webpack config object to return
 	let wpConfig = {};
