@@ -47,25 +47,11 @@ import {
 /**
  * Services
  */
-import { BaseService } from './config/test/test-stub-service.service';
 
 import { AuthenticationService, UserStateService } from './admin';
 import { AuthGuard, ConfigService } from './core';
-import { ClientConfiguration } from './config';
 import { TeamsService } from './teams';
 import { NotificationsModule } from './notifications';
-
-
-export function initializerFactory () {
-	return () => () => new Promise<any>( (resolve) => {
-		ClientConfiguration.initializing$
-			.subscribe( (initialized) => {
-				if (initialized) {
-					resolve();
-				}
-			});
-	});
-}
 @NgModule({
 	imports: [
 		BrowserModule,
@@ -101,19 +87,9 @@ export function initializerFactory () {
 	providers: [
 		AuthenticationService,
 		AuthGuard,
-		ClientConfiguration,
 		ConfigService,
 		TeamsService,
-		UserStateService,
-		{
-			provide: BaseService,
-			useClass: ClientConfiguration.config.providers.BaseService.useClass
-		},
-		{
-			provide: APP_INITIALIZER,
-			multi: true,
-			useFactory: initializerFactory
-		}
+		UserStateService
 	]
 })
 export class AppModule { }
