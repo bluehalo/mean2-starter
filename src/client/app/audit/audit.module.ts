@@ -12,8 +12,8 @@ import { AuditViewChangeModal, AuditViewDetailModal } from './audit-view-change.
 import { AuditService } from './audit.service';
 import { AuditComponent } from './audit.component';
 import {
-AuditObjectComponent, UrlAudit,
-DefaultAudit, ExportAudit
+	AuditObjectComponent, UrlAudit,
+	DefaultAudit, ExportAudit
 } from './audit-object.component';
 
 

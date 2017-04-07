@@ -7,18 +7,17 @@ import { AuthenticationService } from './authentication.service';
 import { UserStateService } from './user-state.service';
 
 @Component({
-	templateUrl: './signin.component.html',
-	providers: [ User ]
+	templateUrl: './signin.component.html'
 })
 export class SigninComponent {
 	error: string;
 	config: any;
+	user: User;
 
 	constructor(
 		private authService: AuthenticationService,
 		private userStateService: UserStateService,
-		private configService: ConfigService,
-		private user: User
+		private configService: ConfigService
 	) {}
 
 	ngOnInit() {
