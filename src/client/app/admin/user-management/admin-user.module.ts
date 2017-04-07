@@ -21,7 +21,7 @@ import { UserSignupComponent } from './user-signup.component';
 import { UserSignedUpComponent } from './user-signed-up.component';
 
 @NgModule({
-imports: [
+	imports: [
 		CommonModule,
 		FormsModule,
 		Ng2BootstrapModule,
