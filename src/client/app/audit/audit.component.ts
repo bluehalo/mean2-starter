@@ -20,7 +20,7 @@ import { AuditOption } from './audit.classes';
 
 @Component({
 	selector: 'audit',
-	templateUrl: './audit-list.component.html',
+	templateUrl: './audit-list.component.html'
 })
 export class AuditComponent {
 
