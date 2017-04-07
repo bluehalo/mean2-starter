@@ -72,7 +72,6 @@ import { NotificationsModule } from './notifications';
 		NotificationsModule,
 		ResourcesModule,
 		TeamsModule,
-		UtilModule,
 		WelcomeModule,
 		UtilModule
 	],
