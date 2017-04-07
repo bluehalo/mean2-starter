@@ -51,7 +51,7 @@ export class AuthenticationService {
 	};
 
 	// Get the user who is currently logged in (or null if no one is logged in)
-	public getCurrentUser() {
+	public getCurrentUser(): User {
 		return this.userStateService.user;
 	}
 
