@@ -27,7 +27,7 @@ module.exports = (mode) => {
 	const aot = build;
 
 	//Client path
-	const clientPath = path.posix.resolve('./src/client/');
+	const clientPath = './src/client/';
 
 	// The main webpack config object to return
 	let wpConfig = {};
@@ -58,13 +58,13 @@ module.exports = (mode) => {
 	 */
 	if (test) {
 		wpConfig.entry = {
-			application: path.posix.resolve(clientPath+'/main.ts')
+			application: path.posix.resolve(path.posix.join(clientPath, '/main.ts'))
 		};
 	}
 	else {
 		wpConfig.entry = {
-			application: path.posix.resolve(clientPath+'/main.ts'),
-			vendor: path.posix.resolve(clientPath+'/vendor.ts')
+			application: path.posix.resolve(path.posix.join(clientPath, '/main.ts')),
+			vendor: path.posix.resolve(path.posix.join(clientPath, '/vendor.ts'))
 		};
 	}
 
@@ -96,7 +96,8 @@ module.exports = (mode) => {
 	 */
 	wpConfig.resolve = {
 		alias: {
-			app: path.posix.resolve(clientPath+'/app')
+			//Alias the directory app/* to clientPath/app/*
+			app: path.posix.resolve(path.posix.join(clientPath, '/app'))
 		},
 		extensions: [
 			'.ts', '.js','.json',
@@ -234,7 +235,7 @@ module.exports = (mode) => {
 		wpConfig.plugins.push(
 			new ngToolsWebpack.AotPlugin({
 				tsConfigPath: './tsconfig-aot.json',
-				entryModule: path.posix.resolve(clientPath+'/app/app.module#AppModule')
+				entryModule: path.posix.resolve(path.posix.join(clientPath, '/app/app.module#AppModule'))
 			})
 		);
 
