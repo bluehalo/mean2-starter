@@ -148,7 +148,10 @@ module.exports = (mode) => {
 
 		// If we're in AOT mode, we want to build with the webpack loader
 		wpConfig.module.loaders.unshift(
-			{ test: /\.ts$/, loader: '@ngtools/webpack' }
+			{
+				test: /\.ts$/,
+				loader: '@ngtools/webpack'
+			}
 		);
 
 	}
@@ -158,14 +161,12 @@ module.exports = (mode) => {
 		wpConfig.module.loaders.unshift(
 			{
 				test: /\.ts$/,
-				loader: 'ts-loader',
-				options: {
-					configFileName: path.posix.resolve('./tsconfig.json')
-				}
+				loader: 'awesome-typescript-loader'
 			},
 			{
 				test: /\.ts$/,
-				loader: 'angular2-template-loader'
+				loader: 'angular2-template-loader',
+				enforce: 'pre'
 			}
 		);
 
@@ -214,7 +215,7 @@ module.exports = (mode) => {
 
 		// Specify all global packages
 		new webpack.ProvidePlugin({
-			d3: 'd3'
+			// d3: 'd3'
 		}),
 
 		// Context replacement for ng4
