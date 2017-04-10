@@ -43,12 +43,20 @@ describe('StringUtils', () => {
 			expect(StringUtils.toTitleCase('')).toBe('');
 		});
 
+		it('returns Capitalized string if input is single character', () => {
+			expect(StringUtils.toTitleCase('a')).toBe('A');
+		});
+
 		it('returns Capitalized single word if lower case', () => {
 			expect(StringUtils.toTitleCase('test')).toBe('Test');
 		});
 
 		it('returns Capitalized single word if upper case', () => {
 			expect(StringUtils.toTitleCase('TEST')).toBe('Test');
+		});
+
+		it('returns Capitalized single word if mixed case', () => {
+			expect(StringUtils.toTitleCase('TEST TEsTeR testIng')).toBe('Test Tester Testing');
 		});
 
 		it('returns Capitalized 2 words', () => {
