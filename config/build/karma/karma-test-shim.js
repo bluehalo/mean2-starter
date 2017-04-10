@@ -12,7 +12,6 @@ require('zone.js/dist/async-test');
 require('zone.js/dist/fake-async-test');
 
 require('../../../src/client/vendor.ts');
-require('../../../src/client/configuration.ts');
 
 var appContext = require.context('../../../src/client', true, /\.spec\.ts/);
 
