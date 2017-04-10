@@ -58,6 +58,14 @@ describe('StringUtils', () => {
 		it('returns Capitalized on hyphenated word', () => {
 			expect(StringUtils.toTitleCase('test-string')).toBe('Test-string');
 		});
+
+		it('returns Capitalized on hyphenated word sentence', () => {
+			expect(StringUtils.toTitleCase('hello, test-strings are cool!')).toBe('Hello, Test-strings Are Cool!');
+		});
+
+		it('returns Capitalized on hyphenated word multiple sentences', () => {
+			expect(StringUtils.toTitleCase('hello, test-strings are cool!  I really like how they are capitalized....a lot.')).toBe('Hello, Test-strings Are Cool!  I Really Like How They Are Capitalized....a Lot.');
+		});
 	});
 
 });
