@@ -176,7 +176,7 @@ module.exports.getPage = function (queryParams) {
  * Extract given field from request header
  */
 module.exports.getHeaderField = function (header, fieldName) {
-	return (null == header || null == header[fieldName]) ? null : header[fieldName];
+	return (null == header || null == header[fieldName]) ? null : decodeURI(header[fieldName]);
 };
 
 /**

@@ -39,7 +39,7 @@ export class AsyHttp {
 
 	get(opts: HttpOptions) {
 		let headers = new Headers({
-			'Interface-URL': this.location.path()
+			'Interface-URL': this.getUriEncodedPath()
 		});
 
 		let observable = this._http.get(opts.url, {search: opts.urlParams, headers: headers} )
@@ -63,7 +63,7 @@ export class AsyHttp {
 	post(opts: HttpOptions) {
 		let headers = new Headers({
 			'Content-Type': 'application/json',
-			'Interface-URL': this.location.path()
+			'Interface-URL': this.getUriEncodedPath()
 		});
 
 		let observable = this._http.post(opts.url, JSON.stringify(opts.data), {
@@ -87,7 +87,7 @@ export class AsyHttp {
 	put(opts: HttpOptions) {
 		let headers = new Headers({
 			'Content-Type': 'application/json',
-			'Interface-URL': this.location.path()
+			'Interface-URL': this.getUriEncodedPath()
 		});
 
 		let observable = this._http.put(opts.url, JSON.stringify(opts.data), {
@@ -110,7 +110,7 @@ export class AsyHttp {
 
 	delete(opts: HttpOptions) {
 		let headers = new Headers({
-			'Interface-URL': this.location.path()
+			'Interface-URL': this.getUriEncodedPath()
 		});
 
 		let observable = this._http.delete(opts.url, { headers: headers})
@@ -191,6 +191,10 @@ export class AsyHttp {
 
 	private hasContent(res: Response) {
 		return (res.status !== 204 && (<string> res.text()).length > 0);
+	}
+
+	private getUriEncodedPath() {
+		return encodeURI(this.location.path());
 	}
 
 }
