@@ -194,7 +194,9 @@ export class AsyHttp {
 	}
 
 	private getUriEncodedPath() {
-		return encodeURI(this.location.path());
+		let path = this.location.path();
+		let alreadyEncoded = decodeURI(path) !== path;
+		return alreadyEncoded ? path : encodeURI(this.location.path());
 	}
 
 }
