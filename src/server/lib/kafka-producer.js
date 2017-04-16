@@ -31,7 +31,7 @@ let retryMs = (null != config.kafka && null != config.kafka.kafkaRetryMs) ? conf
 let zookeeperCommTimeout = (null != config.kafka && null != config.kafka.zookeeperCommTimeout) ? config.kafka.zookeeperCommTimeout : 1000;
 
 // Make JSLint happy
-let onConnectionError, getProducer, send, retrySend, scheduleRetry;
+let getProducer, send, retrySend, scheduleRetry;
 
 // Listen to our own error event so we don't crash the app.
 _events.on('error', function() {});
