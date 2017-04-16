@@ -34,6 +34,7 @@
 		"glob": "7.1",
 		"helmet": "3.5",
 		"JSONPath": "0.11",
+		"kafka-node": "1.6",
 		"lodash": "4.17",
 		"method-override": "2.3",
 		"moment": "2.18",
@@ -53,9 +54,7 @@
 		"serve-favicon": "2.4",
 		"socket.io": "1.7",
 		"through2": "2.0",
-		"validator": "7.0",
-
-		"kafka-node": "1.6"
+		"validator": "7.0"
 	},
 	"devDependencies": {
 		"@angular/common": "4",

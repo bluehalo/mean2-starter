@@ -20,13 +20,22 @@ function createGroupId(topic) {
 }
 
 /**
- * Gets a new Kafka client.  We need to do this for each new connection, according to Kafka best practices.
+ * Gets a new Kafka ConsumerGroup.  We need to do this for each new connection, according to Kafka best practices.
  *
- * @returns A promise to return a KafkaClient.
+ * @returns A promise to return a ConsumerGroup.
  */
-function getClient() {
-	var client = new kafka.Client(config.kafka.zookeeper);
-	return q.resolve(client);
+function getConsumer(topic, groupId) {
+	let consumer = new kafka.ConsumerGroup(
+		{
+			host: config.kafka.zookeeper,
+			groupId: groupId,
+			fromOffset: 'latest',
+			outOfRangeOffset: 'latest'
+		},
+		topic
+	);
+
+	return q.resolve(consumer);
 }
 
 function disconnect(connection) {
@@ -117,7 +126,7 @@ KafkaConsumer.prototype.isPending = function() {
  * @returns A promise to return a KafkaConsumer.
  */
 KafkaConsumer.prototype.getConsumer = function() {
-	var self = this;
+	let self = this;
 
 	// Initialize the deferred promise, if we don't already have one.
 	self.deferred = self.deferred || q.defer();
@@ -137,20 +146,11 @@ KafkaConsumer.prototype.getConsumer = function() {
 	self.state = 'connecting';
 	self.groupId = self.groupId || createGroupId(self.topic);
 
-	// Try to connect, creating a new client and consumer each time.
-	getClient().then(function (client) {
+	// Try to connect, creating a new consumer each time.
+	getConsumer(self.topic, self.groupId).then(function (consumer) {
 		// If the connection was closed in the meantime, it's possible the deferred object has been cleared.
 		// If so, we don't care about the response.
 		if (null != self.deferred) {
-			var consumer = new kafka.HighLevelConsumer(client,
-				[{
-					topic: self.topic
-				}],
-				{
-					groupId: self.groupId,
-					fromOffset: true
-				}
-			);
 			self.state = 'connected';
 
 			// Since each consumer has its own group Id, the offsets by default will reset to the beginning
@@ -162,13 +162,13 @@ KafkaConsumer.prototype.getConsumer = function() {
 				consumer.pause();
 
 				// Replace the default rebalance event listeners with our own
-				var rebalanceListeners = consumer.listeners('rebalanced');
+				let rebalanceListeners = consumer.listeners('rebalanced');
 				consumer.removeAllListeners('rebalanced');
 
-				// The first time the client is rebalanced, get the offsets
+				// The first time the consumer is rebalanced, get the offsets
 				consumer.once('rebalanced', function() {
 					// Get the last offset for each topic
-					var payloads = consumer.getTopicPayloads().map(function(topic) {
+					let payloads = consumer.getTopicPayloads().map(function(topic) {
 						return {
 							topic: topic.topic,
 							partition: Number(topic.partition),
@@ -184,8 +184,8 @@ KafkaConsumer.prototype.getConsumer = function() {
 						else {
 
 							// Condense multiple offset values
-							for (var topic in offsets) {
-								for (var partition in offsets[topic]) {
+							for (let topic in offsets) {
+								for (let partition in offsets[topic]) {
 									offsets[topic][partition] = Math.min.apply(null, offsets[topic][partition]);
 									logger.info('Kafka Consumer: Connected to topic %s, partition: %d, offset: %d', topic, partition, offsets[topic][partition]);
 								}
@@ -306,7 +306,7 @@ KafkaConsumer.prototype.close = function() {
  * @param topic The topic to reconnect to.
  */
 KafkaConsumer.prototype.reconnect = function() {
-	var self = this;
+	let self = this;
 
 	// If a reconnection is already scheduled, don't do it again.
 	if (null == self.timeout) {

@@ -1,7 +1,6 @@
 'use strict';
 
-let
-	kafka = require('kafka-node'),
+let kafka = require('kafka-node'),
 	HighLevelProducer = kafka.HighLevelProducer,
 	path = require('path'),
 	q = require('q'),
@@ -10,29 +9,29 @@ let
 	config = require(path.resolve('./src/server/config.js')),
 	logger = require(path.resolve('./src/server/lib/bunyan.js')).logger;
 
-var _producerPromise = null;
-var _events = new events.EventEmitter();
+let _producerPromise = null;
+let _events = new events.EventEmitter();
 
-var _timeout = null;
-var _retryPayloads = [];
-var _retryPromises = [];
-var _retryPromise = null;
-var _connectTimeout = null;
+let _timeout = null;
+let _retryPayloads = [];
+let _retryPromises = [];
+let _retryPromise = null;
+let _connectTimeout = null;
 
 /**
  * @type {number} The number of milliseconds to wait before attempting to send any queued payloads.
  *   This can be changed in the config.
  */
-var retryMs = (null != config.kafka && null != config.kafka.kafkaRetryMs) ? config.kafka.kafkaRetryMs : 3000;
+let retryMs = (null != config.kafka && null != config.kafka.kafkaRetryMs) ? config.kafka.kafkaRetryMs : 3000;
 
 /**
  * @type {number} The number of milliseconds to wait before deciding that Zookeeper is unreachable.
  *   This can be changed in the config.
  */
-var zookeeperCommTimeout = (null != config.kafka && null != config.kafka.zookeeperCommTimeout) ? config.kafka.zookeeperCommTimeout : 1000;
+let zookeeperCommTimeout = (null != config.kafka && null != config.kafka.zookeeperCommTimeout) ? config.kafka.zookeeperCommTimeout : 1000;
 
 // Make JSLint happy
-var getProducer, send, retrySend, scheduleRetry;
+let onConnectionError, getProducer, send, retrySend, scheduleRetry;
 
 // Listen to our own error event so we don't crash the app.
 _events.on('error', function() {});
@@ -47,11 +46,11 @@ getProducer = function() {
 		return _producerPromise.promise;
 	}
 
-	var client, producer = null;
+	let client, producer = null;
 	_producerPromise = q.defer();
 
 	// Get the promise to return at this point, just in case onError is called before we have a chance to return it
-	var promise = _producerPromise.promise;
+	let promise = _producerPromise.promise;
 
 	function onError(err) {
 		logger.error(err, 'Kafka Producer: Failed to send payload');
@@ -111,14 +110,14 @@ getProducer = function() {
 };
 
 send = function(payloads, retry) {
-	var defer = q.defer();
+	let defer = q.defer();
 
 	// It's important that the payloads are sent in the correct order, so try to resend any queued up
 	// payloads before sending the new payload.
 	retrySend().then(getProducer).then(function(producer) {
 
 		// Send the payload to Kafka.
-		var d = q.defer();
+		let d = q.defer();
 		producer.send(payloads, d.makeNodeResolver());
 		return d.promise;
 
@@ -164,7 +163,7 @@ retrySend = function() {
 	getProducer().then(function (producer) {
 
 		// Send the payload to Kafka
-		var d = q.defer();
+		let d = q.defer();
 		producer.send(_retryPayloads, d.makeNodeResolver());
 		return d.promise;
 
