@@ -16,7 +16,7 @@ let kafka = require('kafka-node'),
  * @returns {string}
  */
 function createGroupId(topic) {
-	return 'nodejs-' + topic + '-' + Math.random();
+	return `nodejs-${topic}-${Math.random()}`;
 }
 
 /**
@@ -43,7 +43,7 @@ function disconnect(connection) {
 
 		connection.state = 'closing';
 		connection.getConsumer()
-			.then(function (consumer) {
+			.then((consumer) => {
 				if (null != consumer) {
 					try {
 						consumer.close();
@@ -54,7 +54,7 @@ function disconnect(connection) {
 				}
 				connection.emit('disconnect');
 			})
-			.fail(function (err) {
+			.fail((err) => {
 				logger.error(err, 'Kafka Consumer: error closing consumer');
 
 				// Re-emit this error to listeners.
@@ -94,7 +94,7 @@ function KafkaConsumer(topic, groupId, currentOffset) {
 	events.EventEmitter.call(this);
 
 	// Listen to our own error event, to avoid throwing exceptions out to NodeJS
-	this.on('error', function(err) {
+	this.on('error', (err) => {
 		// Ignore, this error will already have been logged elsewhere
 	});
 
@@ -114,7 +114,7 @@ KafkaConsumer.prototype.retryMs = (null != config.kafka && null != config.kafka.
  */
 KafkaConsumer.prototype.partition = 0;
 
-KafkaConsumer.prototype.isPending = function() {
+KafkaConsumer.prototype.isPending = () => {
 	return null != this.deferred && this.deferred.promise.isPending();
 };
 
@@ -125,7 +125,7 @@ KafkaConsumer.prototype.isPending = function() {
  * @param topic The topic to connect to.
  * @returns A promise to return a KafkaConsumer.
  */
-KafkaConsumer.prototype.getConsumer = function() {
+KafkaConsumer.prototype.getConsumer = () => {
 	let self = this;
 
 	// Initialize the deferred promise, if we don't already have one.
@@ -147,7 +147,7 @@ KafkaConsumer.prototype.getConsumer = function() {
 	self.groupId = self.groupId || createGroupId(self.topic);
 
 	// Try to connect, creating a new consumer each time.
-	getConsumer(self.topic, self.groupId).then(function (consumer) {
+	getConsumer(self.topic, self.groupId).then((consumer) => {
 		// If the connection was closed in the meantime, it's possible the deferred object has been cleared.
 		// If so, we don't care about the response.
 		if (null != self.deferred) {
@@ -166,9 +166,9 @@ KafkaConsumer.prototype.getConsumer = function() {
 				consumer.removeAllListeners('rebalanced');
 
 				// The first time the consumer is rebalanced, get the offsets
-				consumer.once('rebalanced', function() {
+				consumer.once('rebalanced', () => {
 					// Get the last offset for each topic
-					let payloads = consumer.getTopicPayloads().map(function(topic) {
+					let payloads = consumer.getTopicPayloads().map((topic) => {
 						return {
 							topic: topic.topic,
 							partition: Number(topic.partition),
@@ -177,7 +177,7 @@ KafkaConsumer.prototype.getConsumer = function() {
 						};
 					});
 
-					consumer.offsetRequest(payloads, function (err, offsets) {
+					consumer.offsetRequest(payloads, (err, offsets) => {
 						if (err) {
 							consumer.emit('error', err);
 						}
@@ -187,13 +187,13 @@ KafkaConsumer.prototype.getConsumer = function() {
 							for (let topic in offsets) {
 								for (let partition in offsets[topic]) {
 									offsets[topic][partition] = Math.min.apply(null, offsets[topic][partition]);
-									logger.info('Kafka Consumer: Connected to topic %s, partition: %d, offset: %d', topic, partition, offsets[topic][partition]);
+									logger.info(`Kafka Consumer: Connected to topic ${topic}, partition: ${partition}, offset: ${offsets[topic][partition]}`);
 								}
 							}
 
 							// Update the offsets and commit them
 							consumer.updateOffsets(offsets, true);
-							consumer.commit(false, function(err) {
+							consumer.commit(false, (err) => {
 								if (err) {
 									consumer.emit('error', err);
 								}
@@ -201,7 +201,7 @@ KafkaConsumer.prototype.getConsumer = function() {
 									self.offsetsInitialized = true;
 
 									// Re-register the previous listeners
-									rebalanceListeners.forEach(function(listener) {
+									rebalanceListeners.forEach((listener) => {
 										consumer.on('rebalanced', listener);
 									});
 
@@ -216,7 +216,7 @@ KafkaConsumer.prototype.getConsumer = function() {
 			}
 
 			// If the consumer receives an error, try to reconnect
-			consumer.on('error', function (err) {
+			consumer.on('error', (err) => {
 
 				// If the promise still hasn't been resolved, we need to reject it
 				// before we create a new one; otherwise clients listening to the old
@@ -229,7 +229,7 @@ KafkaConsumer.prototype.getConsumer = function() {
 				// Otherwise, we are probably trying to close the connection.
 				if (self.state === 'connected') {
 					if (err.name === 'TopicsNotExistError') {
-						logger.warn('Kafka Consumer: %s', err.message);
+						logger.warn(`Kafka Consumer: ${err.message}`);
 					}
 					else {
 						logger.error(err, 'Kafka Consumer: Connection to zookeeper failed.');
@@ -246,7 +246,7 @@ KafkaConsumer.prototype.getConsumer = function() {
 			// If the consumer receives a message, re-emit to our own event handler.
 			// This allows consumers to bind to the KafkaConsumer object rather than to a Consumer
 			// that may need to reconnect.
-			consumer.on('message', function (message) {
+			consumer.on('message', (message) => {
 				// Re-emit the message to listeners of this wrapper
 				self.emit('message', message);
 			});
@@ -258,7 +258,7 @@ KafkaConsumer.prototype.getConsumer = function() {
 			// the consumer will immediately be returned.
 			self.deferred.resolve(consumer);
 		}
-	}).fail(function (err) {
+	}).fail((err) => {
 		logger.error(err, 'Kafka Consumer: error creating consumer');
 
 		// Re-emit this error to listeners.
@@ -280,8 +280,8 @@ KafkaConsumer.prototype.getConsumer = function() {
 /**
  * Disconnects this consumer from its topic, closing all necessary resources and canceling any pending reconnects.
  */
-KafkaConsumer.prototype.close = function() {
-	logger.info('Kafka Consumer: Disconnecting zookeeper topic %s', this.topic);
+KafkaConsumer.prototype.close = () => {
+	logger.info(`Kafka Consumer: Disconnecting zookeeper topic ${this.topic}`);
 
 	// Explicitly close the connection (but only do this if we were actually connected)
 	disconnect(this);
@@ -305,12 +305,12 @@ KafkaConsumer.prototype.close = function() {
  *
  * @param topic The topic to reconnect to.
  */
-KafkaConsumer.prototype.reconnect = function() {
+KafkaConsumer.prototype.reconnect = () => {
 	let self = this;
 
 	// If a reconnection is already scheduled, don't do it again.
 	if (null == self.timeout) {
-		logger.info('Kafka Consumer: Attempting to reconnect zookeeper topic %s in %s ms', self.topic, self.retryMs);
+		logger.info(`Kafka Consumer: Attempting to reconnect zookeeper topic ${self.topic} in ${self.retryMs} ms`);
 
 		// Let listeners know we are reconnecting.  They will subsequently also get 'disconnect' and 'connect' notifications.
 		self.emit('reconnect');
@@ -328,7 +328,7 @@ KafkaConsumer.prototype.reconnect = function() {
 		self.deferred = q.defer();
 
 		// Setup a timeout
-		self.timeout = setTimeout(function () {
+		self.timeout = setTimeout(() => {
 			self.timeout = null;
 			self.state = 'disconnected';
 
@@ -339,7 +339,6 @@ KafkaConsumer.prototype.reconnect = function() {
 	}
 	return self.deferred.promise;
 };
-
 
 // Export API
 module.exports = KafkaConsumer;

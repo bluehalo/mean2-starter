@@ -34,14 +34,14 @@ let zookeeperCommTimeout = (null != config.kafka && null != config.kafka.zookeep
 let getProducer, send, retrySend, scheduleRetry;
 
 // Listen to our own error event so we don't crash the app.
-_events.on('error', function() {});
+_events.on('error', () => {});
 
 /**
  * Returns the active producer, creating a new one if necessary.
  *
  * @returns {Promise{HighLevelProducer}} A promise for the producer singleton.
  */
-getProducer = function() {
+getProducer = () => {
 	if (null != _producerPromise) {
 		return _producerPromise.promise;
 	}
@@ -72,7 +72,7 @@ getProducer = function() {
 
 		// When the producer is ready, resolve the promise.
 		// This will always be called even if there is an error, unless Zookeeper is down.
-		producer.once('ready', function () {
+		producer.once('ready', () => {
 			if (null != _connectTimeout) {
 				clearTimeout(_connectTimeout);
 				_connectTimeout = null;
@@ -83,7 +83,7 @@ getProducer = function() {
 			}
 		});
 
-		producer.once('error', function (err) {
+		producer.once('error', (err) => {
 			if (null != _connectTimeout) {
 				clearTimeout(_connectTimeout);
 				_connectTimeout = null;
@@ -93,13 +93,13 @@ getProducer = function() {
 
 		// Check that zookeeper actually connected after a short time.
 		// This allows us to close the promise even if the ready event is never fired.
-		_connectTimeout = setTimeout(function () {
+		_connectTimeout = setTimeout(() => {
 			_connectTimeout = null;
 
 			// If the promise has not yet been resolved, emit an error in the producer.
 			// This will trigger our error-handling code above.
 			if (_producerPromise.promise.isPending()) {
-				onError(new Error('Failed to connect to Zookeeper in ' + zookeeperCommTimeout + ' ms'));
+				onError(new Error(`Failed to connect to Zookeeper in ${zookeeperCommTimeout} ms`));
 			}
 		}, zookeeperCommTimeout);
 	}
@@ -109,23 +109,23 @@ getProducer = function() {
 	return promise;
 };
 
-send = function(payloads, retry) {
+send = (payloads, retry) => {
 	let defer = q.defer();
 
 	// It's important that the payloads are sent in the correct order, so try to resend any queued up
 	// payloads before sending the new payload.
-	retrySend().then(getProducer).then(function(producer) {
+	retrySend().then(getProducer).then((producer) => {
 
 		// Send the payload to Kafka.
 		let d = q.defer();
 		producer.send(payloads, d.makeNodeResolver());
 		return d.promise;
 
-	}).then(function() {
+	}).then(() => {
 		logger.debug('Kafka Producer: Sent payload successfully');
 		defer.resolve();
 
-	}).fail(function(err) {
+	}).fail((err) => {
 		// If we're not bothering to retry, reject the promise immediately.
 		if (!retry) {
 			defer.reject(err);
@@ -140,7 +140,7 @@ send = function(payloads, retry) {
 	return defer.promise;
 };
 
-retrySend = function() {
+retrySend = () => {
 	// If there is a timeout set to call this function, cancel it.
 	if (null != _timeout) {
 		clearTimeout(_timeout);
@@ -160,16 +160,16 @@ retrySend = function() {
 	_retryPromise = q.defer();
 
 	// Try sending all of the stored payloads to Kafka and see what happens.
-	getProducer().then(function (producer) {
+	getProducer().then((producer) => {
 
 		// Send the payload to Kafka
 		let d = q.defer();
 		producer.send(_retryPayloads, d.makeNodeResolver());
 		return d.promise;
 
-	}).then(function(results) {
+	}).then((results) => {
 		// Resolve all the deferred promises
-		_retryPromises.forEach(function (promise) {
+		_retryPromises.forEach((promise) => {
 			promise.resolve();
 		});
 
@@ -181,7 +181,7 @@ retrySend = function() {
 		_retryPromise.resolve();
 		_retryPromise = null;
 
-	}).fail(function (err) {
+	}).fail((err) => {
 		// Schedule the retry again.
 		scheduleRetry();
 
@@ -194,10 +194,10 @@ retrySend = function() {
 	return _retryPromise.promise;
 };
 
-scheduleRetry = function() {
+scheduleRetry = () => {
 	if (null == _timeout) {
-		logger.info('Kafka Producer: Attempting to resend payloads in %s ms', retryMs);
-		_timeout = setTimeout(function() {
+		logger.info(`Kafka Producer: Attempting to resend payloads in ${retryMs} ms`);
+		_timeout = setTimeout(() => {
 			_timeout = null;
 			retrySend();
 		}, retryMs);
@@ -240,7 +240,7 @@ module.exports.send = send;
  *   retry is set to false.  If retry is true, the promise will only be resolved when a successful send
  *   is finally made.
  */
-module.exports.sendMessageForTopic = function(topic, message, retry) {
+module.exports.sendMessageForTopic = (topic, message, retry) => {
 	return send([{topic: topic, messages: message}], retry);
 };
 
@@ -258,6 +258,6 @@ module.exports.sendMessageForTopic = function(topic, message, retry) {
  *   retry is set to false.  If retry is true, the promise will only be resolved when a successful send
  *   is finally made.
  */
-module.exports.sendMessageForTopicWithKey = function(topic, message, key, retry) {
+module.exports.sendMessageForTopicWithKey = (topic, message, key, retry) => {
 	return send([{topic: topic, messages: message, key: key}], retry);
 };
