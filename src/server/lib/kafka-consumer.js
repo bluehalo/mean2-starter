@@ -24,16 +24,28 @@ function createGroupId(topic) {
  *
  * @returns A promise to return a ConsumerGroup.
  */
-function getConsumer(topic, groupId) {
-	let consumer = new kafka.ConsumerGroup(
-		{
-			host: config.kafka.zookeeper,
-			groupId: groupId,
-			fromOffset: 'latest',
-			outOfRangeOffset: 'latest'
-		},
-		topic
-	);
+function getConsumer(topic, groupId, extraOptions) {
+
+	// Default options
+	let options = {
+		fromOffset: 'latest',
+		outOfRangeOffset: 'latest'
+	};
+
+	// If extraOptions are provided merge with default Options
+	if (null != extraOptions) {
+		options = Object.assign(options, extraOptions);
+	}
+
+	let connectionOptions = {
+		host: config.kafka.zookeeper,
+		groupId: groupId
+	};
+
+	// Merge connectionOptions
+	options = Object.assign(options, connectionOptions);
+
+	let consumer = new kafka.ConsumerGroup(options, topic);
 
 	return q.resolve(consumer);
 }
@@ -72,7 +84,7 @@ function disconnect(connection) {
  * @param {string=} groupId Optionally, a groupId to use for this connection.
  * @param {boolean=} currentOffset Optionally, use the current offset in zookeeper, otherwise use latest offset [default].
  */
-function KafkaConsumer(topic, groupId, currentOffset) {
+function KafkaConsumer(topic, groupId, currentOffset, extraOptions) {
 	this.topic = topic;
 
 	// The state: disconnected, connecting, connected, reconnecting, closing
@@ -89,6 +101,9 @@ function KafkaConsumer(topic, groupId, currentOffset) {
 
 	// This will be set to true once we've initialized the offsets for this groupId.
 	this.offsetsInitialized = (currentOffset === true);
+
+	// Any extraOptions we want to provide to kafka-node consumer
+	this.extraOptions = extraOptions;
 
 	// This class is an EventEmitter
 	events.EventEmitter.call(this);
@@ -114,7 +129,7 @@ KafkaConsumer.prototype.retryMs = (null != config.kafka && null != config.kafka.
  */
 KafkaConsumer.prototype.partition = 0;
 
-KafkaConsumer.prototype.isPending = () => {
+KafkaConsumer.prototype.isPending = function() {
 	return null != this.deferred && this.deferred.promise.isPending();
 };
 
@@ -125,7 +140,7 @@ KafkaConsumer.prototype.isPending = () => {
  * @param topic The topic to connect to.
  * @returns A promise to return a KafkaConsumer.
  */
-KafkaConsumer.prototype.getConsumer = () => {
+KafkaConsumer.prototype.getConsumer = function() {
 	let self = this;
 
 	// Initialize the deferred promise, if we don't already have one.
@@ -147,7 +162,7 @@ KafkaConsumer.prototype.getConsumer = () => {
 	self.groupId = self.groupId || createGroupId(self.topic);
 
 	// Try to connect, creating a new consumer each time.
-	getConsumer(self.topic, self.groupId).then((consumer) => {
+	getConsumer(self.topic, self.groupId, self.extraOptions).then((consumer) => {
 		// If the connection was closed in the meantime, it's possible the deferred object has been cleared.
 		// If so, we don't care about the response.
 		if (null != self.deferred) {
@@ -280,7 +295,7 @@ KafkaConsumer.prototype.getConsumer = () => {
 /**
  * Disconnects this consumer from its topic, closing all necessary resources and canceling any pending reconnects.
  */
-KafkaConsumer.prototype.close = () => {
+KafkaConsumer.prototype.close = function() {
 	logger.info(`Kafka Consumer: Disconnecting zookeeper topic ${this.topic}`);
 
 	// Explicitly close the connection (but only do this if we were actually connected)
@@ -305,7 +320,7 @@ KafkaConsumer.prototype.close = () => {
  *
  * @param topic The topic to reconnect to.
  */
-KafkaConsumer.prototype.reconnect = () => {
+KafkaConsumer.prototype.reconnect = function() {
 	let self = this;
 
 	// If a reconnection is already scheduled, don't do it again.
