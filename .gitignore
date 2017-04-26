@@ -45,6 +45,7 @@ nb-configuration.xml
 
 # Node
 node_modules/
+yarn.lock
 
 # Common
 bin/
