@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { Http, Headers, URLSearchParams, Response } from '@angular/http';
 
-import { Observable } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import * as _ from 'lodash';
 
 export class HttpOptions {
@@ -30,27 +30,20 @@ export class AsyHttp {
 
 	private publishError: Function;
 
-	private _errors: Observable<any>;
+	private _errors: Subject<any>;
 
 	constructor(
 		private _http: Http,
 		private router: Router,
 		private location: Location
 	) {
-		this._errors = Observable.create((observer: any) => {
-			this.publishError = (...a: any[]) => observer.next(...a);
-
-			return () => {
-				this.publishError = () => {};
-			};
-		});
-
-		this._errors.publish();
+		this._errors = new Subject();
+		this.publishError = this._errors.next;
 	}
 
 	static defaultErrFn(_err: any) { }
 
-	public errors(): Observable<any> {
+	public errors(): Subject<any> {
 		return this._errors;
 	}
 
@@ -64,7 +57,6 @@ export class AsyHttp {
 			.share()
 			.catch((error: any, caught: Observable<any>) => {
 				return this.handleErrorResponse(error, caught);
-
 			});
 
 		observable
