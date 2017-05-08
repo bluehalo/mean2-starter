@@ -82,6 +82,7 @@ gulp.task('webpack-dev-server', (done) => {
 
 	new webpackDevServer(compiler, {
 		publicPath: `${config.app.url.protocol}://${config.app.url.host}:${config.devPorts.webpack}/dev/`,
+		headers: { 'Access-Control-Allow-Origin': '*' },
 		stats: {
 			chunks: false,
 			children: false,
