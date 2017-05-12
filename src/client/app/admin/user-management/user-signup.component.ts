@@ -28,7 +28,7 @@ export class UserSignupComponent extends ManageUserComponent {
 		this.title = 'New Account Request';
 		this.subtitle = 'Provide the required information to request an account';
 		this.okButtonText = 'Submit';
-		this.navigateOnSuccess = '';
+		this.navigateOnSuccess = '/signed-up';
 		this.user = new User();
 	}
 

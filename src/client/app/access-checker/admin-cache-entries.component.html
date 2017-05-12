@@ -37,7 +37,7 @@
 
 		<template asy-template="table-row" let-cacheEntry>
 			<td>{{cacheEntry.entry.key}}</td>
-			<td class="hideOverflow" style="max-width: 300px;">{{cacheEntry.entry.value | json}}</td>
+			<td class="hide-overflow" style="max-width: 300px;">{{cacheEntry.entry.value | json}}</td>
 			<td><span [attr.title]="cacheEntry.entry.ts | date:'yyyy-MM-dd HH:mm:ssZ'">{{cacheEntry.entry.ts | agoDate:false}}</span></td>
 			<td style="width: 120px;">
 				<div class="pull-right">

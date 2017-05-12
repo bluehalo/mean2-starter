@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import 'rxjs/Rx';
 
 import { Alert } from './alert.class';
+import { Response } from '@angular/http';
 
 class Alerts {
 	list: Alert[] = [];
@@ -49,6 +50,12 @@ export class AlertService {
 		// If they passed in a ttl parameter, age off the alert after said timeout
 		if (null != ttl) {
 			setTimeout(() => this.clearAlertById(alert.id), ttl);
+		}
+	}
+
+	addAlertResponse(response: any) {
+		if (response instanceof Response) {
+			this.addAlert(response.json().message);
 		}
 	}
 

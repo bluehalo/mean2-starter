@@ -15,6 +15,9 @@ module.exports.audit = function(message, eventType, eventAction, eventActor, eve
 
 	// Extract additional metadata to audit
 	let interfaceUrl = utilService.getHeaderField(eventMetadata, 'interface-url');
+	if (interfaceUrl != null) {
+		interfaceUrl = decodeURI(interfaceUrl);
+	}
 	let userAgentObj = utilService.getUserAgentFromHeader(eventMetadata);
 
 	// Send to Mongo

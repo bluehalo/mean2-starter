@@ -222,9 +222,10 @@ module.exports = (mode) => {
 			d3: 'd3'
 		}),
 
-		// Context replacement for ng2
+		// Context replacement for ng4
 		new webpack.ContextReplacementPlugin(
-			/angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/
+			/angular(\\|\/)core(\\|\/)@angular/,
+			path.posix.resolve('./src/client')
 		)
 	);
 
