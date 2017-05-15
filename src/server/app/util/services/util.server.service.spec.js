@@ -77,7 +77,13 @@ describe('Utils:', () => {
 			input: 1483274096,
 			expected: 1483274096,
 			name: 'should properly parse a number that is not actually a date'
-		}, {
+		},
+		{
+			input: '1483274096789',
+			expected: 1483274096789,
+			name: 'should properly parse a number string'
+		},
+		{
 			input: null,
 			expected: null,
 			name: 'should handle null inputs'
