@@ -57,24 +57,6 @@ module.exports = function() {
 		return q.all(searches.map((search) => populateTagInfo(search)));
 	}
 
-	function doSearch(query, sortParams, page, limit) {
-		let offset = page * limit;
-
-		return q.all([
-			Resource.find(query).count(),
-			Resource.find(query).sort(sortParams).skip(offset).limit(limit)
-		])
-			.then((results) => {
-				return q({
-					totalSize: results[0],
-					pageNumber: page,
-					pageSize: limit,
-					totalPages: Math.ceil(results[0]/limit),
-					elements: results[1]
-				});
-			});
-	}
-
 	function searchResources(query, queryParams, user) {
 		let page = util.getPage(queryParams);
 		let limit = util.getLimit(queryParams, 1000);
@@ -92,6 +74,10 @@ module.exports = function() {
 			sortParams[sort] = dir === 'ASC' ? 1 : -1;
 		}
 
+		const searchConfig = {
+			query: query, sorting: sortParams, page: page, limit: limit
+		};
+
 		let searchPromise;
 		// If user is not an admin, constrain the results to the user's teams
 		if (null == user.roles || !user.roles.admin) {
@@ -104,16 +90,16 @@ module.exports = function() {
 							}
 						});
 
-						query.$or = [{'owner.type': 'team', 'owner._id': {$in: teamIds}}, {
+						searchConfig.query.$or = [{'owner.type': 'team', 'owner._id': {$in: teamIds}}, {
 							'owner.type': 'user',
 							'owner._id': user._id
 						}];
 
-						return doSearch(query, sortParams, page, limit);
+						return Resource.pagingSearch(searchConfig);
 					});
 		}
 		else {
-			searchPromise = doSearch(query, sortParams, page, limit);
+			searchPromise = Resource.pagingSearch(searchConfig);
 		}
 
 		return searchPromise
@@ -163,7 +149,6 @@ module.exports = function() {
 									}
 								]
 							};
-
 							return Resource.find(query).exec();
 						})
 					.then(

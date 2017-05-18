@@ -6,6 +6,7 @@ let mongoose = require('mongoose'),
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	util = deps.utilService,
 	query = deps.queryService,
+	schemaService = deps.schemaService,
 	GetterSchema = deps.schemaService.GetterSchema;
 
 /**
@@ -34,6 +35,12 @@ let AuditSchema = new GetterSchema({
 		}
 	}
 });
+
+/*****************
+ * Plugins
+ *****************/
+
+AuditSchema.plugin(schemaService.pageable);
 
 /**
  * Index declarations

@@ -5,7 +5,8 @@ let mongoose = require('mongoose'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	config = deps.config,
-	util = deps.utilService;
+	util = deps.utilService,
+	schemaService = deps.schemaService;
 
 /**
  * Notification Schema
@@ -26,6 +27,11 @@ let NotificationSchema = new mongoose.Schema({
 	}
 }, module.exports.notificationOptions);
 
+/*****************
+ * Plugins
+ *****************/
+
+NotificationSchema.plugin(schemaService.pageable);
 
 /*****************
  * Index declarations

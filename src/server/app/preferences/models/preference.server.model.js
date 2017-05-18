@@ -4,7 +4,8 @@ let mongoose = require('mongoose'),
 	path = require('path'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
-	util = deps.utilService;
+	util = deps.utilService,
+	schemaService = deps.schemaService;
 
 /**
  * Preference Schema
@@ -29,6 +30,11 @@ let PreferenceSchema = new mongoose.Schema({
 	}
 }, module.exports.preferenceOptions);
 
+/*****************
+ * Plugins
+ *****************/
+
+PreferenceSchema.plugin(schemaService.pageable);
 
 /*****************
  * Index declarations

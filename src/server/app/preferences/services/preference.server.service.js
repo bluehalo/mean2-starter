@@ -1,35 +1,10 @@
 'use strict';
 
 let path = require('path'),
-	q = require('q'),
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	util = deps.utilService,
 	dbs = deps.dbs,
 	Preference = dbs.admin.model('Preference');
-
-function doSearch(query, sortParams, page, limit) {
-	let countPromise = Preference.find(query).count();
-	let searchPromise = Preference.find(query);
-
-	if (sortParams) {
-		searchPromise = searchPromise.sort(sortParams);
-	}
-
-	if (limit) {
-		searchPromise = searchPromise.skip(page * limit).limit(limit);
-	}
-
-	return q.all([ countPromise, searchPromise ])
-		.then((results) => {
-			return q({
-				totalSize: results[0],
-				pageNumber: page,
-				pageSize: limit,
-				totalPages: Math.ceil(results[0] / limit),
-				elements: results[1]
-			});
-		});
-}
 
 module.exports.searchAll = function(query) {
 	return Preference.find(query).exec();
@@ -51,5 +26,10 @@ module.exports.search = function(query, queryParams) {
 		sortParams[sort] = dir === 'ASC' ? 1 : -1;
 	}
 
-	return doSearch(query, sortParams, page, limit);
+	return Preference.pagingSearch({
+		query: query,
+		sorting: sortParams,
+		page: page,
+		limit: limit
+	});
 };

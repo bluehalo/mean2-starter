@@ -6,8 +6,9 @@ var	mongoose = require('mongoose'),
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	util = deps.utilService,
 	query = deps.queryService,
+	schemaService = deps.schemaService,
 
-	GetterSchema = deps.schemaService.GetterSchema;
+	GetterSchema = schemaService.GetterSchema;
 
 /**
  * Message Schema
@@ -48,6 +49,12 @@ var MessageSchema = new GetterSchema({
 		ref: 'User'
 	}
 });
+
+/*****************
+ * Plugins
+ *****************/
+
+MessageSchema.plugin(schemaService.pageable);
 
 /**
  * Index declarations

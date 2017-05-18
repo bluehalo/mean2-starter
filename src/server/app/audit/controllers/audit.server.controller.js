@@ -52,21 +52,15 @@ exports.search = function(req, res) {
 	}
 	page = Math.max(0, page);
 
-	let offset = page * limit;
-
-	Audit.search(query, search, limit, offset, sortArr).then(function(result) {
-		// success
-		var toReturn = {
-			hasMore: result.count > result.results.length,
-			elements: result.results,
-			totalSize: result.count,
-			pageNumber: page,
-			pageSize: limit,
-			totalPages: Math.ceil(result.count / limit)
-		};
-
+	Audit.pagingSearch({
+		query: query,
+		searchTerms: search,
+		limit: limit,
+		page: page,
+		sorting: sortArr
+	}).then(function(result) {
 		// Serialize the response
-		res.status(200).json(toReturn);
+		res.status(200).json(result);
 	}, function(err) {
 		// failure
 		logger.error({err: err, req: req}, 'Error searching for audit entries');

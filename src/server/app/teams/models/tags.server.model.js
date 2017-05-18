@@ -7,6 +7,7 @@ let
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	util = deps.utilService,
 	query = deps.queryService,
+	schemaService = deps.schemaService,
 	GetterSchema = deps.schemaService.GetterSchema;
 
 /**
@@ -40,6 +41,11 @@ let TagSchema = new GetterSchema({
 	}
 });
 
+/*****************
+ * Plugins
+ *****************/
+
+TagSchema.plugin(schemaService.pageable);
 
 /**
  * Index declarations
