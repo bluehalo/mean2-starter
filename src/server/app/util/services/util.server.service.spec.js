@@ -57,43 +57,55 @@ describe('Utils:', () => {
 
 	describe('Date Parse:', () => {
 
-		[{
-			input: '2017-01-01T12:34:56.789Z',
-			expected: 1483274096789,
-			name: 'should properly parse a date string'
-		}, {
-			input: '2017-01-01T12:34Z',
-			expected: 1483274040000,
-			name: 'should properly parse a date without seconds'
-		}, {
-			input: new Date('2017-01-01T12:34:56.789Z'),
-			expected: 1483274096789,
-			name: 'should properly parse a date object'
-		}, {
-			input: 1483274096789,
-			expected: 1483274096789,
-			name: 'should properly parse a number'
-		}, {
-			input: 1483274096,
-			expected: 1483274096,
-			name: 'should properly parse a number that is not actually a date'
-		},
-		{
-			input: '1483274096789',
-			expected: 1483274096789,
-			name: 'should properly parse a number string'
-		},
-		{
-			input: null,
-			expected: null,
-			name: 'should handle null inputs'
-		}].forEach((test) => {
-			it(test.name, () => {
-				const actual = util.dateParse(test.input);
-				should(actual).equal(test.expected);
-			});
+		it('returns null if null', () => {
+			should.equal(util.dateParse(null), null);
 		});
 
+		it('returns null if undefined', () => {
+			should.equal(util.dateParse(undefined), null);
+		});
+
+		it('returns null if object', () => {
+			should.equal(util.dateParse({}), null);
+		});
+
+		it('returns null if array', () => {
+			should.equal(util.dateParse([]), null);
+		});
+
+		it('returns null if function', () => {
+			should.equal(util.dateParse(() => {}), null);
+		});
+
+		it('returns number if number', () => {
+			should.equal(util.dateParse(0), 0);
+			should.equal(util.dateParse(12345), 12345);
+			should.equal(util.dateParse(-12345), -12345);
+		});
+
+		it('returns number if string is a number', () => {
+			should.equal(util.dateParse('0'), 0);
+			should.equal(util.dateParse('12345'), 12345);
+			should.equal(util.dateParse('-12345'), -12345);
+		});
+
+		it('returns null if string is bad', () => {
+			should.equal(util.dateParse('2017-0000000000000'), null);
+			should.equal(util.dateParse('Hello'), null);
+		});
+
+		it('returns number if string is a date', () => {
+			should.equal(util.dateParse('1970-01-01'), 0);
+			should.equal(util.dateParse('1970-01-01T00:00:00.000Z'), 0);
+			should.equal(util.dateParse('2017-06-19T20:41:45.000Z'), 1497904905000);
+		});
+
+		it('returns number if date', () => {
+			should.equal(util.dateParse(new Date(0)), 0);
+			should.equal(util.dateParse(new Date(12345)), 12345);
+			const now = new Date();
+			should.equal(util.dateParse(now), now.getTime());
+		});
 	});
 
 	describe('getPage:', () => {
