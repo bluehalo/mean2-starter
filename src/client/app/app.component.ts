@@ -1,8 +1,8 @@
 import { Component, ViewContainerRef } from '@angular/core';
 import { Overlay } from 'angular2-modal';
-import { ConfigService } from './core/config.service';
+
+import { ConfigService, SocketService } from './core';
 import { MessageHandlerService } from './messages/message-handler.service';
-import { SocketService } from './core/socket.service';
 
 @Component({
 	selector: 'app-component',

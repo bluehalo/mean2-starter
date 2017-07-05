@@ -1,12 +1,10 @@
-import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
+import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { Http, Headers, URLSearchParams, Response } from '@angular/http';
 
-import { Observable } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import * as _ from 'lodash';
-
-import { UserStateService } from '../admin/authentication/user-state.service';
 
 export class HttpOptions {
 	public urlParams: URLSearchParams;
@@ -18,6 +16,7 @@ export class HttpOptions {
 		public completeFn: Function = (): any => null,
 		public errFn: Function = AsyHttp.defaultErrFn,
 		public type: string = 'get') {
+
 	}
 
 	public setParamsFromObject(obj: any) {
@@ -29,13 +28,24 @@ export class HttpOptions {
 @Injectable()
 export class AsyHttp {
 
+	private publishError: Function;
+
+	private _errors: Subject<any>;
+
 	constructor(
-		private userStateService: UserStateService,
 		private _http: Http,
 		private router: Router,
-		private location: Location) {}
+		private location: Location
+	) {
+		this._errors = new Subject();
+		this.publishError = this._errors.next;
+	}
 
 	static defaultErrFn(_err: any) { }
+
+	public errors(): Subject<any> {
+		return this._errors;
+	}
 
 	get(opts: HttpOptions) {
 		let headers = new Headers({
@@ -47,7 +57,6 @@ export class AsyHttp {
 			.share()
 			.catch((error: any, caught: Observable<any>) => {
 				return this.handleErrorResponse(error, caught);
-
 			});
 
 		observable
@@ -141,12 +150,12 @@ export class AsyHttp {
 
 	protected handleErrorResponse(err: any, _caught: Observable<any>): Observable<any> {
 		let errData = JSON.parse(err._body);
+		try {
+			this.publishError(err);
+		} catch (e) { /** Log out publish error */ }
+
 		switch (err.status) {
 			case 401:
-
-				// Deauthenticate the global user
-				this.userStateService.user.clearUser();
-
 
 				if (errData.type === 'invalid-certificate') {
 					// Redirect to invalid credentials page

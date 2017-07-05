@@ -3,8 +3,8 @@ import { Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
 
-import { AsyHttp, HttpOptions } from '../../shared/asy-http.service';
-import { PagingOptions } from '../../shared/pager.component';
+import { AsyHttp, HttpOptions, PagingOptions } from 'app/shared';
+
 import { Tag } from './tags.class';
 
 @Injectable()

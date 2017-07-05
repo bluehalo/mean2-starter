@@ -3,11 +3,13 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Ng2BootstrapModule } from 'ng2-bootstrap';
-import { UtilModule } from '../../shared/util.module';
+
+import { UtilModule } from 'app/shared';
+
+import { MessagesModule } from '../messages.module';
 import { CreateMessageComponent } from './create-message.component';
 import { ListMessagesComponent } from './list-messages.component';
 import { AdminMessagesRoutingModule } from './admin-messages-routing.module';
-import { MessagesModule } from '../messages.module';
 import { UpdateMessageComponent } from './edit-message.component';
 
 @NgModule({

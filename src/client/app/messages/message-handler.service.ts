@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
+
+import * as _ from 'lodash';
 import { ToasterService, Toast, BodyOutputType } from 'angular2-toaster';
+
 import { MessageService } from './message.service';
 import { Message, MessageType } from './message.class';
-import { AuthenticationService } from '../admin/authentication/authentication.service';
-import { UserStateService } from '../admin/authentication/user-state.service';
-import * as _ from 'lodash';
+
+import { AuthenticationService } from 'app/admin/authentication/authentication.service';
+import { UserStateService } from 'app/admin/authentication/user-state.service';
 
 @Injectable()
 export class MessageHandlerService {

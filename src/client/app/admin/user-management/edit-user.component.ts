@@ -4,13 +4,14 @@ import { Router } from '@angular/router';
 
 import * as _ from 'lodash';
 
+import { ConfigService } from 'app/core';
+import { AlertService } from 'app/shared';
+import { CacheEntriesService } from 'app/access-checker';
+
+import { User } from '../user';
+import { AuthenticationService } from '../authentication';
 import { ManageUserComponent } from './manage-user.component';
 import { AdminService } from '../admin.service';
-import { User } from '../user.class';
-import { AuthenticationService } from '../authentication/authentication.service';
-import { ConfigService } from '../../core/config.service';
-import { AlertService } from '../../shared/alert.service';
-import { CacheEntriesService } from '../../access-checker/cache-entries.service';
 
 @Component({
 	selector: 'edit-user',

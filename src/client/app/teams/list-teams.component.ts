@@ -5,13 +5,16 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import * as _ from 'lodash';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 
+import {
+	PagingOptions, TableSortOptions,
+	SortDirection, SortDisplayOption,
+	AlertService
+} from 'app/shared';
+
 import { Team, TeamMember } from './teams.class';
 import { TeamsService } from './teams.service';
-import { SortDirection, SortDisplayOption } from '../shared/result-utils.class';
-import { PagingOptions } from '../shared/pager.component';
-import { TableSortOptions } from '../shared/pageable-table/pageable-table.component';
-import { AuthenticationService } from '../admin/authentication/authentication.service';
-import { AlertService } from '../shared/alert.service';
+
+import { AuthenticationService } from 'app/admin/authentication/authentication.service';
 
 @Component({
 	selector: 'list-teams',

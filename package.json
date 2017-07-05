@@ -14,7 +14,12 @@
 		"npm": "3.10.9"
 	},
 
-	"scripts": {},
+	"scripts": {
+		"dev": "export NODE_ENV=development && gulp dev | bunyan",
+		"build": "gulp build",
+		"test": "gulp test",
+		"test-ci": "gulp test-ci"
+	},
 
 	"dependencies": {
 		"async": "2.2",

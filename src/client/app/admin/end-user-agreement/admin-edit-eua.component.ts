@@ -4,10 +4,11 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 
 import { EndUserAgreement } from './eua.class';
+import { AuthenticationService } from '../authentication';
+import { AlertService } from 'app/shared';
+
 import { EuaService } from './eua.service';
-import { AuthenticationService } from '../authentication/authentication.service';
 import { ManageEuaComponent } from './manage-eua.component';
-import { AlertService } from '../../shared/alert.service';
 
 @Component({
 	selector: 'admin-update-eua',

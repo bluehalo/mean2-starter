@@ -1,12 +1,9 @@
-import { Credentials } from './authentication/credentials.class';
+import { Credentials } from '../authentication/credentials.class';
 
 export class User {
-
-	constructor(
-		public userModel: any = {}, // raw User model object,
-		public credentials: Credentials = new Credentials(),
-		public eua?: any) {
-	}
+	userModel: any = {}; // raw User model object,
+	credentials: Credentials = new Credentials();
+	eua?: any;
 
 	// General auth methods
 	public isAuthenticated(): boolean {

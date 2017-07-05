@@ -1,18 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { User } from '../user.class';
+import { User } from '../user';
+import { AsyHttp } from 'app/shared';
 
-/**
- *
- */
 @Injectable()
 export class UserStateService {
 
-	public user: User = new User();
+	public user: User;
 	public authRedirectUrl: string; // Can maintain state of a url to redirect to after login
 
-	constructor(private router: Router) {}
+	constructor(
+		private router: Router,
+		private _http: AsyHttp
+	) {
+		this.user = new User();
+		this._http.errors().subscribe((err) => { this.routeError(err); }, () => {});
+	}
 
 	/**
 	 * Redirect the user to the last attempted route
@@ -40,5 +44,12 @@ export class UserStateService {
 
 	public clearUser() {
 		this.user.clearUser();
+	}
+
+	private routeError(err: any): void {
+		// console.log('RouteError');
+		if (err.status === 401) {
+			this.clearUser();
+		}
 	}
 }

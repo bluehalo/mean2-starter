@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { Observable, BehaviorSubject } from 'rxjs';
 
-import { User } from '../user.class';
+import { AsyHttp, HttpOptions } from 'app/shared';
+
+import { User } from '../user';
 import { UserStateService } from './user-state.service';
-import { AsyHttp, HttpOptions } from '../../shared/asy-http.service';
 
 @Injectable()
 export class AuthenticationService {

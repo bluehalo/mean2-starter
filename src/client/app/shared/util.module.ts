@@ -4,6 +4,14 @@ import { CommonModule } from '@angular/common';
 
 import { Ng2BootstrapModule } from 'ng2-bootstrap';
 
+import {
+	AsyDropdownComponent,
+	AsyDropdownItemComponent,
+	AsyDropdownService,
+	AsyDropdownItemWrapperComponent
+} from './dropdown';
+import { PageableTable } from './pageable-table';
+
 import { AddRemoveTypeaheadList } from './add-remove-typeahead-list.component';
 import { AgoDatePipe } from './ago-date.pipe';
 import { AlertService } from './alert.service';
@@ -21,13 +29,8 @@ import { InLineEdit } from './in-line-edit.component';
 import { Pager } from './pager.component';
 import { AsyTemplate } from './asy-template.directive';
 import { AsyTransclude } from './asy-transclude.directive';
-import { PageableTable } from './pageable-table/pageable-table.component';
 import { AreaPipe } from './area.pipe';
 import { KeysPipe } from './keys.pipe';
-import { AsyDropdownComponent } from './dropdown/asy-dropdown.component';
-import { AsyDropdownItemComponent } from './dropdown/asy-dropdown-item.component';
-import { AsyDropdownService } from './dropdown/asy-dropdown.service';
-import { AsyDropdownItemWrapperComponent } from './dropdown/asy-dropdown-item-wrapper.component';
 
 import { UrlClickHandler } from './urlHandler/url-click-handler.component';
 import { ListManager } from './list-manager.component';

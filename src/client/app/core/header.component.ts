@@ -3,9 +3,9 @@ import { Router, NavigationEnd } from '@angular/router';
 
 import { CoreComponent } from './core.component';
 import { ConfigService } from './config.service';
-import { AuthenticationService } from '../admin/authentication/authentication.service';
-import { Team } from '../teams/teams.class';
-import { TeamsService } from '../teams/teams.service';
+import { AuthenticationService } from 'app/admin/authentication/authentication.service';
+import { Team } from 'app/teams/teams.class';
+import { TeamsService } from 'app/teams/teams.service';
 
 /**
  * Primary header component wrapping the whole page

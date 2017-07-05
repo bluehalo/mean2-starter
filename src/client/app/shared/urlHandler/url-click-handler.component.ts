@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { AsyDropdownHandlers } from '../dropdown/asy-dropdown-type.class';
+import { AsyDropdownHandlers } from '../dropdown';
 
 @Component({
 	template: `<asy-dropdown-item (clicked)="retrieveUrl()" label="Retrieve URL"></asy-dropdown-item>`

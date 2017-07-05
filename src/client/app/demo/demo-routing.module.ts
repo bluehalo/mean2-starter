@@ -1,7 +1,7 @@
 import { NgModule }     from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { AuthGuard } from '../core/auth-guard.service';
+import { AuthGuard } from 'app/core';
 
 import { DemoComponent } from './demo.component';
 import { DemoLeafletComponent } from './leaflet/demo-leaflet.component';

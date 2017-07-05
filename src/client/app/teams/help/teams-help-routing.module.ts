@@ -1,9 +1,9 @@
 import { NgModule }     from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { AuthGuard } from '../../core/auth-guard.service';
+import { AuthGuard } from 'app/core';
+import { HelpComponent } from 'app/help/help.component';
 import { TeamsHelpComponent } from './teams-help.component';
-import { HelpComponent } from '../../help/help.component';
 
 @NgModule({
 	imports: [

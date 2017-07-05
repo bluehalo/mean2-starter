@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 
 import { OverviewHelpComponent } from './overview.component';
 import { AboutComponent } from '../about.component';
-import { HelpService } from '../../help/help.service';
-import { HelpTopic } from '../../help/help.class';
+import { HelpService } from 'app/help/help.service';
+import { HelpTopic } from 'app/help/help.class';
 
 
 @NgModule({

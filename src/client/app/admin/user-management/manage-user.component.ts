@@ -3,9 +3,9 @@ import { Response } from '@angular/http';
 
 import { Observable } from 'rxjs';
 
-import { ConfigService } from '../../core/config.service';
-import { AlertService } from '../../shared/alert.service';
-import { User } from '../user.class';
+import { ConfigService } from 'app/core';
+import { AlertService } from 'app/shared';
+import { User } from '../user';
 
 export abstract class ManageUserComponent {
 

@@ -3,7 +3,7 @@ import { Router, NavigationEnd } from '@angular/router';
 
 import { CoreComponent } from './core.component';
 import { ConfigService } from './config.service';
-import { AuthenticationService } from '../admin/authentication/authentication.service';
+import { AuthenticationService } from 'app/admin/authentication/authentication.service';
 
 /**
  * Primary footer component wrapping the whole page

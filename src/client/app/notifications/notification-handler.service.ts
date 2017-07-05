@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AuthenticationService } from '../admin/authentication/authentication.service';
-import { UserStateService } from '../admin/authentication/user-state.service';
+
+import { AuthenticationService } from 'app/admin/authentication/authentication.service';
+import { UserStateService } from 'app/admin/authentication/user-state.service';
+
 import { NotificationService } from './notification.service';
 import { NotificationStateService } from './notification-state-service';
 

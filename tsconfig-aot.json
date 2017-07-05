@@ -19,7 +19,12 @@
 		"noUnusedParameters": false,
 		"noUnusedLocals": false,
 
-		"sourceMap": true
+		"sourceMap": true,
+
+		"baseUrl": "src/client",
+		"paths": {
+			"app/*": [ "app/*" ]
+		}
 	}
 }
 

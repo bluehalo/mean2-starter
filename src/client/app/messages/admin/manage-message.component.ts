@@ -2,9 +2,10 @@ import { Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
+import { ConfigService } from 'app/core';
+import { AlertService } from 'app/shared';
+
 import { Message } from '../message.class';
-import { ConfigService } from '../../core/config.service';
-import { AlertService } from '../../shared/alert.service';
 
 export abstract class ManageMessageComponent {
 

@@ -1,16 +1,17 @@
-import { Location } from '@angular/common';
 import { Component } from '@angular/core';
+import { Location } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Response } from '@angular/http';
 
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 
+import { AlertService } from 'app/shared';
+import { ConfigService } from 'app/core';
+
 import { Team } from './teams.class';
 import { TeamsService } from './teams.service';
-import { AlertService } from '../shared/alert.service';
-import { AuthenticationService } from '../admin/authentication/authentication.service';
-import { ConfigService } from '../core/config.service';
+import { AuthenticationService } from 'app/admin/authentication/authentication.service';
 
 @Component({
 	selector: 'manage-team',

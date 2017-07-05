@@ -1,15 +1,21 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { AdminListUsersComponent } from './user-management/admin-list-users.component';
-import { AdminCreateUserComponent } from './user-management/admin-create-user.component';
-import { AdminUpdateUserComponent } from './user-management/admin-edit-user.component';
+import { AuthGuard } from 'app/core';
+import { AdminCacheEntriesComponent } from 'app/access-checker';
+
+import {
+	AdminListUsersComponent,
+	AdminCreateUserComponent,
+	AdminUpdateUserComponent,
+} from './user-management';
+import {
+	AdminListEuasComponent,
+	AdminCreateEuaComponent,
+	AdminUpdateEuaComponent,
+} from './end-user-agreement';
+
 import { AdminComponent } from './admin.component';
-import { AdminListEuasComponent } from './end-user-agreement/admin-list-euas.component';
-import { AdminCreateEuaComponent } from './end-user-agreement/admin-create-eua.component';
-import { AdminUpdateEuaComponent } from './end-user-agreement/admin-edit-eua.component';
-import { AdminCacheEntriesComponent } from '../access-checker/admin-cache-entries.component';
-import { AuthGuard } from '../core/auth-guard.service';
 
 @NgModule({
 	imports: [

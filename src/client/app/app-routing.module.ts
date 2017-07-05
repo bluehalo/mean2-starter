@@ -1,19 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { AuthGuard } from './core/auth-guard.service';
-import { SigninComponent } from './admin/authentication/signin.component';
-import { UnauthorizedComponent } from './admin/authentication/unauthorized.component';
-import { UserSignupComponent } from './admin/user-management/user-signup.component';
-import { UpdateUserComponent } from './admin/user-management/edit-user.component';
-import { InvalidResourceComponent } from './core/invalid-resource.component';
-import { InvalidCertificateComponent } from './admin/authentication/invalid-certificate.component';
-import { AuditComponent } from './audit/audit.component';
-import { UserEuaComponent } from './admin/end-user-agreement/user-eua.component';
-import { NoAccessComponent } from './admin/authentication/no-access.component';
-import { LoggedInComponent } from './core/logged-in.component';
-import { InactiveComponent } from './admin/authentication/inactive.component';
-import { UserSignedUpComponent } from './admin/user-management/user-signed-up.component';
+import { AuthGuard, LoggedInComponent, InvalidResourceComponent } from './core';
+import { AuditComponent } from './audit';
+
+import {
+	SigninComponent,
+	UnauthorizedComponent,
+	UserSignupComponent,
+	UpdateUserComponent,
+	InvalidCertificateComponent,
+	UserEuaComponent,
+	NoAccessComponent,
+	InactiveComponent,
+	UserSignedUpComponent
+} from './admin';
 
 @NgModule({
 	imports: [

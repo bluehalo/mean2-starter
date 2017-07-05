@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { User } from '../user.class';
+
+import { User } from '../user';
+
 import { AuthenticationService } from './authentication.service';
 
 @Component({
 	templateUrl: './inactive.component.html'
 })
-
 export class InactiveComponent {
 	user: User;
 

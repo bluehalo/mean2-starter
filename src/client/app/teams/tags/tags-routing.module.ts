@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { AuthGuard } from '../../core/auth-guard.service';
+import { AuthGuard } from 'app/core';
+
 import { ManageTagComponent } from './manage-tag.component';
 
 @NgModule({

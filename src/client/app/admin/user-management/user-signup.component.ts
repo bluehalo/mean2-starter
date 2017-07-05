@@ -1,11 +1,12 @@
 import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 
+import { ConfigService } from 'app/core';
+import { AlertService } from 'app/shared';
+
+import { AuthenticationService } from '../authentication';
 import { ManageUserComponent } from './manage-user.component';
-import { ConfigService } from '../../core/config.service';
-import { AlertService } from '../../shared/alert.service';
-import { AuthenticationService } from '../authentication/authentication.service';
-import { User } from '../user.class';
+import { User } from '../user';
 
 @Component({
 	selector: 'user-signup',

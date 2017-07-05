@@ -2,17 +2,17 @@ import { Component } from '@angular/core';
 import { Response } from '@angular/http';
 import { Router } from '@angular/router';
 
-import { AuthenticationService } from '../authentication/authentication.service';
-import { UserStateService } from '../authentication/user-state.service';
-import { ConfigService } from '../../core/config.service';
-import { User } from '../user.class';
+import { AuthenticationService, UserStateService } from '../authentication';
+import { ConfigService } from 'app/core';
+
+import { User } from '../user';
 
 @Component({
-	templateUrl: './forgot-password.component.html'
+	templateUrl: './forgot-password.component.html',
+	providers: [ User ]
 })
 export class ForgotPasswordComponent {
 
-	user: User;
 	error: string;
 	success: string;
 	pending: string;
@@ -22,7 +22,8 @@ export class ForgotPasswordComponent {
 		private router: Router,
 		private authService: AuthenticationService,
 		private userStateService: UserStateService,
-		private configService: ConfigService
+		private configService: ConfigService,
+		private user: User
 	) {}
 
 	ngOnInit() {

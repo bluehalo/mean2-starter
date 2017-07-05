@@ -1,16 +1,19 @@
-import { ActivatedRoute, Params } from '@angular/router';
 import { Component } from '@angular/core';
+import { Response } from '@angular/http';
 import { DialogRef } from 'angular2-modal';
-import { Modal } from 'angular2-modal/plugins/bootstrap';
-import { Message } from '../message.class';
-import { MessageService } from '../message.service';
+import { ActivatedRoute, Params } from '@angular/router';
 
 import * as _ from 'lodash';
-import { Response } from '@angular/http';
-import { PagingOptions } from '../../shared/pager.component';
-import { TableSortOptions } from '../../shared/pageable-table/pageable-table.component';
-import { SortDirection, SortDisplayOption } from '../../shared/result-utils.class';
-import { AlertService } from '../../shared/alert.service';
+import { Modal } from 'angular2-modal/plugins/bootstrap';
+
+import {
+	AlertService, PagingOptions,
+	SortDirection, SortDisplayOption,
+	TableSortOptions
+} from 'app/shared';
+
+import { Message } from '../message.class';
+import { MessageService } from '../message.service';
 
 @Component({
 	templateUrl: './list-messages.component.html'

@@ -1,6 +1,7 @@
-import { AuditObjectTypes } from '../../audit/audit.classes';
-import { DefaultAudit } from '../../audit/audit-object.component';
 import { Component } from '@angular/core';
+
+import { AuditObjectTypes } from 'app/audit/audit.classes';
+import { DefaultAudit } from 'app/audit';
 
 @Component({
 	selector: 'message-audit',

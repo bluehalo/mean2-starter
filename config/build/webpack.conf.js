@@ -26,6 +26,8 @@ module.exports = (mode) => {
 	// For testing, use this to override aot mode
 	const aot = build;
 
+	//Client path
+	const clientPath = './src/client/';
 
 	// The main webpack config object to return
 	let wpConfig = {};
@@ -56,13 +58,13 @@ module.exports = (mode) => {
 	 */
 	if (test) {
 		wpConfig.entry = {
-			application: path.posix.resolve('./src/client/main.ts')
+			application: path.posix.resolve(path.posix.join(clientPath, '/main.ts'))
 		};
 	}
 	else {
 		wpConfig.entry = {
-			application: path.posix.resolve('./src/client/main.ts'),
-			vendor: path.posix.resolve('./src/client/vendor.ts')
+			application: path.posix.resolve(path.posix.join(clientPath, '/main.ts')),
+			vendor: path.posix.resolve(path.posix.join(clientPath, '/vendor.ts'))
 		};
 	}
 
@@ -93,6 +95,10 @@ module.exports = (mode) => {
 	 * List of extensions that webpack should try to resolve
 	 */
 	wpConfig.resolve = {
+		alias: {
+			//Alias the directory app/* to clientPath/app/*
+			app: path.posix.resolve(path.posix.join(clientPath, '/app'))
+		},
 		extensions: [
 			'.ts', '.js','.json',
 			'.woff', '.woff2', '.ttf', '.eot', '.svg',
@@ -230,7 +236,7 @@ module.exports = (mode) => {
 		wpConfig.plugins.push(
 			new ngToolsWebpack.AotPlugin({
 				tsConfigPath: './tsconfig-aot.json',
-				entryModule: path.posix.resolve('./src/client/app/app.module#AppModule')
+				entryModule: path.posix.resolve(path.posix.join(clientPath, '/app/app.module#AppModule'))
 			})
 		);
 

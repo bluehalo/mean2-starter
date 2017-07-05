@@ -1,9 +1,9 @@
 import { Component, Input, Output, EventEmitter, ContentChildren, QueryList, TemplateRef } from '@angular/core';
 import * as _ from 'lodash';
 
-import { AsyTemplate } from './../asy-template.directive';
-import { SortDisplayOption } from './../result-utils.class';
-import { PagingOptions, PageChange } from './../pager.component';
+import { AsyTemplate } from '../asy-template.directive';
+import { SortDisplayOption } from '../result-utils.class';
+import { PagingOptions, PageChange } from '../pager.component';
 
 export type TableSortOptions = {
 	[name: string]: SortDisplayOption

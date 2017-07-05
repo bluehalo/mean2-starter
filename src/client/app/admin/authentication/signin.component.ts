@@ -1,16 +1,18 @@
 import { Component } from '@angular/core';
+
+import { ConfigService } from 'app/core';
+import { User } from '../user';
+
 import { AuthenticationService } from './authentication.service';
-import { User } from '../user.class';
 import { UserStateService } from './user-state.service';
-import { ConfigService } from '../../core/config.service';
 
 @Component({
 	templateUrl: './signin.component.html'
 })
 export class SigninComponent {
-	user: User;
 	error: string;
 	config: any;
+	user: User;
 
 	constructor(
 		private authService: AuthenticationService,

@@ -2,14 +2,13 @@ import { Component } from '@angular/core';
 import { Response } from '@angular/http';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import * as _ from 'lodash';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
+
+import { AlertService, StringUtils } from 'app/shared';
 
 import { Team, TeamMember } from './teams.class';
 import { TeamsService } from './teams.service';
-import { AlertService } from '../shared/alert.service';
-import { AuthenticationService } from '../admin/authentication/authentication.service';
-import { StringUtils } from '../shared/string-utils.service';
+import { AuthenticationService } from 'app/admin/authentication/authentication.service';
 
 @Component({
 	selector: 'team-summary',

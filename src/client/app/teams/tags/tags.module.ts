@@ -4,10 +4,11 @@ import { NgModule } from '@angular/core';
 import { Ng2BootstrapModule } from 'ng2-bootstrap';
 import { TooltipModule } from 'ng2-bootstrap';
 
+import { UtilModule } from 'app/shared';
+
 import { ListTagsComponent } from './list-tags.component';
 import { ManageTagComponent } from './manage-tag.component';
 import { TagsRoutingModule } from './tags-routing.module';
-import { UtilModule } from '../../shared/util.module';
 import { TagAudit } from './audit/tag-audit.component';
 
 @NgModule({

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { HelpTopic } from './help.class';
 
 @Injectable()

@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import { ManageMessageComponent } from './manage-message.component';
 import { Router } from '@angular/router';
-import { MessageService } from '../message.service';
+
+import { ConfigService } from 'app/core';
+import { AlertService } from 'app/shared';
+
 import { Message, MessageType } from '../message.class';
-import { ConfigService } from '../../core/config.service';
-import { AlertService } from '../../shared/alert.service';
+import { ManageMessageComponent } from './manage-message.component';
+import { MessageService } from '../message.service';
 
 @Component({
 	templateUrl: './manage-message.component.html',

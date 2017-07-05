@@ -6,15 +6,18 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 
+import {
+	PagingOptions, TableSortOptions,
+	SortDirection, SortDisplayOption,
+	AlertService
+} from 'app/shared';
+import { User } from 'app/admin/user';
+
 import { Team, TeamMember, TeamRole } from './teams.class';
 import { TeamsService } from './teams.service';
-import { User } from '../admin/user.class';
-import { UserService } from '../admin/users.service';
-import { PagingOptions } from '../shared/pager.component';
-import { TableSortOptions } from '../shared/pageable-table/pageable-table.component';
-import { SortDirection, SortDisplayOption } from '../shared/result-utils.class';
-import { AlertService } from '../shared/alert.service';
-import { AuthenticationService } from '../admin/authentication/authentication.service';
+
+import { UserService } from 'app/admin/user';
+import { AuthenticationService } from 'app/admin/authentication';
 
 @Component({
 	selector: 'list-team-members',

@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 
-import { AuthenticationService } from '../authentication/authentication.service';
-import { UserStateService } from '../authentication/user-state.service';
-import { AlertService } from '../../shared/alert.service';
+import { AlertService } from 'app/shared';
+import { AuthenticationService, UserStateService } from '../authentication';
 
 @Component({
 	templateUrl: './user-eua.component.html'
