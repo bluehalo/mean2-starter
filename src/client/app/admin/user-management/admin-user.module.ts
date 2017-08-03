@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { Ng2BootstrapModule } from 'ng2-bootstrap';
+import { AlertModule, BsDropdownModule, ButtonsModule } from 'ngx-bootstrap';
 
 import { AdminService } from '../admin.service';
 import { AdminCreateUserComponent } from './admin-create-user.component';
@@ -22,9 +22,12 @@ import { UserSignedUpComponent } from './user-signed-up.component';
 
 @NgModule({
 	imports: [
+		AlertModule.forRoot(),
+		BsDropdownModule.forRoot(),
+		ButtonsModule.forRoot(),
+
 		CommonModule,
 		FormsModule,
-		Ng2BootstrapModule,
 		RouterModule,
 		TeamsModule,
 		UtilModule

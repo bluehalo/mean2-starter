@@ -58,7 +58,7 @@ export class AdminCacheEntriesComponent {
 		this.pagingOpts.sortField = sortOpt.sortField;
 		this.pagingOpts.sortDir = sortOpt.sortDir;
 		this.loadCacheEntries();
-	};
+	}
 
 	confirmDeleteEntry(cacheEntry: any) {
 		let entryToDelete = cacheEntry.entry;
@@ -88,7 +88,7 @@ export class AdminCacheEntriesComponent {
 					() => {}
 				)
 			);
-	};
+	}
 
 	viewCacheEntry(cacheEntry: any) {
 		this.modal.open(ViewCacheEntryModal, overlayConfigFactory({cacheEntry: cacheEntry}, ViewCacheEntryModalContext));
@@ -110,7 +110,7 @@ export class AdminCacheEntriesComponent {
 				cacheEntry.isRefreshing = false;
 			}
 		);
-	};
+	}
 
 
 	private loadCacheEntries() {

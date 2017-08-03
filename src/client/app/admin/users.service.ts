@@ -10,11 +10,11 @@ export class UserService {
 		private asyHttp: AsyHttp
 	) {}
 
-	public update (user: User) {
+	public update(user: User) {
 		return this.asyHttp.post(new HttpOptions('user/me', () => {}, user.userModel));
-	};
+	}
 
-	public match (query: any, search: string, paging: PagingOptions) {
+	public match(query: any, search: string, paging: PagingOptions) {
 		return this.asyHttp.post(new HttpOptions('users/match?' + this.asyHttp.urlEncode(paging.toObj()), () => {}, { s: search, q: query }));
 	}
 }

@@ -15,7 +15,7 @@ let
  */
 let getGlobbedPaths = (globPatterns, excludes) => {
 	// URL paths regex
-	let urlRegex = new RegExp('^(?:[a-z]+:)?\/\/', 'i');
+	let urlRegex = new RegExp('^(?:[a-z]+:)?//', 'i');
 
 	// The output array
 	let output = [];

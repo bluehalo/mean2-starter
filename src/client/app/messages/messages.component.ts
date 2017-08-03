@@ -43,9 +43,9 @@ export class MessagesComponent {
 					return msg.type === MessageType.MOTD;
 				});
 				if (motdIdx >= 0) {
-					this.motd = <Message> messages.splice(motdIdx, 1)[0];
+					this.motd = messages.splice(motdIdx, 1)[0] as Message;
 				}
-				this.messages = <Message[]> messages;
+				this.messages = messages as Message[];
 			});
 	}
 
@@ -78,4 +78,4 @@ export class MessagesComponent {
 				return 'unknown';
 		}
 	}
-};
+}
