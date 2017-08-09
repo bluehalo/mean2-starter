@@ -25,9 +25,10 @@ function timeoutHandler() {
 	// Loop over all of the services
 	services.forEach(function(service) {
 		try {
+			// If the service specifies an interval than use that, otherwise use the interval from the configuration
+			let serviceInterval = (service.service.interval) ? service.service.interval : service.configInterval;
 			// If interval has passed since the last run, run now
-			if(!service.running && Date.now() > service.lastRun + service.interval) {
-
+			if(!service.running && Date.now() > service.lastRun + serviceInterval) {
 				// Service is running
 				service.running = true;
 				var startTs = Date.now();
@@ -74,11 +75,11 @@ module.exports.start = function() {
 			service.config = serviceConfig.config;
 
 			// Get the service run interval
-			service.interval = serviceConfig.interval;
+			service.configInterval = serviceConfig.interval;
 			service.lastRun = 0;
 
 			// Validate the service
-			if(null == service.interval || service.interval < 1000) {
+			if(null == service.configInterval || service.configInterval < 1000) {
 				logger.warn(service, 'Scheduler: Bad service configuration provided');
 			} else {
 				// Store it in the services array
