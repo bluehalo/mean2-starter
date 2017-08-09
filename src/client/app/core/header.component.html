@@ -50,7 +50,7 @@
 						<!--Team Quick Select-->
 						<li *ngIf="teams.length > 0" class="dropdown" dropdown>
 							<a class="dropdown-toggle" dropdownToggle>Teams <span class="caret"></span></a>
-							<ul class="dropdown-menu" role="menu">
+							<ul *dropdownMenu class="dropdown-menu" role="menu">
 								<li *ngFor="let team of teams.slice(0,3)">
 									<a [routerLink]="['/team', team._id]">{{team.name}}</a>
 								</li>
@@ -60,8 +60,8 @@
 						</li>
 
 						<li class="dropdown" dropdown>
-							<a href="/#!/" class="dropdown-toggle" dropdownToggle>{{user.userModel.name}} <span class="caret"></span></a>
-							<ul class="dropdown-menu" role="menu">
+							<a class="dropdown-toggle" dropdownToggle>{{user.userModel.name}} <span class="caret"></span></a>
+							<ul *dropdownMenu class="dropdown-menu" role="menu">
 
 								<!-- Manage User Account -->
 								<li><a [routerLink]="['/update-user']">My Account</a></li>
@@ -84,14 +84,14 @@
 						<li class="notification-indicator" notification-indicator>
 						</li>
 						<li class="dropdown" dropdown>
-							<a href="/#!/" class="dropdown-toggle btn-icon" dropdownToggle>
+							<a class="dropdown-toggle btn-icon" dropdownToggle>
 								<span class="fa-stack fa">
 									<i class="fa fa-circle-o fa-stack-2x"></i>
 									<i class="fa fa-question fa-stack-1x"></i>
 								</span>
 								<span class="caret"></span>
 							</a>
-							<ul class="dropdown-menu" role="menu">
+							<ul *dropdownMenu class="dropdown-menu" role="menu">
 
 								<!-- Help -->
 								<li [hidden]="!pki && !user.isActive()"><a [routerLink]="['/help']">Help</a></li>

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { DialogRef, ModalComponent } from 'angular2-modal';
-import { BSModalContext } from 'angular2-modal/plugins/bootstrap/index';
+import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 
 import { CacheEntry } from './cache-entries.service';
 

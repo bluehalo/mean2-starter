@@ -107,7 +107,7 @@ export class ListTagsComponent {
 			this.pagingOptions.sortDir = sortOpt.sortDir;
 		}
 		this.getTags();
-	};
+	}
 
 	removeTag(tag: any) {
 		this.modal.confirm()

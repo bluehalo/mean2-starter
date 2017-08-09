@@ -70,9 +70,9 @@
 			<td [hidden]="!columns.text">
 				<div class="hide-overflow" style="max-width:400px;">{{eua.euaModel.text}}</div>
 			</td>
-			<td [hidden]="!columns.created">{{eua.euaModel.created | date:"yyyy-MM-dd HH:mm:ssZ"}}</td>
-			<td [hidden]="!columns.updated">{{eua.euaModel.updated | date:"yyyy-MM-dd HH:mm:ssZ"}}</td>
-			<td [hidden]="!columns.published">{{eua.euaModel.published | date:"yyyy-MM-dd HH:mm:ssZ"}}</td>
+			<td [hidden]="!columns.created">{{ eua.euaModel.created | utcDate }}</td>
+			<td [hidden]="!columns.updated">{{ eua.euaModel.updated | utcDate }}</td>
+			<td [hidden]="!columns.published">{{ eua.euaModel.published | utcDate }}</td>
 
 			<td style="width: 120px;">
 				<div class="pull-right">

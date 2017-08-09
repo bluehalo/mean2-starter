@@ -11,7 +11,7 @@ import { AsyHttp, HttpOptions } from '../../shared/asy-http.service';
 export class AuthenticationService {
 
 	public initializing$: BehaviorSubject<boolean>
-		= <BehaviorSubject<boolean>> new BehaviorSubject(true);
+		= new BehaviorSubject(true);
 
 	constructor(
 		private userStateService: UserStateService,
@@ -47,7 +47,7 @@ export class AuthenticationService {
 			() => {},
 			user.userModel
 		));
-	};
+	}
 
 	// Get the user who is currently logged in (or null if no one is logged in)
 	public getCurrentUser(): User {

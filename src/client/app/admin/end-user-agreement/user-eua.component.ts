@@ -34,5 +34,5 @@ export class UserEuaComponent {
 			(error: any) => {
 				this.alertService.addAlert(error.message);
 			});
-	};
+	}
 }

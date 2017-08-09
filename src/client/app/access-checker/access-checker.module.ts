@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { Ng2BootstrapModule } from 'ng2-bootstrap';
+import { AlertModule } from 'ngx-bootstrap';
 
 import { ViewCacheEntryModal } from './view-cache-entry.component';
 import { CacheEntriesService } from './cache-entries.service';
@@ -11,10 +11,11 @@ import { UtilModule } from '../shared/util.module';
 
 @NgModule({
 	imports: [
+		AlertModule.forRoot(),
+
 		CommonModule,
 		FormsModule,
-		UtilModule,
-		Ng2BootstrapModule
+		UtilModule
 	],
 	entryComponents: [
 		ViewCacheEntryModal
