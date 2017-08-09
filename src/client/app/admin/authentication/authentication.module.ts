@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { Ng2BootstrapModule } from 'ng2-bootstrap';
-
 import { AdminService } from '../admin.service';
 import { UserService } from '../users.service';
 import { UtilModule } from '../../shared/util.module';
@@ -20,7 +18,6 @@ import { UserAuthenticationAudit } from './audit/user-authentication-audit.compo
 	imports: [
 		CommonModule,
 		FormsModule,
-		Ng2BootstrapModule,
 		RouterModule,
 		UtilModule
 	],

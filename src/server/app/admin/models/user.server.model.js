@@ -55,7 +55,7 @@ let UserSchema = new GetterSchema({
 		type: String,
 		trim: true,
 		default: '',
-		match: [/.+\@.+\..+/, 'A valid phone number and cellular provider is required'],
+		match: [/.+@.+\..+/, 'A valid phone number and cellular provider is required'],
 		required: false
 	},
 	username: {

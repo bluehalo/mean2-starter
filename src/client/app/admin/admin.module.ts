@@ -2,8 +2,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
-import { Ng2BootstrapModule } from 'ng2-bootstrap';
-
 import { EuaService } from './end-user-agreement/eua.service';
 import { AdminService } from './admin.service';
 import { AdminComponent } from './admin.component';
@@ -30,7 +28,6 @@ import { PasswordModule } from './password/password.module';
 
 		CommonModule,
 		FormsModule,
-		Ng2BootstrapModule,
 		UtilModule
 	],
 	exports: [],

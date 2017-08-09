@@ -1,6 +1,8 @@
 {
 	"extends": "tslint:recommended",
 	"rules": {
+		"ban-types": false,
+		"interface-over-type-literal": false,
 		"indent": [ true, "tabs" ],
 		"trailing-comma": false,
 		"quotemark": [ true, "single" ],
@@ -19,7 +21,8 @@
 		"max-classes-per-file": false,
 		"one-line": [ true, "check-open-brace", "check-whitespace" ],
 		"object-literal-key-quotes": false,
-		"array-type": false
+		"array-type": false,
+		"prefer-const": false
 
 	}
 }

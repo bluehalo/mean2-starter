@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-import { Ng2BootstrapModule } from 'ng2-bootstrap';
+import { BsDropdownModule, TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
 
 import { AddRemoveTypeaheadList } from './add-remove-typeahead-list.component';
 import { AgoDatePipe } from './ago-date.pipe';
@@ -36,9 +36,12 @@ import { UtcDatePipe } from './utc-date-pipe/utc-date.pipe';
 
 @NgModule({
 	imports: [
+		BsDropdownModule.forRoot(),
+		TooltipModule.forRoot(),
+		TypeaheadModule.forRoot(),
+
 		CommonModule,
 		FormsModule,
-		Ng2BootstrapModule
 	],
 	entryComponents: [
 		UrlClickHandler
