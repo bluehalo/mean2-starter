@@ -61,7 +61,7 @@
 				<button type="button" class="btn btn-default btn-sm dropdown-toggle" dropdownToggle>
 					<span class="caret"></span>
 				</button>
-				<ul class="dropdown-menu" role="menu">
+				<ul *dropdownMenu class="dropdown-menu" role="menu">
 					<li><a (click)="exportCurrentView()">Export Current View</a></li>
 					<li><a (click)="exportUserData()">Export Single Field</a></li>
 				</ul>

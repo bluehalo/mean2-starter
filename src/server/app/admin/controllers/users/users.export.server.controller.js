@@ -103,7 +103,7 @@ exports.adminGetCSV = (req, res) => {
 								return (teamTitleMap.hasOwnProperty(t._id) ? teamTitleMap[t._id].name : '<missing>');
 							});
 
-							// Formatted team name string, ex. "Group 1, WildfireDev, Test Group"
+							// Formatted team name string, ex. "Group 1, SomeDev, Test Group"
 							user.teams = teamNames.join(', ');
 						});
 					}

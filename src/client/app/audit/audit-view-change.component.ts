@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 
 import * as _ from 'lodash';
 import { DialogRef, ModalComponent } from 'angular2-modal';
-import { BSModalContext } from 'angular2-modal/plugins/bootstrap/index';
+import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 
 export class AuditViewDetailModalContext extends BSModalContext {
 	auditEntry: any;
 
-	constructor () {
+	constructor() {
 		super();
 		this.size = 'lg';
 	}
@@ -19,7 +19,7 @@ export class AuditViewDetailModalContext extends BSModalContext {
 export class AuditViewDetailModal implements ModalComponent<AuditViewDetailModalContext> {
 	context: AuditViewDetailModalContext;
 
-	constructor (
+	constructor(
 		public dialog: DialogRef<AuditViewDetailModalContext>
 	) {
 		this.context = dialog.context;
@@ -48,7 +48,7 @@ export class AuditViewDetailModal implements ModalComponent<AuditViewDetailModal
 })
 export class AuditViewChangeModal extends AuditViewDetailModal {
 
-	constructor (
+	constructor(
 		dialog: DialogRef<AuditViewDetailModalContext>
 	) {
 		super(dialog);

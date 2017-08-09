@@ -1,12 +1,14 @@
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+import { BsDropdownModule, CollapseModule } from 'ngx-bootstrap';
 import { ModalModule } from 'angular2-modal';
 import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
-import { Ng2BootstrapModule } from 'ng2-bootstrap';
-import { ToasterModule } from 'angular2-toaster';
+import { ToasterModule, ToasterService } from 'angular2-toaster';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -29,18 +31,23 @@ import { InvalidResourceComponent } from './core/invalid-resource.component';
 import { AuthenticationService } from './admin/authentication/authentication.service';
 import { AuthGuard } from './core/auth-guard.service';
 import { ConfigService } from './core/config.service';
+import { SocketService } from './core/socket.service';
 import { TeamsService } from './teams/teams.service';
 import { UserStateService } from './admin/authentication/user-state.service';
 import { NotificationsModule } from './notifications/notifications.module';
 
 @NgModule({
 	imports: [
+		CommonModule,
+		BsDropdownModule.forRoot(),
+		CollapseModule.forRoot(),
+
 		BrowserModule,
+		BrowserAnimationsModule,
 		FormsModule,
 		HttpModule,
 
 		AppRoutingModule,
-		Ng2BootstrapModule.forRoot(),
 		ModalModule.forRoot(),
 		BootstrapModalModule,
 		ToasterModule,
@@ -55,7 +62,6 @@ import { NotificationsModule } from './notifications/notifications.module';
 		TeamsModule,
 		UtilModule,
 		WelcomeModule,
-		UtilModule
 	],
 	declarations: [
 		AppComponent,
@@ -69,7 +75,9 @@ import { NotificationsModule } from './notifications/notifications.module';
 		AuthenticationService,
 		AuthGuard,
 		ConfigService,
+		SocketService,
 		TeamsService,
+		ToasterService,
 		UserStateService
 	]
 })

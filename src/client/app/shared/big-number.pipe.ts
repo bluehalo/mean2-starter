@@ -28,7 +28,7 @@ export class BigNumberPipe implements PipeTransform {
 		}
 	];
 
-	transform (n: number): string {
+	transform(n: number): string {
 		let scale: any = this.getScale(n);
 		let postfix: string = '';
 		let fraction: number = n;

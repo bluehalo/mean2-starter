@@ -3,8 +3,6 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-import { Ng2BootstrapModule } from 'ng2-bootstrap';
-
 import { HelpComponent } from './help.component';
 import { HelpRoutingModule } from './help-routing.module';
 import { UtilModule } from '../shared/util.module';
@@ -29,7 +27,6 @@ import { HelpService } from './help.service';
 		CommonModule,
 		FormsModule,
 		RouterModule,
-		Ng2BootstrapModule,
 		UtilModule
 	],
 	exports: [],

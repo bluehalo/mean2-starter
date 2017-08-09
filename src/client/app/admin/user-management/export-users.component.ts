@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Response } from '@angular/http';
 
-import { BSModalContext } from 'angular2-modal/plugins/bootstrap/index';
+import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 
 import { AdminService } from '../admin.service';
 import { ModalComponent, DialogRef } from 'angular2-modal';
