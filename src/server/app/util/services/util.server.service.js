@@ -128,8 +128,8 @@ module.exports.toLowerCase = function (v){
  */
 module.exports.dateParse = function (date) {
 
-	// Handle nil values by simply returning null
-	if (_.isNil(date)) {
+	// Handle nil values, arrays, and functions by simply returning null
+	if (_.isNil(date) || _.isArray(date) || _.isFunction(date)) {
 		return null;
 	}
 
@@ -149,7 +149,14 @@ module.exports.dateParse = function (date) {
 	}
 
 	// Handle String, Object, etc.
-	return Date.parse(date);
+	const parsed = Date.parse(date);
+
+	// A string that cannot be parsed returns NaN
+	if (isNaN(parsed)) {
+		return null;
+	}
+
+	return parsed;
 };
 
 /**
