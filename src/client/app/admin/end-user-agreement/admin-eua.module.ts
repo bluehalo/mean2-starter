@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { BootstrapModalModule, Modal } from 'angular2-modal/plugins/bootstrap';
-import { Ng2BootstrapModule } from 'ng2-bootstrap';
+import { AlertModule } from 'ngx-bootstrap';
 
 import { AdminService } from '../admin.service';
 import { AdminListEuasComponent } from './admin-list-euas.component';
@@ -17,9 +17,10 @@ import { EuaAudit } from './audit/eua-audit.component';
 
 @NgModule({
 	imports: [
+		AlertModule.forRoot(),
+
 		CommonModule,
 		FormsModule,
-		Ng2BootstrapModule,
 		RouterModule,
 		UtilModule
 	],

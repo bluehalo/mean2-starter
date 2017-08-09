@@ -25,7 +25,7 @@ export class AsyDropdownItemWrapperComponent {
 
 	ngOnInit() {
 		if (null == this.item.handler) {
-			console.warn(`WARNING: Improperly configured click handler: ${this.item}.`);
+			// console.warn(`WARNING: Improperly configured click handler: ${this.item}.`);
 		}
 		else {
 			let factory: ComponentFactory<Component> =

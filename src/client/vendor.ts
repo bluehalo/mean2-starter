@@ -33,6 +33,7 @@ import 'angular2-toaster/toaster.css';
 
 
 // Angular2 Imports
+import '@angular/animations';
 import '@angular/common';
 import '@angular/core';
 import '@angular/forms';
@@ -43,7 +44,7 @@ import '@angular/router';
 // Angular2 Third-Party
 import 'angular2-modal';
 import 'angular2-toaster';
-import 'ng2-bootstrap';
+import 'ngx-bootstrap';
 
 
 // Other Dependencies

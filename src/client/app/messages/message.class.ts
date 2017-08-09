@@ -1,8 +1,8 @@
 export enum MessageType {
-	MOTD = <any> 'MOTD',
-	INFO = <any> 'INFO',
-	WARN = <any> 'WARN',
-	ERROR = <any> 'ERROR'
+	MOTD = 'MOTD' as any,
+	INFO = 'INFO' as any,
+	WARN = 'WARN' as any,
+	ERROR = 'ERROR' as any
 }
 export class Message {
 	public _id: string;

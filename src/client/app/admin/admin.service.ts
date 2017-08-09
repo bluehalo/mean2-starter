@@ -39,26 +39,26 @@ export class AdminService {
 						observer.complete();
 					});
 		});
-	};
+	}
 
 	removeUser(id: string) {
 		return this.asyHttp.delete(new HttpOptions(`admin/user/${id}`, () => {}));
-	};
+	}
 
 	getAll(query: any, field: string) {
 		return this.asyHttp.post(new HttpOptions('admin/users/getAll', () => {}, { query: query, field: field }));
-	};
+	}
 
-	create (user: User) {
+	create(user: User) {
 		return this.asyHttp.post(new HttpOptions('admin/user', () => {}, user.userModel));
-	};
+	}
 
 	get(userId: string) {
 		return this.asyHttp.get(new HttpOptions(`admin/user/${userId}`, () => {}));
-	};
+	}
 
 	update(user: User) {
 		return this.asyHttp.post(new HttpOptions(`admin/user/${user.userModel._id}`, () => {}, user.userModel));
-	};
+	}
 
 }

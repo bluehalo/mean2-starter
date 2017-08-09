@@ -43,7 +43,7 @@ export class MessageHandlerService {
 							}
 
 							if (messages.totalSize === 1) {
-								let message: Message = <Message> messages.elements[0];
+								let message: Message = messages.elements[0] as Message;
 								this.showToaster(message);
 								this.newMessages = true;
 							} else {
@@ -92,12 +92,12 @@ export class MessageHandlerService {
 		};
 
 		this.toasterService.pop(toast);
-	};
+	}
 
 	private markAllRead() {
 		this.newMessages = false;
 		this.messageService.markAllRead();
-	};
+	}
 
 	private getToastType(message: Message): string {
 		switch (message.type) {

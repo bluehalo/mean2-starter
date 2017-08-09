@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 
+import { AccordionModule } from 'ngx-bootstrap';
+
 import { OverviewHelpComponent } from './overview.component';
 import { AboutComponent } from '../about.component';
 import { HelpService } from '../../help/help.service';
@@ -7,7 +9,9 @@ import { HelpTopic } from '../../help/help.class';
 
 
 @NgModule({
-	imports: [],
+	imports: [
+		AccordionModule.forRoot()
+	],
 	exports: [],
 	declarations:   [
 		AboutComponent,

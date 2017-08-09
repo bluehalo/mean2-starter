@@ -76,7 +76,7 @@ export class ListMessagesComponent {
 	 * Initialize query, search, and paging options, possibly from cached user settings
 	 */
 	initializeMessageFilters() {
-		let cachedFilter: any = <any> this.messageService.cache.listMessages;
+		let cachedFilter: any = this.messageService.cache.listMessages as any;
 
 		this.search = cachedFilter.search ? cachedFilter.search : '';
 		this.filters = cachedFilter.filters ? cachedFilter.filters : {};
@@ -126,7 +126,7 @@ export class ListMessagesComponent {
 		this.pagingOpts.sortField = sortOpt.sortField;
 		this.pagingOpts.sortDir = sortOpt.sortDir;
 		this.applySearch();
-	};
+	}
 
 	confirmDeleteMessage(message: Message) {
 		this.messageToDelete = message;
@@ -159,7 +159,7 @@ export class ListMessagesComponent {
 				}
 			)
 		);
-	};
+	}
 
 	quickColumnSelect(selection: string) {
 		if (selection === 'all') {

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { Ng2BootstrapModule } from 'ng2-bootstrap';
+import { AlertModule, BsDropdownModule, TabsModule, TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
 
 import { ManageTeamComponent } from './manage-team.component';
 import { ListTeamMembersComponent } from './list-team-members.component';
@@ -18,12 +18,17 @@ import { SelectTeamsComponent } from './select-teams.component';
 
 @NgModule({
 	imports: [
+		AlertModule.forRoot(),
+		BsDropdownModule.forRoot(),
+		TabsModule.forRoot(),
+		TooltipModule.forRoot(),
+		TypeaheadModule.forRoot(),
+
 		TeamsRoutingModule,
 		TagsModule,
 
 		CommonModule,
 		FormsModule,
-		Ng2BootstrapModule,
 		UtilModule
 	],
 	entryComponents: [

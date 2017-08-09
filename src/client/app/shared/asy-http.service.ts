@@ -11,7 +11,7 @@ import { UserStateService } from '../admin/authentication/user-state.service';
 export class HttpOptions {
 	public urlParams: URLSearchParams;
 
-	constructor (
+	constructor(
 		public url: string,
 		public dataFn: Function = () => {},
 		public data: any = {},
@@ -190,7 +190,7 @@ export class AsyHttp {
 	}
 
 	private hasContent(res: Response) {
-		return (res.status !== 204 && (<string> res.text()).length > 0);
+		return (res.status !== 204 && (res.text() as string).length > 0);
 	}
 
 	private getUriEncodedPath() {

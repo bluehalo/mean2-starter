@@ -269,4 +269,4 @@ module.exports.toProvenance = function(user) {
 	};
 };
 
-module.exports.emailMatcher = /.+\@.+\..+/;
+module.exports.emailMatcher = /.+@.+\..+/;
