@@ -31,6 +31,7 @@ import { AsyDropdownItemWrapperComponent } from './dropdown/asy-dropdown-item-wr
 
 import { UrlClickHandler } from './urlHandler/url-click-handler.component';
 import { ListManager } from './list-manager.component';
+import { UtcDatePipe } from './utc-date-pipe/utc-date.pipe';
 
 
 @NgModule({
@@ -65,7 +66,8 @@ import { ListManager } from './list-manager.component';
 		PageableTable,
 		AsyTemplate,
 		AsyTransclude,
-		KeysPipe
+		KeysPipe,
+		UtcDatePipe
 	],
 
 	declarations: [
@@ -90,7 +92,8 @@ import { ListManager } from './list-manager.component';
 		AsyTemplate,
 		AsyTransclude,
 		KeysPipe,
-		UrlClickHandler
+		UrlClickHandler,
+		UtcDatePipe
 	],
 	providers: [
 		AlertService,

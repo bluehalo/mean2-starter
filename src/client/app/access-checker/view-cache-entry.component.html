@@ -19,7 +19,7 @@
 				<div>{{context.cacheEntry.key}}</div>
 
 				<label>Last Updated</label>
-				<div>{{ context.cacheEntry.date | date:'yyyy-MM-dd HH:mm:ssZ' }} ({{ context.cacheEntry.date | agoDate:false }})</div>
+				<div>{{ context.cacheEntry.date | utcDate }} ({{ context.cacheEntry.date | agoDate:false }})</div>
 
 				<label>Value</label>
 				<pre>{{context.cacheEntry.value | json}}</pre>
