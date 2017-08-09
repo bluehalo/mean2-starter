@@ -26,11 +26,11 @@ export class CacheEntriesService {
 
 	public match(query: any, search: string, paging: PagingOptions): Observable<Response> {
 		return this.asyHttp.post(new HttpOptions('access-checker/entries/match?' + this.asyHttp.urlEncode(paging.toObj()), () => {}, { s: search, q: query }));
-	};
+	}
 
 	public remove(key: string): Observable<Response> {
 		return this.asyHttp.delete(new HttpOptions('access-checker/entry/' + encodeURIComponent(key), () => {}, { key: key }));
-	};
+	}
 
 	public refresh(key: string): Observable<Response> {
 		return this.asyHttp.post(new HttpOptions('access-checker/entry/' + encodeURIComponent(key), () => {}, { key: key }));

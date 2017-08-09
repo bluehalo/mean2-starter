@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, Output, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Subject } from 'rxjs';
-import { TooltipModule } from 'ng2-bootstrap';
+
+import { TooltipModule } from 'ngx-bootstrap';
 
 import { CapitalizePipe } from './../capitalize.pipe';
 import { KeysPipe } from './../keys.pipe';
@@ -65,7 +66,7 @@ describe('PageableTable', () => {
 	beforeEach(() => {
 		const testbed = TestBed.configureTestingModule({
 			imports: [
-				TooltipModule
+				TooltipModule.forRoot()
 			],
 			declarations: [
 				PageableTableTestHost,

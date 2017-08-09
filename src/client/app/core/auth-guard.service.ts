@@ -41,7 +41,7 @@ export class AuthGuard implements CanActivate {
 		let requiresAuthentication: boolean = true; // default this to true unless told otherwise...
 
 		// Only set it to false if it is explicitly set
-		if (null != route.data && (<any> route.data).requiresAuthentication === false) {
+		if (null != route.data && (route.data as any).requiresAuthentication === false) {
 			requiresAuthentication = false;
 		}
 
@@ -80,7 +80,7 @@ export class AuthGuard implements CanActivate {
 			// -----------------------------------------------------------
 
 			// compile a list of roles that are missing
-			let requiredRoles = (null != route.data && null != (<any> route.data).roles) ? (<any> route.data).roles : ['user'];
+			let requiredRoles = (null != route.data && null != (route.data as any).roles) ? (route.data as any).roles : ['user'];
 			let missingRoles: any[] = [];
 			requiredRoles.forEach( (role: any) => {
 				if (!this.userStateService.hasRole(role)) {

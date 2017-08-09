@@ -108,7 +108,7 @@ export class ListTeamMembersComponent {
 		this.pagingOptions.sortDir = sortOpt.sortDir;
 
 		this.getTeamMembers();
-	};
+	}
 
 	updateRole(member: TeamMember, role: string) {
 		// No update required

@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
-import { Ng2BootstrapModule } from 'ng2-bootstrap';
-import { TooltipModule } from 'ng2-bootstrap';
+import { TooltipModule } from 'ngx-bootstrap';
 
 import { ListTagsComponent } from './list-tags.component';
 import { ManageTagComponent } from './manage-tag.component';
@@ -12,11 +12,12 @@ import { TagAudit } from './audit/tag-audit.component';
 
 @NgModule({
 	imports: [
+		TooltipModule.forRoot(),
+
 		TagsRoutingModule,
 
 		CommonModule,
-		Ng2BootstrapModule,
-		TooltipModule,
+		FormsModule,
 		UtilModule
 	],
 	entryComponents: [
