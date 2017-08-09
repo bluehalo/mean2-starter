@@ -4,7 +4,7 @@ let _ = require('lodash'),
 	mongoose = require('mongoose'),
 	extend = require('mongoose-schema-extend'),
 	path = require('path'),
-	uuid = require('node-uuid'),
+	uuid = require('uuid'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	util = deps.utilService,

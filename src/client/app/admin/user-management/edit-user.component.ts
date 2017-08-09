@@ -72,7 +72,7 @@ export class UpdateUserComponent extends ManageUserComponent {
 				this.refreshing = false;
 			}
 		);
-	};
+	}
 
 	private initializeUser() {
 		this.user = _.cloneDeep(this.authService.getCurrentUser());

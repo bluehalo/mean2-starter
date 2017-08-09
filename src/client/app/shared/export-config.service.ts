@@ -13,5 +13,5 @@ export class ExportConfigService {
 		return this.asyHttp.post(new HttpOptions('/requestExport',
 			() => {},
 			{type: type, config: config}));
-	};
+	}
 }

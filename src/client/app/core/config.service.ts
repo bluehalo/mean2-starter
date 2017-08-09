@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 export class ConfigService {
 
 	public getConfig() {
-		return Observable.of((<any> window).config);
+		return Observable.of((window as any).config);
 	}
 
 }
