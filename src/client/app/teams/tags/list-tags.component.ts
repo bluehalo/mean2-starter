@@ -2,8 +2,6 @@ import { Component, Input } from '@angular/core';
 import { Response } from '@angular/http';
 import { ActivatedRoute, Params } from '@angular/router';
 
-import { Modal } from 'angular2-modal/plugins/bootstrap';
-
 import { User } from '../../admin/user.class';
 import { PagingOptions } from '../../shared/pager.component';
 import { TableSortOptions } from '../../shared/pageable-table/pageable-table.component';
@@ -11,6 +9,7 @@ import { SortDirection, SortDisplayOption } from '../../shared/result-utils.clas
 import { AlertService } from '../../shared/alert.service';
 import { AuthenticationService } from '../../admin/authentication/authentication.service';
 import { TagsService } from './tags.service';
+import { ModalAction, ModalService } from '../../shared/asy-modal.service';
 
 @Component({
 	selector: 'list-tags',
@@ -37,7 +36,7 @@ export class ListTagsComponent {
 	loading: boolean = false;
 
 	constructor(
-		public modal: Modal,
+		private modalService: ModalService,
 		public route: ActivatedRoute,
 		public alertService: AlertService,
 		public auth: AuthenticationService,
@@ -110,30 +109,19 @@ export class ListTagsComponent {
 	}
 
 	removeTag(tag: any) {
-		this.modal.confirm()
-			.size('lg')
-			.showClose(true)
-			.isBlocking(true)
-			.title('Remove tag from team?')
-			.body(`Are you sure you want to remove tag: "${tag.name}" from this team?`)
-			.okBtn('Remove Tag')
-			.open()
-			.then(
-				(resultPromise: any) => resultPromise.result.then(
-					() => {
-						this.tagsService.deleteTag(tag._id)
-							.subscribe(
-								() => {
-									this.getTags();
-								},
-								(response: Response) => {
-									if (response.status >= 400 && response.status < 500) {
-										this.alertService.addAlert(response.json().message);
-									}
-								});
-					},
-					() => {}
-				)
-			);
+		this.modalService
+			.confirm('Remove tag from team?', `Are you sure you want to remove tag: "${tag.name}" from this team?`, 'Remove Tag')
+			.first()
+			.filter((action: ModalAction) => action === ModalAction.OK)
+			.switchMap(() => {
+				return this.tagsService.deleteTag(tag._id);
+			})
+			.subscribe(() => {
+				this.getTags();
+			}, (response: Response) => {
+				if (response.status >= 400 && response.status < 500) {
+					this.alertService.addAlert(response.json().message);
+				}
+			});
 	}
 }

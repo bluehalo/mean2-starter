@@ -1,10 +1,10 @@
-<div class="col-md-12 modal-content">
+<div class="col-md-12 modal-content modal-lg">
 	<section class="modal-header">
 		<h3>
 			<span>Cache Entry Details</span>
 			<span class="pull-right">
 				<a class="btn-icon no-href"
-				   (click)="done()"
+				   (click)="modalRef.hide()"
 				   data-tooltip="Close"
 				   data-tooltip-placement="bottom">
 					<i class="fa fa-times"></i>
@@ -16,17 +16,17 @@
 		<div class="row">
 			<div class="col-md-12">
 				<label>Key</label>
-				<div>{{context.cacheEntry.key}}</div>
+				<div>{{ cacheEntry?.key}}</div>
 
 				<label>Last Updated</label>
-				<div>{{ context.cacheEntry.date | utcDate }} ({{ context.cacheEntry.date | agoDate:false }})</div>
+				<div>{{ cacheEntry?.date | utcDate }} ({{ cacheEntry?.date | agoDate:false }})</div>
 
 				<label>Value</label>
-				<pre>{{context.cacheEntry.value | json}}</pre>
+				<pre>{{ cacheEntry?.value | json}}</pre>
 			</div>
 		</div>
 	</section>
 	<section class="modal-footer">
-		<button class="btn btn-link" (click)="done()">Close</button>
+		<button class="btn btn-link" (click)="modalRef.hide()">Close</button>
 	</section>
 </div>

@@ -1,13 +1,12 @@
 import { Router } from '@angular/router';
 
-import { Modal } from 'angular2-modal/plugins/bootstrap';
-
 import { EndUserAgreement } from './eua.class';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { AlertService } from '../../shared/alert.service';
+import { ModalService } from '../../shared/asy-modal.service';
 
 export abstract class ManageEuaComponent {
-	public error: any;
+	error: any;
 
 	mode: string;
 	id: string;
@@ -18,10 +17,10 @@ export abstract class ManageEuaComponent {
 	submitText: string;
 
 	constructor(
-		protected router: Router,
-		protected auth: AuthenticationService,
-		protected alertService: AlertService,
-		protected modal: Modal
+		public router: Router,
+		public auth: AuthenticationService,
+		public alertService: AlertService,
+		public asyModalService: ModalService
 	) {
 		this.eua = new EndUserAgreement();
 	}
@@ -29,11 +28,6 @@ export abstract class ManageEuaComponent {
 	abstract submitEua(): any;
 
 	previewEua() {
-		return this.modal.alert()
-			.size('lg')
-			.showClose(true)
-			.title(this.eua.euaModel.title)
-			.body(this.eua.euaModel.text)
-			.open();
+		this.asyModalService.alert(this.eua.euaModel.title, this.eua.euaModel.text);
 	}
 }
