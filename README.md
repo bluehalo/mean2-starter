@@ -26,7 +26,7 @@ Bunyan is a logging framework. We will pipe the console output through the bunya
 
 
 ### Configuration ###
-Application configuration is controlled by a combination of the 'NODE_ENV' environment variable, which specifies the name of the config file located under './config/env' which should be used by the application. That directory contains a 'development.template.js' file which you should rename to 'development.js' and use for development purposes as it is already ignored by the .gitignore file. To customize your environment for development, you can override any top-level property located in 'default.js'. Each property is documented in the default file.
+Application configuration is controlled by a combination of the 'NODE_ENV' environment variable, which specifies the name of the config file located under './config/env' which should be used by the application. That directory contains a 'development.js' file which you should rename to 'development.js' and use for development purposes as it is already ignored by the .gitignore file. To customize your environment for development, you can override any top-level property located in 'default.js'. Each property is documented in the default file.
 
 
 ### Running the Application ###

@@ -5,7 +5,8 @@ let path = require('path'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	dbs = deps.dbs,
-	User = dbs.admin.model('User');
+	User = dbs.admin.model('User'),
+	logger = deps.logger;
 
 
 /**
@@ -38,4 +39,8 @@ module.exports.userById = (id) => {
 	});
 
 	return defer.promise;
+};
+
+module.exports.searchAll = function(query) {
+	return User.find(query).exec();
 };

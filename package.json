@@ -2,20 +2,16 @@
 	"name": "mean2-starter",
 	"description": "MEAN starter with MongoDB, Express, Angular 2, and Node.",
 	"version": "0.1.0-SNAPSHOT",
-
 	"private": false,
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Asymmetrik/mean2-starter.git"
 	},
-
 	"engines": {
 		"node": "6.9.0",
 		"npm": "3.10.9"
 	},
-
 	"scripts": {},
-
 	"dependencies": {
 		"async": "2.5",
 		"body-parser": "1.17",
@@ -68,26 +64,20 @@
 		"@angular/platform-browser-dynamic": "4",
 		"@angular/platform-server": "4",
 		"@angular/router": "4",
-
 		"core-js": "2.4",
 		"classlist.js": "1.1",
 		"console-polyfill": "0.3",
-
 		"rxjs": "5.4",
 		"zone.js": "0.8",
-
 		"angular2-modal": "3.0",
 		"angular2-toaster": "2.0",
 		"bootstrap": "3",
 		"font-awesome": "4.7",
 		"ngx-bootstrap": "1.8",
-
 		"socket.io-client": "2.0",
 		"@types/socket.io-client": "1.4",
-
 		"@types/node": "8.0",
 		"@types/lodash": "4.14",
-
 		"webpack": "3.4",
 		"webpack-dev-server": "2.6",
 		"webpack-stats-plugin": "0.1",
@@ -102,16 +92,13 @@
 		"ts-loader": "2.3",
 		"url-loader": "0.5",
 		"source-map-loader": "0.2",
-
 		"typescript": "2.4",
 		"ts-helpers": "1.1",
 		"tslint": "5.5",
-
 		"mocha": "3.5",
 		"mochawesome": "2.3",
 		"should": "11.2",
 		"proxyquire": "1.8",
-
 		"karma": "1.7",
 		"karma-coverage": "1.1",
 		"karma-jasmine": "1.1",
@@ -123,7 +110,6 @@
 		"sourcemap-istanbul-instrumenter-loader": "0.2",
 		"jasmine-core": "2.7",
 		"@types/jasmine": "2.5",
-
 		"gulp": "3.9",
 		"del": "3.0",
 		"gulp-clean-css": "3.7",
@@ -150,6 +136,5 @@
 		"run-sequence": "2.1",
 		"node-sass": "4.5",
 		"yargs": "8.0"
-
 	}
 }
