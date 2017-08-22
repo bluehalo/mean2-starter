@@ -95,7 +95,8 @@ module.exports = {
 				config: {
 					first: 30*86400000,  // 30 days
 					second: 60*86400000, // 60 days
-					third: 90*86400000 	// 90 days
+					third: 90*86400000, 	// 90 days
+					day: 86400000 // a single day
 				}
 			},
 			{

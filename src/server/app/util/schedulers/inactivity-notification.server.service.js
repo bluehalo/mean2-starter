@@ -13,7 +13,7 @@ let services = [
 ];
 
 module.exports.run = function(config) {
-logger.info(config);
+
 	let cleanups = services.map((service) => service.path.run(config));
 	return q.allSettled(cleanups)
 		.then((results) => {
@@ -26,6 +26,5 @@ logger.info(config);
 			});
 
 		});
-	return q();
 };
 

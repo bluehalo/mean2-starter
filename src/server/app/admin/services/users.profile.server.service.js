@@ -5,8 +5,7 @@ let path = require('path'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	dbs = deps.dbs,
-	User = dbs.admin.model('User'),
-	logger = deps.logger;
+	User = dbs.admin.model('User');
 
 
 /**
