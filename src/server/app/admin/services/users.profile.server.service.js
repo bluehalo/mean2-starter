@@ -39,3 +39,7 @@ module.exports.userById = (id) => {
 
 	return defer.promise;
 };
+
+module.exports.searchAll = (query) => {
+	return User.find(query).exec();
+};
