@@ -28,7 +28,7 @@ export class ModalService {
 	}
 
 	private showModalHelper(title: string, message: string, okText?: string) {
-		this.modalRef = this.modalService.show(AsyModalComponent, { ignoreBackdropClick: true });
+		this.modalRef = this.modalService.show(AsyModalComponent, { ignoreBackdropClick: true, class: 'modal-lg' });
 		this.modalRef.content.title = title;
 		this.modalRef.content.message = message;
 

@@ -82,7 +82,7 @@ export class AdminCacheEntriesComponent {
 	}
 
 	viewCacheEntry(cacheEntry: any) {
-		this.cacheEntryModalRef = this.modalService.show(ViewCacheEntryModal, { ignoreBackdropClick: true });
+		this.cacheEntryModalRef = this.modalService.show(ViewCacheEntryModal, { ignoreBackdropClick: true, class: 'modal-lg' });
 		this.cacheEntryModalRef.content.cacheEntry = cacheEntry.entry;
 	}
 

@@ -147,11 +147,11 @@ export class AuditComponent {
 	viewMore(auditEntry: any, type: string) {
 		switch (type) {
 			case 'viewDetails':
-				this.auditModalRef = this.modalService.show(AuditViewDetailModal, { ignoreBackdropClick: true });
+				this.auditModalRef = this.modalService.show(AuditViewDetailModal, { ignoreBackdropClick: true, class: 'modal-lg' });
 				this.auditModalRef.content.auditEntry = auditEntry;
 				break;
 			case 'viewChanges':
-				this.auditModalRef = this.modalService.show(AuditViewChangeModal, { ignoreBackdropClick: true });
+				this.auditModalRef = this.modalService.show(AuditViewChangeModal, { ignoreBackdropClick: true, class: 'modal-lg' });
 				this.auditModalRef.content.auditEntry = auditEntry;
 				break;
 			default:
