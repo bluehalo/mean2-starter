@@ -3,6 +3,7 @@
 let _ = require('lodash'),
 	path = require('path'),
 	q = require('q'),
+	emailService = deps.emailService,
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	// dbs = deps.dbs,
@@ -18,42 +19,60 @@ let _ = require('lodash'),
  */
 module.exports.run = function(config) {
 
-	return userService.searchAll([{lastLogin: [{$lte: Date.now() - config.first}, {$gt: Date.now() - config.first - config.day}]},
-		{lastLogin: [{$lte: Date.now() - config.second}, {$gt: Date.now() - config.second - config.day}]}, {lastLogin: { $lte: Date.now() - config.third}}])
+	let query1 = {lastLogin: {$lte: new Date(Date.now() - config.first), $gt: new Date(Date.now() - config.first - config.day)}};
+	let query2 = {lastLogin: {$lte: new Date(Date.now() - config.second), $gt: new Date(Date.now() - config.second - config.day)}};
+	let query3 = {lastLogin: { $lte: new Date(Date.now() - config.third)}};
+	return q.all([userService.searchAll(query1), userService.searchAll(query2), userService.searchAll(query3)])
 		.then((usersLastLogin) => {
 			if (_.isArray(usersLastLogin)) {
-				usersLastLogin.forEach((login) => {
-					let transporter = nodemailer.createTransport({
-						host: 'wildfire.com',
-						port: '3000',
-						secure: true,
-						auth: {
-							user:'team@wildfire.com',
-							pass: 'password'
-						}
-					});
-					let mail = {
-						from: 'Wildfire Team',
-						to: usersLastLogin[0].email,
+
+				logger.info(usersLastLogin[1]);
+
+				let mail = {};
+				usersLastLogin[0].forEach((login) => {
+
+					mail = {
+						from: '"Wildfire Team" <team@wildfire.com>',
+						to: login.email,
 						subject: 'Inactivity Notice',
-						text: 'Hello ' + usersLastLogin[0].name + ',\n' + 'It seems you haven\'t logged into your (WF | FH)' +
-						'account since ' + new Date(usersLastLogin[0].lastLogin).toISOString() + '. Why not check in and see what\'s new!\n' + '' +
-						'Have a question or just want to know what\'s new? Take a look at our Message of the Day page: ' +
-						'Keep in mind that all accounts that have been inactive for a period of at least 90 days are removed' +
-						'from the system.'
+						text: 'Hello ' + login.name + ',\n\n' + 'It seems you haven\'t logged into your (WF | FH) ' +
+						'account since ' + new Date(login.lastLogin) + '. Why not check in and see what\'s new!\n' + '' +
+						'Have a question or just want to know what\'s new? Take a look at our Message of the Day page: \n' +
+						'\nKeep in mind that all accounts that have been inactive for a period of at least 90 days are removed ' +
+						'from the system. \n\nThe Wildfire Team'
 
 					};
-					transporter.sendMail(mail, (error, info) => {
-						if (error) {
-							return logger.error('Failed to send');
-						}
-						logger.debug('Email send successful');
-					});
 				});
-				// users[1];
-				// users[2];
+				usersLastLogin[1].forEach((login) => {
+					mail = {
+						from: '"Wildfire Team" <team@wildfire.com>',
+						to: login.email,
+						subject: 'Inactivity Notice',
+						text: 'Hello ' + login.name + ',\n\n' + 'It seems you haven\'t logged into your (WF | FH) ' +
+						'account since ' + new Date(login.lastLogin) + '. Why not check in and see what\'s new!\n' + '' +
+						'Have a question or just want to know what\'s new? Take a look at our Message of the Day page: \n' +
+						'\nKeep in mind that all accounts that have been inactive for a period of at least 90 days are removed ' +
+						'from the system. \n\nThe Wildfire Team'
+
+					};
+				});
+				usersLastLogin[2].forEach((login) => {
+					mail = {
+						from: '"Wildfire Team" <team@wildfire.com>',
+						to: login.email,
+						subject: 'Account Deactivation',
+						text: 'Hello ' + login.name + ',\n\n' + 'It seems you haven\'t logged into your (WF | FH) ' +
+						'account since ' + new Date(login.lastLogin) + '.\n' +
+						'We are emailing you to let you know that you have been inactive for 90 days and so your account' +
+						'has been deactivated.\nPlease contact us if you have any questions. \n\nThe Wildfire Team'
+					};
+				});
+				logger.info(mail);
+				return emailService.sendMail(mail)
+					.then((result) => {
+						logger.debug(`Sent email to: ${bcc}`);
+					});
 			}
-			return q.all(usersLastLogin);
 		})
 		.fail((err) => {
 			logger.error(`Failed scheduled run to remove inactive users. Error=${JSON.stringify(err)}`);
