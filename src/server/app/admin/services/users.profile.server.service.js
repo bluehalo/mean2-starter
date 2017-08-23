@@ -40,6 +40,10 @@ module.exports.userById = (id) => {
 	return defer.promise;
 };
 
+module.exports.updateUser = function(query) {
+	return User.update(query).exec();
+};
+
 module.exports.searchAll = function(query) {
 	return User.find(query).exec();
 };

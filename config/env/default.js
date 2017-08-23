@@ -91,7 +91,7 @@ module.exports = {
 //			},
 			{
 				file: './src/server/app/util/schedulers/inactivity-notification.server.service.js',
-				interval: 600000, //every 10 seconds
+				interval: 86400000, //every day
 				config: {
 					first: 30*86400000,  // 30 days
 					second: 60*86400000, // 60 days
@@ -176,12 +176,11 @@ module.exports = {
 	// Configuration for outgoing mail server
 	mailer: {
 		from: process.env.MAILER_FROM || 'USERNAME@GMAIL.COM',
-		admin: process.env.MAILER_ADMIN || 'noreply@asymmetrik.com',
 		options: {
 			service: process.env.MAILER_SERVICE_PROVIDER || 'gmail',
 			auth: {
-				user: process.env.MAILER_EMAIL_ID || 'jlaspesa@asymmetrik.com',
-				pass: process.env.MAILER_PASSWORD || ''
+				user: process.env.MAILER_EMAIL_ID || 'USERNAME@GMAIL.COM',
+				pass: process.env.MAILER_PASSWORD || 'PASSWORD'
 			}
 		}
 	},
