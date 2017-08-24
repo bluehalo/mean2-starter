@@ -25,7 +25,6 @@ function buildEmailContent(resource, emailTemplateName, config) {
 	let emailHTML = fs.readFileSync(`./src/server/app/util/templates/${emailTemplateName}-email.server.view.html`, 'utf-8');
 	let template = handlebars.compile(emailHTML);
 	emailHTML = template(emailData);
-	logger.info(emailHTML);
 	return emailHTML;
 }
 
@@ -81,7 +80,6 @@ module.exports.run = function(config) {
 				if (usersLastLogin[2].count > 0) {
 					logger.info(usersLastLogin[2]);
 					usersLastLogin[2].results.forEach((login) => {
-					logger.info('here');
 						let emailContent = buildEmailContent(login, 'deactivate', config);
 
 						mailOptions = {
