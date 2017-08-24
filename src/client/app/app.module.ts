@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { BsDropdownModule, CollapseModule } from 'ngx-bootstrap';
+import { BsDropdownModule, CollapseModule, ModalModule, TooltipModule } from 'ngx-bootstrap';
 import { ModalModule } from 'angular2-modal';
 import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
 import { ToasterModule, ToasterService } from 'angular2-toaster';
@@ -35,12 +35,17 @@ import { SocketService } from './core/socket.service';
 import { TeamsService } from './teams/teams.service';
 import { UserStateService } from './admin/authentication/user-state.service';
 import { NotificationsModule } from './notifications/notifications.module';
+import { FeedbackModalComponent } from './core/feedback/feedback.component';
+import { FeedbackService } from './core/feedback/feedback.service';
+import { FeedbackAudit } from './core/feedback/audit/feedback-audit.component';
 
 @NgModule({
 	imports: [
 		CommonModule,
 		BsDropdownModule.forRoot(),
 		CollapseModule.forRoot(),
+		ModalModule.forRoot(),
+		TooltipModule.forRoot(),
 
 		BrowserModule,
 		BrowserAnimationsModule,
@@ -65,16 +70,23 @@ import { NotificationsModule } from './notifications/notifications.module';
 	],
 	declarations: [
 		AppComponent,
+		FeedbackAudit,
+		FeedbackModalComponent,
 		HeaderComponent,
 		LoggedInComponent,
 		InvalidResourceComponent,
 		FooterComponent
+	],
+	entryComponents: [
+		FeedbackAudit,
+		FeedbackModalComponent
 	],
 	bootstrap: [ AppComponent ],
 	providers: [
 		AuthenticationService,
 		AuthGuard,
 		ConfigService,
+		FeedbackService,
 		SocketService,
 		TeamsService,
 		ToasterService,
