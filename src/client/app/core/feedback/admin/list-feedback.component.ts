@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 
 import { PagingOptions } from '../../../shared/pager.component';
-import { TableSortOptions } from '../../../shared/pageable-table/sort-controls.component';
+import { TableSortOptions } from '../../../shared/pageable-table/pageable-table.component' ;
 import { SortDirection, SortDisplayOption } from '../../../shared/result-utils.class';
 import { AlertService } from '../../../shared/alert.service';
 import { FeedbackService } from '../feedback.service';

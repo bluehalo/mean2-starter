@@ -6,8 +6,6 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { BsDropdownModule, CollapseModule, ModalModule, TooltipModule } from 'ngx-bootstrap';
-import { ModalModule } from 'angular2-modal';
-import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
 import { ToasterModule, ToasterService } from 'angular2-toaster';
 
 import { AppComponent } from './app.component';
@@ -53,8 +51,6 @@ import { FeedbackAudit } from './core/feedback/audit/feedback-audit.component';
 		HttpModule,
 
 		AppRoutingModule,
-		ModalModule.forRoot(),
-		BootstrapModalModule,
 		ToasterModule,
 
 		AccessCheckerModule,

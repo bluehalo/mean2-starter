@@ -1,16 +1,16 @@
 import { ActivatedRoute, Params } from '@angular/router';
 import { Component } from '@angular/core';
-import { DialogRef } from 'angular2-modal';
-import { Modal } from 'angular2-modal/plugins/bootstrap';
-import { Message } from '../message.class';
-import { MessageService } from '../message.service';
+import { Response } from '@angular/http';
 
 import * as _ from 'lodash';
-import { Response } from '@angular/http';
+
+import { Message } from '../message.class';
+import { MessageService } from '../message.service';
 import { PagingOptions } from '../../shared/pager.component';
 import { TableSortOptions } from '../../shared/pageable-table/pageable-table.component';
 import { SortDirection, SortDisplayOption } from '../../shared/result-utils.class';
 import { AlertService } from '../../shared/alert.service';
+import { ModalAction, ModalService } from '../../shared/asy-modal.service';
 
 @Component({
 	templateUrl: './list-messages.component.html'
@@ -22,7 +22,6 @@ export class ListMessagesComponent {
 	search: string = '';
 	filters: any = {};
 	sort: any;
-	messageToDelete: Message;
 
 	// Columns to show/hide in user table
 	columns = {
@@ -56,7 +55,7 @@ export class ListMessagesComponent {
 	constructor(
 		private messageService: MessageService,
 		public alertService: AlertService,
-		private modal: Modal,
+		private modalService: ModalService,
 		private route: ActivatedRoute) {
 	}
 
@@ -129,36 +128,21 @@ export class ListMessagesComponent {
 	}
 
 	confirmDeleteMessage(message: Message) {
-		this.messageToDelete = message;
+		const id = message._id;
 
-		let dialogPromise: Promise<DialogRef<any>>;
-		dialogPromise = this.modal.confirm()
-			.size('lg')
-			.showClose(true)
-			.isBlocking(true)
-			.title('Delete message?')
-			.body(`Are you sure you want to delete message: "${message.title}" ?`)
-			.okBtn('Delete')
-			.open();
-
-		dialogPromise.then(
-			(resultPromise) => resultPromise.result.then(
-				// Success
-				() => {
-					let id = message._id;
-					this.messageService.remove(id).subscribe(() => {
-							this.alertService.addAlert(`Deleted message.`, 'success');
-							this.applySearch();
-						},
-						(response: Response) => {
-							this.alertService.addAlert(response.json().message);
-						});
-				},
-				// Fail
-				() => {
-				}
-			)
-		);
+		this.modalService
+			.confirm('Delete message?', `Are you sure you want to delete message: "${message.title}" ?`, 'Delete')
+			.first()
+			.filter((action: ModalAction) => action === ModalAction.OK)
+			.switchMap(() => {
+				return this.messageService.remove(id);
+			})
+			.subscribe(() => {
+				this.alertService.addAlert(`Deleted message.`, 'success');
+				this.applySearch();
+			}, (response: Response) => {
+				this.alertService.addAlert(response.json().message);
+			});
 	}
 
 	quickColumnSelect(selection: string) {
