@@ -43,7 +43,6 @@ module.exports.run = function(config) {
 	return q.all([User.search(query1), User.search(query2), User.search(query3)])
 		.then((usersLastLogin) => {
 			if (_.isArray(usersLastLogin)) {
-				logger.info(usersLastLogin[0].results.length);
 				let mailOptions = {};
 				if (usersLastLogin[0].count > 0) {
 					usersLastLogin[0].results.forEach((login) => {
@@ -78,7 +77,6 @@ module.exports.run = function(config) {
 					});
 				}
 				if (usersLastLogin[2].count > 0) {
-					logger.info(usersLastLogin[2]);
 					usersLastLogin[2].results.forEach((login) => {
 						let emailContent = buildEmailContent(login, 'deactivate', config);
 
