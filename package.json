@@ -38,7 +38,7 @@
 		"lodash": "4.17",
 		"method-override": "2.3",
 		"moment": "2.18",
-		"mongoose": "4.11",
+		"mongoose": "4.11.6",
 		"mongoose-schema-extend": "0.2",
 		"mongoose-unique-validator": "1.0",
 		"morgan": "1.8",
