@@ -93,10 +93,12 @@ module.exports = {
 				file: './src/server/app/util/schedulers/inactivity-notification.server.service.js',
 				interval: 86400000, //every day
 				config: {
-					first: 30*86400000,  // 30 days
-					second: 60*86400000, // 60 days
-					third: 90*86400000, 	// 90 days
-					day: 86400000 // a single day
+					day: 86400000, // a single day
+					alertInterval: [
+						30 * 86400000,  // 30 days
+						60 * 86400000, // 60 days
+						90 * 86400000 	// 90 days
+					]
 				}
 			},
 			{
