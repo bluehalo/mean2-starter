@@ -1,12 +1,13 @@
 language: node_js
 node_js:
-  - "6.11"
+  - "6.9"
 before_script:
   - npm install -g gulp
 script:
   - gulp build
   - gulp test-ci
 sudo: false
+dist: precise
 addons:
   apt:
     sources:
