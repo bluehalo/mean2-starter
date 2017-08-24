@@ -11,9 +11,7 @@ let _ = require('lodash'),
 	configc = deps.config,
 	emailService = deps.emailService,
 	logger = deps.logger,
-	User = dbs.admin.model('User'),
-
-	UserService = require(path.resolve('./src/server/app/admin/services/users.profile.server.service.js'));
+	User = dbs.admin.model('User');
 
 
 function buildEmailContent(resource, emailTemplateName, config) {
