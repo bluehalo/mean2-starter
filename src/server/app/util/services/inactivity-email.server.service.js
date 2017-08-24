@@ -11,7 +11,9 @@ let _ = require('lodash'),
 	configc = deps.config,
 	emailService = deps.emailService,
 	logger = deps.logger,
-	User = dbs.admin.model('User');
+	User = dbs.admin.model('User'),
+
+	UserService = require(path.resolve('./src/server/app/admin/services/users.profile.server.service.js'));
 
 
 function buildEmailContent(resource, emailTemplateName, config) {
@@ -92,8 +94,7 @@ module.exports.run = function(config) {
 							.then((result) => {
 								logger.debug('Sent email');
 								// deactivate user
-								let query = (login.username, {$set: {'roles.user': false, 'roles.admin': false}});
-								return q(User.updateOne(query));
+								return User.update({'username': login.username}, {$set: {'roles.user': false, 'roles.admin': false}});
 							});
 
 					});

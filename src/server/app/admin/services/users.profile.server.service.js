@@ -39,4 +39,3 @@ module.exports.userById = (id) => {
 
 	return defer.promise;
 };
-
