@@ -13,14 +13,16 @@ let _ = require('lodash'),
 	logger = deps.logger,
 	User = dbs.admin.model('User');
 
+const day = 86400000;
 
 function buildEmailContent(resource, emailTemplateName, config) {
-	let numOfDays = Math.floor((Date.now() - resource.lastLogin)/config.day);
+	let numOfDays = Math.floor((Date.now() - resource.lastLogin)/day);
 	let emailData = {
 		appName: configc.app.instanceName,
-		url: configc.app.url.protocol + '://' + configc.app.url.host + ':' + configc.app.url.port + '/#', // message of the day board
+		url: configc.app.baseUrl, // message of the day board
 		name: resource.name,
-		date: /* new Date(resource.lastLogin) */ numOfDays
+		date: numOfDays,
+		contactEmail: configc.contactEmail
 	};
 	let emailHTML = fs.readFileSync(`./src/server/app/util/templates/${emailTemplateName}-email.server.view.html`, 'utf-8');
 	let template = handlebars.compile(emailHTML);
@@ -33,14 +35,9 @@ function buildEmailContent(resource, emailTemplateName, config) {
  */
 module.exports.run = function(config) {
 
-	// search for users inactive for 30 days
-	let query1 = {lastLogin: {$lte: new Date(Date.now() - config.alertInterval[0]), $gt: new Date(Date.now() - config.alertInterval[0] - config.day)}};
-	// search for users inactive for 60 days
-	let query2 = {lastLogin: {$lte: new Date(Date.now() - config.alertInterval[1]), $gt: new Date(Date.now() - config.alertInterval[1] - config.day)}};
-	// search for users inactive for 90 days
-	let query3 = {lastLogin: { $lte: new Date(Date.now() - config.alertInterval[2]), $gt: new Date(Date.now() - config.alertInterval[2] - config.day)}};
+	let alertQueries = config.alertInterval.map((interval) => ({lastLogin: {$lte: new Date(Date.now() - interval), $gt: new Date(Date.now() - interval - day)}}));
 
-	return q.all([User.search(query1), User.search(query2), User.search(query3)])
+	return q.all(alertQueries.map((query) => User.search(query)))
 		.then((usersLastLogin) => {
 			if (_.isArray(usersLastLogin)) {
 				let mailOptions = {};

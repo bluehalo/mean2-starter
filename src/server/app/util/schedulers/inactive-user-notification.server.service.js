@@ -7,21 +7,21 @@ let path = require('path'),
 
 let services = [
 	{
-		path: require(path.resolve('./src/server/app/util/services/inactivity-email.server.service.js')),
-		name: 'inactivity-notification'
+		path: require(path.resolve('./src/server/app/util/services/inactive-user-email.server.service.js')),
+		name: 'inactive-user-notification'
 	}
 ];
 
 module.exports.run = function(config) {
 
-	let cleanups = services.map((service) => service.path.run(config));
-	return q.allSettled(cleanups)
+	let notifyInactiveUsers = services.map((service) => service.path.run(config));
+	return q.allSettled(notifyInactiveUsers)
 		.then((results) => {
 			results.forEach((result, idx) => {
 				if (result.state === 'rejected') {
 					logger.error(`Error running service=${services[idx].name}. Error=${JSON.stringify(result.reason)}`);
 				} else {
-					logger.debug(`Ran service=${services[idx].name} during system-resource-cleanup`);
+					logger.debug(`Ran service=${services[idx].name} to email inactive users`);
 				}
 			});
 
