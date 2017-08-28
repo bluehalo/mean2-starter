@@ -1,7 +1,6 @@
 'use strict';
 
-let
-	path = require('path'),
+const path = require('path'),
 	q = require('q'),
 	_ = require('lodash'),
 
@@ -17,14 +16,23 @@ let
  * Create a new team. The team creator is automatically added as an admin
  */
 module.exports.create = function(req, res) {
-	teamsService.createTeam(req.body, req.user, req.headers)
-		.then(function(result) {
-			res.status(200).json(result);
-		}, function(err) {
-			util.handleErrorResponse(res, err);
-		}).done();
+	teamsService.createTeam(req.body, req.user, req.headers).then((result) => {
+		res.status(200).json(result);
+	}, (err) => {
+		util.handleErrorResponse(res, err);
+	}).done();
 };
 
+/**
+ * Get all the teams in the system
+ */
+module.exports.get = function(req, res) {
+	teamsService.getTeams(req.query).then((result) => {
+		res.status(200).json(result);
+	}, (err) => {
+		util.handleErrorResponse(res, err);
+	}).done();
+};
 
 /**
  * Read the team
@@ -38,12 +46,11 @@ module.exports.read = function(req, res) {
  * Update the team metadata
  */
 module.exports.update = function(req, res) {
-	teamsService.updateTeam(req.team, req.body, req.user, req.headers)
-		.then(function(result) {
-			res.status(200).json(result);
-		}, function(err) {
-			util.handleErrorResponse(res, err);
-		}).done();
+	teamsService.updateTeam(req.team, req.body, req.user, req.headers).then((result) => {
+		res.status(200).json(result);
+	}, (err) => {
+		util.handleErrorResponse(res, err);
+	}).done();
 };
 
 
@@ -51,12 +58,11 @@ module.exports.update = function(req, res) {
  * Delete the team
  */
 module.exports.delete = function(req, res) {
-	teamsService.deleteTeam(req.team, req.user, req.headers)
-		.then(function(result) {
-			res.status(200).json(req.team);
-		}, function(err) {
-			util.handleErrorResponse(res, err);
-		}).done();
+	teamsService.deleteTeam(req.team, req.user, req.headers).then((result) => {
+		res.status(200).json(req.team);
+	}, (err) => {
+		util.handleErrorResponse(res, err);
+	}).done();
 };
 
 
@@ -65,34 +71,55 @@ module.exports.delete = function(req, res) {
  */
 module.exports.search = function(req, res) {
 	// Get search and query parameters
-	let search = req.body.s || null;
+	const search = req.body.s || null;
 	let query = req.body.q || {};
 	query = util.toMongoose(query);
 
-	teamsService.searchTeams(search, query, req.query, req.user)
-		.then(function(result) {
-			res.status(200).json(result);
-		}, function(err) {
-			util.handleErrorResponse(res, err);
-		}).done();
+	teamsService.searchTeams(search, query, req.query, req.user).then((result) => {
+		res.status(200).json(result);
+	}, (err) => {
+		util.handleErrorResponse(res, err);
+	}).done();
 };
 
+module.exports.requestAccess = function(req, res) {
+	const user = req.body.user || null;
+	const team = req.team || null;
+
+	teamsService.requestAccessToTeam(user, team, req.headers).then(() => {
+		res.status(204).end();
+	}, (err) => {
+		util.handleErrorResponse(res, err);
+	}).done();
+};
+
+module.exports.requestNewTeam = function(req, res) {
+	const user = req.body.user || null;
+	const org = req.body.org || null;
+	const aoi = req.body.aoi || null;
+	const description = req.body.description || null;
+
+	teamsService.requestNewTeam(org, aoi, description, user, req.headers).then(() => {
+		res.status(204).end();
+	}, (err) => {
+		util.handleErrorResponse(res, err);
+	}).done();
+};
 
 /**
  * Search the members of the team, includes paging and sorting
  */
 module.exports.searchMembers = function(req, res) {
 	// Get search and query parameters
-	let search = req.body.s || null;
+	const search = req.body.s || null;
 	let query = req.body.q || {};
 	query = util.toMongoose(query);
 
-	teamsService.searchTeamMembers(search, query, req.query, req.team)
-		.then(function(result) {
-			res.status(200).json(result);
-		}, function(err) {
-			util.handleErrorResponse(res, err);
-		}).done();
+	teamsService.searchTeamMembers(search, query, req.query, req.team).then((result) => {
+		res.status(200).json(result);
+	}, (err) => {
+		util.handleErrorResponse(res, err);
+	}).done();
 };
 
 
@@ -100,16 +127,15 @@ module.exports.searchMembers = function(req, res) {
  * Add a member to a team, defaulting to read-only access
  */
 module.exports.addMember = function(req, res) {
-	let user = req.userParam;
-	let team = req.team;
-	let role = req.body.role || 'member';
+	const user = req.userParam;
+	const team = req.team;
+	const role = req.body.role || 'member';
 
-	teamsService.addMemberToTeam(user, team, role, req.user, req.headers)
-		.then(function() {
-			res.status(204).end();
-		}, function(err) {
-			util.handleErrorResponse(res, err);
-		}).done();
+	teamsService.addMemberToTeam(user, team, role, req.user, req.headers).then(() => {
+		res.status(204).end();
+	}, (err) => {
+		util.handleErrorResponse(res, err);
+	}).done();
 };
 
 
@@ -117,29 +143,27 @@ module.exports.addMember = function(req, res) {
  * Remove a member from a team
  */
 module.exports.removeMember = function(req, res) {
-	let user = req.userParam;
-	let team = req.team;
+	const user = req.userParam;
+	const team = req.team;
 
-	teamsService.removeMemberFromTeam(user, team, req.user, req.headers)
-		.then(function() {
-			res.status(204).end();
-		}, function(err) {
-			util.handleErrorResponse(res, err);
-		}).done();
+	teamsService.removeMemberFromTeam(user, team, req.user, req.headers).then(() => {
+		res.status(204).end();
+	}, (err) => {
+		util.handleErrorResponse(res, err);
+	}).done();
 };
 
 
 module.exports.updateMemberRole = function(req, res) {
-	let user = req.userParam;
-	let team = req.team;
-	let role = req.body.role || 'member';
+	const user = req.userParam;
+	const team = req.team;
+	const role = req.body.role || 'member';
 
-	teamsService.updateMemberRole(user, team, role, req.user, req.headers)
-		.then(function() {
-			res.status(204).end();
-		}, function(err) {
-			util.handleErrorResponse(res, err);
-		}).done();
+	teamsService.updateMemberRole(user, team, role, req.user, req.headers).then(() => {
+		res.status(204).end();
+	}, (err) => {
+		util.handleErrorResponse(res, err);
+	}).done();
 };
 
 
@@ -147,32 +171,28 @@ module.exports.updateMemberRole = function(req, res) {
  * Team middleware
  */
 module.exports.teamById = function(req, res, next, id) {
-	Team.findOne({ _id: id })
-		.exec()
-		.then(function(team) {
-			if (null == team) {
-				next(new Error('Could not find team: ' + id));
-			}
-			else {
-				req.team = team;
-				next();
-			}
-		}, next);
+	Team.findOne({ _id: id }).exec().then((team) => {
+		if (null == team) {
+			next(new Error('Could not find team: ' + id));
+		}
+		else {
+			req.team = team;
+			next();
+		}
+	}, next);
 };
 
 
 module.exports.teamUserById = function(req, res, next, id) {
-	TeamMember.findOne({ _id: id })
-		.exec()
-		.then(function(user) {
-			if (null == user) {
-				next(new Error(`Failed to load team member ${id}`));
-			}
-			else {
-				req.userParam = user;
-				next();
-			}
-		}, next);
+	TeamMember.findOne({ _id: id }).exec().then((user) => {
+		if (null == user) {
+			next(new Error(`Failed to load team member ${id}`));
+		}
+		else {
+			req.userParam = user;
+			next();
+		}
+	}, next);
 };
 
 

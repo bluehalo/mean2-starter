@@ -5,6 +5,7 @@ import { Response } from '@angular/http';
 
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 import { Team } from './teams.class';
 import { TeamsService } from './teams.service';
@@ -29,21 +30,24 @@ export class ManageTeamComponent {
 
 	private teamId: string;
 
+	private routeParamSubscription: Subscription;
+
 	constructor(
 		private router: Router,
 		private route: ActivatedRoute,
 		private location: Location,
 		private configService: ConfigService,
 		private teamsService: TeamsService,
-		public alertService: AlertService,
-		private authService: AuthenticationService
-	) {
-	}
+		private authService: AuthenticationService,
+		public alertService: AlertService
+	) {}
 
 	ngOnInit() {
 		this.alertService.clearAllAlerts();
 
-		this.configService.getConfig()
+		this.configService
+			.getConfig()
+			.first()
 			.subscribe((config: any) => {
 				// Need to show external groups when in proxy-pki mode
 				if (config.auth === 'proxy-pki') {
@@ -51,8 +55,8 @@ export class ManageTeamComponent {
 				}
 			});
 
-		this.route.params.subscribe((params: Params) => {
-			this.mode = params[`mode`];
+		this.routeParamSubscription = this.route.params.subscribe((params: Params) => {
+			this.mode = _.get(this.route, 'data.value.mode', 'create');
 			this.teamId = params[`id`];
 
 			this.modeDisplay = _.capitalize(this.mode);
@@ -63,15 +67,18 @@ export class ManageTeamComponent {
 
 			// Initialize team if appropriate
 			if (this.teamId) {
-				this.teamsService.get(this.teamId)
-					.subscribe((result: any) => {
-						if (result) {
-							this.team = new Team(result._id, result.name, result.description, result.created, result.requiresExternalTeams);
-						}
-					});
+				this.teamsService.get(this.teamId).subscribe((result: any) => {
+					if (result) {
+						this.team = new Team(result._id, result.name, result.description, result.created, result.requiresExternalTeams);
+					}
+				});
 			}
 
 		});
+	}
+
+	ngOnDestroy() {
+		this.routeParamSubscription.unsubscribe();
 	}
 
 	back() {

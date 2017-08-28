@@ -59,6 +59,10 @@
 							</ul>
 						</li>
 
+						<li *ngIf="teams.length === 0" class="dropdown" dropdown>
+							<a [routerLink]="['/team/join']">Join a Team</a>
+						</li>
+
 						<li class="dropdown" dropdown>
 							<a class="dropdown-toggle" dropdownToggle>{{user.userModel.name}} <span class="caret"></span></a>
 							<ul *dropdownMenu class="dropdown-menu" role="menu">

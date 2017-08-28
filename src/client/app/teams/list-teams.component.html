@@ -1,13 +1,16 @@
 <section>
 
 	<!-- Alert Notifications -->
-	<alert *ngFor="let alert of alertService.getAlerts(); let i = index" [type]="alert.type" (close)="alertService.clear(i)" dismissible="true" >{{alert.msg}}</alert>
+	<alert *ngFor="let alert of alertService.getAlerts(); let i = index" [type]="alert.type" (close)="alertService.clear(i)" dismissible="true" >{{ alert.msg }}</alert>
 
 	<h3 class="page-header">
 		My Teams
 		<small>View and manage team membership and roles</small>
-		<a *ngIf="user.canManageSystemResources()" [routerLink]="['/team/create', { mode:'create' }]" type="button" class="btn btn-default btn-sm pull-right">
+		<a *ngIf="canManageSystemResources" [routerLink]="['/team/create']" style="margin-left: 10px;" type="button" class="btn btn-default btn-sm pull-right">
 			<i class="fa fa-plus"></i> Create Team
+		</a>
+		<a [routerLink]="['/team/join']" type="button" class="btn btn-default btn-sm pull-right">
+			<i class="fa fa-plus"></i> Join Another Team
 		</a>
 	</h3>
 

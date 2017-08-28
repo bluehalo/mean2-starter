@@ -1,7 +1,6 @@
 'use strict';
 
-let
-	express = require('express'),
+const express = require('express'),
 	path = require('path'),
 
 	teams = require(path.posix.resolve('./src/server/app/teams/controllers/teams.server.controller.js')),
@@ -18,12 +17,19 @@ router.route('/team')
 	.put(users.hasEditorAccess, teams.create);
 
 router.route('/teams')
+	.get(users.hasAccess, teams.get)
 	.post(users.hasAccess, teams.search);
 
 router.route('/team/:teamId')
 	.get(   users.hasAccess, users.hasAny(users.requiresAdminRole, teams.requiresMember), teams.read)
 	.post(  users.hasAccess, users.hasAny(users.requiresAdminRole, teams.requiresAdmin), teams.update)
 	.delete(users.hasAccess, users.hasAny(users.requiresAdminRole, teams.requiresAdmin), teams.delete);
+
+router.route('/team/:teamId/request')
+	.post(users.hasAccess, teams.requestAccess);
+
+router.route('/team-request')
+	.post(users.hasAccess, teams.requestNewTeam);
 
 /**
  * Team editors Routes (requires team admin role)
