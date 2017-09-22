@@ -10,6 +10,7 @@ let _ = require('lodash'),
 
 	configc = deps.config,
 	emailService = deps.emailService,
+	auditService = deps.auditService,
 	logger = deps.logger,
 	User = dbs.admin.model('User');
 
@@ -31,31 +32,31 @@ function buildEmailContent(resource, emailTemplateName) {
 }
 
 function deactivationAlert(dQuery, config) {
-	return q(User.search(dQuery))
-		.then((deactivateUsers) => {
-			if (_.isArray(deactivateUsers.results)) {
-
-				deactivateUsers.results.forEach((login) => {
-					let emailContent = buildEmailContent(login, 'deactivate', config);
+	return User.find(dQuery).exec().then((deactivatedUsers) => {
+			if (_.isArray(deactivatedUsers)) {
+				deactivatedUsers.forEach((user) => {
+					let originalUser = User.auditCopy(user);
+					let emailContent = buildEmailContent(user, 'deactivate', config);
 					let mailOptions = {
 						from: configc.mailer.from,
 						replyTo: configc.mailer.from,
-						to: login.email,
+						to: user.email,
 						subject: 'Account Deactivation',
 						html: emailContent
 					};
 
-					return emailService.sendMail(mailOptions)
-						.then((result) => {
-							logger.debug('Sent email');
-							// deactivate user
-							return User.update({'username': login.username}, {
-								$set: {
-									'roles.user': false,
-									'roles.admin': false
-								}
-							});
-						});
+					return User.update({'username': user.username}, {
+						$set: {
+							'roles.user': false,
+							'roles.admin': false
+						}
+					}).then(() => {
+						user.roles.admin = false;
+						user.roles.user = false;
+						let emailPromise = emailService.sendMail(mailOptions);
+						let auditPromise = auditService.audit('deactivation due to inactivity','user','deactivation', null, {before: originalUser, after: User.auditCopy(user)}, null);
+						return q.all([emailPromise, auditPromise]);
+					});
 				});
 			}
 
@@ -63,22 +64,20 @@ function deactivationAlert(dQuery, config) {
 }
 
 function inactivityAlert(query, config) {
-	return q.all(query.map((iQuery) => User.search(iQuery)))
-		.then((usersLastLogin) => {
-
-			if (_.isArray(usersLastLogin)) {
-				usersLastLogin.forEach((entry) => {
-					entry.results.forEach((login) => {
-					let emailContent = buildEmailContent(login, 'inactivity', config);
+	return q.all(query.map((iQuery) => User.find(iQuery).exec())).then((usersLastLogin) => {
+		if (_.isArray(usersLastLogin)) {
+			usersLastLogin.forEach((login) => {
+				login.forEach((entry) => {
+					let emailContent = buildEmailContent(entry, 'inactivity', config);
 					let mailOptions = {
 						from: configc.mailer.from,
 						replyTo: configc.mailer.from,
-						to: login.email,
+						to: entry.email,
 						subject: 'Inactivity Notice',
 						html: emailContent
 					};
 					return emailService.sendMail(mailOptions)
-						.then((result) => {
+						.then(() => {
 							logger.debug('Sent email');
 						});
 				});
@@ -88,21 +87,21 @@ function inactivityAlert(query, config) {
 }
 
 /**
- * alert users who's accounts have been inactive for 30-89 days. Remove accounts that have been inactive for 90+ days
+ * alert users whose accounts have been inactive for 30-89 days. Remove accounts that have been inactive for 90+ days
  */
 module.exports.run = function(config) {
 
 	let alertQueries = config.alertInterval.map((interval) => ({
 		lastLogin: {
-			$lte: new Date(Date.now() - interval),
-			$gt: new Date(Date.now() - interval - day)
+			$lte:  new Date(Date.now() - interval).toISOString(),
+			$gt: new Date(Date.now() - interval - day).toISOString()
 		}
 	}));
 
 	let deactivateQuery = {
 		lastLogin: {
-			$lte: new Date(Date.now() - config.deactivateAfter),
-			$gt: new Date(Date.now() - config.deactivateAfter - day)
+			$lte: new Date(Date.now() - config.deactivateAfter).toISOString(),
+			$gt: new Date(Date.now() - config.deactivateAfter - day).toISOString()
 		}
 	};
 
