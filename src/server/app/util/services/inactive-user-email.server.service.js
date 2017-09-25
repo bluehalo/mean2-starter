@@ -95,14 +95,15 @@ module.exports.run = function(config) {
 		lastLogin: {
 			$lte:  new Date(Date.now() - interval).toISOString(),
 			$gt: new Date(Date.now() - interval - day).toISOString()
-		}
+		},
+		'roles.user': true
 	}));
 
 	let deactivateQuery = {
 		lastLogin: {
-			$lte: new Date(Date.now() - config.deactivateAfter).toISOString(),
-			$gt: new Date(Date.now() - config.deactivateAfter - day).toISOString()
-		}
+			$lte: new Date(Date.now() - config.deactivateAfter).toISOString()
+		},
+		'roles.user': true
 	};
 
 	let deactivatePromise = deactivationAlert(deactivateQuery, config);
