@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { BootstrapModalModule, Modal } from 'angular2-modal/plugins/bootstrap';
-import { AlertModule } from 'ngx-bootstrap';
+import { AlertModule, ModalModule } from 'ngx-bootstrap';
 
 import { AdminService } from '../admin.service';
 import { AdminListEuasComponent } from './admin-list-euas.component';
@@ -18,6 +17,7 @@ import { EuaAudit } from './audit/eua-audit.component';
 @NgModule({
 	imports: [
 		AlertModule.forRoot(),
+		ModalModule.forRoot(),
 
 		CommonModule,
 		FormsModule,
@@ -39,9 +39,7 @@ import { EuaAudit } from './audit/eua-audit.component';
 	],
 	providers:  [
 		AlertService,
-		AdminService,
-		BootstrapModalModule,
-		Modal
-	],
+		AdminService
+	]
 })
 export class AdminEuaModule { }

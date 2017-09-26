@@ -3,27 +3,25 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Response } from '@angular/http';
 
 import * as _ from 'lodash';
-import { DialogRef } from 'angular2-modal';
-import { Modal } from 'angular2-modal/plugins/bootstrap';
 
 import { EndUserAgreement } from './eua.class';
 import { EuaService } from './eua.service';
-import { AdminService } from '../admin.service';
-import { AuthenticationService } from '../authentication/authentication.service';
 import { PagingOptions } from '../../shared/pager.component';
 import { TableSortOptions } from '../../shared/pageable-table/pageable-table.component';
 import { SortDisplayOption, SortDirection } from '../../shared/result-utils.class';
 import { AlertService } from '../../shared/alert.service';
+import { ModalAction, ModalService } from '../../shared/asy-modal.service';
 
 @Component({
 	selector: 'admin-list-euas',
 	templateUrl: './admin-list-euas.component.html'
 })
 export class AdminListEuasComponent implements OnInit {
-	agree: boolean = false;
+
 	pagingOpts: PagingOptions;
-	euaToDelete: EndUserAgreement;
+
 	euas: EndUserAgreement[] = [];
+
 	search: string = '';
 
 	// Columns to show/hide in user table
@@ -45,12 +43,10 @@ export class AdminListEuasComponent implements OnInit {
 	};
 
 	constructor(
-		public adminService: AdminService,
-		public auth: AuthenticationService,
-		public alertService: AlertService,
-		public euaService: EuaService,
+		private asyModalService: ModalService,
+		private euaService: EuaService,
 		private route: ActivatedRoute,
-		private modal: Modal
+		public alertService: AlertService,
 	) {}
 
 	ngOnInit() {
@@ -64,23 +60,6 @@ export class AdminListEuasComponent implements OnInit {
 		this.initializeUserFilters();
 
 		this.loadEuas();
-	}
-
-	/**
-	 * Initialize query, search, and paging options, possibly from cached user settings
-	 */
-	initializeUserFilters() {
-		let cachedFilter = this.euaService.cache.listEuas;
-
-		this.search = cachedFilter.search ? cachedFilter.search : '';
-
-		if (cachedFilter.paging) {
-			this.pagingOpts = cachedFilter.paging;
-		} else {
-			this.pagingOpts = new PagingOptions();
-			this.pagingOpts.sortField = this.sortOpts['title'].sortField;
-			this.pagingOpts.sortDir = this.sortOpts['title'].sortDir;
-		}
 	}
 
 	applySearch() {
@@ -100,39 +79,24 @@ export class AdminListEuasComponent implements OnInit {
 	}
 
 	confirmDeleteEua(eua: EndUserAgreement) {
-		this.euaToDelete = eua;
+		const id = eua.euaModel._id;
+		const title = eua.euaModel.title;
 
-		let dialogPromise: Promise<DialogRef<any>>;
-		dialogPromise = this.modal.confirm()
-			.size('lg')
-			.showClose(true)
-			.isBlocking(true)
-			.title('Delete End User Agreement?')
-			.body(`Are you sure you want to delete eua: "${eua.euaModel.title}" ?`)
-			.okBtn('Delete')
-			.open();
-
-		dialogPromise.then(
-			(resultPromise: any) => resultPromise.result.then(
-				// Success
-				() => {
-					let id = eua.euaModel._id;
-					let title = eua.euaModel.title;
-					this.euaService.remove(id).subscribe(
-						() => {
-							this.alertService.addAlert(`Deleted EUA entitled: ${title}`, 'success');
-							this.loadEuas();
-						},
-						(response: Response) => {
-							if (response.status >= 400 && response.status < 500) {
-								this.alertService.addAlert(response.json().message);
-							}
-						});
-				},
-				// Fail
-				() => {}
-			)
-		);
+		this.asyModalService
+			.confirm('Delete End User Agreement?', `Are you sure you want to delete eua: "${eua.euaModel.title}" ?`, 'Delete')
+			.first()
+			.filter((action: ModalAction) => action === ModalAction.OK)
+			.switchMap(() => {
+				return this.euaService.remove(id);
+			})
+			.subscribe(() => {
+				this.alertService.addAlert(`Deleted EUA entitled: ${title}`, 'success');
+				this.loadEuas();
+			}, (response: Response) => {
+				if (response.status >= 400 && response.status < 500) {
+					this.alertService.addAlert(response.json().message);
+				}
+			});
 	}
 
 	publishEua(eua: EndUserAgreement) {
@@ -146,6 +110,23 @@ export class AdminListEuasComponent implements OnInit {
 				}
 			});
 		this.loadEuas();
+	}
+
+	/**
+	 * Initialize query, search, and paging options, possibly from cached user settings
+	 */
+	private initializeUserFilters() {
+		let cachedFilter = this.euaService.cache.listEuas;
+
+		this.search = cachedFilter.search ? cachedFilter.search : '';
+
+		if (cachedFilter.paging) {
+			this.pagingOpts = cachedFilter.paging;
+		} else {
+			this.pagingOpts = new PagingOptions();
+			this.pagingOpts.sortField = this.sortOpts['title'].sortField;
+			this.pagingOpts.sortDir = this.sortOpts['title'].sortDir;
+		}
 	}
 
 	private loadEuas() {
