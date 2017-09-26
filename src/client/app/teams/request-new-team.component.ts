@@ -37,7 +37,7 @@ export class RequestNewTeamModalComponent {
 		if (this.validateInput()) {
 			this.error = null;
 			this.submitting = true;
-			this.teamsService.requestNewTeam(this.user, this.organization, this.aoi, this.description).subscribe(() => {
+			this.teamsService.requestNewTeam(this.user.userModel, this.organization, this.aoi, this.description).subscribe(() => {
 				this.success = 'Request successfully submitted!';
 				setTimeout(() => this.modalRef.hide(), 1500);
 			}, (response: Response) => {
