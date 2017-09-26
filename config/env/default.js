@@ -106,6 +106,25 @@ module.exports = {
 	// MongoDB
 	db: {
 		admin: 'mongodb://localhost/mean2-dev'
+
+		// Example with Connection Options. Note: require('fs') at the top of this file
+//		admin: {
+//			uri: 'mongodb://localhost/mean2-dev',
+//			options: {
+//				server: {
+//					sslValidate: true,
+//					sslCA: [fs.readFileSync('/path/to/ca.pem')],
+//					sslKey: fs.readFileSync('/path/to/client.pem'),
+//					sslCert: fs.readFileSync('/path/to/client.pem'),
+//					sslPass: 'changeme'
+//				},
+//				replset: {
+//					... other options ...
+//					rs_name: 'mean2-dev'
+//				}
+//			}
+//		}
+
 	},
 
 	// Fallback image if no images are available
