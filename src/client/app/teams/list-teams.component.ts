@@ -96,7 +96,7 @@ export class ListTeamsComponent {
 	/**
 	 * Initialize query, search, and paging options, possibly from cached user settings
 	 */
-	private initializeUserFilters() {
+	initializeUserFilters() {
 		let cachedFilter: any = this.teamsService.cache.listTeams;
 
 		this.search = cachedFilter.search ? cachedFilter.search : '';
@@ -109,7 +109,7 @@ export class ListTeamsComponent {
 		}
 	}
 
-	private loadTeams() {
+	loadTeams() {
 		let query: any = {};
 		let options: any = {};
 
@@ -125,4 +125,5 @@ export class ListTeamsComponent {
 				}
 			});
 	}
+
 }
