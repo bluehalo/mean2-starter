@@ -39,8 +39,14 @@ module.exports = (mode) => {
 		wpConfig.devtool = false;
 	}
 	else if (test) {
-		// Inline sourcemaps required for coverage to work
-		wpConfig.devtool = 'inline-source-map';
+		if(coverage) {
+			// Inline sourcemaps required for coverage to work
+			wpConfig.devtool = 'inline-source-map';
+		}
+		/* *
+		 * Do not set wpConfig.devtool if we're testing without code coverage (e.g., "gulp test-client").
+		 * This will save some time by not generating source maps.
+		 * */
 	}
 	else {
 		// Eval source maps for development (provides trace back to original TS)
