@@ -100,6 +100,9 @@
 								<!-- Help -->
 								<li [hidden]="!pki && !user.isActive()"><a [routerLink]="['/help']">Help</a></li>
 
+								<!-- Feedback -->
+								<li><a (click)="showFeedbackModal()">Give Feedback</a></li>
+
 								<!-- About -->
 								<li><a [routerLink]="['/about']">About</a></li>
 

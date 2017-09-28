@@ -1,0 +1,37 @@
+<section class="modal-header">
+	<h3>
+		<span>Give Feedback</span>
+	</h3>
+</section>
+
+<section class="modal-body">
+	<div class="row">
+		<div class="col-md-12">
+				<textarea
+					style="max-width: 100%;"
+					class="form-control input-sm custom-control"
+					placeholder="Tell us about your experience using {{ appName }} so that we can make it even better"
+					rows="5"
+					[(ngModel)]="feedbackText">
+				</textarea>
+		</div>
+	</div>
+</section>
+
+<section class="modal-footer">
+	<div class="row">
+		<div *ngIf="error" class="col-md-12 pull-right text-danger">
+			<strong>{{ error }}</strong>
+		</div>
+		<div *ngIf="success" class="col-md-12 pull-right text-success">
+			<strong>{{ success }}</strong>
+		</div>
+	</div>
+
+	<div class="row padding-top-5">
+		<div class="col-md-12 pull-right">
+			<button class="btn btn-primary" [disabled]="submitting" (click)="submit()">Submit</button>
+			<button class="btn btn-link" (click)="modalRef.hide()">Cancel</button>
+		</div>
+	</div>
+</section>
