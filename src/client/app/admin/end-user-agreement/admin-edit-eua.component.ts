@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import { Modal } from 'angular2-modal/plugins/bootstrap';
-
 import { EndUserAgreement } from './eua.class';
 import { EuaService } from './eua.service';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { ManageEuaComponent } from './manage-eua.component';
 import { AlertService } from '../../shared/alert.service';
+import { ModalService } from '../../shared/asy-modal.service';
 
 @Component({
 	selector: 'admin-update-eua',
@@ -19,11 +18,11 @@ export class AdminUpdateEuaComponent extends ManageEuaComponent {
 		router: Router,
 		auth: AuthenticationService,
 		alertService: AlertService,
-		modal: Modal,
+		public asyModalService: ModalService,
 		protected euaService: EuaService,
 		protected route: ActivatedRoute
 	) {
-		super(router, auth, alertService, modal);
+		super(router, auth, alertService, asyModalService);
 	}
 
 	ngOnInit() {

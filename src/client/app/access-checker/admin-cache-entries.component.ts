@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import { Response } from '@angular/http';
 
-import { overlayConfigFactory } from 'angular2-modal';
-import { Modal } from 'angular2-modal/plugins/bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 import { CacheEntriesService, CacheEntry } from './cache-entries.service';
 import { AlertService } from '../shared/alert.service';
 import { SortDirection, SortDisplayOption } from '../shared/result-utils.class';
 import { PagingOptions } from '../shared/pager.component';
 import { TableSortOptions } from '../shared/pageable-table/pageable-table.component';
-import { ViewCacheEntryModal, ViewCacheEntryModalContext } from './view-cache-entry.component';
+import { ViewCacheEntryModal } from './view-cache-entry.component';
+import { ModalAction, ModalService } from '../shared/asy-modal.service';
 
 @Component({
 	selector: 'cache-entries',
@@ -18,20 +18,23 @@ import { ViewCacheEntryModal, ViewCacheEntryModalContext } from './view-cache-en
 export class AdminCacheEntriesComponent {
 
 	cacheEntries: any[] = [];
-	search = '';
+
+	search: string = '';
+
 	pagingOpts: PagingOptions;
-	entryToView: CacheEntry;
-	viewCacheEntryVisible: boolean;
 
 	sortOpts: TableSortOptions = {
 		key: new SortDisplayOption('Key', 'key', SortDirection.asc),
 		timestamp: new SortDisplayOption('Timestamp', 'ts', SortDirection.desc)
 	};
 
+	private cacheEntryModalRef: BsModalRef;
+
 	constructor(
-		public cacheEntriesService: CacheEntriesService,
-		public alertService: AlertService,
-		private modal: Modal
+		private modalService: BsModalService,
+		private asyModalService: ModalService,
+		private cacheEntriesService: CacheEntriesService,
+		public alertService: AlertService
 	) {}
 
 	ngOnInit() {
@@ -61,37 +64,26 @@ export class AdminCacheEntriesComponent {
 	}
 
 	confirmDeleteEntry(cacheEntry: any) {
-		let entryToDelete = cacheEntry.entry;
+		const entryToDelete = cacheEntry.entry;
 
-		this.modal.confirm()
-			.size('lg')
-			.showClose(true)
-			.isBlocking(true)
-			.title('Delete cache entry?')
-			.body(`Are you sure you want to delete entry: ${cacheEntry.entry.key}?`)
-			.okBtn('Delete')
-			.open()
-			.then(
-				(resultPromise: any) => resultPromise.result.then(
-					// Success
-					() => {
-						this.cacheEntriesService.remove(entryToDelete.key).subscribe(
-							() => {
-								this.alertService.addAlert(`Deleted cache entry: ${entryToDelete.key}`, 'success');
-								this.loadCacheEntries();
-							},
-							(response: Response) => {
-								this.alertService.addAlert(response.json().message);
-							});
-					},
-					// Fail
-					() => {}
-				)
-			);
+		this.asyModalService
+			.confirm('Delete cache entry?', `Are you sure you want to delete entry: ${cacheEntry.entry.key}?`, 'Delete')
+			.first()
+			.filter((action: ModalAction) => action === ModalAction.OK)
+			.switchMap(() => {
+				return this.cacheEntriesService.remove(entryToDelete.key);
+			})
+			.subscribe(() => {
+				this.alertService.addAlert(`Deleted cache entry: ${entryToDelete.key}`, 'success');
+				this.loadCacheEntries();
+			}, (response: Response) => {
+				this.alertService.addAlert(response.json().message);
+			});
 	}
 
 	viewCacheEntry(cacheEntry: any) {
-		this.modal.open(ViewCacheEntryModal, overlayConfigFactory({cacheEntry: cacheEntry}, ViewCacheEntryModalContext));
+		this.cacheEntryModalRef = this.modalService.show(ViewCacheEntryModal, { ignoreBackdropClick: true, class: 'modal-lg' });
+		this.cacheEntryModalRef.content.cacheEntry = cacheEntry.entry;
 	}
 
 	refreshCacheEntry(cacheEntry: any) {

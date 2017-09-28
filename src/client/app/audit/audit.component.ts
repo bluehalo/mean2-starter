@@ -1,15 +1,13 @@
 import { Component } from '@angular/core';
-
-import { Modal } from 'angular2-modal/plugins/bootstrap';
-import { overlayConfigFactory } from 'angular2-modal';
-import { Observable } from 'rxjs/Observable';
+import { DatePipe } from '@angular/common';
 
 import * as _ from 'lodash';
 import * as moment from 'moment';
-
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { Observable } from 'rxjs/Observable';
 
 import { AuditService } from './audit.service';
-import { AuditViewDetailModalContext, AuditViewChangeModal, AuditViewDetailModal } from './audit-view-change.component';
+import { AuditViewChangeModal, AuditViewDetailModal } from './audit-view-change.component';
 import { PagingOptions } from '../shared/pager.component';
 import { TableSortOptions } from '../shared/pageable-table/pageable-table.component';
 import { SortDisplayOption, SortDirection } from '../shared/result-utils.class';
@@ -25,18 +23,17 @@ export class AuditComponent {
 
 	// List of audit entries
 	auditEntries: any[] = [];
-	auditEntriesLoaded: boolean = false;
 
 	actionOptions: AuditOption[] = [];
+
 	auditTypeOptions: AuditOption[] = [];
 
 	queryUserSearchTerm: string = '';
-	queryUserObj: any;
 
 	// Search phrase
 	search: string = '';
+
 	pagingOpts: PagingOptions;
-	userPagingOpts: PagingOptions;
 
 	sortOpts: TableSortOptions = {
 		created: new SortDisplayOption('Created', 'created', SortDirection.desc),
@@ -45,20 +42,32 @@ export class AuditComponent {
 	};
 
 	dateRangeOptions: any[];
+
 	dateRangeFilter: any;
 
 	// Date picker
 	showGteDatepicker: boolean = false;
+
 	showLteDatepicker: boolean = false;
 
 	queryStartDate: Date = moment.utc().subtract(1, 'days').toDate();
+
 	queryEndDate: Date = moment.utc().toDate();
+
 	searchUsersRef: Observable<any>;
+
+	private userPagingOpts: PagingOptions;
+
+	private queryUserObj: any;
+
+	private auditEntriesLoaded: boolean = false;
+
+	private auditModalRef: BsModalRef;
 
 	constructor(
 		private auditService: AuditService,
 		private userService: UserService,
-		private modal: Modal
+		private modalService: BsModalService
 	) {}
 
 	ngOnInit() {
@@ -138,10 +147,12 @@ export class AuditComponent {
 	viewMore(auditEntry: any, type: string) {
 		switch (type) {
 			case 'viewDetails':
-				this.modal.open(AuditViewDetailModal, overlayConfigFactory({auditEntry: auditEntry}, AuditViewDetailModalContext));
+				this.auditModalRef = this.modalService.show(AuditViewDetailModal, { ignoreBackdropClick: true, class: 'modal-lg' });
+				this.auditModalRef.content.auditEntry = auditEntry;
 				break;
 			case 'viewChanges':
-				this.modal.open(AuditViewChangeModal, overlayConfigFactory({auditEntry: auditEntry}, AuditViewDetailModalContext));
+				this.auditModalRef = this.modalService.show(AuditViewChangeModal, { ignoreBackdropClick: true, class: 'modal-lg' });
+				this.auditModalRef.content.auditEntry = auditEntry;
 				break;
 			default:
 				break;
@@ -157,6 +168,10 @@ export class AuditComponent {
 		}
 
 		this.loadAuditEntries();
+	}
+
+	formatDate(date: Date) {
+		return new DatePipe('en-US').transform(date, 'shortDate');
 	}
 
 	private getTimeFilterQueryObject(): any {
