@@ -13,6 +13,7 @@ import { UtilModule } from '../shared/util.module';
 import { AlertService } from '../shared/alert.service';
 import { AdminMessagesModule } from '../messages/admin/admin-messages.module';
 import { PasswordModule } from './password/password.module';
+import { AdminFeedbackModule } from '../core/feedback/admin/admin-feedback.module';
 
 @NgModule({
 	imports: [
@@ -20,6 +21,7 @@ import { PasswordModule } from './password/password.module';
 
 		// App Admin Modules
 		AdminEuaModule,
+		AdminFeedbackModule,
 		AdminMessagesModule,
 		AdminUserModule,
 

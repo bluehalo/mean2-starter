@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
+import { BsModalService } from 'ngx-bootstrap';
+
 import { CoreComponent } from './core.component';
 import { ConfigService } from './config.service';
 import { AuthenticationService } from '../admin/authentication/authentication.service';
 import { Team } from '../teams/teams.class';
 import { TeamsService } from '../teams/teams.service';
+import { FeedbackModalComponent } from './feedback/feedback.component';
 
 /**
  * Primary header component wrapping the whole page
@@ -17,6 +20,7 @@ import { TeamsService } from '../teams/teams.service';
 export class HeaderComponent extends CoreComponent {
 
 	teams: Team[] = [];
+
 	private currentRoute: string = '';
 
 	constructor(
@@ -24,6 +28,7 @@ export class HeaderComponent extends CoreComponent {
 		authService: AuthenticationService,
 		configService: ConfigService,
 		protected teamsService: TeamsService,
+		private modalService: BsModalService
 	) {
 		super(authService, configService);
 	}
@@ -53,5 +58,9 @@ export class HeaderComponent extends CoreComponent {
 					this.currentRoute = event.url;
 				}
 			});
+	}
+
+	showFeedbackModal() {
+		this.modalService.show(FeedbackModalComponent, { ignoreBackdropClick: true, class: 'modal-lg' });
 	}
 }
