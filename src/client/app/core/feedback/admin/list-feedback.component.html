@@ -1,0 +1,37 @@
+<section>
+
+	<h3 class="page-header">
+		System Feedback
+		<button type="button" class="btn btn-default btn-sm pull-right" (click)="export()"><i class="fa fa-download"></i> Export </button>
+	</h3>
+
+	<!-- Alert Notifications -->
+	<alert *ngFor="let alert of alertService.getAlerts(); let i = index" [type]="alert.type" (close)="alertService.clear(i)" dismissible="true" >{{alert.msg}}</alert>
+
+	<pageable-table [items]="feedbacks"
+		[pagingOptions]="pagingOpts"
+		[sortOptions]="sortOpts"
+		(onPageChange)="goToPage($event)"
+		(onSortChange)="setSort($event)">
+
+		<template asy-template="table-header">
+			<th *ngFor="let key of columnKeys" [hidden]="!columns[key].show">{{ columns[key].title }}</th>
+		</template>
+
+		<template asy-template="table-row" let-feedback>
+			<td [hidden]="!columns.actor.show">{{ feedback?.actorName }}</td>
+			<td [hidden]="!columns.email.show">{{ feedback?.actorEmail }}</td>
+			<td [hidden]="!columns.body.show">{{ feedback?.body }}</td>
+			<td [hidden]="!columns.url.show">{{ feedback?.url }}</td>
+			<td [hidden]="!columns.created.show" [tooltip]="feedback.created" container="body" placement="top">{{ feedback?.created | agoDate:false }}</td>
+		</template>
+
+		<template asy-template="empty-table">
+			<h3>
+				<small>No Feedback</small>
+			</h3>
+		</template>
+
+	</pageable-table>
+
+</section>
