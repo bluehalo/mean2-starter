@@ -4,7 +4,6 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { Modal } from 'angular2-modal/plugins/bootstrap';
 
 import { Team, TeamMember, TeamRole } from './teams.class';
 import { TeamsService } from './teams.service';
@@ -15,6 +14,7 @@ import { TableSortOptions } from '../shared/pageable-table/pageable-table.compon
 import { SortDirection, SortDisplayOption } from '../shared/result-utils.class';
 import { AlertService } from '../shared/alert.service';
 import { AuthenticationService } from '../admin/authentication/authentication.service';
+import { ModalAction, ModalService } from '../shared/asy-modal.service';
 
 @Component({
 	selector: 'list-team-members',
@@ -41,7 +41,7 @@ export class ListTeamMembersComponent {
 	constructor(
 		private router: Router,
 		private route: ActivatedRoute,
-		private modal: Modal,
+		private modalService: ModalService,
 		private teamsService: TeamsService,
 		private userService: UserService,
 		private alertService: AlertService,
@@ -118,34 +118,27 @@ export class ListTeamMembersComponent {
 
 		// If user is removing their own admin, verify that they know what they're doing
 		if (this.user.userModel._id === member.userModel._id && member.role === 'admin' && role !== 'admin') {
-			this.modal.confirm()
-				.size('lg')
-				.showClose(true)
-				.isBlocking(true)
-				.title('Remove "Team Admin" role?')
-				.body(`Are you sure you want to remove <strong>yourself</strong> from the Team Admin role?<br/>Once you do this, you will no longer be able to manage the members of this team. <br/><strong>This also means you won\'t be able to give the role back to yourself.</strong>`)
-				.okBtn('Remove Admin')
-				.open()
-				.then(
-					(resultPromise: any) => resultPromise.result.then(
-						() => {
-							this.doUpdateRole(member, role)
-								.subscribe(
-									() => {
-										this.authService.reloadCurrentUser().subscribe(() => {
-											// If we successfully removed the role from ourselves, redirect away
-											this.router.navigate(['/teams', {clearCachedFilter: true}]);
-										});
-									},
-									(response: Response) => {
-										if (response.status >= 400 && response.status < 500) {
-											this.alertService.addAlert(response.json().message);
-										}
-									});
-						},
-						() => {}
-					)
-				);
+			this.modalService
+				.confirm(
+					'Remove "Team Admin" role?',
+					`Are you sure you want to remove <strong>yourself</strong> from the Team Admin role?<br/>Once you do this, you will no longer be able to manage the members of this team. <br/><strong>This also means you won\'t be able to give the role back to yourself.</strong>`,
+					'Remove Admin')
+				.first()
+				.filter((action: ModalAction) => action === ModalAction.OK)
+				.switchMap(() => {
+					return this.doUpdateRole(member, role);
+				})
+				.switchMap(() => {
+					return this.authService.reloadCurrentUser();
+				})
+				.subscribe(() => {
+					// If we successfully removed the role from ourselves, redirect away
+					this.router.navigate(['/teams', {clearCachedFilter: true}]);
+				}, (response: Response) => {
+					if (response.status >= 400 && response.status < 500) {
+						this.alertService.addAlert(response.json().message);
+					}
+				});
 		}
 		else if (!member.explicit) {
 			// Member is implicitly in team, should explicitly add this member with the desired role
@@ -166,33 +159,26 @@ export class ListTeamMembersComponent {
 	}
 
 	removeMember(member: TeamMember) {
-		this.modal.confirm()
-			.size('lg')
-			.showClose(true)
-			.isBlocking(true)
-			.title('Remove member from team?')
-			.body(`Are you sure you want to remove member: "${member.userModel.name}" from this team?`)
-			.okBtn('Remove Member')
-			.open()
-			.then(
-				(resultPromise: any) => resultPromise.result.then(
-					() => {
-						this.teamsService.removeMember(this.teamId, member.userModel._id)
-							.subscribe(
-								() => {
-									this.authService.reloadCurrentUser().subscribe(() => {
-										this.getTeamMembers();
-									});
-								},
-								(response: Response) => {
-									if (response.status >= 400 && response.status < 500) {
-										this.alertService.addAlert(response.json().message);
-									}
+		this.modalService
+			.confirm(
+				'Remove member from team?',
+				`Are you sure you want to remove member: "${member.userModel.name}" from this team?`,
+				'Remove Member')
+			.first()
+			.filter((action: ModalAction) => action === ModalAction.OK)
+			.switchMap(() => {
+				return this.teamsService.removeMember(this.teamId, member.userModel._id);
+			})
+			.switchMap(() => {
+				return this.authService.reloadCurrentUser();
+			})
+			.subscribe(() => {
+				this.getTeamMembers();
+			}, (response: Response) => {
+				if (response.status >= 400 && response.status < 500) {
+					this.alertService.addAlert(response.json().message);
+				}
 								});
-					},
-					() => {}
-				)
-			);
 	}
 
 	private addMember(member: User, role?: string) {

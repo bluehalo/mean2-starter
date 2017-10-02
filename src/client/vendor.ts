@@ -42,7 +42,6 @@ import '@angular/router';
 
 
 // Angular2 Third-Party
-import 'angular2-modal';
 import 'angular2-toaster';
 import 'ngx-bootstrap';
 

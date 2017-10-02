@@ -2,19 +2,19 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-import { BsDropdownModule, TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
+import { BsDropdownModule, ModalModule, TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
 
 import { AddRemoveTypeaheadList } from './add-remove-typeahead-list.component';
 import { AgoDatePipe } from './ago-date.pipe';
 import { AlertService } from './alert.service';
 import { AsyHttp } from './asy-http.service';
+import { AsyModalComponent } from './asy-modal.component';
 import { AddRemoveList } from './add-remove-list.component';
 import { CamelToHumanPipe } from './camel-to-human.pipe';
 import { SafeImageComponent } from './safe-image.component';
 import { AsyLoading } from './loading-animation.component';
 import { BigNumberPipe } from './big-number.pipe';
 import { CapitalizePipe } from './capitalize.pipe';
-import { ConfirmModal } from './confirm.component';
 import { ConstrainedQuery } from './constrained-query.component';
 import { ExportConfigService } from './export-config.service';
 import { InLineEdit } from './in-line-edit.component';
@@ -32,11 +32,12 @@ import { AsyDropdownItemWrapperComponent } from './dropdown/asy-dropdown-item-wr
 import { UrlClickHandler } from './urlHandler/url-click-handler.component';
 import { ListManager } from './list-manager.component';
 import { UtcDatePipe } from './utc-date-pipe/utc-date.pipe';
-
+import { ModalService } from './asy-modal.service';
 
 @NgModule({
 	imports: [
 		BsDropdownModule.forRoot(),
+		ModalModule.forRoot(),
 		TooltipModule.forRoot(),
 		TypeaheadModule.forRoot(),
 
@@ -44,6 +45,7 @@ import { UtcDatePipe } from './utc-date-pipe/utc-date.pipe';
 		FormsModule,
 	],
 	entryComponents: [
+		AsyModalComponent,
 		UrlClickHandler
 	],
 	exports: [
@@ -58,7 +60,7 @@ import { UtcDatePipe } from './utc-date-pipe/utc-date.pipe';
 		BigNumberPipe,
 		CamelToHumanPipe,
 		CapitalizePipe,
-		ConfirmModal,
+		AsyModalComponent,
 		ConstrainedQuery,
 		InLineEdit,
 		SafeImageComponent,
@@ -79,10 +81,10 @@ import { UtcDatePipe } from './utc-date-pipe/utc-date.pipe';
 		AsyDropdownItemComponent,
 		AsyDropdownItemWrapperComponent,
 		AsyLoading,
+		AsyModalComponent,
 		BigNumberPipe,
 		CamelToHumanPipe,
 		CapitalizePipe,
-		ConfirmModal,
 		ConstrainedQuery,
 		InLineEdit,
 		ListManager,
@@ -99,7 +101,8 @@ import { UtcDatePipe } from './utc-date-pipe/utc-date.pipe';
 		AlertService,
 		AsyDropdownService,
 		AsyHttp,
-		ExportConfigService
+		ExportConfigService,
+		ModalService
 	]
 })
 export class UtilModule { }

@@ -13,6 +13,9 @@ let router = express.Router();
 router.route('/audit')
 	.post(users.hasAuditorAccess, auditController.search);
 
+router.route('/audit/feedback')
+	.post(users.hasAdminAccess, auditController.search);
+
 router.route('/audit/distinctValues')
 	.get(users.hasAuditorAccess, auditController.getDistinctValues);
 

@@ -2,8 +2,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
-import { DatepickerModule, TypeaheadModule } from 'ngx-bootstrap';
-import { BootstrapModalModule, Modal } from 'angular2-modal/plugins/bootstrap';
+import { DatepickerModule, ModalModule, TypeaheadModule } from 'ngx-bootstrap';
 
 import { AuditViewChangeModal, AuditViewDetailModal } from './audit-view-change.component';
 import { AuditService } from './audit.service';
@@ -18,6 +17,7 @@ import { UserService } from '../admin/users.service';
 @NgModule({
 	imports: [
 		DatepickerModule.forRoot(),
+		ModalModule.forRoot(),
 		TypeaheadModule.forRoot(),
 
 		CommonModule,
@@ -39,14 +39,11 @@ import { UserService } from '../admin/users.service';
 		AuditViewDetailModal,
 		UrlAudit,
 		AuditObjectComponent,
-
 		DefaultAudit,
 		ExportAudit
 	],
 	providers: [
 		AuditService,
-		BootstrapModalModule,
-		Modal,
 		UserService
 	]
 })
