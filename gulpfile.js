@@ -337,17 +337,18 @@ gulp.task('test-server-ci', [ 'env:test', 'coverage-init' ], (done) => {
 					inlineAssets: true
 				}
 			}))
+			.on('error', (err) => {
+				error = err; // save the error to a local variable, then let it fall through to the 'end' event
+			})
+			.on('end', () => {
+				return mongoose.disconnect().done();
+			})
 			.pipe(plugins.istanbul.writeReports({
 				dir: './reports/coverage/server',
 				reporters: ['text-summary', 'lcov']
 			}))
-			.on('error', (err) => {
-				error = err;
-			})
 			.on('end', () => {
-				mongoose.disconnect().then(() => {
-					done(error);
-				}).done();
+				done(error); // complete or fail the gulp pipeline by handling the rejected promise
 			});
 	}).done();
 });
