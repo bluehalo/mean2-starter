@@ -14,9 +14,7 @@ let provider;
 const getProvider = () => {
 	var emailConfig = config.mailer || {};
 
-	logger.info('Found email config:', emailConfig);
 	if(!provider && null != emailConfig.provider) {
-		logger.info('Creating email provider with options:', emailConfig);
 		provider = require(path.resolve(emailConfig.provider))(emailConfig.options);
 	}
 
