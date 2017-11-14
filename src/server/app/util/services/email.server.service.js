@@ -2,22 +2,32 @@
 
 let path = require('path'),
 	q = require('q'),
-	nodemailer = require('nodemailer'),
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	config = deps.config,
 	logger = deps.logger;
 
-// Initialize the mailer if it has been configured
-let smtpTransport;
-if (config.mailer) {
-	smtpTransport = nodemailer.createTransport(config.mailer.options);
-}
+let provider;
+/**
+ * Initializes the provider only once. Use the getProvider() method
+ * to create and/or retrieve this singleton
+ */
+const getProvider = () => {
+	var emailConfig = config.mailer || {};
+
+	logger.info('Found email config:', emailConfig);
+	if(!provider && null != emailConfig.provider) {
+		logger.info('Creating email provider with options:', emailConfig);
+		provider = require(path.resolve(emailConfig.provider))(emailConfig.options);
+	}
+
+	return provider;
+};
 
 /**
  * Detects issues with mailOptions
  * returns an array of fields missing from mailOptions
  */
-function getMissingMailOptions(mailOptions) {
+const getMissingMailOptions = (mailOptions) => {
 	let requiredOptions = [
 		['to', 'cc', 'bcc'],
 		'from',
@@ -38,7 +48,7 @@ function getMissingMailOptions(mailOptions) {
 	});
 
 	return missingOptions;
-}
+};
 
 module.exports.getMissingMailOptions = getMissingMailOptions;
 
@@ -46,8 +56,9 @@ module.exports.sendMail = (mailOptions) => {
 	let defer = q.defer();
 
 	// Make sure that the mailer is configured
-	if (!smtpTransport) {
-		defer.reject({ message: 'Email server is not configured' });
+	const mailProvider = getProvider();
+	if (!mailProvider) {
+		defer.reject({ message: 'Email service is not configured' });
 		return defer.promise;
 	}
 
@@ -64,15 +75,13 @@ module.exports.sendMail = (mailOptions) => {
 		return defer.promise;
 	}
 
-	smtpTransport.sendMail(mailOptions, (error) => {
-		if (!error) {
-			logger.debug(`Sent email to: ${mailOptions.to}`);
-			defer.resolve(mailOptions);
-		}
-		else {
-			logger.error('Failure sending email.');
-			defer.reject(error);
-		}
+	mailProvider.sendMail(mailOptions)
+	.then((results) => {
+		logger.debug(`Sent email to: ${mailOptions.to}`);
+		defer.resolve(mailOptions);
+	}).catch((error) => {
+		logger.error('Failure sending email.');
+		defer.reject(error);
 	});
 
 	return defer.promise;
