@@ -89,11 +89,17 @@ module.exports = {
 //					refresh: 8*3600000 // 8 Hours
 //				}
 //			},
-//			{
-//				file: '...',
-//				interval: 10000,
-//				config: {}
-//			}
+			{
+				file: './src/server/app/util/schedulers/inactive-user-notification.server.service.js',
+				interval: 86400000, //every day
+				config: {
+					deactivateAfter: 90 * 86400000, // deactivate account after 90 days of inactivity
+					alertInterval: [
+						30 * 86400000,  // 30 days
+						60 * 86400000 // 60 days
+					]
+				}
+			},
 			{
 				file: './src/server/app/util/schedulers/system-resource-cleanup.server.service.js',
 				interval: 1800000, // every 30 minutes
@@ -190,11 +196,10 @@ module.exports = {
 	// Configuration for outgoing mail server
 	mailer: {
 		from: process.env.MAILER_FROM || 'USERNAME@GMAIL.COM',
-		admin: process.env.MAILER_ADMIN || 'noreply@asymmetrik.com',
 		options: {
 			service: process.env.MAILER_SERVICE_PROVIDER || 'gmail',
 			auth: {
-				user: process.env.MAILER_EMAIL_ID || 'noreply@asymmetrik.com',
+				user: process.env.MAILER_EMAIL_ID || 'USERNAME@GMAIL.COM',
 				pass: process.env.MAILER_PASSWORD || 'PASSWORD'
 			}
 		}

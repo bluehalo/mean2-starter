@@ -50,7 +50,6 @@ module.exports.sendMail = (mailOptions) => {
 		defer.reject({ message: 'Email server is not configured' });
 		return defer.promise;
 	}
-
 	// Make sure mailOptions are specified
 	if (!mailOptions) {
 		defer.reject({ message: 'No email options specified' });
@@ -63,7 +62,6 @@ module.exports.sendMail = (mailOptions) => {
 		defer.reject({ message: `The following required values were not specified in mailOptions: ${missingOptions.join(', ')}`});
 		return defer.promise;
 	}
-
 	smtpTransport.sendMail(mailOptions, (error) => {
 		if (!error) {
 			logger.debug(`Sent email to: ${mailOptions.to}`);

@@ -26,7 +26,7 @@ Bunyan is a logging framework. We will pipe the console output through the bunya
 
 
 ### Configuration ###
-Application configuration is controlled by a combination of the 'NODE_ENV' environment variable, which specifies the name of the config file located under './config/env' which should be used by the application. That directory contains a 'development.template.js' file which you should rename to 'development.js' and use for development purposes as it is already ignored by the .gitignore file. To customize your environment for development, you can override any top-level property located in 'default.js'. Each property is documented in the default file.
+Application configuration is controlled by a combination of the 'NODE_ENV' environment variable, which specifies the name of the config file located under './config/env' which should be used by the application. That directory contains a 'development.template.js' file which you should copy and rename to 'development.js' and use for development purposes as it is already ignored by the .gitignore file. To customize your environment for development, you can override any top-level property located in 'default.js'. Each property is documented in the default file.
 
 
 ### Running the Application ###
@@ -109,4 +109,3 @@ Integrating client modules can be more complicated for the following reasons:
 1. The first step is to identify the package and add it to the package.json file. All client dependencies are bundled for production by Webpack, therefore all Client-side dependencies are declared in the "devDependencies" section of the package.json file.
 1. Next, add the dependency to the vendor.ts file. This isn't necessary to make the application work, but it is how Webpack understands what is application code versus vendor code and bundles it into the application and vendor bundles.
 1. Once you've done that, you can import and reference the code as needed. Dependending on the type of library, you may either do a named import (import { FooModule } from "...") or an aliased import (import * as d3 from "..."). There are also situations where you may need to just import the file (import "file"). This situation might arise if you have two modules where one extends the other and the first exports the module in question but the second merely extends it.
-
