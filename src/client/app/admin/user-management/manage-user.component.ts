@@ -34,7 +34,9 @@ export abstract class ManageUserComponent {
 		protected router: Router,
 		protected configService: ConfigService,
 		public alertService: AlertService
-	) {}
+	) {
+		this.alertService.clearAllAlerts();
+	}
 
 	ngOnInit() {
 		this.configService.getConfig().first().subscribe((config: any) => {
