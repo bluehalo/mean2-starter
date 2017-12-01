@@ -45,17 +45,17 @@
 			<table class="asymmetrik table table-condensed table-hover table-striped" [hidden]="items?.length === 0">
 				<thead>
 					<tr>
-						<template [asy-transclude]="headerTemplate"></template>
+						<ng-template [asy-transclude]="headerTemplate"></ng-template>
 					</tr>
 				</thead>
 
 				<tbody>
 					<tr *ngFor="let item of items; let i = index">
-						<template *ngIf="rowTemplate"
+						<ng-template *ngIf="rowTemplate"
 							[asy-transclude]="rowTemplate"
 							[item]="item"
 							[index]="i"
-						></template>
+						></ng-template>
 					</tr>
 				</tbody>
 			</table>
@@ -64,7 +64,7 @@
 
 	<!-- Empty Table Display -->
 	<div class="col-md-6 col-md-offset-3 center" [hidden]="items?.length > 0">
-		<template [asy-transclude]="emptyTableTemplate"></template>
+		<ng-template [asy-transclude]="emptyTableTemplate"></ng-template>
 	</div>
 
 </div>

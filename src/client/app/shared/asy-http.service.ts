@@ -1,15 +1,15 @@
 import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Http, Headers, URLSearchParams, Response } from '@angular/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
 import * as _ from 'lodash';
+import { Observable } from 'rxjs/Observable';
 
 import { UserStateService } from '../admin/authentication/user-state.service';
 
 export class HttpOptions {
-	public urlParams: URLSearchParams;
+	public urlParams: HttpParams;
 
 	constructor(
 		public url: string,
@@ -21,7 +21,7 @@ export class HttpOptions {
 	}
 
 	public setParamsFromObject(obj: any) {
-		this.urlParams = new URLSearchParams();
+		this.urlParams = new HttpParams();
 		Object.keys(obj).forEach( (key) => this.urlParams.set(key, obj[key]) );
 	}
 }
@@ -31,116 +31,93 @@ export class AsyHttp {
 
 	constructor(
 		private userStateService: UserStateService,
-		private _http: Http,
+		private _http: HttpClient,
 		private router: Router,
-		private location: Location) {}
+		private location: Location
+	) {}
 
 	static defaultErrFn(_err: any) { }
 
 	get(opts: HttpOptions) {
-		let headers = new Headers({
+		let headers = new HttpHeaders({
 			'Interface-URL': this.getUriEncodedPath()
 		});
 
-		let observable = this._http.get(opts.url, {search: opts.urlParams, headers: headers} )
-			.map((res) => this.hasContent(res) ? res.json() : null)
+		let observable = this._http.get(opts.url, { params: opts.urlParams, headers: headers } )
 			.share()
-			.catch((error: any, caught: Observable<any>) => {
-				return this.handleErrorResponse(error, caught);
+			.catch((error: HttpErrorResponse) => this.handleErrorResponse(error));
 
-			});
-
-		observable
-			.subscribe(
-				(data) => opts.dataFn(data),
-				(err) => opts.errFn(err),
-				() => opts.completeFn()
-			);
+		observable.subscribe(
+			(data: any) => opts.dataFn(data),
+			(err: any) => opts.errFn(err),
+			() => opts.completeFn()
+		);
 
 		return observable;
 	}
 
 	post(opts: HttpOptions) {
-		let headers = new Headers({
+		let headers = new HttpHeaders({
 			'Content-Type': 'application/json',
 			'Interface-URL': this.getUriEncodedPath()
 		});
 
-		let observable = this._http.post(opts.url, JSON.stringify(opts.data), {
-			headers: headers
-		})
-			.map((res) => this.hasContent(res) ? res.json() : null)
+		let observable = this._http.post(opts.url, JSON.stringify(opts.data), { headers: headers })
 			.share()
-			.catch((error: any, caught: Observable<any>) => {
-				return this.handleErrorResponse(error, caught);
-			});
+			.catch((error: HttpErrorResponse) => this.handleErrorResponse(error));
 
-		observable
-			.subscribe(
-				(data) => opts.dataFn(data),
-				(err) => opts.errFn(err),
-				() => opts.completeFn()
-			);
+		observable.subscribe(
+			(data: any) => opts.dataFn(data),
+			(err: HttpErrorResponse) => opts.errFn(err),
+			() => opts.completeFn()
+		);
+
 		return observable;
 	}
 
 	put(opts: HttpOptions) {
-		let headers = new Headers({
+		let headers = new HttpHeaders({
 			'Content-Type': 'application/json',
 			'Interface-URL': this.getUriEncodedPath()
 		});
 
-		let observable = this._http.put(opts.url, JSON.stringify(opts.data), {
-			headers: headers
-		})
-			.map((res) => this.hasContent(res) ? res.json() : null)
+		let observable = this._http.put(opts.url, JSON.stringify(opts.data), { headers: headers })
 			.share()
-			.catch((error: any, caught: Observable<any>) => {
-				return this.handleErrorResponse(error, caught);
-			});
+			.catch((error: HttpErrorResponse) => this.handleErrorResponse(error));
 
-		observable
-			.subscribe(
-				(data) => opts.dataFn(data),
-				(err) => opts.errFn(err),
-				() => opts.completeFn()
-			);
+		observable.subscribe(
+			(data: any) => opts.dataFn(data),
+			(err: any) => opts.errFn(err),
+			() => opts.completeFn()
+		);
+
 		return observable;
 	}
 
 	delete(opts: HttpOptions) {
-		let headers = new Headers({
+		let headers = new HttpHeaders({
 			'Interface-URL': this.getUriEncodedPath()
 		});
 
 		let observable = this._http.delete(opts.url, { headers: headers})
-			.map((res) => this.hasContent(res) ? res.json() : null)
 			.share()
-			.catch((error: any, caught: Observable<any>) => {
-				return this.handleErrorResponse(error, caught);
-			});
+			.catch((error: HttpErrorResponse) => this.handleErrorResponse(error));
 
-		observable
-			.subscribe(
-				(data) => opts.dataFn(data),
-				(err) => opts.errFn(err),
-				() => opts.completeFn()
-			);
+		observable.subscribe(
+			(data: any) => opts.dataFn(data),
+			(err: any) => opts.errFn(err),
+			() => opts.completeFn()
+		);
+
 		return observable;
 	}
 
 	urlEncode(obj: any): string {
-		let urlSearchParams = new URLSearchParams();
-		for (let key in obj) {
-			if (obj.hasOwnProperty(key)) {
-				urlSearchParams.append(key, obj[key]);
-			}
-		}
-		return urlSearchParams.toString();
+		return Object.getOwnPropertyNames(obj).filter((key: string) => null != obj[key]).reduce((p: HttpParams, key: string) => p.set(key, obj[key]), new HttpParams()).toString();
 	}
 
-	protected handleErrorResponse(err: any, _caught: Observable<any>): Observable<any> {
-		let errData = _.isString(err._body) ? JSON.parse(err._body) : err._body;
+	protected handleErrorResponse(err: HttpErrorResponse): Observable<any> {
+		const type = err.error.type;
 		switch (err.status) {
 			case 401:
 
@@ -148,7 +125,7 @@ export class AsyHttp {
 				this.userStateService.user.clearUser();
 
 
-				if (errData.type === 'invalid-certificate') {
+				if (type === 'invalid-certificate') {
 					// Redirect to invalid credentials page
 					this.router.navigate(['/invalid-certificate']);
 				}
@@ -158,13 +135,13 @@ export class AsyHttp {
 
 				break;
 			case 403:
-				if (errData.type === 'eua') {
+				if (type === 'eua') {
 					this.router.navigate(['/user-eua']);
 				}
-				else if (errData.type === 'inactive') {
+				else if (type === 'inactive') {
 					this.router.navigate(['/inactive-user']);
 				}
-				else if (errData.type === 'noaccess') {
+				else if (type === 'noaccess') {
 					this.router.navigate(['/no-access']);
 				}
 				else {
@@ -187,10 +164,7 @@ export class AsyHttp {
 		else {
 			return Observable.throw(err);
 		}
-	}
 
-	private hasContent(res: Response) {
-		return (res.status !== 204 && (res.text() as string).length > 0);
 	}
 
 	private getUriEncodedPath() {
@@ -198,5 +172,4 @@ export class AsyHttp {
 		let alreadyEncoded = decodeURI(path) !== path;
 		return alreadyEncoded ? path : encodeURI(this.location.path());
 	}
-
 }

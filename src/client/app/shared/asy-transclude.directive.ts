@@ -1,4 +1,4 @@
-import { Directive, Input, ViewContainerRef, TemplateRef, OnChanges, SimpleChange, SimpleChanges, EmbeddedViewRef } from '@angular/core';
+import { Directive, Input, ViewContainerRef, TemplateRef, OnChanges, SimpleChanges, EmbeddedViewRef } from '@angular/core';
 @Directive({
 	selector: '[asy-transclude]'
 })

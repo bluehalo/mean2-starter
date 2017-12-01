@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-
-import 'rxjs/Rx';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { Alert } from './alert.class';
-import { Response } from '@angular/http';
 
 class Alerts {
 	list: Alert[] = [];
@@ -53,9 +51,9 @@ export class AlertService {
 		}
 	}
 
-	addAlertResponse(response: any) {
-		if (response instanceof Response) {
-			this.addAlert(response.json().message);
+	addClientErrorAlert(error: HttpErrorResponse) {
+		if (error.status >= 400 && error.status < 500) {
+			this.addAlert(error.error.message);
 		}
 	}
 

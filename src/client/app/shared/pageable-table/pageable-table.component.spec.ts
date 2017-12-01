@@ -1,16 +1,15 @@
-import { Component, EventEmitter, Input, Output, DebugElement } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Subject } from 'rxjs';
 
+import { Subject } from 'rxjs/Subject';
 import { TooltipModule } from 'ngx-bootstrap';
 
-import { CapitalizePipe } from './../capitalize.pipe';
-import { KeysPipe } from './../keys.pipe';
-import { AsyTemplate } from './../asy-template.directive';
-import { AsyTransclude } from './../asy-transclude.directive';
-import { SortDisplayOption } from './../result-utils.class';
-import { PagingOptions, PageChange, Pager } from './../pager.component';
-
+import { CapitalizePipe } from '../capitalize.pipe';
+import { KeysPipe } from '../keys.pipe';
+import { AsyTemplate } from '../asy-template.directive';
+import { AsyTransclude } from '../asy-transclude.directive';
+import { SortDisplayOption } from '../result-utils.class';
+import { PagingOptions, PageChange, Pager } from '../pager.component';
 import { PageableTable, TableSortOptions } from './pageable-table.component';
 
 @Component({
@@ -25,19 +24,19 @@ import { PageableTable, TableSortOptions } from './pageable-table.component';
 		(onRefresh)="refreshed$.next($event)"
 	>
 
-		<template asy-template="table-header">
+		<ng-template asy-template="table-header">
 			{{ headerContent }}
-		</template>
+		</ng-template>
 
-		<template asy-template="table-row" let-item let-index="index">
+		<ng-template asy-template="table-row" let-item let-index="index">
 			{{ rowContent }}
 			{{ item }}
 			{{ index }}
-		</template>
+		</ng-template>
 
-		<template asy-template="empty-table">
+		<ng-template asy-template="empty-table">
 			{{ emptyTableContent }}
-		</template>
+		</ng-template>
 
 	</pageable-table>
 `
