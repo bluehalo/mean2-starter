@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
-import { Response } from '@angular/http';
 
 import * as _ from 'lodash';
-import * as moment from 'moment';
 
-import { PagingOptions } from '../../../shared/pager.component';
+import { IPagingResults, PagingOptions } from '../../../shared/pager.component';
 import { TableSortOptions } from '../../../shared/pageable-table/pageable-table.component' ;
 import { SortDirection, SortDisplayOption } from '../../../shared/result-utils.class';
 import { AlertService } from '../../../shared/alert.service';
@@ -69,24 +67,14 @@ export class ListFeedbackComponent {
 	}
 
 	private loadFeedbackEntries() {
-		this.feedbackService.getFeedback(this.pagingOpts).subscribe((results: any) => {
-			if (null != results && null != results.elements && results.elements.length > 0) {
-				this.feedbacks = results.elements.map((e: any) => ({
-					actorName: _.get(e, 'audit.actor.name', null),
-					actorEmail: _.get(e, 'audit.actor.email', null),
-					body: _.get(e, 'audit.object.body', null),
-					url: _.get(e, 'audit.object.url', null),
-					created: moment(e.created).toISOString()
-				}));
-
-				this.pagingOpts.set(results.pageNumber, results.pageSize, results.totalPages, results.totalSize);
+		this.feedbackService.getFeedback(this.pagingOpts).subscribe((result: IPagingResults) => {
+			this.feedbacks = result.elements;
+			if (this.feedbacks.length > 0) {
+				this.pagingOpts.set(result.pageNumber, result.pageSize, result.totalPages, result.totalSize);
 			}
 			else {
-				this.feedbacks = [];
 				this.pagingOpts.reset();
 			}
-		}, (response: Response) => {
-			this.alertService.addAlertResponse(response);
 		});
 	}
 }

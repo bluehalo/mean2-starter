@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { BsModalService } from 'ngx-bootstrap';
 
@@ -9,55 +9,37 @@ import { AuthenticationService } from '../admin/authentication/authentication.se
 import { Team } from '../teams/teams.class';
 import { TeamsService } from '../teams/teams.service';
 import { FeedbackModalComponent } from './feedback/feedback.component';
+import { IPagingResults } from '../shared/pager.component';
 
 /**
  * Primary header component wrapping the whole page
  */
 @Component({
 	selector: 'core-header',
-	templateUrl: './header.component.html'
+	templateUrl: 'header.component.html'
 })
 export class HeaderComponent extends CoreComponent {
 
 	teams: Team[] = [];
 
-	private currentRoute: string = '';
-
 	constructor(
 		protected router: Router,
-		authService: AuthenticationService,
-		configService: ConfigService,
-		protected teamsService: TeamsService,
+		protected authService: AuthenticationService,
+		protected configService: ConfigService,
+		private teamsService: TeamsService,
 		private modalService: BsModalService
 	) {
-		super(authService, configService);
+		super(router, authService, configService);
 	}
 
 	ngOnInit() {
 		super.ngOnInit();
 
 		// Subscribe to user initialization observable and load teams when done
-		this.authService.initializing$.subscribe(
-			(isInitializing: boolean) => {
-				if (!isInitializing && this.user.isAuthenticated()) {
-					this.teamsService.selectionList().subscribe(
-						(result: any) => {
-							if (null != result && null != result.elements && result.elements.length > 0) {
-								this.teams = result.elements.map((e: any) => new Team(e._id, e.name));
-							}
-							else {
-								this.teams = [];
-							}
-						});
-				}
-			});
-
-		this.router.events.subscribe(
-			(event: any) => {
-				if (event instanceof NavigationEnd) {
-					this.currentRoute = event.url;
-				}
-			});
+		this.authService.initializing$
+			.filter((isInitializing: boolean) => !isInitializing && this.user.isAuthenticated())
+			.switchMap(() => this.teamsService.selectionList())
+			.subscribe((result: IPagingResults) => this.teams = result.elements);
 	}
 
 	showFeedbackModal() {
