@@ -225,7 +225,7 @@ module.exports = (mode) => {
 
 		// Context replacement for ng4
 		new webpack.ContextReplacementPlugin(
-			/angular(\\|\/)core(\\|\/)@angular/,
+			/angular(\\|\/)core/,
 			path.posix.resolve('./src/client')
 		)
 	);
@@ -234,7 +234,7 @@ module.exports = (mode) => {
 
 		// If we're in AOT mode, we need to configure the webpack AOT plugin
 		wpConfig.plugins.push(
-			new ngToolsWebpack.AotPlugin({
+			new ngToolsWebpack.AngularCompilerPlugin({
 				tsConfigPath: './tsconfig-aot.json',
 				entryModule: path.posix.resolve('./src/client/app/app.module#AppModule')
 			})
