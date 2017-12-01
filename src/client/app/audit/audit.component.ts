@@ -8,16 +8,15 @@ import { Observable } from 'rxjs/Observable';
 
 import { AuditService } from './audit.service';
 import { AuditViewChangeModal, AuditViewDetailModal } from './audit-view-change.component';
-import { PagingOptions } from '../shared/pager.component';
+import { IPagingResults, PagingOptions } from '../shared/pager.component';
 import { TableSortOptions } from '../shared/pageable-table/pageable-table.component';
 import { SortDisplayOption, SortDirection } from '../shared/result-utils.class';
 import { UserService } from '../admin/users.service';
 import { AuditOption } from './audit.classes';
 
-
 @Component({
 	selector: 'audit',
-	templateUrl: './audit-list.component.html'
+	templateUrl: 'audit-list.component.html'
 })
 export class AuditComponent {
 
@@ -94,15 +93,13 @@ export class AuditComponent {
 
 		// Bind the search users typeahead to a function
 		this.searchUsersRef = Observable.create((observer: any) => {
-			this.userService.match({}, this.queryUserSearchTerm, this.userPagingOpts)
-				.subscribe((result: any) => {
-					let formatted = result.elements
-						.map((r: any) => {
-							r.displayName = r.name + ' [' + r.username + ']';
-							return r;
-						});
-					observer.next(formatted);
+			this.userService.match({}, this.queryUserSearchTerm, this.userPagingOpts).subscribe((result: any) => {
+				let formatted = result.elements.map((r: any) => {
+					r.displayName = r.name + ' [' + r.username + ']';
+					return r;
 				});
+				observer.next(formatted);
+			});
 		});
 
 		// Load action and audit type options from the server
@@ -231,21 +228,16 @@ export class AuditComponent {
 	private loadAuditEntries() {
 		let query = this.buildSearchQuery();
 
-		this.auditService.search(query, '', this.pagingOpts)
-			.subscribe((result: any) => {
-				if (null != result && null != result.elements && result.elements.length > 0) {
-					// Defensively filter out bad audit entries (null or audit or audit.object object is null)
-					this.auditEntries = result.elements
-						.filter((e: any) => (null != e && null != e.audit && null != e.audit.object));
-
-					this.pagingOpts.set(result.pageNumber, result.pageSize, result.totalPages, result.totalSize);
-					this.auditEntriesLoaded = true;
-				}
-				else {
-					this.auditEntries = [];
-					this.pagingOpts.reset();
-					this.auditEntriesLoaded = false;
-				}
-			});
+		this.auditService.search(query, '', this.pagingOpts).subscribe((result: IPagingResults) => {
+			this.auditEntries = result.elements;
+			if (this.auditEntries.length > 0) {
+				this.pagingOpts.set(result.pageNumber, result.pageSize, result.totalPages, result.totalSize);
+				this.auditEntriesLoaded = true;
+			}
+			else {
+				this.pagingOpts.reset();
+				this.auditEntriesLoaded = false;
+			}
+		});
 	}
 }
