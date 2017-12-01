@@ -1,62 +1,65 @@
 import { Injectable, EventEmitter } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { Observable } from 'rxjs/Observable';
 
 import { Message } from './message.class';
-import { PagingOptions } from '../shared/pager.component';
+import { IPagingResults, NULL_PAGING_RESULTS, PagingOptions } from '../shared/pager.component';
 import { HttpOptions, AsyHttp } from '../shared/asy-http.service';
 import { UserStateService } from '../admin/authentication/user-state.service';
 import { UserService } from '../admin/users.service';
 import { SocketService } from '../core/socket.service';
+import { AlertService } from '../shared/alert.service';
 
 @Injectable()
 export class MessageService {
 
 	cache: any = {};
-	sort: any = {};
-	messageReceived: EventEmitter<Message> = new EventEmitter<Message>();
-	private subscribed: number = 0;
 
+	sort: any = {};
+
+	messageReceived: EventEmitter<Message> = new EventEmitter<Message>();
+
+	private subscribed: number = 0;
 
 	constructor(
 		private asyHttp: AsyHttp,
+		private alertService: AlertService,
 		private socketService: SocketService,
 		private userService: UserService,
 		private userStateService: UserStateService) {
 	}
 
-	create(message: Message) {
-		return this.asyHttp.post(new HttpOptions('admin/message', () => {
-		}, message));
+	create(message: Message): Observable<any> {
+		return this.asyHttp.post(new HttpOptions('admin/message', () => {}, message));
 	}
 
-	get(id: string) {
-		return this.asyHttp.get(new HttpOptions(`admin/message/${id}`, () => {
-		}, {}));
+	get(id: string): Observable<Message>  {
+		return this.asyHttp.get(new HttpOptions(`admin/message/${id}`, () => {}, {}))
+			.map((result: any) => new Message().setFromModel(result));
 	}
 
 	/**
 	 * Retrieves an array of a field's value for all messages in the system
 	 */
-	getAll(query: any, field: any) {
-		return this.asyHttp.post(new HttpOptions(`admin/message/getAll`, () => {
-			},
-			{query: query, field: field}));
+	getAll(query: any, field: any): Observable<any>  {
+		return this.asyHttp.post(new HttpOptions(`admin/message/getAll`, () => {}, { query: query, field: field }));
 	}
 
-	update(message: Message) {
-		return this.asyHttp.post(new HttpOptions(`admin/message/${message._id}`, () => {
-			},
-			message));
+	update(message: Message): Observable<any>  {
+		return this.asyHttp.post(new HttpOptions(`admin/message/${message._id}`, () => {}, message));
 	}
 
-	remove(id: string) {
-		return this.asyHttp.delete(new HttpOptions(`admin/message/${id}`, () => {
-		}, {}));
+	remove(id: string): Observable<any>  {
+		return this.asyHttp.delete(new HttpOptions(`admin/message/${id}`, () => {}, {}));
 	}
 
-	search(query: any, search: any, paging: PagingOptions = new PagingOptions()) {
-		return this.asyHttp.post(new HttpOptions(`messages?${this.asyHttp.urlEncode(paging.toObj())}`, () => {
-			},
-			{q: query, s: search}));
+	search(query: any, search: any, paging: PagingOptions = new PagingOptions()): Observable<IPagingResults> {
+		return this.asyHttp.post(new HttpOptions(`messages?${this.asyHttp.urlEncode(paging.toObj())}`, () => {}, { q: query, s: search }))
+			.catch((error: HttpErrorResponse) => {
+				this.alertService.addAlert(error.error.message);
+				return Observable.of(NULL_PAGING_RESULTS);
+			});
 	}
 
 	/**

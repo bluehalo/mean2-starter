@@ -8,7 +8,7 @@ import { AuthenticationService } from '../admin/authentication/authentication.se
 import { HelpService } from './help.service';
 
 @Component({
-	templateUrl: './help.component.html'
+	templateUrl: 'help.component.html'
 })
 
 export class HelpComponent {
@@ -23,17 +23,17 @@ export class HelpComponent {
 		private router: Router,
 		private auth: AuthenticationService,
 		private configService: ConfigService,
-		private helpService: HelpService) {}
+		private helpService: HelpService
+	) {}
 
 	ngOnInit() {
 		this.user = this.auth.getCurrentUser();
 
-		this.configService.getConfig()
-			.subscribe((config: any) => {
-				this.helpTopics = this.helpService.helpRegistry;
-				this.pki = config.auth === 'proxy-pki';
-				this.config = config;
-			});
+		this.configService.getConfig().first().subscribe((config: any) => {
+			this.helpTopics = this.helpService.helpRegistry;
+			this.pki = config.auth === 'proxy-pki';
+			this.config = config;
+		});
 
 		// If local mode and user has no roles, redirect
 		if (!this.pki && !this.user.isActive()) {
