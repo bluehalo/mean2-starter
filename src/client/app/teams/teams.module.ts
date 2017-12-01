@@ -15,6 +15,8 @@ import { TagsService } from './tags/tags.service';
 import { TeamAudit } from './audit/team-audit.component';
 import { TeamRoleAudit } from './audit/team-role-audit.component';
 import { SelectTeamsComponent } from './select-teams.component';
+import { JoinTeamComponent } from './join-team.component';
+import { RequestNewTeamModalComponent } from './request-new-team.component';
 
 @NgModule({
 	imports: [
@@ -32,6 +34,7 @@ import { SelectTeamsComponent } from './select-teams.component';
 		UtilModule
 	],
 	entryComponents: [
+		RequestNewTeamModalComponent,
 		TeamAudit,
 		TeamRoleAudit
 	],
@@ -41,9 +44,11 @@ import { SelectTeamsComponent } from './select-teams.component';
 		TeamRoleAudit
 	],
 	declarations: 	[
+		JoinTeamComponent,
 		ListTeamsComponent,
 		ListTeamMembersComponent,
 		ManageTeamComponent,
+		RequestNewTeamModalComponent,
 		SelectTeamsComponent,
 		TeamAudit,
 		TeamRoleAudit,

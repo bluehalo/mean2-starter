@@ -96,6 +96,7 @@ export class TeamRole {
 
 	public static get ROLES(): TeamRole[] {
 		return [
+			new TeamRole('Requester', 'This user has requested access to the team', 'requester'),
 			new TeamRole('Member', 'This user can view tags within this team.', 'member'),
 			new TeamRole('Editor', 'This user has member privileges and can also create and manage tags within this team', 'editor'),
 			new TeamRole('Admin', 'This user has editor privileges and can also manage team membership', 'admin')

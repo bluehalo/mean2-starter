@@ -36,18 +36,19 @@
 			<tabset class="tabs">
 				<tab>
 					<template tabHeading>
-						Tags
-					</template>
-					<br/>
-					<list-tags [readOnly]="!user.canManageTeamResources(team)"></list-tags>
-				</tab>
-				<tab>
-					<template tabHeading>
 						Members
 					</template>
 					<br/>
 					<list-team-members [readOnly]="!user.canManageTeam(team)"></list-team-members>
 				</tab>
+				<tab>
+					<template tabHeading>
+						Tags
+					</template>
+					<br/>
+					<list-tags [readOnly]="!user.canManageTeamResources(team)"></list-tags>
+				</tab>
+
 			</tabset>
 		</div>
 	</div>

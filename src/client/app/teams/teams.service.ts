@@ -13,6 +13,22 @@ import { ObservableResult } from '../shared/observable-result.class';
 import { Resource } from '../resources/resource.class';
 import { AuthenticationService } from '../admin/authentication/authentication.service';
 
+export interface ITeamResults {
+	pageNumber: number;
+	pageSize: number;
+	totalPages: number;
+	totalSize: number;
+	elements: Team[];
+}
+
+export const NULL_TEAM_RESULTS: ITeamResults = {
+	pageNumber: 0,
+	pageSize: 0,
+	totalPages: 0,
+	totalSize: 0,
+	elements: []
+};
+
 @Injectable()
 export class TeamsService {
 
@@ -64,8 +80,23 @@ export class TeamsService {
 		return this.search({}, null, new PagingOptions(0, 1000), {});
 	}
 
+	getTeams(paging: PagingOptions): Observable<ITeamResults> {
+		return this.asyHttp.get(new HttpOptions(`teams?${this.asyHttp.urlEncode(paging.toObj())}`, () => {}))
+			.catch(() => {
+				return Observable.of<ITeamResults>(NULL_TEAM_RESULTS);
+			});
+	}
+
 	get(teamId: string): Observable<Response> {
 		return this.asyHttp.get(new HttpOptions(`team/${teamId}`, () => {}));
+	}
+
+	requestAccessToTeam(teamId: string, user: TeamMember): Observable<Response> {
+		return this.asyHttp.post(new HttpOptions(`team/${teamId}/request`, () => {}, { user: user }));
+	}
+
+	requestNewTeam(user: TeamMember, org: string, aoi: string, description: string): Observable<Response> {
+		return this.asyHttp.post(new HttpOptions(`team-request`, () => {}, { user, org, aoi, description }));
 	}
 
 	searchMembers(teamId: string, team: Team, query: any, search: any, paging: PagingOptions, resolveTeamNames: boolean = true): Observable<any> {

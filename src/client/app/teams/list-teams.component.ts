@@ -14,8 +14,7 @@ import { AlertService } from '../shared/alert.service';
 import { ModalAction, ModalService } from '../shared/asy-modal.service';
 
 @Component({
-	selector: 'list-teams',
-	templateUrl: './list-teams.component.html'
+	templateUrl: 'list-teams.component.html'
 })
 export class ListTeamsComponent {
 
@@ -24,6 +23,8 @@ export class ListTeamsComponent {
 	teams: Team[] = [];
 
 	search: string = '';
+
+	canManageSystemResources: boolean = false;
 
 	sortOptions: TableSortOptions = {
 		name: new SortDisplayOption('Team Name', 'name', SortDirection.asc)
@@ -43,7 +44,18 @@ export class ListTeamsComponent {
 
 	ngOnInit() {
 		this.user = this.teamsService.getCurrentUserAsTeamMember();
-		this.initializeTeams();
+		this.canManageSystemResources = this.user.canManageSystemResources();
+
+		this.alertService.clearAllAlerts();
+		this.route.params.subscribe((params: Params) => {
+			const clearCachedFilter = params[`clearCachedFilter`];
+			if (_.toString(clearCachedFilter) === 'true' || null == this.teamsService.cache.listTeams) {
+				this.teamsService.cache.listTeams = {};
+			}
+
+			this.initializeUserFilters();
+			this.loadTeams();
+		});
 	}
 
 	goToPage(event: any) {
@@ -113,20 +125,5 @@ export class ListTeamsComponent {
 				}
 			});
 	}
-
-	private initializeTeams() {
-		this.alertService.clearAllAlerts();
-
-		this.route.params.subscribe((params: Params) => {
-			let clearCachedFilter = params[`clearCachedFilter`];
-			if (_.toString(clearCachedFilter) === 'true' || null == this.teamsService.cache.listTeams) {
-				this.teamsService.cache.listTeams = {};
-			}
-		});
-
-		this.initializeUserFilters();
-		this.loadTeams();
-	}
-
 
 }

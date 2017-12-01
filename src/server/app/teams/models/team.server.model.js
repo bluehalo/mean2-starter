@@ -23,7 +23,7 @@ let TeamRoleSchema = new GetterSchema({
 		type: String,
 		trim: true,
 		default: 'member',
-		enum: ['admin', 'editor', 'member']
+		enum: ['admin', 'editor', 'member', 'requester']
 	}
 });
 

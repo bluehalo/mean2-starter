@@ -5,6 +5,7 @@ import { AuthGuard } from '../core/auth-guard.service';
 import { ListTeamsComponent } from './list-teams.component';
 import { ManageTeamComponent } from './manage-team.component';
 import { TeamSummaryComponent } from './team-summary.component';
+import { JoinTeamComponent } from './join-team.component';
 
 @NgModule({
 	imports: [
@@ -16,16 +17,28 @@ import { TeamSummaryComponent } from './team-summary.component';
 				data: { roles: [ 'user' ] }
 			},
 			{
+				path: 'team/join',
+				component: JoinTeamComponent,
+				canActivate: [AuthGuard],
+				data: { roles: [ 'user' ] }
+			},
+			{
 				path: 'team/create',
 				component: ManageTeamComponent,
 				canActivate: [AuthGuard],
-				data: { roles: [ 'editor' ] }
+				data: {
+					mode: 'create',
+					roles: [ 'editor' ]
+				}
 			},
 			{
 				path: 'team/edit/:id',
 				component: ManageTeamComponent,
 				canActivate: [AuthGuard],
-				data: { roles: [ 'user' ] }
+				data: {
+					mode: 'edit',
+					roles: [ 'user' ]
+				}
 			},
 			{
 				path: 'team/:id',

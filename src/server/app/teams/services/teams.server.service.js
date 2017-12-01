@@ -1,14 +1,17 @@
 'use strict';
 
-let
-	path = require('path'),
+const path = require('path'),
 	q = require('q'),
+	fs = require('fs'),
 	_ = require('lodash'),
+	handlebars = require('handlebars'),
+	mongoose = require('mongoose'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	config = deps.config,
 	dbs = deps.dbs,
 	auditService = deps.auditService,
+	emailService = deps.emailService,
 	util = deps.utilService,
 	Tag = dbs.admin.model('Tag'),
 	TeamMember = dbs.admin.model('TeamUser'),
@@ -18,6 +21,7 @@ let
 module.exports = function() {
 
 	let teamRolesMap = {
+		requester: { priority: 0 },
 		member: { priority: 1 },
 		editor: { priority: 5 },
 		admin: { priority: 7 }
@@ -212,6 +216,29 @@ module.exports = function() {
 			});
 	}
 
+	function getTeams(queryParams) {
+		const page = util.getPage(queryParams);
+		const limit = util.getLimit(queryParams, 1000);
+
+		const offset = page * limit;
+
+		// Default to sorting by ID
+		let sortArr = [{property: '_id', direction: 'DESC'}];
+		if (null != queryParams.sort && null != queryParams.dir) {
+			sortArr = [{property: queryParams.sort, direction: queryParams.dir}];
+		}
+
+		return Team.search({}, null, limit, offset, sortArr).then((result) => {
+			return q({
+				totalSize: result.count,
+				pageNumber: page,
+				pageSize: limit,
+				totalPages: Math.ceil(result.count / limit),
+				elements: result.results
+			});
+		});
+	}
+
 	/**
 	 * Updates an existing team with fresh metadata
 	 *
@@ -285,7 +312,7 @@ module.exports = function() {
 
 					if (null != userObj.teams && _.isArray(userObj.teams)) {
 						// Get list of user's teams by id
-						userTeams = userObj.teams.map((t) => t._id.toString());
+						userTeams = userObj.teams.filter((t) => t.role !== 'requester').map((t) => t._id.toString());
 					}
 
 					// If the query already has a filter by team, take the intersection
@@ -382,10 +409,9 @@ module.exports = function() {
 	 */
 	function addMemberToTeam(user, team, role, requester, headers) {
 		// Audit the member add request
-		return auditService.audit(`team ${role} added`, 'team-role', 'user add', TeamMember.auditCopy(requester), Team.auditCopyTeamMember(team, user, role), headers)
-			.then(function() {
-				return TeamMember.update({ _id: user._id }, { $addToSet: { teams: new TeamRole({ _id: team._id, role: role }) } }).exec();
-			});
+		return auditService.audit(`team ${role} added`, 'team-role', 'user add', TeamMember.auditCopy(requester), Team.auditCopyTeamMember(team, user, role), headers).then(() => {
+			return TeamMember.update({ _id: user._id }, { $addToSet: { teams: new TeamRole({ _id: team._id, role: role }) } }).exec();
+		});
 	}
 
 
@@ -428,8 +454,123 @@ module.exports = function() {
 			});
 	}
 
+	function buildEmailContent(requester, team) {
+		let defer = q.defer();
+
+		let emailData = {
+			teamName: team.name,
+			name: requester.name,
+			username: requester.username,
+			url: `${config.app.baseUrl}/team/${team._id}`
+		};
+
+		fs.readFile('src/server/app/teams/templates/user-request-access-email.server.view.html', 'utf-8', (error, source) => {
+			if (error) {
+				defer.reject(error);
+			} else {
+				let template = handlebars.compile(source);
+				let emailHTML = template(emailData);
+
+				defer.resolve(emailHTML);
+			}
+		});
+
+		return defer.promise;
+	}
+
+	function sendRequestEmail(toEmail, requester, team) {
+		return buildEmailContent(requester, team).then((content) => {
+			let mailOptions = {
+				bcc: toEmail,
+				from: config.mailer.from,
+				replyTo: config.mailer.from,
+				subject: `${config.app.title}: A user has requested access to Team ${team.name}`,
+				html: content
+			};
+
+			return emailService.sendMail(mailOptions);
+		});
+	}
+
+	function requestAccessToTeam(requester, team, headers) {
+		let adminEmails;
+
+		// Lookup the emails of all team admins
+		return TeamMember.find({ teams: { $elemMatch: { _id: mongoose.Types.ObjectId(team._id), role: 'admin' } }}).then((admins) => {
+			if (null == admins) {
+				return q.reject({ status: 404, message: 'Error retrieving team admins' });
+			}
+
+			adminEmails = admins.map((admin) => admin.email);
+
+			if (null == adminEmails || adminEmails.length === 0) {
+				return q.reject({ status: 404, message: 'Error retrieving team admins' });
+			}
+
+			// Add requester role to user for this team
+			return addMemberToTeam(requester, team, 'requester', requester, headers);
+		}).then(() => {
+			return sendRequestEmail(adminEmails, requester, team);
+		});
+	}
+
+
+	function buildNewTeamEmailContent(requester, org, aoi, description) {
+		let defer = q.defer();
+
+		let emailData = {
+			org: org,
+			aoi: aoi,
+			description: description,
+			name: requester.name,
+			username: requester.username,
+			url: `${config.app.baseUrl}/team/create`
+		};
+
+		fs.readFile('src/server/app/teams/templates/user-request-new-team-email.server.view.html', 'utf-8', (error, source) => {
+			if (error) {
+				defer.reject(error);
+			} else {
+				let template = handlebars.compile(source);
+				let emailHTML = template(emailData);
+
+				defer.resolve(emailHTML);
+			}
+		});
+
+		return defer.promise;
+	}
+
+	function requestNewTeam(org, aoi, description, requester, headers) {
+		if (null == org) {
+			return q.reject({ status: 400, message: 'Organization cannot be empty' });
+		}
+		if (null == aoi) {
+			return q.reject({ status: 400, message: 'AOI cannot be empty' });
+		}
+		if (null == description) {
+			return q.reject({ status: 400, message: 'Description cannot be empty' });
+		}
+		if (null == requester) {
+			return q.reject({ status: 400, message: 'Invalid requester' });
+		}
+
+		return auditService.audit('new team requested', 'team', 'request', TeamMember.auditCopy(requester), { org, aoi, description }, headers).then(() => {
+			return buildNewTeamEmailContent(requester, org, aoi, description);
+		}).then((content) => {
+			return emailService.sendMail({
+				bcc: config.contactEmail,
+				from: config.mailer.from,
+				replyTo: config.mailer.from,
+				subject: 'New Team Requested',
+				html: content
+			});
+		});
+	}
+
 	return {
 		createTeam: createTeam,
+		getTeams: getTeams,
 		updateTeam: updateTeam,
 		deleteTeam: deleteTeam,
 		searchTeams: searchTeams,
@@ -438,6 +579,8 @@ module.exports = function() {
 		meetsRoleRequirement: meetsRoleRequirement,
 		meetsRequiredExternalTeams: meetsRequiredExternalTeams,
 		getActiveTeamRole: getActiveTeamRole,
+		requestNewTeam: requestNewTeam,
+		requestAccessToTeam: requestAccessToTeam,
 		addMemberToTeam: addMemberToTeam,
 		updateMemberRole: updateMemberRole,
 		removeMemberFromTeam: removeMemberFromTeam
