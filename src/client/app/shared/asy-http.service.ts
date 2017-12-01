@@ -140,7 +140,7 @@ export class AsyHttp {
 	}
 
 	protected handleErrorResponse(err: any, _caught: Observable<any>): Observable<any> {
-		let errData = JSON.parse(err._body);
+		let errData = _.isString(err._body) ? JSON.parse(err._body) : err._body;
 		switch (err.status) {
 			case 401:
 

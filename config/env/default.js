@@ -187,10 +187,11 @@ module.exports = {
 
 	notificationExpires: 15552000, // 180 days
 
-	// Configuration for outgoing mail server
+	// Configuration for outgoing mail server / service
 	mailer: {
 		from: process.env.MAILER_FROM || 'USERNAME@GMAIL.COM',
 		admin: process.env.MAILER_ADMIN || 'noreply@asymmetrik.com',
+		provider: './src/server/app/util/providers/email/smtp-email.server.provider.js',
 		options: {
 			service: process.env.MAILER_SERVICE_PROVIDER || 'gmail',
 			auth: {
@@ -198,6 +199,21 @@ module.exports = {
 				pass: process.env.MAILER_PASSWORD || 'PASSWORD'
 			}
 		}
+		/*
+		provider: './src/server/app/util/providers/email/log-email.server.provider.js',
+		options: {}
+		*/
+		/*
+		provider: './src/server/app/util/providers/email/https-email.server.provider.js',
+		options: {
+			host: '',
+			port: ,
+			path: '',
+			ca: '/path/to/ca.crt',
+			cert: '/path/to/cert.crt',
+			key: '/path/to/cert.key'
+		}
+		*/
 	},
 
 
