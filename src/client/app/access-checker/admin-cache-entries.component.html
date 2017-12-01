@@ -28,14 +28,14 @@
 		(onPageChange)="goToPage($event)"
 		(onSortChange)="setSort($event)">
 
-		<template asy-template="table-header">
+		<ng-template asy-template="table-header">
 			<th>Key</th>
 			<th>Value</th>
 			<th>Timestamp</th>
 			<th>&nbsp;</th>
-		</template>
+		</ng-template>
 
-		<template asy-template="table-row" let-cacheEntry>
+		<ng-template asy-template="table-row" let-cacheEntry>
 			<td>{{cacheEntry.entry.key}}</td>
 			<td class="hide-overflow" style="max-width: 300px;">{{cacheEntry.entry.value | json}}</td>
 			<td><span [attr.title]="cacheEntry.entry.ts | utcDate">{{cacheEntry.entry.ts | agoDate:false}}</span></td>
@@ -46,13 +46,13 @@
 					<button title="Delete Entry" type="button" class="btn btn-danger btn-sm" (click)="confirmDeleteEntry(cacheEntry)"><span class="fa fa-trash-o"></span></button>
 				</div>
 			</td>
-		</template>
+		</ng-template>
 
-		<template asy-template="empty-table">
+		<ng-template asy-template="empty-table">
 			<h3>
 				<small>No Cache Entries matched your search</small>
 			</h3>
-		</template>
+		</ng-template>
 
 	</pageable-table>
 
