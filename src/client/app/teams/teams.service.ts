@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
 
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 
 import { AsyHttp, HttpOptions } from '../shared/asy-http.service';
-import { PagingOptions } from '../shared/pager.component';
+import { IPagingResults, NULL_PAGING_RESULTS, PagingOptions } from '../shared/pager.component';
 import { Team, TeamMember } from './teams.class';
 import { User } from '../admin/user.class';
 import { ObservableUtils } from '../shared/observable-utils.class';
@@ -23,9 +22,7 @@ export class TeamsService {
 	constructor(
 		private asyHttp: AsyHttp,
 		private authService: AuthenticationService
-	) {
-	}
-
+	) {}
 
 	resolveTeamNames(users: User[]) {
 		if (_.isArray(users)) {
@@ -55,62 +52,65 @@ export class TeamsService {
 		}
 	}
 
-	search(query: any, search: any, paging: PagingOptions, options: any): Observable<Response> {
-		return this.asyHttp.post(new HttpOptions(`teams?${this.asyHttp.urlEncode(paging.toObj())}`, () => {}, { s: search , q: query, options: options }));
+	search(query: any, search: any, paging: PagingOptions, options: any): Observable<IPagingResults> {
+		return this.asyHttp.post(new HttpOptions(`teams?${this.asyHttp.urlEncode(paging.toObj())}`, () => {}, { s: search , q: query, options: options }))
+			.map((result: IPagingResults) => {
+				if (null != result && Array.isArray(result.elements)) {
+					result.elements = result.elements.map((element: any) => new Team(element._id, element.name, element.description, element.created));
+				}
+
+				return result;
+			})
+			.catch(() => Observable.of(NULL_PAGING_RESULTS));
 	}
 
 	// Retrieve all teams (or up to 1000)
-	selectionList(): Observable<Response> {
+	selectionList(): Observable<IPagingResults> {
 		return this.search({}, null, new PagingOptions(0, 1000), {});
 	}
 
-	get(teamId: string): Observable<Response> {
-		return this.asyHttp.get(new HttpOptions(`team/${teamId}`, () => {}));
+	get(teamId: string): Observable<Team> {
+		return this.asyHttp.get(new HttpOptions(`team/${teamId}`, () => {}))
+			.map((result: any) => (null != result) ? new Team(result._id, result.name, result.description, result.created, result.requiresExternalTeams) : null);
 	}
 
-	searchMembers(teamId: string, team: Team, query: any, search: any, paging: PagingOptions, resolveTeamNames: boolean = true): Observable<any> {
-		return Observable.create((observer: any) => {
-			this.asyHttp.post(new HttpOptions(`team/${teamId}/members?${this.asyHttp.urlEncode(paging.toObj())}`, () => {}, { s: search , q: query }))
-				.subscribe(
-					(results: any) => {
-						if (null != results && _.isArray(results.elements)) {
-							results.elements = results.elements.map((element: any) => new TeamMember().setFromTeamMemberModel(team, element));
-							if (resolveTeamNames) {
-								this.resolveTeamNames(results.elements);
-							}
-						}
-						observer.next(results);
-					},
-					(err: any) => {
-						observer.error(err);
-					},
-					() => {
-						observer.complete();
-					});
-		});
+	searchMembers(teamId: string, team: Team, query: any, search: any, paging: PagingOptions, resolveTeamNames: boolean = true): Observable<IPagingResults> {
+		return this.asyHttp.post(new HttpOptions(`team/${teamId}/members?${this.asyHttp.urlEncode(paging.toObj())}`, () => {}, { s: search , q: query }))
+			.map((result: IPagingResults) => {
+				if (null != result && Array.isArray(result.elements)) {
+					result.elements = result.elements.map((element: any) => new TeamMember().setFromTeamMemberModel(team, element));
+					if (resolveTeamNames) {
+						this.resolveTeamNames(result.elements);
+					}
+				}
+
+				return result;
+			})
+			.catch(() => Observable.of(NULL_PAGING_RESULTS));
 	}
 
-	create(team: Team): Observable<Response> {
+	create(team: Team): Observable<any> {
 		return this.asyHttp.put(new HttpOptions('team', () => { }, team));
 	}
 
-	update(team: Team): Observable<Response> {
-		return this.asyHttp.post(new HttpOptions(`team/${team._id}`, () => {}, team));
+	update(team: Team): Observable<Team> {
+		return this.asyHttp.post(new HttpOptions(`team/${team._id}`, () => {}, team))
+			.map((result: any) => (null != result) ? new Team(result._id, result.name, result.description, result.created, result.requiresExternalTeams) : null);
 	}
 
-	delete(teamId: string): Observable<Response> {
+	delete(teamId: string): Observable<any> {
 		return this.asyHttp.delete(new HttpOptions(`team/${teamId}`, () => {}));
 	}
 
-	addMember(teamId: string, memberId: string, role?: string): Observable<Response> {
+	addMember(teamId: string, memberId: string, role?: string): Observable<any> {
 		return this.asyHttp.post(new HttpOptions(`team/${teamId}/member/${memberId}`, () => {}, { role: role }));
 	}
 
-	updateMemberRole(teamId: string, memberId: string, role: string): Observable<Response> {
+	updateMemberRole(teamId: string, memberId: string, role: string): Observable<any> {
 		return this.asyHttp.post(new HttpOptions(`team/${teamId}/member/${memberId}/role`, () => {}, { role: role }));
 	}
 
-	removeMember(teamId: string, memberId: string): Observable<Response> {
+	removeMember(teamId: string, memberId: string): Observable<any> {
 		return this.asyHttp.delete(new HttpOptions(`team/${teamId}/member/${memberId}`, () => {}, {}));
 	}
 

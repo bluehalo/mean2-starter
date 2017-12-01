@@ -35,16 +35,16 @@
 		<div class="col-md-12">
 			<tabset class="tabs">
 				<tab>
-					<template tabHeading>
-						Tags
-					</template>
+					<ng-template tabHeading>
+						Members
+					</ng-template>
 					<br/>
 					<list-tags [readOnly]="!user.canManageTeamResources(team)"></list-tags>
 				</tab>
 				<tab>
-					<template tabHeading>
-						Members
-					</template>
+					<ng-template tabHeading>
+						Tags
+					</ng-template>
 					<br/>
 					<list-team-members [readOnly]="!user.canManageTeam(team)"></list-team-members>
 				</tab>

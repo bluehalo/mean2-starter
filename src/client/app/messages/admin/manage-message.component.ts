@@ -1,6 +1,7 @@
-import { Response } from '@angular/http';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { Observable } from 'rxjs/Observable';
 
 import { Message } from '../message.class';
 import { ConfigService } from '../../core/config.service';
@@ -9,12 +10,16 @@ import { AlertService } from '../../shared/alert.service';
 export abstract class ManageMessageComponent {
 
 	message: Message;
+
 	error: string = null;
+
 	okDisabled: boolean;
 
 	// Variables that will be set by implementing classes
 	title: string;
+
 	subtitle: string;
+
 	okButtonText: string;
 
 	typeOptions: any[] = [
@@ -25,6 +30,7 @@ export abstract class ManageMessageComponent {
 	];
 
 	protected config: any;
+
 	protected navigateOnSuccess: string;
 
 	constructor(
@@ -34,28 +40,23 @@ export abstract class ManageMessageComponent {
 	) {}
 
 	ngOnInit() {
-		this.configService.getConfig()
-			.subscribe((config: any) => {
-				this.config = config;
-
-				this.initialize();
-			});
+		this.configService.getConfig().first().subscribe((config: any) => {
+			this.config = config;
+			this.initialize();
+		});
 	}
 
 	abstract initialize(): void;
 
-	abstract submitMessage(message: Message): Observable<Response>;
+	abstract submitMessage(message: Message): Observable<any>;
 
 	submit() {
-		this.submitMessage(this.message)
-			.subscribe(
-				() => this.router.navigate([this.navigateOnSuccess]),
-				(response: Response) => {
-					if (response.status >= 400 && response.status < 500) {
-						let errors = response.json().message.split('\n');
-						this.error = errors.join(', ');
-					}
-				});
+		this.submitMessage(this.message).subscribe(
+			() => this.router.navigate([this.navigateOnSuccess]),
+			(error: HttpErrorResponse) => {
+				if (error.status >= 400 && error.status < 500) {
+					this.error = error.error.message;
+				}
+			});
 	}
-
 }

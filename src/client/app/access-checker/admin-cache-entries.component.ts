@@ -1,19 +1,18 @@
 import { Component } from '@angular/core';
-import { Response } from '@angular/http';
 
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
-import { CacheEntriesService, CacheEntry } from './cache-entries.service';
+import { CacheEntriesService } from './cache-entries.service';
 import { AlertService } from '../shared/alert.service';
 import { SortDirection, SortDisplayOption } from '../shared/result-utils.class';
-import { PagingOptions } from '../shared/pager.component';
+import { PagingOptions, IPagingResults } from '../shared/pager.component';
 import { TableSortOptions } from '../shared/pageable-table/pageable-table.component';
-import { ViewCacheEntryModal } from './view-cache-entry.component';
 import { ModalAction, ModalService } from '../shared/asy-modal.service';
+import { ViewCacheEntryModal } from './view-cache-entry.component';
 
 @Component({
 	selector: 'cache-entries',
-	templateUrl: './admin-cache-entries.component.html'
+	templateUrl: 'admin-cache-entries.component.html'
 })
 export class AdminCacheEntriesComponent {
 
@@ -70,15 +69,9 @@ export class AdminCacheEntriesComponent {
 			.confirm('Delete cache entry?', `Are you sure you want to delete entry: ${cacheEntry.entry.key}?`, 'Delete')
 			.first()
 			.filter((action: ModalAction) => action === ModalAction.OK)
-			.switchMap(() => {
-				return this.cacheEntriesService.remove(entryToDelete.key);
-			})
-			.subscribe(() => {
-				this.alertService.addAlert(`Deleted cache entry: ${entryToDelete.key}`, 'success');
-				this.loadCacheEntries();
-			}, (response: Response) => {
-				this.alertService.addAlert(response.json().message);
-			});
+			.switchMap(() => this.cacheEntriesService.remove(entryToDelete.key))
+			.filter((success: boolean) => success)
+			.subscribe(() => this.loadCacheEntries());
 	}
 
 	viewCacheEntry(cacheEntry: any) {
@@ -87,42 +80,24 @@ export class AdminCacheEntriesComponent {
 	}
 
 	refreshCacheEntry(cacheEntry: any) {
-		// temporary flag to show that the entry is refreshing
 		cacheEntry.isRefreshing = true;
 
-		let key = cacheEntry.entry.key;
-		this.cacheEntriesService.refresh(key).subscribe(
-			() => {
-				this.alertService.addAlert(`Refreshed cache entry: ${key}`, 'success');
-				cacheEntry.isRefreshing = false;
-				this.applySearch();
-			},
-			(response: Response) => {
-				this.alertService.addAlert(response.json().message);
-				cacheEntry.isRefreshing = false;
-			}
-		);
+		const key = cacheEntry.entry.key;
+		this.cacheEntriesService.refresh(key)
+			.do(() => cacheEntry.isRefreshing = false)
+			.filter((success: boolean) => success)
+			.subscribe((success: boolean) => this.applySearch());
 	}
-
 
 	private loadCacheEntries() {
-		this.cacheEntriesService.match({}, this.search, this.pagingOpts).subscribe(
-			(result: any) => {
-				if (result && Array.isArray(result.elements)) {
-					this.cacheEntries = result.elements.map((element: any) => {
-						return {
-							entry: new CacheEntry(element.key, element.value, element.ts),
-							isRefreshing: false
-						};
-					});
-					this.pagingOpts.set(result.pageNumber, result.pageSize, result.totalPages, result.totalSize);
-				} else {
-					this.pagingOpts.reset();
-				}
-			},
-			(response: Response) => {
-				this.alertService.addAlert(response.json().message);
-			});
+		this.cacheEntriesService.match({}, this.search, this.pagingOpts).subscribe((result: IPagingResults) => {
+			this.cacheEntries = result.elements;
+			if (this.cacheEntries.length > 0) {
+				this.pagingOpts.set(result.pageNumber, result.pageSize, result.totalPages, result.totalSize);
+			}
+			else {
+				this.pagingOpts.reset();
+			}
+		});
 	}
-
 }

@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Response } from '@angular/http';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import * as _ from 'lodash';
+import { Subscription } from 'rxjs/Subscription';
 
 import { EndUserAgreement } from './eua.class';
 import { EuaService } from './eua.service';
-import { PagingOptions } from '../../shared/pager.component';
+import { IPagingResults, PagingOptions } from '../../shared/pager.component';
 import { TableSortOptions } from '../../shared/pageable-table/pageable-table.component';
 import { SortDisplayOption, SortDirection } from '../../shared/result-utils.class';
 import { AlertService } from '../../shared/alert.service';
@@ -14,7 +15,7 @@ import { ModalAction, ModalService } from '../../shared/asy-modal.service';
 
 @Component({
 	selector: 'admin-list-euas',
-	templateUrl: './admin-list-euas.component.html'
+	templateUrl: 'admin-list-euas.component.html'
 })
 export class AdminListEuasComponent implements OnInit {
 
@@ -42,6 +43,8 @@ export class AdminListEuasComponent implements OnInit {
 		relevance: new SortDisplayOption('Relevance', 'score', SortDirection.desc)
 	};
 
+	private routeParamSubscription: Subscription;
+
 	constructor(
 		private asyModalService: ModalService,
 		private euaService: EuaService,
@@ -51,15 +54,18 @@ export class AdminListEuasComponent implements OnInit {
 
 	ngOnInit() {
 		this.alertService.clearAllAlerts();
-		this.route.params.subscribe( (params: Params) => {
+		this.routeParamSubscription = this.route.params.subscribe( (params: Params) => {
 			if (_.toString(params[`clearCachedFilter`]) === 'true' || null == this.euaService.cache.listEuas) {
 				this.euaService.cache.listEuas = {};
 			}
 		});
 
 		this.initializeUserFilters();
-
 		this.loadEuas();
+	}
+
+	ngOnDestroy() {
+		this.routeParamSubscription.unsubscribe();
 	}
 
 	applySearch() {
@@ -86,30 +92,18 @@ export class AdminListEuasComponent implements OnInit {
 			.confirm('Delete End User Agreement?', `Are you sure you want to delete eua: "${eua.euaModel.title}" ?`, 'Delete')
 			.first()
 			.filter((action: ModalAction) => action === ModalAction.OK)
-			.switchMap(() => {
-				return this.euaService.remove(id);
-			})
+			.switchMap(() => this.euaService.remove(id))
 			.subscribe(() => {
 				this.alertService.addAlert(`Deleted EUA entitled: ${title}`, 'success');
 				this.loadEuas();
-			}, (response: Response) => {
-				if (response.status >= 400 && response.status < 500) {
-					this.alertService.addAlert(response.json().message);
-				}
-			});
+			}, (error: HttpErrorResponse) => this.alertService.addClientErrorAlert(error));
 	}
 
 	publishEua(eua: EndUserAgreement) {
-		this.euaService.publish(eua.euaModel._id).subscribe(
-			() => {
-				this.alertService.addAlert(`Published ${eua.euaModel.title}`, 'success');
-			},
-			(response: Response) => {
-				if (response.status >= 400 && response.status < 500) {
-					this.alertService.addAlert(response.json().message);
-				}
-			});
-		this.loadEuas();
+		this.euaService.publish(eua.euaModel._id).subscribe(() => {
+			this.alertService.addAlert(`Published ${eua.euaModel.title}`, 'success');
+			this.loadEuas();
+		}, (error: HttpErrorResponse) => this.alertService.addClientErrorAlert(error));
 	}
 
 	/**
@@ -132,16 +126,15 @@ export class AdminListEuasComponent implements OnInit {
 	private loadEuas() {
 		let options: any = {};
 		this.euaService.cache.listEuas = {search: this.search, paging: this.pagingOpts};
-		this.euaService.search(this.getQuery(), this.search, this.pagingOpts, options)
-			.subscribe((result: any) => {
-				if (result && Array.isArray(result.elements)) {
-					this.euas = result.elements.map((element: any) => new EndUserAgreement().setFromEuaModel(element));
-					this.pagingOpts.set(result.pageNumber, result.pageSize, result.totalPages, result.totalSize);
-				} else {
-					this.pagingOpts.reset();
-					this.euas = [];
-				}
-			});
+		this.euaService.search(this.getQuery(), this.search, this.pagingOpts, options).subscribe((result: IPagingResults) => {
+			this.euas = result.elements;
+			if (this.euas.length > 0) {
+				this.pagingOpts.set(result.pageNumber, result.pageSize, result.totalPages, result.totalSize);
+			}
+			else {
+				this.pagingOpts.reset();
+			}
+		});
 	}
 
 	private getQuery(): any {
@@ -153,5 +146,4 @@ export class AdminListEuasComponent implements OnInit {
 		}
 		return query;
 	}
-
 }

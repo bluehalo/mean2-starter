@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Response } from '@angular/http';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { AuthenticationService } from '../authentication/authentication.service';
 import { UserStateService } from '../authentication/user-state.service';
@@ -8,14 +8,18 @@ import { ConfigService } from '../../core/config.service';
 import { User } from '../user.class';
 
 @Component({
-	templateUrl: './forgot-password.component.html'
+	templateUrl: 'forgot-password.component.html'
 })
 export class ForgotPasswordComponent {
 
 	user: User;
+
 	error: string;
+
 	success: string;
+
 	pending: string;
+
 	username: string;
 
 	constructor(
@@ -26,24 +30,16 @@ export class ForgotPasswordComponent {
 	) {}
 
 	ngOnInit() {
-
 		// If user is signed in then redirect back home
 		if (this.userStateService.isAuthenticated()) {
 			this.router.navigate(['/']);
 		}
 
 		// If we aren't running in local mode, users shouldn't be able to change passwords
-		this.configService.getConfig()
-			.subscribe((config: any) => {
-				if (config.auth === 'proxy-pki') {
-					this.router.navigate(['/']);
-				}
-			});
-
+		this.configService.getConfig().first().filter((config: any) => config.auth === 'proxy-pki').subscribe((config: any) => this.router.navigate(['/']));
 	}
 
 	requestPasswordReset() {
-
 		this.success = null;
 		this.error = null;
 
@@ -52,18 +48,14 @@ export class ForgotPasswordComponent {
 		}
 		else {
 			this.pending = 'Processing request...';
-			this.authService.forgotPassword(this.username)
-				.subscribe(
-					(result: any) => {
-						this.username = null;
-						this.success = result;
-						this.pending = null;
-					},
-					(response: Response) => {
-						this.error = response.json().message;
-						this.pending = null;
-					});
+			this.authService.forgotPassword(this.username).subscribe((result: any) => {
+				this.username = null;
+				this.success = result;
+				this.pending = null;
+			}, (error: HttpErrorResponse) => {
+				this.error = error.error.message;
+				this.pending = null;
+			});
 		}
-
 	}
 }

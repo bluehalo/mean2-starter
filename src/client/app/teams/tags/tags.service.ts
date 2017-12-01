@@ -1,44 +1,40 @@
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
 
 import { AsyHttp, HttpOptions } from '../../shared/asy-http.service';
-import { PagingOptions } from '../../shared/pager.component';
+import { IPagingResults, PagingOptions } from '../../shared/pager.component';
 import { Tag } from './tags.class';
 
 @Injectable()
 export class TagsService {
 
-	public cache: any = {};
+	cache: any = {};
 
-	constructor(
-		private asyHttp: AsyHttp
-	) {
-	}
+	constructor(private asyHttp: AsyHttp) {}
 
-	public searchTags(query: any, search: string, paging: PagingOptions, options: any): Observable<Response> {
+	searchTags(query: any, search: string, paging: PagingOptions, options: any): Observable<IPagingResults> {
 		return this.asyHttp.post(new HttpOptions('tags?' + this.asyHttp.urlEncode(paging.toObj()), () => {}, { s: search, q: query, options: options }));
 	}
 
 	// Retrieve all tags (or up to 1000)
-	public selectionList(): Observable<Response> {
+	selectionList(): Observable<IPagingResults> {
 		return this.searchTags({}, null, new PagingOptions(0, 1000), {});
 	}
 
-	public getTag(tagId: string): Observable<Response> {
+	getTag(tagId: string): Observable<any> {
 		return this.asyHttp.get(new HttpOptions('tag/' + tagId, () => {}));
 	}
 
-	public createTag(tag: Tag): Observable<Response> {
+	createTag(tag: Tag): Observable<any> {
 		return this.asyHttp.put(new HttpOptions('tag', () => {}, tag));
 	}
 
-	public updateTag(tag: Tag): Observable<Response> {
+	updateTag(tag: Tag): Observable<any> {
 		return this.asyHttp.post(new HttpOptions('tag/' + tag._id, () => {}, tag));
 	}
 
-	public deleteTag(tagId: string): Observable<Response> {
+	deleteTag(tagId: string): Observable<any> {
 		return this.asyHttp.delete(new HttpOptions('tag/' + tagId, () => {}));
 	}
 }

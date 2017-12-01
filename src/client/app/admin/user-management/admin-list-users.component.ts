@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import { Response } from '@angular/http';
 import { ActivatedRoute, Params } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import * as _ from 'lodash';
 import { BsModalService } from 'ngx-bootstrap';
@@ -11,7 +11,7 @@ import { User } from '../user.class';
 import { AdminService } from '../admin.service';
 import { Role } from './role.class';
 import { ExportUsersModal } from './export-users.component';
-import { PagingOptions } from '../../shared/pager.component';
+import { IPagingResults, PagingOptions } from '../../shared/pager.component';
 import { TableSortOptions } from '../../shared/pageable-table/pageable-table.component' ;
 import { SortDisplayOption, SortDirection } from '../../shared/result-utils.class';
 import { AlertService } from '../../shared/alert.service';
@@ -23,7 +23,7 @@ import { TeamsService } from '../../teams/teams.service';
 import { ModalAction, ModalService } from '../../shared/asy-modal.service';
 
 @Component({
-	templateUrl: './admin-list-users.component.html'
+	templateUrl: 'admin-list-users.component.html'
 })
 export class AdminListUsersComponent {
 
@@ -100,14 +100,13 @@ export class AdminListUsersComponent {
 			if (_.toString(clearCachedFilter) === 'true' || null == this.adminService.cache.listUsers) {
 				this.adminService.cache.listUsers = {};
 			}
+		});
 
-			this.configService.getConfig().subscribe(
-				(config: any) => {
-					this.requiredExternalRoles = _.isArray(config.requiredRoles) ? config.requiredRoles : [];
+		this.configService.getConfig().first().subscribe((config: any) => {
+			this.requiredExternalRoles = _.isArray(config.requiredRoles) ? config.requiredRoles : [];
 
-					this.initialize();
-					this.loadUsers();
-				});
+			this.initialize();
+			this.loadUsers();
 		});
 	}
 
@@ -147,14 +146,12 @@ export class AdminListUsersComponent {
 			.confirm('Delete user?', `Are you sure you want to delete user: '${user.userModel.username}" ?`, 'Delete')
 			.first()
 			.filter((action: ModalAction) => action === ModalAction.OK)
-			.switchMap(() => {
-				return this.adminService.removeUser(id);
-			})
+			.switchMap(() => this.adminService.removeUser(id))
 			.subscribe(() => {
 				this.alertService.addAlert(`Deleted user: ${username}`, 'success');
 				this.loadUsers();
-			}, (response: Response) => {
-				this.alertService.addAlert(response.json().message);
+			}, (error: HttpErrorResponse) => {
+				this.alertService.addAlert(error.error.message);
 			});
 	}
 
@@ -268,26 +265,20 @@ export class AdminListUsersComponent {
 			team: this.selectedTeam,
 		};
 
-		let obs: Observable<Response> = (null != this.selectedTeam) ?
+		let obs: Observable<IPagingResults> = (null != this.selectedTeam) ?
 			this.teamsService.searchMembers(this.selectedTeam._id, null, this.getQuery(), this.search, this.pagingOpts) :
 			this.adminService.search(this.getQuery(), this.search, this.pagingOpts, options);
 
-		obs.subscribe(
-			(result: any) => {
-				if (result && Array.isArray(result.elements)) {
-					this.pagingOpts.set(result.pageNumber, result.pageSize, result.totalPages, result.totalSize);
-
-					// Set the user list
-					this.users = result.elements;
-
-					// Get latest team cache
-					this.teamMap = this.teamsService.teamMap;
-
-				} else {
-					this.pagingOpts.reset();
-				}
-			},
-			(_err: any): any => null );
+		obs.subscribe((result: IPagingResults) => {
+			this.users = result.elements;
+			this.teamMap = this.teamsService.teamMap;
+			if (this.users.length > 0) {
+				this.pagingOpts.set(result.pageNumber, result.pageSize, result.totalPages, result.totalSize);
+			}
+			else {
+				this.pagingOpts.reset();
+			}
+		});
 	}
 
 	private getQuery(): any {

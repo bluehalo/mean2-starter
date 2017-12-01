@@ -46,12 +46,12 @@
 		(onPageChange)="goToPage($event)"
 		(onSortChange)="setSort($event)">
 
-		<template asy-template="table-header">
+		<ng-template asy-template="table-header">
 			<th *ngFor="let key of columnKeys" [hidden]="!columns[key].show">{{columns[key].title}}</th>
 			<th>&nbsp;</th>
-		</template>
+		</ng-template>
 
-		<template asy-template="table-row" let-message>
+		<ng-template asy-template="table-row" let-message>
 			<td [hidden]="!columns.title.show">{{message.title}}</td>
 			<td [hidden]="!columns.tearline.show">{{message.tearline}}</td>
 			<td [hidden]="!columns.type.show">{{message.type}}</td>
@@ -65,13 +65,13 @@
 					<button title="Delete" type="button" class="btn btn-danger btn-sm" (click)="confirmDeleteMessage(message)"><span class="fa fa-trash-o"></span></button>
 				</div>
 			</td>
-		</template>
+		</ng-template>
 
-		<template asy-template="empty-table">
+		<ng-template asy-template="empty-table">
 			<h3>
 				<small>No Messages matched your search</small>
 			</h3>
-		</template>
+		</ng-template>
 
 	</pageable-table>
 

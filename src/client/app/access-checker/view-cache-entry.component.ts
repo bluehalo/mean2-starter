@@ -11,7 +11,5 @@ export class ViewCacheEntryModal {
 
 	cacheEntry: CacheEntry;
 
-	constructor(
-		public modalRef: BsModalRef
-	) {}
+	constructor(public modalRef: BsModalRef) {}
 }

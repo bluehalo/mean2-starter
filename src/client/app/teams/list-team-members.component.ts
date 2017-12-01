@@ -1,15 +1,16 @@
-import { Component, Input } from '@angular/core';
-import { Response } from '@angular/http';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import * as _ from 'lodash';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 import { Team, TeamMember, TeamRole } from './teams.class';
 import { TeamsService } from './teams.service';
 import { User } from '../admin/user.class';
 import { UserService } from '../admin/users.service';
-import { PagingOptions } from '../shared/pager.component';
+import { IPagingResults, PagingOptions } from '../shared/pager.component';
 import { TableSortOptions } from '../shared/pageable-table/pageable-table.component';
 import { SortDirection, SortDisplayOption } from '../shared/result-utils.class';
 import { AlertService } from '../shared/alert.service';
@@ -18,36 +19,46 @@ import { ModalAction, ModalService } from '../shared/asy-modal.service';
 
 @Component({
 	selector: 'list-team-members',
-	templateUrl: './list-team-members.component.html'
+	templateUrl: 'list-team-members.component.html'
 })
-export class ListTeamMembersComponent {
+export class ListTeamMembersComponent implements OnDestroy {
 
 	@Input() readOnly: boolean = true;
 
 	team: Team;
+
 	teamMembers: TeamMember[] = [];
+
 	teamId: string;
+
 	teamRoleOptions: any[] = TeamRole.ROLES;
+
 	user: User;
+
 	queryUserSearchTerm: string = '';
+
 	queryUserObj: User;
+
 	sortOptions: TableSortOptions = {
 		name: new SortDisplayOption('Name', 'name', SortDirection.asc),
 		username: new SortDisplayOption('Username', 'username', SortDirection.asc)
 	};
+
 	pagingOptions: PagingOptions;
+
 	searchUsersRef: Observable<any>;
 
+	private routeParamSubscription: Subscription;
+
 	constructor(
+		private modalService: ModalService,
 		private router: Router,
 		private route: ActivatedRoute,
-		private modalService: ModalService,
 		private teamsService: TeamsService,
 		private userService: UserService,
-		private alertService: AlertService,
-		private authService: AuthenticationService
-	) {
-	}
+		private authService: AuthenticationService,
+		public alertService: AlertService
+	) {}
 
 	ngOnInit() {
 		this.alertService.clearAllAlerts();
@@ -60,17 +71,16 @@ export class ListTeamMembersComponent {
 		this.pagingOptions.sortField = this.sortOptions['name'].sortField;
 		this.pagingOptions.sortDir = this.sortOptions['name'].sortDir;
 
-		this.route.params.subscribe((params: Params) => {
+		this.routeParamSubscription = this.route.params.subscribe((params: Params) => {
 			this.teamId = params[`id`];
 
 			// Initialize team if appropriate
 			if (this.teamId) {
 				this.teamsService.get(this.teamId)
-					.subscribe((result: any) => {
-						if (result) {
-							this.team = new Team(result._id, result.name, result.description, result.created, result.requiresExternalTeams);
-							this.getTeamMembers();
-						}
+					.filter((team: Team) => null != team)
+					.subscribe((team: Team) => {
+						this.team = team;
+						this.getTeamMembers();
 					});
 			}
 		});
@@ -90,6 +100,10 @@ export class ListTeamMembersComponent {
 					observer.next(formatted);
 				});
 		});
+	}
+
+	ngOnDestroy() {
+		this.routeParamSubscription.unsubscribe();
 	}
 
 	typeaheadOnSelect(e: any) {
@@ -125,36 +139,21 @@ export class ListTeamMembersComponent {
 					'Remove Admin')
 				.first()
 				.filter((action: ModalAction) => action === ModalAction.OK)
-				.switchMap(() => {
-					return this.doUpdateRole(member, role);
-				})
-				.switchMap(() => {
-					return this.authService.reloadCurrentUser();
-				})
+				.switchMap(() => this.doUpdateRole(member, role))
+				.switchMap(() => this.authService.reloadCurrentUser())
 				.subscribe(() => {
 					// If we successfully removed the role from ourselves, redirect away
 					this.router.navigate(['/teams', {clearCachedFilter: true}]);
-				}, (response: Response) => {
-					if (response.status >= 400 && response.status < 500) {
-						this.alertService.addAlert(response.json().message);
-					}
-				});
+				}, (error: HttpErrorResponse) => this.alertService.addClientErrorAlert(error));
 		}
 		else if (!member.explicit) {
 			// Member is implicitly in team, should explicitly add this member with the desired role
 			this.addMember(member, role);
 		}
 		else {
-			this.doUpdateRole(member, role)
-				.subscribe(
-					() => {
-						this.getTeamMembers();
-					},
-					(response: Response) => {
-						if (response.status >= 400 && response.status < 500) {
-							this.alertService.addAlert(response.json().message);
-						}
-					});
+			this.doUpdateRole(member, role).subscribe(
+			() => this.getTeamMembers(),
+			(error: HttpErrorResponse) => this.alertService.addClientErrorAlert(error));
 		}
 	}
 
@@ -166,19 +165,11 @@ export class ListTeamMembersComponent {
 				'Remove Member')
 			.first()
 			.filter((action: ModalAction) => action === ModalAction.OK)
-			.switchMap(() => {
-				return this.teamsService.removeMember(this.teamId, member.userModel._id);
-			})
-			.switchMap(() => {
-				return this.authService.reloadCurrentUser();
-			})
-			.subscribe(() => {
-				this.getTeamMembers();
-			}, (response: Response) => {
-				if (response.status >= 400 && response.status < 500) {
-					this.alertService.addAlert(response.json().message);
-				}
-								});
+			.switchMap(() => this.teamsService.removeMember(this.teamId, member.userModel._id))
+			.switchMap(() => this.authService.reloadCurrentUser())
+			.subscribe(
+				() => this.getTeamMembers(),
+				(error: HttpErrorResponse) => this.alertService.addClientErrorAlert(error));
 	}
 
 	private addMember(member: User, role?: string) {
@@ -188,34 +179,25 @@ export class ListTeamMembersComponent {
 		}
 
 		this.teamsService.addMember(this.teamId, member.userModel._id, role)
+			.switchMap(() => this.authService.reloadCurrentUser())
 			.subscribe(
-				() => {
-					this.authService.reloadCurrentUser().subscribe(() => {
-						this.getTeamMembers();
-					});
-				},
-				(response: Response) => {
-					if (response.status >= 400 && response.status < 500) {
-						this.alertService.addAlert(response.json().message);
-					}
-				});
+				() => this.getTeamMembers(),
+				(error: HttpErrorResponse) => this.alertService.addClientErrorAlert(error));
 	}
 
 	private getTeamMembers() {
-		this.teamsService.searchMembers(this.teamId, this.team, null, null, this.pagingOptions, false)
-			.subscribe((result: any) => {
-				if (null != result && null != result.elements && result.elements.length > 0) {
-					this.teamMembers = result.elements;
-					this.pagingOptions.set(result.pageNumber, result.pageSize, result.totalPages, result.totalSize);
-				} else {
-					this.teamMembers = [];
-					this.pagingOptions.reset();
-				}
-			});
+		this.teamsService.searchMembers(this.teamId, this.team, null, null, this.pagingOptions, false).subscribe((result: IPagingResults) => {
+			this.teamMembers = result.elements;
+			if (this.teamMembers.length > 0) {
+				this.pagingOptions.set(result.pageNumber, result.pageSize, result.totalPages, result.totalSize);
+			}
+			else {
+				this.pagingOptions.reset();
+			}
+		});
 	}
 
-	private doUpdateRole(member: TeamMember, role: string): Observable<Response> {
+	private doUpdateRole(member: TeamMember, role: string): Observable<any> {
 		return this.teamsService.updateMemberRole(this.teamId, member.userModel._id, role);
 	}
-
 }

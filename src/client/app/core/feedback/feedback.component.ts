@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Response } from '@angular/http';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { BsModalRef } from 'ngx-bootstrap';
 
@@ -44,9 +44,9 @@ export class FeedbackModalComponent {
 			this.feedbackService.submit(this.feedbackText, this.currentRoute).subscribe(() => {
 				this.success = 'Feedback successfully submitted!';
 				setTimeout(() => this.modalRef.hide(), 1500);
-			}, (response: Response) => {
+			}, (error: HttpErrorResponse) => {
 				this.submitting = false;
-				this.error = response.json().message;
+				this.error = error.error.message;
 			});
 		}
 		else {

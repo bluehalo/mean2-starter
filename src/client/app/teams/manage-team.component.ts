@@ -1,10 +1,11 @@
 import { Location } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Response } from '@angular/http';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 import { Team } from './teams.class';
 import { TeamsService } from './teams.service';
@@ -16,18 +17,25 @@ import { ConfigService } from '../core/config.service';
 	selector: 'manage-team',
 	templateUrl: './manage-team.component.html'
 })
-export class ManageTeamComponent {
+export class ManageTeamComponent implements OnDestroy {
 
 	team: Team;
+
 	mode: string;
+
 	modeDisplay: string;
+
 	subtitle: string;
+
 	okButtonText: string;
 
 	showExternalTeams: boolean = false;
+
 	error: string = null;
 
-	private teamId: string;
+	teamId: string;
+
+	private routeParamSubscription: Subscription;
 
 	constructor(
 		private router: Router,
@@ -35,15 +43,16 @@ export class ManageTeamComponent {
 		private location: Location,
 		private configService: ConfigService,
 		private teamsService: TeamsService,
-		public alertService: AlertService,
-		private authService: AuthenticationService
-	) {
-	}
+		private authService: AuthenticationService,
+		public alertService: AlertService
+	) {}
 
 	ngOnInit() {
 		this.alertService.clearAllAlerts();
 
-		this.configService.getConfig()
+		this.configService
+			.getConfig()
+			.first()
 			.subscribe((config: any) => {
 				// Need to show external groups when in proxy-pki mode
 				if (config.auth === 'proxy-pki') {
@@ -51,7 +60,7 @@ export class ManageTeamComponent {
 				}
 			});
 
-		this.route.params.subscribe((params: Params) => {
+		this.routeParamSubscription = this.route.params.subscribe((params: Params) => {
 			this.mode = params[`mode`];
 			this.teamId = params[`id`];
 
@@ -63,15 +72,13 @@ export class ManageTeamComponent {
 
 			// Initialize team if appropriate
 			if (this.teamId) {
-				this.teamsService.get(this.teamId)
-					.subscribe((result: any) => {
-						if (result) {
-							this.team = new Team(result._id, result.name, result.description, result.created, result.requiresExternalTeams);
-						}
-					});
+				this.teamsService.get(this.teamId).filter((team: Team) => null != team).subscribe((team: Team) => this.team = team);
 			}
-
 		});
+	}
+
+	ngOnDestroy() {
+		this.routeParamSubscription.unsubscribe();
 	}
 
 	back() {
@@ -85,25 +92,22 @@ export class ManageTeamComponent {
 	}
 
 	save() {
-		let result: Observable<Response> = this.mode === 'create' ? this.create() : this.update();
-		result.subscribe(
-			() => {
-				this.authService.reloadCurrentUser().subscribe(() => {
-					this.router.navigate(['/teams', {clearCachedFilter: true}]);
-				});
-			},
-			(response: Response) => {
-				if (response.status >= 400 && response.status < 500) {
-					this.error = response.json().message;
+		let result: Observable<any> = this.mode === 'create' ? this.create() : this.update();
+		result.switchMap(() => this.authService.reloadCurrentUser())
+			.subscribe(() => {
+				this.router.navigate(['/teams', {clearCachedFilter: true}]);
+			}, (error: HttpErrorResponse) => {
+				if (error.status >= 400 && error.status < 500) {
+					this.error = error.error.message;
 				}
 			});
 	}
 
-	private create(): Observable<Response> {
+	create(): Observable<any> {
 		return this.teamsService.create(this.team);
 	}
 
-	private update(): Observable<Response> {
+	update(): Observable<any> {
 		return this.teamsService.update(this.team);
 	}
 

@@ -4,6 +4,22 @@ import * as _ from 'lodash';
 
 import { SortDirection } from './result-utils.class';
 
+export interface IPagingResults {
+	pageNumber: number;
+	pageSize: number;
+	totalPages: number;
+	totalSize: number;
+	elements: any[];
+}
+
+export const NULL_PAGING_RESULTS: IPagingResults = {
+	pageNumber: 0,
+	pageSize: 0,
+	totalPages: 0,
+	totalSize: 0,
+	elements: []
+};
+
 export type PageChange = {
 	pageNumber: number;
 	pageSize: number;
@@ -92,7 +108,7 @@ export class Pager {
 	}
 
 	ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-		if (changes.hasOwnProperty('pageSize') || changes.hasOwnProperty('totalSize')) {
+		if (changes.hasOwnProperty('pageNumber') || changes.hasOwnProperty('pageSize') || changes.hasOwnProperty('totalSize')) {
 			this.calculateTotalPages();
 			this.format();
 		}

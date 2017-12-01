@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { BsDropdownModule, CollapseModule, ModalModule, TooltipModule } from 'ngx-bootstrap';
 import { ToasterModule, ToasterService } from 'angular2-toaster';
@@ -48,7 +48,7 @@ import { FeedbackAudit } from './core/feedback/audit/feedback-audit.component';
 		BrowserModule,
 		BrowserAnimationsModule,
 		FormsModule,
-		HttpModule,
+		HttpClientModule,
 
 		AppRoutingModule,
 		ToasterModule,

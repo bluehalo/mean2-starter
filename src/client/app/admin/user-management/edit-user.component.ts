@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { Response } from '@angular/http';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import * as _ from 'lodash';
+import { Observable } from 'rxjs/Observable';
 
 import { ManageUserComponent } from './manage-user.component';
 import { AdminService } from '../admin.service';
@@ -14,24 +15,24 @@ import { CacheEntriesService } from '../../access-checker/cache-entries.service'
 
 @Component({
 	selector: 'edit-user',
-	templateUrl: './manage-user.component.html'
+	templateUrl: 'manage-user.component.html'
 })
 export class UpdateUserComponent extends ManageUserComponent {
 
 	mode: string = 'edit';
+
 	refreshing: boolean = false;
 
 	constructor(
-		router: Router,
-		configService: ConfigService,
-		alertService: AlertService,
 		private adminService: AdminService,
 		private authService: AuthenticationService,
-		private cacheEntriesService: CacheEntriesService
+		private cacheEntriesService: CacheEntriesService,
+		protected router: Router,
+		protected configService: ConfigService,
+		public alertService: AlertService
 	) {
 		super(router, configService, alertService);
 	}
-
 
 	initialize() {
 		this.title = 'Edit Profile';
@@ -47,10 +48,8 @@ export class UpdateUserComponent extends ManageUserComponent {
 		this.okDisabled = null != this.user && !this.user.userModel.bypassAccessCheck;
 	}
 
-	submitUser(user: User): any {
-		let updateResult = this.adminService.update(user);
-		updateResult.subscribe(() => this.authService.reloadCurrentUser());
-		return updateResult;
+	submitUser(user: User): Observable<any> {
+		return this.adminService.update(user).switchMap(() => this.authService.reloadCurrentUser());
 	}
 
 	/**
@@ -58,18 +57,15 @@ export class UpdateUserComponent extends ManageUserComponent {
 	 */
 	refreshCredentials() {
 		this.refreshing = true;
-		this.cacheEntriesService.refreshCurrentUser().subscribe(
-			() => {
-				this.alertService.addAlert('Credentials successfully refreshed', 'success');
+		this.cacheEntriesService.refreshCurrentUser().switchMap(() => {
+			this.alertService.addAlert('Credentials successfully refreshed', 'success');
+			this.refreshing = false;
+			return this.authService.signin(this.user);
+		}).subscribe(
+			() => this.initializeUser(),
+			(error: HttpErrorResponse) => {
 				this.refreshing = false;
-				this.authService.signin(this.user).subscribe(
-					() => this.initializeUser(),
-					(response: Response) => { this.alertService.addAlert(response.json().message); }
-				);
-			},
-			(response: Response) => {
-				this.alertService.addAlert(response.json().message);
-				this.refreshing = false;
+				this.alertService.addAlert(error.error.message);
 			}
 		);
 	}
@@ -78,5 +74,4 @@ export class UpdateUserComponent extends ManageUserComponent {
 		this.user = _.cloneDeep(this.authService.getCurrentUser());
 		this.user.userModel.providerData = { dn: (null != this.user.userModel.providerData) ? this.user.userModel.providerData.dn : undefined };
 	}
-
 }

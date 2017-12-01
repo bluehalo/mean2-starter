@@ -6,21 +6,27 @@ import { AlertService } from '../../shared/alert.service';
 import { ModalService } from '../../shared/asy-modal.service';
 
 export abstract class ManageEuaComponent {
-	error: any;
+	error: string;
 
 	mode: string;
+
 	id: string;
+
 	eua: EndUserAgreement;
+
 	preview: boolean;
+
 	title: string;
+
 	subtitle: string;
+
 	submitText: string;
 
 	constructor(
-		public router: Router,
-		public auth: AuthenticationService,
-		public alertService: AlertService,
-		public asyModalService: ModalService
+		protected router: Router,
+		protected auth: AuthenticationService,
+		protected asyModalService: ModalService,
+		public alertService: AlertService
 	) {
 		this.eua = new EndUserAgreement();
 	}

@@ -10,19 +10,18 @@ import { ModalService } from '../../shared/asy-modal.service';
 
 @Component({
 	selector: 'admin-create-eua',
-	templateUrl: './manage-eua.component.html'
+	templateUrl: 'manage-eua.component.html'
 })
 export class AdminCreateEuaComponent extends ManageEuaComponent {
 
 	constructor(
-		router: Router,
-		auth: AuthenticationService,
-		alertService: AlertService,
-		public asyModalService: ModalService,
-		protected euaService: EuaService
-
+		protected router: Router,
+		protected auth: AuthenticationService,
+		protected asyModalService: ModalService,
+		protected euaService: EuaService,
+		public alertService: AlertService
 	) {
-		super(router, auth, alertService, asyModalService);
+		super(router, auth, asyModalService, alertService);
 	}
 
 	ngOnInit() {

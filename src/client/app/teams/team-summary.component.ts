@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
-import { Response } from '@angular/http';
+import { Component, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { Subscription } from 'rxjs/Subscription';
 
 import { Team, TeamMember } from './teams.class';
 import { TeamsService } from './teams.service';
@@ -11,9 +13,9 @@ import { ModalAction, ModalService } from '../shared/asy-modal.service';
 
 @Component({
 	selector: 'team-summary',
-	templateUrl: './team-summary.component.html'
+	templateUrl: 'team-summary.component.html'
 })
-export class TeamSummaryComponent {
+export class TeamSummaryComponent implements OnDestroy {
 
 	user: TeamMember;
 
@@ -23,6 +25,8 @@ export class TeamSummaryComponent {
 
 	defaultDescription: string = 'No Description.';
 
+	private routeParamSubscription: Subscription;
+
 	constructor(
 		private router: Router,
 		private route: ActivatedRoute,
@@ -30,37 +34,37 @@ export class TeamSummaryComponent {
 		private teamsService: TeamsService,
 		public alertService: AlertService,
 		private authService: AuthenticationService
-	) {
-	}
+	) {}
 
 	ngOnInit() {
 		this.user = this.teamsService.getCurrentUserAsTeamMember();
 
 		this.team = new Team();
 
-		this.route.params.subscribe((params: Params) => {
+		this.routeParamSubscription = this.route.params.subscribe((params: Params) => {
 			this.teamId = params[`id`];
 
 			// Initialize team
 			if (this.teamId) {
-				this.teamsService.get(this.teamId)
-					.subscribe(
-						(result: any) => {
-							if (null != result) {
-								this.team = new Team(result._id, result.name, result.description, result.created, result.requiresExternalTeams);
-								if (StringUtils.isInvalid(this.team.description)) {
-									this.team.description = this.defaultDescription;
-								}
-							}
-							else {
-								this.router.navigate(['resource/invalid', {type: 'team'}]);
-							}
-						},
-						() => {
-							this.router.navigate(['resource/invalid', {type: 'team'}]);
-						});
+				this.teamsService.get(this.teamId).subscribe((team: Team) => {
+					if (null != team) {
+						this.team = team;
+						if (StringUtils.isInvalid(this.team.description)) {
+							this.team.description = this.defaultDescription;
+						}
+					}
+					else {
+						this.router.navigate(['resource/invalid', {type: 'team'}]);
+					}
+				}, () => {
+					this.router.navigate(['resource/invalid', {type: 'team'}]);
+				});
 			}
 		});
+	}
+
+	ngOnDestroy() {
+		this.routeParamSubscription.unsubscribe();
 	}
 
 	saveEditable(val: any) {
@@ -72,22 +76,14 @@ export class TeamSummaryComponent {
 			this.team.description = val.description;
 		}
 
-		this.teamsService.update(this.team)
-			.subscribe(
-				(result: any) => {
-					if (null != result) {
-						this.team = new Team(result._id, result.name, result.description, result.created, result.requiresExternalTeams);
-
-						if (StringUtils.isInvalid(this.team.description)) {
-							this.team.description = this.defaultDescription;
-						}
-					}
-				},
-				(response: Response) => {
-					if (response.status >= 400 && response.status < 500) {
-						this.alertService.addAlert(response.json().message);
-					}
-				});
+		this.teamsService.update(this.team).subscribe((team: Team) => {
+			if (null != team) {
+				this.team = team;
+				if (StringUtils.isInvalid(this.team.description)) {
+					this.team.description = this.defaultDescription;
+				}
+			}
+		}, (error: HttpErrorResponse) => this.alertService.addClientErrorAlert(error));
 	}
 
 	update() {
@@ -99,18 +95,10 @@ export class TeamSummaryComponent {
 			.confirm('Delete team?', `Are you sure you want to delete the team: <strong>"${this.team.name}"</strong>?<br/>This action cannot be undone.`, 'Delete')
 			.first()
 			.filter((action: ModalAction) => action === ModalAction.OK)
-			.switchMap(() => {
-				return this.teamsService.delete(this.team._id);
-			})
-			.switchMap(() => {
-				return this.authService.reloadCurrentUser();
-			})
+			.switchMap(() => this.teamsService.delete(this.team._id))
+			.switchMap(() => this.authService.reloadCurrentUser())
 			.subscribe(() => {
 				this.router.navigate(['/teams', {clearCachedFilter: true}]);
-			}, (response: Response) => {
-				if (response.status >= 400 && response.status < 500) {
-					this.alertService.addAlert(response.json().message);
-				}
-								});
+			}, (error: HttpErrorResponse) => this.alertService.addClientErrorAlert(error));
 	}
 }

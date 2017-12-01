@@ -1,27 +1,28 @@
 import { ActivatedRoute, Params } from '@angular/router';
 import { Component } from '@angular/core';
-import { Response } from '@angular/http';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import * as _ from 'lodash';
+import { Subscription } from 'rxjs/Subscription';
 
 import { Message } from '../message.class';
 import { MessageService } from '../message.service';
-import { PagingOptions } from '../../shared/pager.component';
+import { IPagingResults, PagingOptions } from '../../shared/pager.component';
 import { TableSortOptions } from '../../shared/pageable-table/pageable-table.component';
 import { SortDirection, SortDisplayOption } from '../../shared/result-utils.class';
 import { AlertService } from '../../shared/alert.service';
 import { ModalAction, ModalService } from '../../shared/asy-modal.service';
 
 @Component({
-	templateUrl: './list-messages.component.html'
+	templateUrl: 'list-messages.component.html'
 })
 export class ListMessagesComponent {
 
 	messages: Message[] = [];
+
 	pagingOpts: PagingOptions;
+
 	search: string = '';
-	filters: any = {};
-	sort: any;
 
 	// Columns to show/hide in user table
 	columns = {
@@ -34,7 +35,7 @@ export class ListMessagesComponent {
 	};
 
 	columnKeys = _.keys(this.columns);
-	defaultColumns = JSON.parse(JSON.stringify(this.columns));
+
 	columnMode = 'default';
 
 	sortOpts: TableSortOptions = {
@@ -44,7 +45,7 @@ export class ListMessagesComponent {
 		updated: new SortDisplayOption('Updated', 'updated', SortDirection.desc)
 	};
 
-	results: any = {
+	private results: any = {
 		pageNumber: 0, // The current page number
 		pageSize: 0,   // The number of elements in the current page
 		totalPages: 0, // The total number of pages
@@ -52,16 +53,24 @@ export class ListMessagesComponent {
 		resolved: false // indicates if search query has completed or is running
 	};
 
+	private sort: any;
+
+	private filters: any = {};
+
+	private defaultColumns = JSON.parse(JSON.stringify(this.columns));
+
+	private routeParamsSubscription: Subscription;
+
 	constructor(
-		private messageService: MessageService,
-		public alertService: AlertService,
 		private modalService: ModalService,
-		private route: ActivatedRoute) {
-	}
+		private messageService: MessageService,
+		private route: ActivatedRoute,
+		public alertService: AlertService
+	) {}
 
 	ngOnInit() {
 		this.alertService.clearAllAlerts();
-		this.route.params.subscribe((params: Params) => {
+		this.routeParamsSubscription = this.route.params.subscribe((params: Params) => {
 			if (_.toString(params[`clearCachedFilter`]) === 'true' || null == this.messageService.cache.listMessages) {
 				this.messageService.cache.listMessages = {};
 			}
@@ -71,49 +80,24 @@ export class ListMessagesComponent {
 		});
 	}
 
-	/**
-	 * Initialize query, search, and paging options, possibly from cached user settings
-	 */
-	initializeMessageFilters() {
-		let cachedFilter: any = this.messageService.cache.listMessages as any;
-
-		this.search = cachedFilter.search ? cachedFilter.search : '';
-		this.filters = cachedFilter.filters ? cachedFilter.filters : {};
-
-		if (cachedFilter.paging) {
-			this.pagingOpts = cachedFilter.paging;
-		}
-		else {
-			this.pagingOpts = new PagingOptions();
-			this.pagingOpts.sortField = this.sortOpts['created'].sortField;
-			this.pagingOpts.sortDir = this.sortOpts['created'].sortDir;
-		}
-
-		this.sort = this.messageService.sort.map;
-	}
-
-	getQuery() {
-		return {};
+	ngOnDestroy() {
+		this.routeParamsSubscription.unsubscribe();
 	}
 
 	applySearch() {
 		this.results.resolved = false;
 
 		this.messageService.cache.messages = {search: this.search, paging: this.pagingOpts};
-		this.messageService.search(this.getQuery(), this.search, this.pagingOpts)
-			.subscribe((result: any) => {
-				if (null != result) {
-					this.messages = result.elements;
+		this.messageService.search(this.getQuery(), this.search, this.pagingOpts).subscribe((result: IPagingResults) => {
+			this.messages = result.elements;
+			if (this.messages.length > 0) {
 					this.pagingOpts.set(result.pageNumber, result.pageSize, result.totalPages, result.totalSize);
-				} else {
-					this.messages = [];
 				}
-
-				this.results.resolved = true;
-			}, (error) => {
-				this.alertService.addAlert(error.message);
-				this.results.resolved = true;
-			});
+			else {
+				this.pagingOpts.reset();
+			}
+			this.results.resolved = true;
+		});
 	}
 
 	goToPage(event: any) {
@@ -129,19 +113,16 @@ export class ListMessagesComponent {
 
 	confirmDeleteMessage(message: Message) {
 		const id = message._id;
-
 		this.modalService
 			.confirm('Delete message?', `Are you sure you want to delete message: "${message.title}" ?`, 'Delete')
 			.first()
 			.filter((action: ModalAction) => action === ModalAction.OK)
-			.switchMap(() => {
-				return this.messageService.remove(id);
-			})
+			.switchMap(() => this.messageService.remove(id))
 			.subscribe(() => {
 				this.alertService.addAlert(`Deleted message.`, 'success');
 				this.applySearch();
-			}, (response: Response) => {
-				this.alertService.addAlert(response.json().message);
+			}, (error: HttpErrorResponse) => {
+				this.alertService.addAlert(error.error.message);
 			});
 	}
 
@@ -176,4 +157,28 @@ export class ListMessagesComponent {
 		});
 	}
 
+	/**
+	 * Initialize query, search, and paging options, possibly from cached user settings
+	 */
+	private initializeMessageFilters() {
+		let cachedFilter: any = this.messageService.cache.listMessages as any;
+
+		this.search = cachedFilter.search ? cachedFilter.search : '';
+		this.filters = cachedFilter.filters ? cachedFilter.filters : {};
+
+		if (cachedFilter.paging) {
+			this.pagingOpts = cachedFilter.paging;
+		}
+		else {
+			this.pagingOpts = new PagingOptions();
+			this.pagingOpts.sortField = this.sortOpts['created'].sortField;
+			this.pagingOpts.sortDir = this.sortOpts['created'].sortDir;
+		}
+
+		this.sort = this.messageService.sort.map;
+	}
+
+	private getQuery() {
+		return {};
+	}
 }
