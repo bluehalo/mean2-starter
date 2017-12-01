@@ -31,14 +31,14 @@
 		[pagingOptions]="pagingOptions"
 		(onPageChange)="goToPage($event)">
 
-		<template asy-template="table-header">
+		<ng-template asy-template="table-header">
 			<th>Team Name</th>
 			<th>Description</th>
 			<th>Created</th>
 			<th>&nbsp;</th>
-		</template>
+		</ng-template>
 
-		<template asy-template="table-row" let-team>
+		<ng-template asy-template="table-row" let-team>
 			<td>
 				<div class="hide-overflow" style="max-width:200px;">
 					<a [routerLink]="['/team', team._id]"><strong>{{team.name}}</strong></a>
@@ -63,9 +63,9 @@
 					</div>
 				</div>
 			</td>
-		</template>
+		</ng-template>
 
-		<template asy-template="empty-table">
+		<ng-template asy-template="empty-table">
 			<h4>
 				No Teams?<br/>
 				<small>
@@ -73,7 +73,7 @@
 					Read our <a [routerLink]="['/help/teams']">getting started page</a> for more details.
 				</small>
 			</h4>
-		</template>
+		</ng-template>
 
 	</pageable-table>
 

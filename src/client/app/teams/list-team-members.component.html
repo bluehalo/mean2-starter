@@ -20,16 +20,16 @@
 		(onPageChange)="goToPage($event)"
 		(onSortChange)="setSort($event)">
 
-		<template asy-template="table-header">
+		<ng-template asy-template="table-header">
 			<th *ngIf="!readOnly" >&nbsp;</th>
 			<th>Name</th>
 			<th>Username</th>
 			<th>Active</th>
 			<th>Bypassed</th>
 			<th>Team Role</th>
-		</template>
+		</ng-template>
 
-		<template asy-template="table-row" let-member>
+		<ng-template asy-template="table-row" let-member>
 			<td *ngIf="!readOnly" style="width:110px;">
 				<div class="pull-left">
 					<button type="button" class="btn btn-danger btn-sm"
@@ -84,9 +84,9 @@
 					</div>
 				</div>
 			</td>
-		</template>
+		</ng-template>
 
-		<template asy-template="empty-table">
+		<ng-template asy-template="empty-table">
 			<h4>
 				No Members?<br/>
 				<small>
@@ -94,7 +94,7 @@
 					Read our <a [routerLink]="['/help/teams']">help page</a> for more details.
 				</small>
 			</h4>
-		</template>
+		</ng-template>
 
 	</pageable-table>
 

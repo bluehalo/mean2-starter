@@ -26,16 +26,16 @@
 		(onPageChange)="goToPage($event)"
 		(onSortChange)="setSort($event)">
 
-		<template asy-template="table-header">
+		<ng-template asy-template="table-header">
 			<th>Name</th>
 			<th>Description</th>
 			<th>Created</th>
 			<th>Updated</th>
 			<th>Resources</th>
 			<th *ngIf="!readOnly">&nbsp;</th>
-		</template>
+		</ng-template>
 
-		<template asy-template="table-row" let-tag>
+		<ng-template asy-template="table-row" let-tag>
 			<!-- Tag Name -->
 			<td>
 				<div style="width:200px;"
@@ -95,15 +95,15 @@
 					</a>
 				</div>
 			</td>
-		</template>
+		</ng-template>
 
-		<template asy-template="empty-table">
+		<ng-template asy-template="empty-table">
 			<h3>
 				No Tags?<br/>
 				<small>
 					Either there were no tags that matched your search or there are no tags in this team.<br/>
 				</small>
 			</h3>
-		</template>
+		</ng-template>
 	</pageable-table>
 </section>

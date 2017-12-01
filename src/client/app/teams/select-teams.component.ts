@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 
-import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 
 import { ObservableUtils } from '../shared/observable-utils.class';
@@ -8,11 +8,11 @@ import { TagsService } from './tags/tags.service';
 import { TeamsService } from './teams.service';
 import { TeamMember, Team } from './teams.class';
 import { Tag } from './tags/tags.class';
-import { PagingOptions } from '../shared/pager.component';
+import { IPagingResults, NULL_PAGING_RESULTS, PagingOptions } from '../shared/pager.component';
 
 @Component({
 	selector: 'select-teams',
-	templateUrl: './select-teams.component.html'
+	templateUrl: 'select-teams.component.html'
 })
 export class SelectTeamsComponent {
 
@@ -21,8 +21,6 @@ export class SelectTeamsComponent {
 	@Output() alertError = new EventEmitter();
 
 	@Output() setSelection = new EventEmitter();
-
-	user: TeamMember;
 
 	// Tag filter variables
 	allTagOption: Tag = new Tag('All', 'All Tags');
@@ -42,11 +40,12 @@ export class SelectTeamsComponent {
 
 	teamOptions: Team[] = [];
 
+	private user: TeamMember;
+
 	constructor(
-		public tagsService: TagsService,
-		public teamsService: TeamsService
-	) {
-	}
+		private tagsService: TagsService,
+		private teamsService: TeamsService
+	) {}
 
 	ngOnInit() {
 		// Get current user info in order to access permissions
@@ -65,7 +64,34 @@ export class SelectTeamsComponent {
 		this.preselectedTag = tag;
 	}
 
-	sortByName(a: any, b: any) {
+	applyTeamFilter(t: Team, update: boolean = true) {
+		if (update) {
+			this.preselectedTag = null;
+		}
+
+		// Check that filter actually changed
+		if (t._id !== this.selectedTeam._id) {
+			this.selectedTeam = t;
+			this.getTagsForTeam(t).subscribe(() => {
+				if (update) {
+					this.updateSelection();
+				}
+			}, (error: HttpErrorResponse) => {
+				this.alertError.emit(error);
+			});
+		}
+	}
+
+	applyTagFilter(t: Tag) {
+		// Check that the filter actually changed
+		if (t._id !== this.selectedTag._id) {
+			this.selectedTag = t;
+
+			this.updateSelection();
+		}
+	}
+
+	private sortByName(a: any, b: any) {
 		let aname = a.name.toUpperCase();
 		let bname = b.name.toUpperCase();
 
@@ -81,123 +107,48 @@ export class SelectTeamsComponent {
 	 * If the user is a system admin, show all teams in the system.
 	 * If user is not an admin, only show teams that the user belongs to
 	 */
-	initializeTeams() {
-		return Observable.create((observer: any) => {
-			this.teamsService.selectionList()
-				.subscribe(
-					(result: any) => {
-						let results = (_.isArray(result)) ? result : result.elements;
-						if (_.isArray(results)) {
-							this.teamOptions = results.map((r: any) => new Team(r._id, r.name)).sort(this.sortByName);
-						}
-
-						observer.complete();
-					},
-					(err: any) => {
-						observer.error(err);
-					});
+	private initializeTeams(): Observable<IPagingResults> {
+		return this.teamsService.selectionList().map((result: IPagingResults) => {
+			this.teamOptions = result.elements.sort(this.sortByName);
+			return result;
 		});
 	}
 
-	initializeTags() {
-		return Observable.create((observer: any) => {
-			if (!this.showTags) {
-				observer.complete();
-			}
-			else {
-				this.tagsService.selectionList()
-					.subscribe(
-						(result: any) => {
-							this.populateTagOptions(result);
-							observer.complete();
-						},
-						(err: any) => {
-							observer.error(err);
-						}
-					);
-			}
+	private initializeTags(): Observable<IPagingResults> {
+		if (!this.showTags) {
+			return Observable.of(NULL_PAGING_RESULTS);
+		}
+
+		return this.tagsService.selectionList().map((result: IPagingResults) => {
+			this.populateTagOptions(result);
+			return result;
 		});
 	}
 
-	handleSelection() {
+	private handleSelection() {
 		if (null != this.preselectedTeam) {
 			this.applyTeamFilter(this.preselectedTeam, false);
 		}
 		return Observable.empty();
 	}
 
-	populateTagOptions(result: any) {
-		// Default to preselected tag or all tags
+	private populateTagOptions(result: IPagingResults) {
 		this.selectedTag = (null != this.preselectedTag) ? this.preselectedTag : this.allTagOption;
-
-		if (null != result && null != result.elements && result.elements.length > 0) {
-			this.tagOptions = result.elements.map((r: any) => new Tag(r._id, r.name)).sort(this.sortByName);
-		}
-		else {
-			this.tagOptions = [];
-		}
+		this.tagOptions = result.elements;
 	}
 
 	/**
 	 * Helper functions for team and tag filtering
 	 */
-	getTagsForTeam(t: Team) {
-		return Observable.create((observer: any) => {
-			// Get all tags or get tags for selected team
-			let obs: Observable<any>;
-			if (t._id === this.allTeamOption._id) {
-				obs = this.tagsService.selectionList();
-			}
-			else {
-				obs = this.tagsService.searchTags({ owner: { $in: [t._id] } }, null, new PagingOptions(0, 1000), {});
-			}
+	private getTagsForTeam(t: Team): Observable<IPagingResults> {
+		let obs: Observable<IPagingResults> = (t._id === this.allTeamOption._id)
+			? this.tagsService.selectionList()
+			: this.tagsService.searchTags({ owner: { $in: [t._id] } }, null, new PagingOptions(0, 1000), {});
 
-			obs.subscribe(
-				(result: any) => {
-					this.populateTagOptions(result);
-					observer.next();
-				},
-				(err: any) => {
-					this.tagOptions = [];
-					observer.error(err);
-				},
-				() => {
-					observer.complete();
-				});
-		});
+		return obs.do((result: IPagingResults) => this.populateTagOptions(result));
 	}
 
-	applyTeamFilter(t: Team, update: boolean = true) {
-		if (update) {
-			this.preselectedTag = null;
-		}
-
-		// Check that filter actually changed
-		if (t._id !== this.selectedTeam._id) {
-			this.selectedTeam = t;
-			this.getTagsForTeam(t)
-				.subscribe(
-					() => {
-						if (update) {
-							this.updateSelection();
-						}
-					},
-					(err: any) => {
-						this.alertError.emit(err);
-					});
-		}
-	}
-
-	applyTagFilter(t: Tag) {
-		// Check that the filter actually changed
-		if (t._id !== this.selectedTag._id) {
-			this.selectedTag = t;
-
-			this.updateSelection();
-		}
-	}
-
-	updateSelection() {
+	private updateSelection() {
 		let team = (this.selectedTeam._id === this.allTeamOption._id) ? null : this.selectedTeam;
 		let tag = (this.selectedTag._id === this.allTagOption._id) ? null : this.selectedTag;
 
