@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+
 import { User } from '../user.class';
 import { AuthenticationService } from './authentication.service';
 
@@ -7,12 +8,10 @@ import { AuthenticationService } from './authentication.service';
 })
 
 export class InactiveComponent {
+
 	user: User;
 
-	constructor(
-		private auth: AuthenticationService
-	) {
-	}
+	constructor(private auth: AuthenticationService) {}
 
 	ngOnInit() {
 		this.user = this.auth.getCurrentUser();

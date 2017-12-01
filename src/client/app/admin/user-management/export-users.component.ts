@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Response } from '@angular/http';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { BsModalRef } from 'ngx-bootstrap';
 
@@ -42,15 +42,14 @@ export class ExportUsersModal {
 
 	retrieveUsers() {
 		if (null != this.selectedField && this.queryValid) {
-			this.adminService.getAll(JSON.parse(this.query), this.selectedField)
-				.subscribe((users: string[]) => {
-					this.valuesArray = users;
-					this.updateValue();
-				}, (response: Response) => {
-					if (response.status >= 400 && response.status < 500) {
-						this.value = 'Unable to retrieve field values: ' + response.json().message;
-					}
-				});
+			this.adminService.getAll(JSON.parse(this.query), this.selectedField).subscribe((users: string[]) => {
+				this.valuesArray = users;
+				this.updateValue();
+			}, (error: HttpErrorResponse) => {
+				if (error.status >= 400 && error.status < 500) {
+					this.value = 'Unable to retrieve field values: ' + error.error.message;
+				}
+			});
 		}
 	}
 

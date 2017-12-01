@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { Subscription } from 'rxjs/Subscription';
 
 import { EndUserAgreement } from './eua.class';
 import { EuaService } from './eua.service';
@@ -10,19 +13,21 @@ import { ModalService } from '../../shared/asy-modal.service';
 
 @Component({
 	selector: 'admin-update-eua',
-	templateUrl: './manage-eua.component.html'
+	templateUrl: 'manage-eua.component.html'
 })
 export class AdminUpdateEuaComponent extends ManageEuaComponent {
 
+	private routeParamSubscription: Subscription;
+
 	constructor(
-		router: Router,
-		auth: AuthenticationService,
-		alertService: AlertService,
-		public asyModalService: ModalService,
-		protected euaService: EuaService,
-		protected route: ActivatedRoute
+		private euaService: EuaService,
+		private route: ActivatedRoute,
+		protected router: Router,
+		protected auth: AuthenticationService,
+		protected asyModalService: ModalService,
+		public alertService: AlertService
 	) {
-		super(router, auth, alertService, asyModalService);
+		super(router, auth, asyModalService, alertService);
 	}
 
 	ngOnInit() {
@@ -30,12 +35,14 @@ export class AdminUpdateEuaComponent extends ManageEuaComponent {
 		this.subtitle = 'Make changes to the eua\'s information';
 		this.submitText = 'Save';
 
-		this.route.params.subscribe((params: Params) => {
-			this.id = params[`id`];
-			this.euaService.get(this.id).subscribe((euaRaw: any) => {
-				this.eua = new EndUserAgreement().setFromEuaModel(euaRaw);
-			});
-		});
+		this.routeParamSubscription = this.route.params
+			.do((params: Params) => this.id = params[`id`])
+			.switchMap(() => this.euaService.get(this.id))
+			.subscribe((eua: EndUserAgreement) => this.eua = eua);
+	}
+
+	ngOnDestroy() {
+		this.routeParamSubscription.unsubscribe();
 	}
 
 	submitEua() {
@@ -46,6 +53,9 @@ export class AdminUpdateEuaComponent extends ManageEuaComponent {
 			text: this.eua.euaModel.text,
 			published: this.eua.euaModel.published
 		};
-		this.euaService.update(_eua).subscribe(() => this.router.navigate(['/admin/euas', {clearCachedFilter: true}]));
+
+		this.euaService.update(_eua).subscribe(
+			() => this.router.navigate(['/admin/euas', {clearCachedFilter: true}]),
+			(error: HttpErrorResponse) => this.alertService.addAlert(error.error.message));
 	}
 }

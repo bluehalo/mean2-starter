@@ -1,11 +1,11 @@
 <section class="row">
 	<!-- PKI Authentication Strategy -->
-	<div *ngIf="config && config.auth === 'proxy-pki'">
+	<div *ngIf="isProxyPki">
 		Loading, please wait...
 	</div>
 
 	<!-- Username/Password Authentication Strategy -->
-	<div *ngIf="config && config.auth === 'local'">
+	<div *ngIf="!isProxyPki">
 
 		<h3 class="col-md-12 text-center">Sign In</h3>
 

@@ -1,56 +1,59 @@
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Component } from '@angular/core';
+
+import { Observable } from 'rxjs/Observable';
 
 import { User } from '../user.class';
 import { AdminService } from '../admin.service';
 import { ManageUserComponent } from './manage-user.component';
-import { Role } from '../user-management/role.class';
+import { Role } from './role.class';
 import { ConfigService } from '../../core/config.service';
 import { AlertService } from '../../shared/alert.service';
 
 @Component({
 	selector: 'admin-edit-user',
-	templateUrl: './manage-user.component.html'
+	templateUrl: 'manage-user.component.html'
 })
 export class AdminUpdateUserComponent extends ManageUserComponent {
 
-	private mode = 'admin-edit';
+	mode = 'admin-edit';
 
-	private possibleRoles = Role.ROLES;
+	possibleRoles = Role.ROLES;
 
 	private id: string;
 
 	private sub: any;
 
 	constructor(
-		router: Router,
-		configService: ConfigService,
-		alertService: AlertService,
 		private adminService: AdminService,
-		private route: ActivatedRoute
+		private route: ActivatedRoute,
+		protected router: Router,
+		protected configService: ConfigService,
+		public alertService: AlertService
 	) {
 		super(router, configService, alertService);
 	}
 
 	initialize() {
-		this.sub = this.route.params.subscribe( (params: any) => {
-			this.id = params.id;
+		this.sub = this.route.params
+			.do( (params: Params) => {
+				this.id = params.id;
 
-			this.title = 'Edit User';
-			this.subtitle = 'Make changes to the user\'s information';
-			this.okButtonText = 'Save';
-			this.navigateOnSuccess = '/admin/users';
-			this.okDisabled = false;
-			this.adminService.get(this.id).subscribe((userRaw: any) => {
-				this.user = new User().setFromUserModel(userRaw);
+				this.title = 'Edit User';
+				this.subtitle = 'Make changes to the user\'s information';
+				this.okButtonText = 'Save';
+				this.navigateOnSuccess = '/admin/users';
+				this.okDisabled = false;
+			})
+			.switchMap(() => this.adminService.get(this.id))
+			.subscribe((user: User) => {
+				this.user = user;
 				if (null == this.user.userModel.roles) {
 					this.user.userModel.roles = {};
 				}
 				this.user.userModel.providerData = { dn: (null != this.user.userModel.providerData) ? this.user.userModel.providerData.dn : undefined };
 				this.metadataLocked = this.proxyPki && !this.user.userModel.bypassAccessCheck;
 			});
-		});
-
 	}
 
 	ngOnDestroy() {
@@ -61,7 +64,7 @@ export class AdminUpdateUserComponent extends ManageUserComponent {
 		// Don't need to do anything
 	}
 
-	submitUser(user: User) {
+	submitUser(user: User): Observable<any> {
 		return this.adminService.update(user);
 	}
 

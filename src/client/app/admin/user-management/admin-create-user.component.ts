@@ -1,28 +1,30 @@
 import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 
+import { Observable } from 'rxjs/Observable';
+
 import { ManageUserComponent } from './manage-user.component';
 import { AdminService } from '../admin.service';
 import { User } from '../user.class';
-import { Role } from '../user-management/role.class';
+import { Role } from './role.class';
 import { ConfigService } from '../../core/config.service';
 import { AlertService } from '../../shared/alert.service';
 
 @Component({
 	selector: 'admin-create-user',
-	templateUrl: './manage-user.component.html'
+	templateUrl: 'manage-user.component.html'
 })
 export class AdminCreateUserComponent extends ManageUserComponent {
 
-	private mode = 'admin-create';
+	mode = 'admin-create';
 
-	private possibleRoles = Role.ROLES;
+	possibleRoles = Role.ROLES;
 
 	constructor(
-		router: Router,
-		configService: ConfigService,
-		alertService: AlertService,
-		private adminService: AdminService
+		private adminService: AdminService,
+		protected router: Router,
+		protected configService: ConfigService,
+		public alertService: AlertService
 	) {
 		super(router, configService, alertService);
 	}
@@ -40,7 +42,7 @@ export class AdminCreateUserComponent extends ManageUserComponent {
 		// Don't need to do anything
 	}
 
-	submitUser(user: User) {
+	submitUser(user: User): Observable<any> {
 		return this.adminService.create(user);
 	}
 

@@ -1,22 +1,31 @@
 import { Component } from '@angular/core';
-import { Response } from '@angular/http';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { Subscription } from 'rxjs/Subscription';
 
 import { AuthenticationService } from '../authentication/authentication.service';
 import { UserStateService } from '../authentication/user-state.service';
 import { ConfigService } from '../../core/config.service';
 
 @Component({
-	templateUrl: './reset-password.component.html'
+	templateUrl: 'reset-password.component.html'
 })
 export class ResetPasswordComponent {
 
 	token: string;
+
 	invalid: boolean = true;
+
 	error: string;
+
 	success: string;
+
 	newPassword: string;
+
 	verifyPassword: string;
+
+	private routeParamSubscription: Subscription;
 
 	constructor(
 		private router: Router,
@@ -33,30 +42,23 @@ export class ResetPasswordComponent {
 		}
 
 		// If we aren't running in local mode, users shouldn't be able to change passwords
-		this.configService.getConfig()
-			.subscribe((config: any) => {
-				if (config.auth === 'proxy-pki') {
-					this.router.navigate(['/']);
-				}
+		this.configService.getConfig().first().filter((config: any) => config.auth === 'proxy-pki').subscribe((config: any) => this.router.navigate(['/']));
 
-				this.route.params.subscribe((params: Params) => {
-					this.token = params[`token`];
+		this.routeParamSubscription = this.route.params.subscribe((params: Params) => {
+			this.token = params[`token`];
+			this.validateToken();
+		});
+	}
 
-					this.validateToken();
-				});
-			});
+	ngOnDestroy() {
+		this.routeParamSubscription.unsubscribe();
 	}
 
 	validateToken() {
 		if (null != this.token) {
-			this.authService.validateToken(this.token)
-				.subscribe(
-					(_result: any) => {
-						this.invalid = false;
-					},
-					(_err: any) => {
-						this.invalid = true;
-					});
+			this.authService.validateToken(this.token).subscribe(
+				() => this.invalid = false,
+				() => this.invalid = true);
 		}
 	}
 
@@ -71,17 +73,13 @@ export class ResetPasswordComponent {
 			return;
 		}
 
-		this.authService.resetPassword(this.token, this.newPassword)
-			.subscribe(
-				(_result: any) => {
-					this.newPassword = null;
-					this.verifyPassword = null;
+		this.authService.resetPassword(this.token, this.newPassword).subscribe(() => {
+			this.newPassword = null;
+			this.verifyPassword = null;
 
-					this.router.navigate(['/password/reset-success']);
-				},
-				(response: Response) => {
-					this.error = response.json().message;
-				});
+			this.router.navigate(['/password/reset-success']);
+		}, (error: HttpErrorResponse) => {
+			this.error = error.error.message;
+		});
 	}
-
 }

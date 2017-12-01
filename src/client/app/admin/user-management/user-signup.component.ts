@@ -1,6 +1,8 @@
 import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 
+import { Observable } from 'rxjs/Observable';
+
 import { ManageUserComponent } from './manage-user.component';
 import { ConfigService } from '../../core/config.service';
 import { AlertService } from '../../shared/alert.service';
@@ -9,17 +11,17 @@ import { User } from '../user.class';
 
 @Component({
 	selector: 'user-signup',
-	templateUrl: './manage-user.component.html'
+	templateUrl: 'manage-user.component.html'
 })
 export class UserSignupComponent extends ManageUserComponent {
 
 	mode = 'signup';
 
 	constructor(
-		router: Router,
-		configService: ConfigService,
-		alertService: AlertService,
-		private authService: AuthenticationService
+		private authService: AuthenticationService,
+		protected router: Router,
+		protected configService: ConfigService,
+		public alertService: AlertService
 	) {
 		super(router, configService, alertService);
 	}
@@ -36,7 +38,7 @@ export class UserSignupComponent extends ManageUserComponent {
 		// Don't need to do anything
 	}
 
-	submitUser(user: User) {
+	submitUser(user: User): Observable<any> {
 		return this.authService.signup(user);
 	}
 

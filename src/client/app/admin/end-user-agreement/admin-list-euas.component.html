@@ -52,7 +52,7 @@
 		(onPageChange)="goToPage($event)"
 		(onSortChange)="setSort($event)">
 
-		<template asy-template="table-header">
+		<ng-template asy-template="table-header">
 			<th [hidden]="!columns._id">ID</th>
 			<th [hidden]="!columns.title">Title</th>
 			<th [hidden]="!columns.text">Text</th>
@@ -60,9 +60,9 @@
 			<th [hidden]="!columns.updated">Updated</th>
 			<th [hidden]="!columns.published">Published</th>
 			<th>&nbsp;</th>
-		</template>
+		</ng-template>
 
-		<template asy-template="table-row" let-eua>
+		<ng-template asy-template="table-row" let-eua>
 			<td [hidden]="!columns._id">{{eua.euaModel._id}}</td>
 			<td [hidden]="!columns.title">
 				<div class="hide-overflow" style="max-width:400px;">{{eua.euaModel.title}}</div>
@@ -81,12 +81,12 @@
 					<button title="Delete" type="button" class="btn btn-danger btn-sm" (click)="confirmDeleteEua(eua)"><span class="fa fa-trash-o"></span></button>
 				</div>
 			</td>
-		</template>
+		</ng-template>
 
-		<template asy-template="empty-table">
+		<ng-template asy-template="empty-table">
 			<h3>
 					<small>No End User Agreements? Either there were no EUAs that matched your search or there are no EUAs in the system.</small>
 			</h3>
-		</template>
+		</ng-template>
 	</pageable-table>
 </section>
