@@ -2,6 +2,8 @@
 
 let path = require('path'),
 	q = require('q'),
+	fs = require('fs'),
+	handlebars = require('handlebars'),
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	config = deps.config,
 	logger = deps.logger;
@@ -80,6 +82,29 @@ module.exports.sendMail = (mailOptions) => {
 	}).catch((error) => {
 		logger.error('Failure sending email.');
 		defer.reject(error);
+	});
+
+	return defer.promise;
+};
+
+module.exports.buildEmailContent = (template, data) => {
+	let defer = q.defer();
+
+	fs.readFile(`src/server/app/${template}.server.view.html`, 'utf-8', function(templateError, templateSource){
+		if (templateError) {
+			defer.reject(templateError);
+		} else {
+			fs.readFile('src/server/app/core/views/layouts/email.server.view.html', 'utf-8', function(error, source){
+				if (error) {
+					defer.reject(error);
+				} else {
+					handlebars.registerPartial(template, templateSource);
+					data.emailTemplate = () => template;
+
+					defer.resolve(handlebars.compile(source)(data));
+				}
+			});
+		}
 	});
 
 	return defer.promise;
