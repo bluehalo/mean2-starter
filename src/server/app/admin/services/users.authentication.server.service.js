@@ -46,41 +46,76 @@ module.exports.initializeNewUser = function(user) {
 	return q(user);
 };
 
-// Send email alert about new account request
+// Send email alert to system admins about new account request
 module.exports.signupEmail = function(user, req) {
 	let defer = q.defer();
 
-	req.app.render('../../admin/templates/user-signup-alert-email', {
+	emailService.buildEmailContent('admin/templates/user-signup-alert-email', {
 		name: user.name,
 		username: user.username,
 		appName: config.app.title,
 		url: `${config.app.baseUrl}/admin/users`
-	}, (error, html) => {
-		if (error) {
-			logger.error({err: error, req: req}, 'Failure rendering template.');
-			defer.reject(error);
-		}
-		else {
-			let to = config.newUserEmail.email;
+	}).then((html) => {
+		let to = config.newUserEmail.email;
 
-			let mailOptions = {
-				to: to,
-				from: config.mailer.from,
-				subject: 'New Account Request',
-				html: html
-			};
+		let mailOptions = {
+			to: to,
+			from: config.mailer.from,
+			subject: 'New Account Request',
+			html: html
+		};
 
-			emailService.sendMail(mailOptions)
-				.then((result) => {
-					logger.debug(`Sent new user(${user.username}) email to: ${to}`);
-					defer.resolve(user);
-				}, (error) => {
-					// Log the error but this shouldn't block
-					// the user from signing up
-					logger.error({err: error, req: req}, 'Failure sending email.');
-					defer.resolve(user);
-				});
-		}
+		emailService.sendMail(mailOptions)
+			.then((result) => {
+				logger.debug(`Sent new user(${user.username}) email to: ${to}`);
+				defer.resolve(user);
+			}, (error) => {
+				// Log the error but this shouldn't block
+				// the user from signing up
+				logger.error({err: error, req: req}, 'Failure sending email.');
+				defer.resolve(user);
+			});
+	}).fail((error) => {
+		logger.error({err: error, req: req}, 'Failure rendering template.');
+		defer.reject(error);
+	});
+
+	return defer.promise;
+};
+
+// Send welcome email to new user
+module.exports.welcomeEmail = (user, req) => {
+	let defer = q.defer();
+
+	const appTitle = config.app.title;
+
+	emailService.buildEmailContent('admin/templates/user-welcome-email', {
+		name: user.name,
+		username: user.username,
+		appName: appTitle,
+		url: `${config.app.baseUrl}/help/overview`
+	}).then((html) => {
+		const to = user.email;
+
+		const mailOptions = {
+			to: to,
+			from: config.mailer.from,
+			replyTo: config.mailer.from,
+			subject: `Welcome to ${appTitle}!`,
+			html: html
+		};
+
+		emailService.sendMail(mailOptions).then(() => {
+			logger.debug(`Sent welcome email to: ${to}`);
+			defer.resolve(user);
+		}, (error) => {
+			// Log the error but this shouldn't block the user from signing up
+			logger.error({err: error, req: req}, 'Failure sending email.');
+			defer.resolve(user);
+		});
+	}).fail((error) => {
+		logger.error({err: error, req: req}, 'Failure rendering template.');
+		defer.reject(error);
 	});
 
 	return defer.promise;

@@ -62,7 +62,7 @@ export class AuthGuard implements CanActivate {
 		// Does the user need to accept the user agreement??
 		// -----------------------------------------------------------
 		// Check to see if the user needs to agree to the end user agreement
-		if (this.userStateService.isAuthenticated() && !this.userStateService.user.isAdmin() && !this.userStateService.user.isEuaCurrent() ) {
+		if (this.userStateService.isActive() && !this.userStateService.user.isAdmin() && !this.userStateService.user.isEuaCurrent() ) {
 			if (url !== '/user-eua') {
 				this.userStateService.authRedirectUrl = url;
 				this.router.navigate(['/user-eua']);

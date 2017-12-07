@@ -27,7 +27,7 @@
 				<div class="navbar-collapse" [collapse]="collapsed">
 
 					<!-- Left part of navbar -->
-					<ul class="nav navbar-nav">
+					<ul *ngIf="user.isActive()" class="nav navbar-nav">
 						<!-- Demo -->
 						<li><a [routerLink]="['/demo']">Demo</a></li>
 
@@ -48,7 +48,7 @@
 					<ul class="nav navbar-nav navbar-right" *ngIf="user.isAuthenticated()">
 
 						<!--Team Quick Select-->
-						<li *ngIf="teams.length > 0" class="dropdown" dropdown>
+						<li *ngIf="teams.length > 0 && user.isActive()" class="dropdown" dropdown>
 							<a class="dropdown-toggle" dropdownToggle>Teams <span class="caret"></span></a>
 							<ul *dropdownMenu class="dropdown-menu" role="menu">
 								<li *ngFor="let team of teams.slice(0,3)">
@@ -81,7 +81,7 @@
 
 							</ul>
 						</li>
-						<li class="notification-indicator" notification-indicator>
+						<li *ngIf="user.isActive()" class="notification-indicator" notification-indicator>
 						</li>
 						<li class="dropdown" dropdown>
 							<a class="dropdown-toggle btn-icon" dropdownToggle>
@@ -94,7 +94,7 @@
 							<ul *dropdownMenu class="dropdown-menu" role="menu">
 
 								<!-- Help -->
-								<li [hidden]="!pki && !user.isActive()"><a [routerLink]="['/help']">Help</a></li>
+								<li><a [routerLink]="['/help']">Help</a></li>
 
 								<!-- Feedback -->
 								<li><a (click)="showFeedbackModal()">Give Feedback</a></li>

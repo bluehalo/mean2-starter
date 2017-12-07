@@ -65,7 +65,10 @@ import { UserSignedUpComponent } from './admin/user-management/user-signed-up.co
 				{
 					path: 'update-user',
 					canActivate: [AuthGuard],
-					component: UpdateUserComponent
+					component: UpdateUserComponent,
+					data: {
+						roles: []
+					}
 				},
 				{
 					path: 'resource/invalid',
@@ -114,7 +117,10 @@ import { UserSignedUpComponent } from './admin/user-management/user-signed-up.co
 				{
 					path: 'inactive-user',
 					canActivate: [AuthGuard],
-					component: InactiveComponent
+					component: InactiveComponent,
+					data: {
+						roles: []
+					}
 				}
 			]
 		, {

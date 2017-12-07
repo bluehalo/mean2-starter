@@ -12,7 +12,7 @@ import { HelpComponent } from '../../help/help.component';
 				path: 'help',
 				component: HelpComponent,
 				canActivate: [AuthGuard],
-				data: { roles: [ 'user' ] },
+				data: { roles: [] },
 				children: [
 					{
 						path: 'teams',

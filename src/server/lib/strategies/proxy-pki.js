@@ -139,69 +139,67 @@ function updateUser(dn, fields) {
 /**
  * Export the PKI Proxy strategy
  */
-module.exports = function() {
+module.exports = () => {
 
 	passport.use(new ProxyPkiStrategy({
 		header: 'x-ssl-client-s-dn'
-	}, function(req, dn, done) {
+	}, (req, dn, done) => {
 
 		// If there is no DN, we can't authenticate
-		if(!dn){
-			return done(null, false, {status: 400, type: 'missing-credentials', message: 'Missing certiticate' });
+		if (!dn){
+			return done(null, false, {status: 400, type: 'missing-credentials', message: 'Missing certificate' });
 		}
 
-		var dnLower = dn.toLowerCase();
+		let dnLower = dn.toLowerCase();
 
 		// Get the user locally and from access checker
 		q.all([
 			q.ninvoke(User, 'findOne', { 'providerData.dnLower': dnLower }),
 			accessChecker.get(dnLower)
-		]).then(function(resultsArray) {
-			var localUser = resultsArray[0];
-			var acUser = resultsArray[1];
+		]).then((resultsArray) => {
+			const localUser = resultsArray[0];
+			const acUser = resultsArray[1];
 
 			// Default to creating accounts automatically
-			var autoCreateAccounts = (null != config.auth && null != config.auth.autoCreateAccounts)? config.auth.autoCreateAccounts : true;
+			const autoCreateAccounts = (null != config.auth && null != config.auth.autoCreateAccounts) ? config.auth.autoCreateAccounts : true;
 
 			// If the user is not known locally, is not known by access checker, and we are creating accounts, create the account as an empty account
-			if(null == localUser && null == acUser && !autoCreateAccounts) {
+			if (null == localUser && null == acUser && !autoCreateAccounts) {
 				done(null, false, { status: 401, type: 'invalid-credentials', message: 'Certificate unknown, expired, or unauthorized' });
 			}
 			// Else if the user is not known locally, and we are creating accounts, create the account as an empty account
-			else if(null == localUser && autoCreateAccounts) {
+			else if (null == localUser && autoCreateAccounts) {
 				// Create the user
-				createUser(dn, acUser).then(function(newUser) {
-						// Send email for new user if enabled, no reason to wait for success
-						if (config.newUserEmail && config.newUserEmail.enabled) {
+				createUser(dn, acUser).then((newUser) => {
+					// Send email for new user if enabled, no reason to wait for success
+					if (config.newUserEmail) {
+						if (config.newUserEmail.enabled) {
 							userAuthService.signupEmail(newUser, req);
 						}
 
-						// Audit user signup
-						return auditService.audit( 'user signup', 'user', 'user signup',
-							{},
-							User.auditCopy(newUser))
-							.then(function() {
-								return q(newUser);
-							});
-					})
-					.then(function(result) {
-						// Return the user
-						done(null, result);
-					}, done).done();
+						if (config.newUserEmail.welcomeEnabled) {
+							userAuthService.welcomeEmail(newUser, req);
+						}
+					}
+
+					// Audit user signup
+					return auditService.audit( 'user signup', 'user', 'user signup', {}, User.auditCopy(newUser)).then(() => newUser);
+				}).then((result) => {
+					// Return the user
+					done(null, result);
+				}, done).done();
 			}
 			// Else if the user is known locally, but not in access checker, update their user info to reflect
-			else if(null == acUser) {
+			else if (null == acUser) {
 				// Update the user only if we are not bypassing access checker
-				if(!localUser.bypassAccessCheck) {
+				if (!localUser.bypassAccessCheck) {
 					updateUser(dn, { externalRoles: [], externalGroups: [] }).then(function(updatedUser) {
-							// Audit user signup
-							return auditService.audit('user updated from access checker', 'user', 'update',
-								User.auditCopy(localUser),
-								User.auditCopy(updatedUser)).then(function() {
-								return q(updatedUser);
-							});
+						// Audit user signup
+						return auditService.audit('user updated from access checker', 'user', 'update',
+							User.auditCopy(localUser),
+							User.auditCopy(updatedUser)).then(() => updatedUser);
 						})
-						.then(function(result) {
+						.then((result) => {
 							// Return the user
 							done(null, result);
 						}, done).done();
@@ -214,7 +212,7 @@ module.exports = function() {
 			// If the user is known locally and in access checker, update their user info
 			else {
 				// Update the user only if we are not bypassing access checker
-				if(!localUser.bypassAccessCheck) {
+				if (!localUser.bypassAccessCheck) {
 					updateUser(dn, copyACGroups(copyACRoles(copyACMetadata({}, acUser), acUser), acUser)).then(function(updatedUser) {
 						// Audit user signup
 						return auditService.audit('user updated from access checker', 'user', 'update',

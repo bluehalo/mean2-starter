@@ -1,9 +1,7 @@
 'use strict';
 
 const path = require('path'),
-	fs = require('fs'),
 	q = require('q'),
-	handlebars = require('handlebars'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
 	configController = require(path.resolve('./src/server/app/core/controllers/config.server.controller.js')),
@@ -34,8 +32,6 @@ exports.index = function(req, res) {
 };
 
 function buildEmailContent(user, feedback, url) {
-	let defer = q.defer();
-
 	let emailData = {
 		appName: config.app.name,
 		name: user.name,
@@ -44,18 +40,7 @@ function buildEmailContent(user, feedback, url) {
 		feedback: feedback
 	};
 
-	fs.readFile('src/server/app/core/views/templates/user-feedback-email.server.view.html', 'utf-8', (error, source) => {
-		if (error) {
-			defer.reject(error);
-		} else {
-			let template = handlebars.compile(source);
-			let emailHTML = template(emailData);
-
-			defer.resolve(emailHTML);
-		}
-	});
-
-	return defer.promise;
+	return emailService.buildEmailContent('core/views/templates/user-feedback-email', emailData);
 }
 
 function sendFeedback(user, feedback, url) {
