@@ -101,7 +101,7 @@ module.exports.welcomeEmail = (user, req) => {
 			to: to,
 			from: config.mailer.from,
 			replyTo: config.mailer.from,
-			subject: emailService.getSubject(`Welcome to ${appTitle}!`),
+			subject: `Welcome to ${appTitle}!`,
 			html: html
 		};
 

@@ -27,7 +27,7 @@
 				<div class="navbar-collapse" [collapse]="collapsed">
 
 					<!-- Left part of navbar -->
-					<ul class="nav navbar-nav">
+					<ul *ngIf="user.isActive()" class="nav navbar-nav">
 						<!-- Demo -->
 						<li><a [routerLink]="['/demo']">Demo</a></li>
 
