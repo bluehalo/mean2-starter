@@ -34,11 +34,6 @@ export class HelpComponent {
 				this.pki = config.auth === 'proxy-pki';
 				this.config = config;
 			});
-
-		// If local mode and user has no roles, redirect
-		if (!this.pki && !this.user.isActive()) {
-			this.router.navigate(['/inactive-user']);
-		}
 	}
 
 }

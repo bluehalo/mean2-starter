@@ -170,6 +170,7 @@ module.exports = {
 	contactEmail: process.env.CONTACT_EMAIL || process.env.MAILER_ADMIN || 'noreply@asymmetrik.com',
 	newUserEmail: {
 		enabled: false,
+		welcomeEnabled: true,
 		email: process.env.MAILER_ADMIN || 'noreply@asymmetrik.com'
 	},
 

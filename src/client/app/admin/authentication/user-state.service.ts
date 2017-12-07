@@ -9,15 +9,16 @@ import { User } from '../user.class';
 @Injectable()
 export class UserStateService {
 
-	public user: User = new User();
-	public authRedirectUrl: string; // Can maintain state of a url to redirect to after login
+	user: User = new User();
+
+	authRedirectUrl: string; // Can maintain state of a url to redirect to after login
 
 	constructor(private router: Router) {}
 
 	/**
 	 * Redirect the user to the last attempted route
 	 */
-	public goToRedirectRoute() {
+	goToRedirectRoute() {
 		// Check if we stored a redirect url.  This is set by the AuthGuard if a prior attempt
 		// to navigate somewhere failed.  Send the user back where they were trying to go...
 		let redirect = this.authRedirectUrl ? this.authRedirectUrl : '/';
@@ -26,19 +27,23 @@ export class UserStateService {
 		this.router.navigate([redirect]);
 	}
 
-	public isAuthenticated(): boolean {
+	isAuthenticated(): boolean {
 		return this.user.isAuthenticated();
 	}
 
-	public hasRoles(roles: string[]): boolean {
+	isActive(): boolean {
+		return this.user.isActive();
+	}
+
+	hasRoles(roles: string[]): boolean {
 		return this.user.hasRoles(roles);
 	}
 
-	public hasRole(role: string): boolean {
+	hasRole(role: string): boolean {
 		return this.user.hasRole(role);
 	}
 
-	public clearUser() {
+	clearUser() {
 		this.user.clearUser();
 	}
 }
