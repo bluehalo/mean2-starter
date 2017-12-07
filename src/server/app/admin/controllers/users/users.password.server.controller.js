@@ -68,13 +68,14 @@ exports.forgot = (req, res, next) => {
 
 		// Generate the email message (from template)
 		(token, user, done) => {
-			res.render('templates/reset-password-email', {
+			emailService.buildEmailContent('core/views/templates/reset-password-email', {
 				name: user.name,
 				appName: config.app.title,
 				url: `${config.app.baseUrl}/password/reset/${token}`
-			}, (error, emailHTML) => {
-				logger.debug('Rendered email.');
-				done(error, emailHTML, user);
+			}).then((emailHTML) => {
+				done(undefined, emailHTML, user);
+			}).fail((error) => {
+				done(error, undefined, user);
 			});
 		},
 
@@ -179,11 +180,13 @@ exports.reset = (req, res, next) => {
 		},
 
 		(user, done) => {
-			res.render('templates/reset-password-confirm-email', {
+			emailService.buildEmailContent('core/views/templates/reset-password-confirm-email', {
 				name: user.name,
 				appName: config.app.title
-			}, (error, emailHTML) => {
-				done(error, emailHTML, user);
+			}).then((emailHTML) => {
+				done(undefined, emailHTML, user);
+			}).fail((error) => {
+				done(error, undefined, user);
 			});
 		},
 
