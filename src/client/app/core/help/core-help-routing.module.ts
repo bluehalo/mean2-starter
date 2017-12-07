@@ -13,7 +13,7 @@ import { AboutComponent } from '../about.component';
 				path: 'help',
 				component: HelpComponent,
 				canActivate: [AuthGuard],
-				data: { roles: [ ] },
+				data: { roles: [] },
 				children: [
 					/**
 					 * Default Route
@@ -33,7 +33,7 @@ import { AboutComponent } from '../about.component';
 				path: 'about',
 				component: AboutComponent,
 				canActivate: [AuthGuard],
-				data: { roles: [ ] },
+				data: { roles: [] },
 			}
 		])
 	],

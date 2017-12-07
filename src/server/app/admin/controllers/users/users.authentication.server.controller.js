@@ -1,6 +1,6 @@
 'use strict';
 
-let path = require('path'),
+const path = require('path'),
 	q = require('q'),
 
 	deps = require(path.resolve('./src/server/dependencies.js')),
@@ -73,36 +73,29 @@ function adminCreateUser(user, req, res) {
 }
 
 // Signup the user - creates the user object and logs in the user
-function signup(user, req, res) {
+const signup = (user, req, res) => {
 	// Initialize the user
-	userAuthService.initializeNewUser(user)
-		.then(
-			(result) => {
-				return user.save();
-			})
-		.then(
-			(newUser) => {
-				// Send email for new user if enabled, no reason to wait for success
-				if (config.newUserEmail && config.newUserEmail.enabled) {
-					userAuthService.signupEmail(user, req);
-				}
+	userAuthService.initializeNewUser(user).then(() => {
+		return user.save();
+	}).then((newUser) => {
+		// Send email for new user if enabled, no reason to wait for success
+		if (config.newUserEmail) {
+			if (config.newUserEmail.enabled) {
+				userAuthService.signupEmail(user, req);
+			}
 
-				return auditService.audit('user signup', 'user', 'user signup', {}, User.auditCopy(newUser), req.headers)
-					.then(
-						() => {
-							return q(newUser);
-						});
-			})
-		.then(
-			(newUser) => {
-				login(newUser, req, res);
-			},
-			(err) => {
-				util.handleErrorResponse(res, err);
-			})
-		.done();
-}
+			if (config.newUserEmail.welcomeEnabled) {
+				userAuthService.welcomeEmail(user, req);
+			}
+		}
 
+		return auditService.audit('user signup', 'user', 'user signup', {}, User.auditCopy(newUser), req.headers).then(() => newUser);
+	}).then((newUser) => {
+		login(newUser, req, res);
+	}, (err) => {
+		util.handleErrorResponse(res, err);
+	}).done();
+};
 
 
 /**
