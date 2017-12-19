@@ -308,7 +308,7 @@ gulp.task('coverage-init', () => {
 	return gulp.src([
 			'src/server/**/*.js',
 			'!src/server/**/routes/**/*.js'
-		])
+		].concat( assets.tests.server.map((f) => { return '!' + f; }) ))
 		// Covering files
 		.pipe(plugins.istanbul({
 			includeUntested: true
