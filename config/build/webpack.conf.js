@@ -205,7 +205,6 @@ module.exports = (mode) => {
 		wpConfig.plugins.push(new webpack.BannerPlugin(
 			{ banner: assets.bannerString, raw: true, entryOnly: false }
 		));
-
 	}
 
 	// Always add these plugins
@@ -227,7 +226,16 @@ module.exports = (mode) => {
 		new webpack.ContextReplacementPlugin(
 			/angular(\\|\/)core(\\|\/)@angular/,
 			path.posix.resolve('./src/client')
-		)
+		),
+
+		// Pass environment variables through webpack so they can be used in client code
+		// or in modules that webpack is bundling, including 3rd party node modules
+		new webpack.DefinePlugin({
+			'process.env': {
+				'NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+			}
+		})
+
 	);
 
 	if (aot) {
